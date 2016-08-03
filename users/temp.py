@@ -13,6 +13,6 @@ def tables(request):
 
 def testdb(request):
     res = User().find(likes=100)
-    #res = User(name="test3").add()
+    #res = User().add(name="test3")
     return HttpResponse(res)
 
