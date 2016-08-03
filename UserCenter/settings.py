@@ -87,7 +87,9 @@ DATABASES = {
         #'PORT' : '3306',
     }
 }
-
+# 连接mongodb
+from mongoengine import connect
+DB_usercenter=connect('database', host='115.28.93.36:27017',username='mongo',password='md#root$2016').md_usercenter
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
