@@ -1,0 +1,80 @@
+{% extends 'common/common.html' %}
+{% block content %}
+
+<div id="content">
+    <div id="content-header">
+        <h1>Tables</h1>
+        <div class="btn-group">
+            <a class="btn btn-large" title="Manage Files"><i class="fa fa-file"></i></a>
+            <a class="btn btn-large" title="Manage Users"><i class="fa fa-user"></i></a>
+            <a class="btn btn-large" title="Manage Comments"><i class="fa fa-comment"></i><span class="label label-danger">5</span></a>
+            <a class="btn btn-large" title="Manage Orders"><i class="fa fa-shopping-cart"></i></a>
+        </div>
+    </div>
+    <div id="breadcrumb">
+        <a href="#" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i> Home</a>
+        <a href="#" class="current">Tables</a>
+    </div>
+        <div class="row">
+            <div class="col-xs-12">
+
+                <div class="widget-box">
+                    <div class="widget-title">
+                        <span class="icon">
+                            <i class="fa fa-th"></i>
+                        </span>
+                        <h5>Static table with checkboxes in box with padding</h5>
+                        <span class="label label-info">Featured</span>
+                    </div>
+                    <div class="widget-content">
+                        <table class="table table-bordered table-striped table-hover with-check table-data">
+                            <thead>
+                                <tr>
+                                    <th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>
+                                    <th>用户名</th>
+                                    <th>邮箱</th>
+                                    <th>状态</th>
+                                    <th>创建时间</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for list in dataList %}
+                                <tr>
+                                    <td><input type="checkbox" /></td>
+                                    <td>{{ list.username }}</td>
+                                    <td>{{ list.email }}</td>
+                                    <td>{{ list.status }}</td>
+                                    <td>{{ list.createTime }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {{ dataPage }}
+                        <ul class="pagination">
+
+                        {% if dataPage.has_previous %}
+                            <li><a href="?page={{ dataPage.previous_page_number }}">Prev</a></li>
+                        {% else %}
+                            <li class="disabled"><a href="#">Prev</a></li>
+                        {% endif %}
+                        {% for page in dataPage.paginator.page_range %}
+                            {% ifequal page dataPage.number %}
+                                <li class="active"><a href="#">{{ page }}</a></li>
+                            {% else %}
+                                <li><a href="?page={{ page }}">{{ page }}</a></li>
+                            {% endifequal  %}
+                        {% endfor %}
+                        {% if dataPage.has_next %}
+                            <li><a href="?page={{ dataPage.next_page_number }}">Next</a></li>
+                        {% else %}
+                            <li class="disabled"><a href="#">Next</a></li>
+                        {% endif %}
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+</div>
+
+{% endblock %}
