@@ -31,6 +31,7 @@
                             <thead>
                                 <tr>
                                     <th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>
+                                    <th>序号</th>
                                     <th>用户名</th>
                                     <th>邮箱</th>
                                     <th>状态</th>
@@ -38,9 +39,10 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                {% for list in dataList %}
+                                {% for list in topics.object_list  %}
                                 <tr>
                                     <td><input type="checkbox" /></td>
+                                    <td>{{  }}</td>
                                     <td>{{ list.username }}</td>
                                     <td>{{ list.email }}</td>
                                     <td>{{ list.status }}</td>
@@ -49,23 +51,23 @@
                                 {% endfor %}
                             </tbody>
                         </table>
-                    {{ dataPage }}
+
                         <ul class="pagination">
 
-                        {% if dataPage.has_previous %}
-                            <li><a href="?page={{ dataPage.previous_page_number }}">Prev</a></li>
+                        {% if topics.has_previous %}
+                            <li><a href="?page={{ topics.previous_page_number }}">Prev</a></li>
                         {% else %}
                             <li class="disabled"><a href="#">Prev</a></li>
                         {% endif %}
-                        {% for page in dataPage.paginator.page_range %}
-                            {% ifequal page dataPage.number %}
+                        {% for page in topics.paginator.page_range %}
+                            {% ifequal page topics.number %}
                                 <li class="active"><a href="#">{{ page }}</a></li>
                             {% else %}
                                 <li><a href="?page={{ page }}">{{ page }}</a></li>
                             {% endifequal  %}
                         {% endfor %}
-                        {% if dataPage.has_next %}
-                            <li><a href="?page={{ dataPage.next_page_number }}">Next</a></li>
+                        {% if topics.has_next %}
+                            <li><a href="?page={{ topics.next_page_number }}">Next</a></li>
                         {% else %}
                             <li class="disabled"><a href="#">Next</a></li>
                         {% endif %}
