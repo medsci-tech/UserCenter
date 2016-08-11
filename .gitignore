@@ -10,3 +10,6 @@
 /users/tests.py
 /users/model/__pycache__
 /users/controller/__pycache__
+/UserProject.komodoproject
+/.komodotools
+/admin/__pycache__

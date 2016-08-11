@@ -1,17 +1,7 @@
-from django.conf.urls import *
-from users.controller import admin
-from users import temp, tests  # test
-urlpatterns = patterns(
-    '',
-    # 管理员管理
-    url(r'^admin/add', admin.add),
-    url(r'^admin/form', admin.form),
-    url(r'^admin/ajax', admin.form),
-    url(r'^admin/', admin.index),
-    # test
-    url(r'^temp/index', temp.index),
-    url(r'^temp/tables', temp.tables),
-    # url(r'^temp/testdb', temp.testdb),
-    # url(r'^temp/', temp.index),
-    # url(r'', temp.login),
-)
+from django.conf.urls import include, url
+#from django.contrib import admin
+
+urlpatterns = [
+    url(r'^admin/', include('admin.urls', namespace="admin")),
+    #url(r'^admin/', include(admin.site.urls)),
+]
