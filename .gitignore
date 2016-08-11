@@ -8,3 +8,5 @@
 /users/migrations/__pycache__
 /templates/__pycache__
 /users/tests.py
+/users/model/__pycache__
+/users/controller/__pycache__
