@@ -1,82 +1,100 @@
-{% extends 'common/common.html' %}
+{% extends 'common/base.html' %}
+
 {% block content %}
 
 <div id="content">
     <div id="content-header">
-        <h1>Tables</h1>
-        <div class="btn-group">
-            <a class="btn btn-large" title="Manage Files"><i class="fa fa-file"></i></a>
-            <a class="btn btn-large" title="Manage Users"><i class="fa fa-user"></i></a>
-            <a class="btn btn-large" title="Manage Comments"><i class="fa fa-comment"></i><span class="label label-danger">5</span></a>
-            <a class="btn btn-large" title="Manage Orders"><i class="fa fa-shopping-cart"></i></a>
-        </div>
+        <h1>管理员</h1>
     </div>
-    <div id="breadcrumb">
-        <a href="#" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i> Home</a>
-        <a href="#" class="current">Tables</a>
-    </div>
-        <div class="row">
-            <div class="col-xs-12">
 
-                <div class="widget-box">
-                    <div class="widget-title">
-                        <span class="icon">
-                            <i class="fa fa-th"></i>
-                        </span>
-                        <h5>Static table with checkboxes in box with padding</h5>
-                        <span class="label label-info">Featured</span>
-                    </div>
-                    <div class="widget-content">
-                        <table class="table table-bordered table-striped table-hover with-check table-data">
-                            <thead>
-                                <tr>
-                                    <th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>
-                                    <th>序号</th>
-                                    <th>用户名</th>
-                                    <th>邮箱</th>
-                                    <th>状态</th>
-                                    <th>创建时间</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for list in topics.object_list  %}
-                                <tr>
-                                    <td><input type="checkbox" /></td>
-                                    <td>{{  }}</td>
-                                    <td>{{ list.username }}</td>
-                                    <td>{{ list.email }}</td>
-                                    <td>{{ list.status }}</td>
-                                    <td>{{ list.createTime }}</td>
-                                </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+    <div class="row">
+        <div class="col-xs-12">
 
-                        <ul class="pagination">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-th"></i>
+                    </span>
+                    <h5>管理员列表</h5>
+                </div>
+                <div class="widget-content">
+                    <table class="table table-bordered table-striped table-hover with-check table-data">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>
+                                <th>用户名</th>
+                                <th>邮箱</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for list in topics.object_list  %}
+                            <tr>
+                                <td><input type="checkbox" /></td>
+                                <td>{{ list.username }}</td>
+                                <td>{{ list.email }}</td>
+                                <td>{{ list.status }}</td>
+                                <td>{{ list.createTime }}</td>
+                                <td>
+                                    <a href="#myModal" data-toggle="modal" class="btn btn-default btn-xs"><i class="fa fa-edit"></i> 编辑</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
 
-                        {% if topics.has_previous %}
-                            <li><a href="?page={{ topics.previous_page_number }}">Prev</a></li>
+                    <ul class="pagination">
+
+                    {% if topics.has_previous %}
+                        <li><a href="?page={{ topics.previous_page_number }}">Prev</a></li>
+                    {% else %}
+                        <li class="disabled"><a href="javascript:;">Prev</a></li>
+                    {% endif %}
+                    {% for page in topics.paginator.page_range %}
+                        {% ifequal page topics.number %}
+                            <li class="active"><a href="javascript:;">{{ page }}</a></li>
                         {% else %}
-                            <li class="disabled"><a href="#">Prev</a></li>
-                        {% endif %}
-                        {% for page in topics.paginator.page_range %}
-                            {% ifequal page topics.number %}
-                                <li class="active"><a href="#">{{ page }}</a></li>
-                            {% else %}
-                                <li><a href="?page={{ page }}">{{ page }}</a></li>
-                            {% endifequal  %}
-                        {% endfor %}
-                        {% if topics.has_next %}
-                            <li><a href="?page={{ topics.next_page_number }}">Next</a></li>
-                        {% else %}
-                            <li class="disabled"><a href="#">Next</a></li>
-                        {% endif %}
+                            <li><a href="?page={{ page }}">{{ page }}</a></li>
+                        {% endifequal  %}
+                    {% endfor %}
+                    {% if topics.has_next %}
+                        <li><a href="?page={{ topics.next_page_number }}">Next</a></li>
+                    {% else %}
+                        <li class="disabled"><a href="javascript:;">Next</a></li>
+                    {% endif %}
 
-                        </ul>
-                    </div>
+                    </ul>
                 </div>
             </div>
         </div>
+    </div>
 </div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>管理员管理</h3>
+            </div>
+            <div class="modal-body">
+                {% include 'admin/form.html' %}
+            </div>
+            <div class="modal-footer">
+                <a data-dismiss="modal" class="btn btn-primary btn-small" href="#">确定</a>
+                <a data-dismiss="modal" class="btn btn-default btn-small" href="#">取消</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% include 'common/js-import.html' %}
+
+<script>
+$(function () {
+    console.log('123');
+});
+</script>
 
 {% endblock %}
