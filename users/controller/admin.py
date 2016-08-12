@@ -39,10 +39,6 @@ def add(request):
     return HttpResponse(res)
     # return render(request, 'admin/index.html')
 
-#
-def form(request):
-    pass
-
 # 修改操作
-def ajax(request):
+def form(request):
     pass
