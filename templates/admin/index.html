@@ -109,9 +109,18 @@
 <script>
 $(function () {
     $('select').select2({width:'100%'});
-    console.log('123');
     $('#form-submit').click(function () {
-        swal('hello','这是个弹窗效果');
+        var data = {};
+        data.id = $('#form-id').val();
+        data.nickname = $('#form-nickname').val();
+        data.username = $('#form-username').val();
+        data.password = $('#form-password').val();
+        data.email = $('#form-email').val();
+        data.status = $('#form-status').val();
+        var url = '/admin/form.html';
+        var location = '/admin/index';
+        console.log(data);
+        subActionAjaxForMime('post', url, data, location);
     })
 });
 </script>

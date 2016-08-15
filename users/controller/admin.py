@@ -8,10 +8,11 @@ from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
-
+from django.views.decorators.csrf import csrf_exempt
+import json
 
 def index(request):
-    param = {'username':'zhaiyu'}
+    param = {}
     data = Admin().find(**param)
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
@@ -25,20 +26,24 @@ def index(request):
 
     return render(request, 'admin/index.html',{'topics':topics})
 
-def add(request):
-    param = {
-        'username': 'zhaiyu',
-        'password':make_password('123456',None,'pbkdf2_sha256'),
-        'email':'123@123.com',
-        'status':1,
-    }
-    # param = (('username' , 'zhaiyu'),('password' , '123456'))
-    # param = {'username','zhaiyu','passwor'}
-    res = Admin(**param).add(**param)
-
-    return HttpResponse(res)
-    # return render(request, 'admin/index.html')
-
 # 修改操作
+@csrf_exempt
 def form(request):
-    pass
+    post = request.POST
+    if post['password']:
+        password_mw = post['password']
+    else:
+        password_mw = '123456'
+    param = {
+        'username': post['username'],
+        'password': make_password(password_mw, None, 'pbkdf2_sha256'),
+        'email': post['email'],
+        'status': post['status'],
+    }
+    try:
+        Admin(**param).add(**param)
+        returnData = {'code': '200', 'msg': 'success', 'data': ''}
+    except Exception as e:
+        returnData = {'code': '800', 'msg': e, 'data': ''}
+
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
