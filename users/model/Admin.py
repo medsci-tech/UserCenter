@@ -19,3 +19,5 @@ class Admin(Document):
         kwargs.update(createTime=datetime.now())
         return self.tables.insert(kwargs)
 
+    # 修改
+

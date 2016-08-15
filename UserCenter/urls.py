@@ -4,9 +4,7 @@ from users import temp, tests  # test
 urlpatterns = patterns(
     '',
     # 管理员管理
-    url(r'^admin/add', admin.add),
     url(r'^admin/form', admin.form),
-    url(r'^admin/ajax', admin.form),
     url(r'^admin/', admin.index),
     # test
     url(r'^temp/index', temp.index),
