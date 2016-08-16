@@ -2,6 +2,7 @@
 from UserCenter.settings import DB_usercenter
 from mongoengine import *
 from datetime import *
+import bson
 
 class Admin(Document):
     tables = DB_usercenter.md_admin  # 获得表
@@ -20,4 +21,8 @@ class Admin(Document):
         return self.tables.insert(kwargs)
 
     # 修改
+    def editById(self, **kwargs):
+        model = self.tables.find({'_id': bson.objectid.ObjectId(kwargs.get('_id'))})
+        model.username = 'hehe'
+        model.save()
 

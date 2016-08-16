@@ -45,5 +45,21 @@ def form(request):
         returnData = {'code': '200', 'msg': 'success', 'data': ''}
     except Exception as e:
         returnData = {'code': '800', 'msg': e, 'data': ''}
-
     return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+# 更改状态操作
+@csrf_exempt
+def status(request):
+    post = request.POST
+
+    param = {
+        '_id': '57ac1407bc8e6e2295a85afe',
+        # 'username': post['username'],
+        # 'nickname': post['nickname'],
+        # 'email': post['email'],
+        # 'status': post['status'],
+    }
+
+    returnData = Admin().editById(**param)
+
+    return HttpResponse(returnData)
