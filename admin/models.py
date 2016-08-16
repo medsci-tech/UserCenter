@@ -1,13 +1,3 @@
-# coding:utf8
-from UserCenter.settings import DB_usercenter
-from mongoengine import *
+from django.db import models
 
-class User(Document):
-    tables = DB_usercenter.md_user  # 获得表
-    name = StringField()
-    likes = StringField()
-    def find(self,**kwargs):
-        return  self.tables.find(kwargs)
-
-    def add(self,**kwargs):
-        return self.tables.insert(kwargs)
+# Create your models here.
