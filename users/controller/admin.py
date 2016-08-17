@@ -10,9 +10,10 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 import json
+from bson.objectid import ObjectId
 
 def index(request):
-    param = {}
+    param = {'_id':ObjectId("57b18a88bc8e6e25503e6d7b")}
     data = Admin().find(**param)
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
@@ -51,15 +52,29 @@ def form(request):
 @csrf_exempt
 def status(request):
     post = request.POST
-
     param = {
-        '_id': '57ac1407bc8e6e2295a85afe',
+        '_id': ObjectId('57b18a88bc8e6e25503e6d7b'),
         # 'username': post['username'],
         # 'nickname': post['nickname'],
         # 'email': post['email'],
-        # 'status': post['status'],
+        'status': 3,
     }
-
-    returnData = Admin().editById(**param)
-
-    return HttpResponse(returnData)
+    '''
+        返回值
+        nModified:修改成功1，修改失败0
+        updatedExisting:根据条件查询结果，有true，无false
+        n:根据条件查询结果，有1，无0
+        ok:1
+    '''
+    try:
+        model = Admin(**param).editById(**param)
+        if model.get('n'):
+            if model.get('ok'):
+                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+            else:
+                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+        else:
+            returnData = {'code': '802', 'msg': '不存在的数据集', 'data': ''}
+    except Exception as e:
+        returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+    return HttpResponse(json.dumps(returnData), content_type="application/json")

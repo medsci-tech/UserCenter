@@ -10,6 +10,7 @@ class Admin(Document):
     password = StringField()
     email = EmailField()
     status = IntField()
+    _id = ObjectIdField()
 
     # 查询
     def find(self,**kwargs):
@@ -22,7 +23,4 @@ class Admin(Document):
 
     # 修改
     def editById(self, **kwargs):
-        model = self.tables.find({'_id': bson.objectid.ObjectId(kwargs.get('_id'))})
-        model.username = 'hehe'
-        model.save()
-
+        return self.tables.update({"_id":kwargs.get('_id')},{'$set':kwargs})
