@@ -6,7 +6,6 @@ author:lxhui
 from django.shortcuts import render
 #from admin.model.Admin import Admin
 from django.http import HttpResponse
-
 '''
 系统首页
 '''
@@ -19,3 +18,4 @@ def index(request):
 def login(request):
     #return HttpResponse('test')
     return render(request, 'admin/login.html', {'question': 1})
+

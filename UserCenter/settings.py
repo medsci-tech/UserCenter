@@ -11,7 +11,7 @@ https://docs.djangoproject.com/en/1.10/ref/settings/
 """
 
 import os
-
+import mongoengine
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -31,12 +31,13 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.admin',
+    #'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'admin',
 ]
 
 MIDDLEWARE = [
@@ -75,12 +76,23 @@ WSGI_APPLICATION = 'UserCenter.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #'ENGINE': 'django.db.backends.sqlite3',
+        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
     }
 }
+#SESSION_ENGINE = 'mongoengine.django.sessions' # optional
+_MONGODB_USER = 'mongo'
+_MONGODB_PASSWD = 'md#root$2016'
+_MONGODB_HOST = '115.28.93.36'
+_MONGODB_NAME = 'md_usercenter'
+_MONGODB_DATABASE_HOST = \
+    'mongodb://%s:%s@%s/%s' \
+    % (_MONGODB_USER, _MONGODB_PASSWD, _MONGODB_HOST, _MONGODB_NAME)
 
-
+mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST,connect=False)
+AUTHENTICATION_BACKENDS = (
+    'mongoengine.auth.MongoEngineBackend',
+) 
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 

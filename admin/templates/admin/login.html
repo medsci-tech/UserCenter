@@ -31,6 +31,13 @@
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" id="password" placeholder="Password" />
                     </div>
+					<div class="input-group  form-group required">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-eye-open red"></i></span>
+						<input type="text" id="loginform-verifycode" class="form-control" name="LoginForm[verifyCode]" placeholder="验证码">
+						<div class="input-group-addon" style="padding:0px; cursor: pointer" title
+="点击更换验证码"> <img onclick="this.setAttribute('src','/accounts/captcha/?nocache='+Math.random());" src="/accounts/captcha/" alt="点击更换验证码"/>
+						</div>					
+						</div>
                     <div class="form-actions clearfix">
                         <div class="pull-left">
                             <a href="#registerform" class="flip-link to-register blue">Create new account</a>
@@ -42,12 +49,10 @@
                     </div>
                     <div class="footer-login">
                         <div class="pull-left text">
-                            Login with
+
                         </div>
                         <div class="pull-right btn-social">
-                            <a class="btn btn-facebook" href="#"><i class="fa fa-facebook"></i></a>
-                            <a class="btn btn-twitter" href="#"><i class="fa fa-twitter"></i></a>
-                            <a class="btn btn-google-plus" href="#"><i class="fa fa-google-plus"></i></a>
+                
                         </div>
                     </div>
 
