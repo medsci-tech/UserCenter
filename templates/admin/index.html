@@ -15,7 +15,7 @@
             <input type="text" name="email">
             </label>
             <button class="btn btn-primary">查询</button>
-            <a href="#myModal" data-toggle="modal" class="btn btn-info">添加</a>
+            <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
             <button class="btn btn-success">启用</button>
             <button class="btn btn-warning">禁用</button>
         </div>
@@ -46,14 +46,22 @@
                         <tbody>
                             {% for list in topics.object_list  %}
                             <tr>
-                                <td><input type="checkbox" /></td>
+                                <td>
+                                    <input type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
                                 <td>{{ list.nickname }}</td>
                                 <td>{{ list.username }}</td>
                                 <td>{{ list.email }}</td>
                                 <td>{{ list.status }}</td>
                                 <td>{{ list.createTime }}</td>
                                 <td>
-                                    <a href="#myModal" data-toggle="modal" class="btn btn-default btn-xs"><i class="fa fa-edit"></i> 编辑</a>
+                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-nickname="{{ list.nickname }}"
+                                       data-username="{{ list.username }}"
+                                       data-email="{{ list.email }}"
+                                       data-status="{{ list.status }}"
+                                    ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -108,7 +116,39 @@
 
 <script>
 $(function () {
-    $('select').select2({width:'100%'});
+    /**
+     * 点击添加按钮触发的操作
+     */
+    $('[data-form="add-model"]').click(function () {
+        var kong = '';
+        $('#form-id').val(kong);
+        $('#form-nickname').val(kong);
+        $('#form-username').val(kong);
+        $('#form-password').val(kong);
+        $('#form-email').val(kong);
+        $('#form-status').val(kong);
+    });
+    /**
+     * 点击修改按钮触发的操作
+     */
+    $('[data-form="edit-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        var nickname = $(this).attr('data-nickname');
+        var username = $(this).attr('data-username');
+        var password = $(this).attr('data-password');
+        var email = $(this).attr('data-email');
+        var status = $(this).attr('data-status');
+        console.log(id);
+        $('#form-id').val(id);
+        $('#form-nickname').val(nickname);
+        $('#form-username').val(username);
+        $('#form-password').val(password);
+        $('#form-email').val(email);
+        $('#form-status').val(status);
+    });
+    /**
+     * 点击form提交按钮触发的操作
+     */
     $('#form-submit').click(function () {
         var data = {};
         data.id = $('#form-id').val();

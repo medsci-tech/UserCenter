@@ -5,7 +5,7 @@ urlpatterns = (
 
     # 管理员管理
     url(r'^admin/form', admin.form),
-    url(r'^admin/status', admin.status),
+    url(r'^admin/stats', admin.stats),
     url(r'^admin/', admin.index),
     # test
     url(r'^temp/index', temp.index),

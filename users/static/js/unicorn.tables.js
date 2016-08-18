@@ -18,9 +18,7 @@ $(document).ready(function(){
     	checkboxClass: checkboxClass,
     	radioClass: radioClass
 	});
-	
-	$('select').select2();
-	
+
 
 	$("span.icon input:checkbox, th input:checkbox").on('ifChecked || ifUnchecked',function() {
 		var checkedStatus = this.checked;
