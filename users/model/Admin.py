@@ -11,7 +11,7 @@ class Admin(Document):
     password = StringField()
     email = EmailField()
     status = StringField()
-    _id = ObjectIdField()
+    id = StringField()
 
     # 查询
     def find(self, **kwargs):
@@ -24,4 +24,4 @@ class Admin(Document):
 
     # 修改
     def editById(self, **kwargs):
-        return self.tables.update({"_id":kwargs.get('id')},{'$set':kwargs})
+        return self.tables.update({"id":kwargs.get('id')},{'$set':kwargs})

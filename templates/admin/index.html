@@ -16,8 +16,8 @@
             </label>
             <button class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
-            <button class="btn btn-success">启用</button>
-            <button class="btn btn-warning">禁用</button>
+            <button class="btn btn-success" data-form="enable">启用</button>
+            <button class="btn btn-warning" data-form="disable">禁用</button>
         </div>
     </div>
     <div class="row">
@@ -31,10 +31,14 @@
                     <h5>管理员列表</h5>
                 </div>
                 <div class="widget-content">
+                    <form id="data-list-form" action="/admin/stats.html" method="post">
                     <table class="table table-bordered table-striped table-hover with-check table-data">
                         <thead>
                             <tr>
-                                <th><input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" /></th>
+                                <th>
+                                    <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
+                                    <input type="hidden" id="form-statusType" name="statusType" value="enable" />
+                                </th>
                                 <th>昵称</th>
                                 <th>用户名</th>
                                 <th>邮箱</th>
@@ -67,7 +71,7 @@
                             {% endfor %}
                         </tbody>
                     </table>
-
+                    </form>
                     <ul class="pagination">
 
                     {% if topics.has_previous %}
@@ -161,7 +165,54 @@ $(function () {
         var location = '/admin/index';
         console.log(data);
         subActionAjaxForMime('post', url, data, location);
-    })
+    });
+
+    /**
+    * 启用
+    */
+    $('[data-form="enable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[name="selection[]"]');
+        console.log(check.length);
+        var verifyChecked = verifyCheckedForMime(check);
+        if(false == verifyChecked){
+            return false;
+        }
+        swal({
+            title: "您确定要启用选中的信息吗",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonColor: "#23c6c8",
+            confirmButtonText: "确定",
+            closeOnConfirm: false
+        }, function () {
+            subActionStatusForMime('#data-list-form', '#form-statusType', 'enable', '/admin/index');
+        });
+    });
+
+    /**
+     * jinyong
+     */
+    $('[data-form="disable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[name="selection[]"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(false == verifyChecked){
+            return false;
+        }
+        swal({
+            title: "您确定要禁用选中的信息吗",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonColor: "#f8ac59",
+            confirmButtonText: "确定",
+            closeOnConfirm: false
+        }, function () {
+            subActionStatusForMime('#data-list-form', '#form-statusType', 'disable', '/admin/index');
+        });
+    });
 });
 </script>
 

@@ -9,12 +9,25 @@ console.log('jq-common-mime');
 
 /**
  * 禁用启用等按钮的提交操作
- * @param element string | eg:'#div'
+ * @param statusType string | eg:'#div'
+ * @param form string | eg:'#div'
  * @param val
+ * @param location
  */
-subActionForMime = function (element,val) {
-    $(element).val(val);
-    $(element).submit();
+subActionStatusForMime = function (form, statusType, val, location) {
+    $(statusType).val(val);
+    console.log(val);
+    $(form).submit();
+    swal({
+        title: "成功",
+        type: "success",
+        confirmButtonColor: "#1ab394",
+        confirmButtonText: "确定",
+        closeOnConfirm: false
+    }, function () {
+        window.location.href = location;
+    });
+    swal("已禁用！", "", "success");
 };
 
 /**

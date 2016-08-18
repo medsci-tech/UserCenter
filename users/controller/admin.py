@@ -52,10 +52,11 @@ def _editById(**param):
     id = param.get('id')
     password = param.get('password')
     if id:
-        if password:
-            param.update(password=make_password(password, None, 'pbkdf2_sha256'))
-        else:
-            param.pop('password')
+        if hasattr(param, 'password'):
+            if password:
+                param.update(password=make_password(password, None, 'pbkdf2_sha256'))
+            else:
+                param.pop('password')
         try:
             model = Admin(**param).editById(**param)
             '''
@@ -92,7 +93,7 @@ def form(request):
     }
     if id:
         # 修改
-        param.update(id=ObjectId(id))
+        param.update(id=id)
         returnData = _editById(**param)
     else:
         # 添加
@@ -104,12 +105,19 @@ def form(request):
 @csrf_exempt
 def stats(request):
     post = request.POST
-    id = post['id']
-    status = 2
+    selection = post['selection[]']
+    statusType = post['statusType']
+    if statusType == 'enable':
+        status = 1
+    elif statusType == 'disable':
+        status = 0
+    else:
+        status = 1
     param = {
-        'id': ObjectId(id),
+        'id': id,
         'status': status,
     }
     returnData = _editById(**param)
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+    return HttpResponse(selection)
+    # return HttpResponse(json.dumps(returnData), content_type="application/json")
