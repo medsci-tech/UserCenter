@@ -3,6 +3,7 @@ from UserCenter.settings import DB_usercenter
 from mongoengine import *
 from datetime import *
 import bson
+from django.db.models import Q
 
 class Admin(Document):
     tables = DB_usercenter.md_admin  # 获得表
@@ -25,3 +26,9 @@ class Admin(Document):
     # 修改
     def editById(self, **kwargs):
         return self.tables.update({"id":kwargs.get('id')},{'$set':kwargs})
+
+
+    # 修改
+    def editByFilter(self, **kwargs):
+        # return self.tables.update({'id':{'$in':['1','6']}},{'$set':kwargs})
+        return self.tables.update({'id':{'$in':['1','6']}},{'$set':kwargs},False,True,True)

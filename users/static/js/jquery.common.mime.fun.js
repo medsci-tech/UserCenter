@@ -8,29 +8,6 @@
 console.log('jq-common-mime');
 
 /**
- * 禁用启用等按钮的提交操作
- * @param statusType string | eg:'#div'
- * @param form string | eg:'#div'
- * @param val
- * @param location
- */
-subActionStatusForMime = function (form, statusType, val, location) {
-    $(statusType).val(val);
-    console.log(val);
-    $(form).submit();
-    swal({
-        title: "成功",
-        type: "success",
-        confirmButtonColor: "#1ab394",
-        confirmButtonText: "确定",
-        closeOnConfirm: false
-    }, function () {
-        window.location.href = location;
-    });
-    swal("已禁用！", "", "success");
-};
-
-/**
  * 判断多选框是否有勾选，有勾选返回true，没有则弹窗提示并返回false
  * @param check array
  * @returns {boolean}

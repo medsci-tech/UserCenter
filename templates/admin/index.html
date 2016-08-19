@@ -31,8 +31,7 @@
                     <h5>管理员列表</h5>
                 </div>
                 <div class="widget-content">
-                    <form id="data-list-form" action="/admin/stats.html" method="post">
-                    <table class="table table-bordered table-striped table-hover with-check table-data">
+                    <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
                         <thead>
                             <tr>
                                 <th>
@@ -51,7 +50,7 @@
                             {% for list in topics.object_list  %}
                             <tr>
                                 <td>
-                                    <input type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
                                 <td>{{ list.nickname }}</td>
                                 <td>{{ list.username }}</td>
@@ -71,7 +70,6 @@
                             {% endfor %}
                         </tbody>
                     </table>
-                    </form>
                     <ul class="pagination">
 
                     {% if topics.has_previous %}
@@ -130,7 +128,7 @@ $(function () {
         $('#form-username').val(kong);
         $('#form-password').val(kong);
         $('#form-email').val(kong);
-        $('#form-status').val(kong);
+        $('#form-status').val(1);
     });
     /**
      * 点击修改按钮触发的操作
@@ -142,7 +140,6 @@ $(function () {
         var password = $(this).attr('data-password');
         var email = $(this).attr('data-email');
         var status = $(this).attr('data-status');
-        console.log(id);
         $('#form-id').val(id);
         $('#form-nickname').val(nickname);
         $('#form-username').val(username);
@@ -172,8 +169,7 @@ $(function () {
     */
     $('[data-form="enable"]').click(function() {
         /*判断是否有选中*/
-        var check = $('#data-list-form').find('input[name="selection[]"]');
-        console.log(check.length);
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
         var verifyChecked = verifyCheckedForMime(check);
         if(false == verifyChecked){
             return false;
@@ -187,7 +183,13 @@ $(function () {
             confirmButtonText: "确定",
             closeOnConfirm: false
         }, function () {
-            subActionStatusForMime('#data-list-form', '#form-statusType', 'enable', '/admin/index');
+            var data = {};
+            data.selection = getDataListForMime(check);
+            data.statusType = 'enable';
+            var url = '/admin/stats.html';
+            var location = '/admin/index';
+            console.log(data);
+            subActionAjaxForMime('post', url, data, location);
         });
     });
 
@@ -196,7 +198,7 @@ $(function () {
      */
     $('[data-form="disable"]').click(function() {
         /*判断是否有选中*/
-        var check = $('#data-list-form').find('input[name="selection[]"]');
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
         var verifyChecked = verifyCheckedForMime(check);
         if(false == verifyChecked){
             return false;
@@ -210,7 +212,13 @@ $(function () {
             confirmButtonText: "确定",
             closeOnConfirm: false
         }, function () {
-            subActionStatusForMime('#data-list-form', '#form-statusType', 'disable', '/admin/index');
+            var data = {};
+            data.selection = getDataListForMime(check);
+            data.statusType = 'disable';
+            var url = '/admin/stats.html';
+            var location = '/admin/index';
+            console.log(data);
+            subActionAjaxForMime('post', url, data, location);
         });
     });
 });

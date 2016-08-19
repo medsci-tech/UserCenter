@@ -10,6 +10,8 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 import json
+from mongoengine import *
+from django.db import transaction
 from bson.objectid import ObjectId
 
 def index(request):
@@ -105,19 +107,28 @@ def form(request):
 @csrf_exempt
 def stats(request):
     post = request.POST
-    selection = post['selection[]']
-    statusType = post['statusType']
+    selection = post.getlist('selection[]')
+    statusType = post.get('statusType')
     if statusType == 'enable':
-        status = 1
-    elif statusType == 'disable':
-        status = 0
+        status = '1'
     else:
-        status = 1
+        status = '0'
     param = {
-        'id': id,
+        'selection':selection,
         'status': status,
     }
-    returnData = _editById(**param)
+    res = Admin(**param).editByFilter(**param)
+    # try:
+    #     for id in selection:
+    #         param.update(id=id)
+    #         Admin(**param).editById(**param)
+    #     returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+    # except Exception:
+    #     transaction.rollback()
+    #     returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+    # returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
 
-    return HttpResponse(selection)
+    # returnData = _editById(**param)
+
+    return HttpResponse(res)
     # return HttpResponse(json.dumps(returnData), content_type="application/json")
