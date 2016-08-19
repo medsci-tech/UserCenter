@@ -73,26 +73,20 @@ WSGI_APPLICATION = 'UserCenter.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        #'ENGINE': 'django.db.backends.sqlite3',
-        #'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-    }
-}
-#SESSION_ENGINE = 'mongoengine.django.sessions' # optional
-_MONGODB_USER = 'mongo'
-_MONGODB_PASSWD = 'md#root$2016'
-_MONGODB_HOST = '115.28.93.36'
-_MONGODB_NAME = 'md_usercenter'
-_MONGODB_DATABASE_HOST = \
+# MongoDB settings
+MONGODB_USER = 'mongo'
+MONGODB_PASSWD = 'md#root$2016'
+MONGODB_HOST = '115.28.93.36'
+MONGODB_NAME = 'md_usercenter'
+MONGODB_DATABASE_HOST = \
     'mongodb://%s:%s@%s/%s' \
-    % (_MONGODB_USER, _MONGODB_PASSWD, _MONGODB_HOST, _MONGODB_NAME)
+    % (MONGODB_USER, MONGODB_PASSWD, MONGODB_HOST, MONGODB_NAME)
 
-mongoengine.connect(_MONGODB_NAME, host=_MONGODB_DATABASE_HOST,connect=False)
+mongoengine.connect(MONGODB_NAME, host=MONGODB_DATABASE_HOST,connect=False)
 AUTHENTICATION_BACKENDS = (
     'mongoengine.auth.MongoEngineBackend',
-) 
+)
+
 # Password validation
 # https://docs.djangoproject.com/en/1.10/ref/settings/#auth-password-validators
 
