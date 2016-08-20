@@ -8,16 +8,6 @@
 console.log('jq-common-mime');
 
 /**
- * 禁用启用等按钮的提交操作
- * @param element string | eg:'#div'
- * @param val
- */
-subActionForMime = function (element,val) {
-    $(element).val(val);
-    $(element).submit();
-};
-
-/**
  * 判断多选框是否有勾选，有勾选返回true，没有则弹窗提示并返回false
  * @param check array
  * @returns {boolean}

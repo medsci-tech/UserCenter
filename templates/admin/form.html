@@ -1,5 +1,5 @@
 <form class="form-horizontal" method="post" action="/admin/form.html">
-    <input type="hidden" name="id" id="form-id">
+    <input type="hidden" name="id" id="form-id" value="">
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">昵称</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
@@ -27,7 +27,7 @@
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <select name="status" id="form-status">
+            <select class="form-control" name="status" id="form-status">
                 <option value="1">启用</option>
                 <option value="0">禁用</option>
             </select>

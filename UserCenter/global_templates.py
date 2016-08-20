@@ -3,8 +3,13 @@
 # @Date    : 20160801
 # @Author  : zhaiyu
 
-def userInfo(request):
-    info = {
-        'username' : 'zhaiyu',
+def configParam(request):
+    return {
+        'c_adminInfo': {
+            'username': 'zhaiyu',
+        },
+        'c_status': {
+            '0': '禁用',
+            '1': '启用',
+        },
     }
-    return {'userInfo': info}
