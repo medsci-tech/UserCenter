@@ -43,7 +43,8 @@ $(document).ready(function(){
         var thisForm = $(this); 
         var userinput = $('#username');
         var passinput = $('#password');
-        if(userinput.val() == '' || passinput.val() == '') {
+        var verycodeinput = $('#verifycode');
+        if(userinput.val() == '' || passinput.val() == '' || verycodeinput.val() == '') {
             highlight_error(userinput);
             highlight_error(passinput);
             loginbox.effect('shake');

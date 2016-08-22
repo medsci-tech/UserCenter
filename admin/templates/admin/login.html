@@ -23,19 +23,19 @@
                 </div>
             </div>
             <div id="loginbox">            
-                <form id="loginform" action="/temp/index.html">
+                <form id="loginform" action="{% url 'admin:index' %}">
     				<p>Enter username and password to continue.</p>
                     <div class="input-group input-sm">
-                        <span class="input-group-addon"><i class="fa fa-user"></i></span><input class="form-control" type="text" id="username" placeholder="Username" />
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span><input class="form-control" type="text" id="username" placeholder="用户名" />
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" id="password" placeholder="Password" />
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" id="password" placeholder="密码" />
                     </div>
 					<div class="input-group  form-group required">
 						<span class="input-group-addon"><i class="glyphicon glyphicon-eye-open red"></i></span>
-						<input type="text" id="loginform-verifycode" class="form-control" name="LoginForm[verifyCode]" placeholder="验证码">
+						<input type="text" id="verifycode" class="form-control" name="verifycode" placeholder="验证码">
 						<div class="input-group-addon" style="padding:0px; cursor: pointer" title
-="点击更换验证码"> <img onclick="this.setAttribute('src','/accounts/captcha/?nocache='+Math.random());" src="/admin/accounts/captcha/" alt="点击更换验证码"/>
+="点击更换验证码"> <img onclick="this.setAttribute('src','/admin/accounts/captcha/?nocache='+Math.random());" src="/admin/accounts/captcha/" alt="点击更换验证码"/>
 						</div>					
 						</div>
                     <div class="form-actions clearfix">
@@ -57,7 +57,7 @@
                     </div>
 
                 </form>
-                <form id="recoverform" action="#">
+                <form id="recoverform" action="{% url 'admin:login' %}">
     				<p>Enter your e-mail address below and we will send you instructions how to recover a password.</p>
     				<div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input class="form-control" type="text" placeholder="E-mail address" />
@@ -75,10 +75,10 @@
                 <form id="registerform" action="#">
                     <p>Enter information required to register:</p>
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-user"></i></span><input class="form-control" type="text" placeholder="Enter Username" />
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span><input class="form-control" type="text" placeholder="Enter Username" name="username" />
                     </div>
                     <div class="input-group">
-                        <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" placeholder="Choose Password" />
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" placeholder="Choose Password" name="password" name='checkcode'/>
                     </div>
                     <div class="input-group">
                         <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" placeholder="Confirm password" />
