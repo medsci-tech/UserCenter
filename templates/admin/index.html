@@ -7,18 +7,25 @@
         <h1>管理员</h1>
     </div>
     <div class="row">
+        <form action="" method="post">
+
+
         <div class="col-xs-12 center">
             <label>昵称：
-            <input type="text" name="nickname">
+                <input type="text" name="nickname" value="{{ request.nickname }}">
+            </label>
+            <label>用户名：
+                <input type="text" name="username" value="{{ request.username }}">
             </label>
             <label>邮箱：
-            <input type="text" name="email">
+                <input type="text" name="email" value="{{ request.email }}">
             </label>
-            <button class="btn btn-primary">查询</button>
+            <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
             <button class="btn btn-success" data-form="enable">启用</button>
             <button class="btn btn-warning" data-form="disable">禁用</button>
         </div>
+        </form>
     </div>
     <div class="row">
         <div class="col-xs-12">
