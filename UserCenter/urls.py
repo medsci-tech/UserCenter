@@ -1,16 +1,14 @@
 from django.conf.urls import *
-from users.controller import admin
-from users import temp, tests  # test
+from users.controller import admin, contract
 urlpatterns = (
 
     # 管理员管理
     url(r'^admin/form', admin.form),
     url(r'^admin/stats', admin.stats),
     url(r'^admin/', admin.index),
-    # test
-    url(r'^temp/index', temp.index),
-    url(r'^temp/tables', temp.tables),
-    # url(r'^temp/testdb', temp.testdb),
-    # url(r'^temp/', temp.index),
-    # url(r'', temp.login),
+    # 合同信息管理
+    url(r'^contract/form', contract.form),
+    url(r'^contract/stats', contract.stats),
+    url(r'^contract/', contract.index),
+
 )

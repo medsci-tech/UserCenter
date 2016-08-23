@@ -4,14 +4,15 @@ from mongoengine import *
 from datetime import *
 import bson
 
-class Admin(Document):
-    tables = DB_usercenter.md_admin  # 获得表
-    username = StringField()
-    nickname = StringField()
-    password = StringField()
-    email = EmailField()
-    status = StringField()
+class Contract(Document):
+    tables = DB_usercenter.md_enterprise  # 获得表
     id = StringField()
+    name = StringField()
+    number = StringField()
+    amount = StringField()
+    img = StringField()
+    startTime = StringField()
+    endTime = StringField()
 
     # 查询
     def find(self, **kwargs):
@@ -27,6 +28,6 @@ class Admin(Document):
         return self.tables.update({"id":kwargs.get('id')},{'$set':kwargs})
 
 
-    # 修改
+    # 批量修改
     def editByIds(self, selection, **kwargs):
         return self.tables.update({'id':{'$in':selection}},{'$set':kwargs},False,True,True)
