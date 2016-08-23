@@ -11,6 +11,10 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 import json
+def test(request):
+    #res = Employee.objects[1:2]
+    num_users = Employee.objects.count()
+    return HttpResponse(num_users)
 
 def detail(request, question_id):
     try:
@@ -18,15 +22,7 @@ def detail(request, question_id):
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
     return render(request, 'admin/detail.html', {'question': question})
-
-def test(request):
-    res = Employee.objects[1:2]
-    num_users = Employee.objects.count()
-    for x in res:
-         print (x)
-    return HttpResponse()
-    
-    
+ 
 @csrf_exempt
 def list(request):
     post = request.POST

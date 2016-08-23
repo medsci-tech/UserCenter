@@ -16,17 +16,17 @@ def captcha(request):
 
 
 '''
-        系统首页
-    Author : lxhui
-    Create : 2016-08-19
+系统首页
+Author : lxhui
+Create : 2016-08-19
 '''
 def index(request):
     return render(request, 'admin/index.html')
 
 '''
-        系统登录
-    Author : lxhui
-    Create : 2016-08-19
+系统登录
+Author : lxhui
+Create : 2016-08-19
 '''
 def login(request):
     if request.method == 'POST':

@@ -89,12 +89,22 @@ WSGI_APPLICATION = 'UserCenter.wsgi.application'
 
 
 # Database
+DATABASES = {
+    'default' : {
+        #'ENGINE' : 'mongoengine',
+        #'NAME' : 'my_database',
+        'OPTIONS' : {
+            'socketTimeoutMS' : 500,
+        }
+    }
+}
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 # MongoDB settings
 MONGODB_USER = 'mongo'
 MONGODB_PASSWD = 'md#root$2016'
 MONGODB_HOST = '115.28.93.36'
 MONGODB_NAME = 'md_usercenter'
+MONGODB_PREFIX = 'md_' #集合前缀
 MONGODB_DATABASE_HOST = \
     'mongodb://%s:%s@%s/%s' \
     % (MONGODB_USER, MONGODB_PASSWD, MONGODB_HOST, MONGODB_NAME)
