@@ -11,10 +11,6 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 import json
-def test(request):
-    #res = Employee.objects[1:2]
-    num_users = Employee.objects.count()
-    return HttpResponse(num_users)
 
 def detail(request, question_id):
     try:
@@ -37,7 +33,7 @@ def list(request):
             param.update(username={'$regex': username})
         if email:
             param.update(email={'$regex': email})
-    data = Admin().find(**param)
+    data = Admin.objects.all()
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -48,7 +44,7 @@ def list(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/index.html',{'topics':topics, 'request': post})
+    return render(request, 'admin/admin/index.html',{'topics':topics, 'request': post})
 
 # 添加操作--protected
 def _add(**param):

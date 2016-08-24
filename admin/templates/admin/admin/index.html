@@ -1,0 +1,214 @@
+{% extends 'admin/layouts/main.html' %}
+
+{% block content %}
+
+<div id="content">
+    <div id="content-header" class="mini">
+        <h1>管理员</h1>
+    </div>
+    <div class="row">
+        <form action="" method="post">
+
+
+        <div class="col-xs-12 center">
+            <label>昵称：
+                <input type="text" name="nickname" value="{{ request.nickname }}">
+            </label>
+            <label>用户名：
+                <input type="text" name="username" value="{{ request.username }}">
+            </label>
+            <label>邮箱：
+                <input type="text" name="email" value="{{ request.email }}">
+            </label>
+            <button type="submit" class="btn btn-primary">查询</button>
+            <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
+            <button class="btn btn-success" data-form="enable">启用</button>
+            <button class="btn btn-warning" data-form="disable">禁用</button>
+        </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-th"></i>
+                    </span>
+                    <h5>管理员列表</h5>
+                </div>
+                <div class="widget-content">
+                    <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
+                                    <input type="hidden" id="form-statusType" name="statusType" value="enable" />
+                                </th>
+                                <th>昵称</th>
+                                <th>用户名</th>
+                                <th>邮箱</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for list in topics.object_list  %}
+                            <tr>
+                                <td>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
+                                <td>{{ list.nickname }}</td>
+                                <td>{{ list.username }}</td>
+                                <td>{{ list.email }}</td>
+                                <td>{{ list.status }}</td>
+                                <td>{{ list.createTime }}</td>
+                                <td>
+                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-nickname="{{ list.nickname }}"
+                                       data-username="{{ list.username }}"
+                                       data-email="{{ list.email }}"
+                                       data-status="{{ list.status }}"
+                                    ><i class="fa fa-edit"></i> 编辑</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include 'admin/layouts/page.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>管理员管理</h3>
+            </div>
+            <div class="modal-body">
+                {% include 'admin/admin/form.html' %}
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
+                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">取消</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+$(function () {
+    /**
+     * 点击添加按钮触发的操作
+     */
+    $('[data-form="add-model"]').click(function () {
+        var kong = '';
+        $('#form-id').val(kong);
+        $('#form-nickname').val(kong);
+        $('#form-username').val(kong);
+        $('#form-password').val(kong);
+        $('#form-email').val(kong);
+        $('#form-status').val(1);
+    });
+    /**
+     * 点击修改按钮触发的操作
+     */
+    $('[data-form="edit-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        var nickname = $(this).attr('data-nickname');
+        var username = $(this).attr('data-username');
+        var password = $(this).attr('data-password');
+        var email = $(this).attr('data-email');
+        var status = $(this).attr('data-status');
+        $('#form-id').val(id);
+        $('#form-nickname').val(nickname);
+        $('#form-username').val(username);
+        $('#form-password').val(password);
+        $('#form-email').val(email);
+        $('#form-status').val(status);
+    });
+    /**
+     * 点击form提交按钮触发的操作
+     */
+    $('#form-submit').click(function () {
+        var data = {};
+        data.id = $('#form-id').val();
+        data.nickname = $('#form-nickname').val();
+        data.username = $('#form-username').val();
+        data.password = $('#form-password').val();
+        data.email = $('#form-email').val();
+        data.status = $('#form-status').val();
+        var url = '/admin/form.html';
+        var location = '/admin/index';
+        console.log(data);
+        subActionAjaxForMime('post', url, data, location);
+    });
+
+    /**
+    * 启用
+    */
+    $('[data-form="enable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(false == verifyChecked){
+            return false;
+        }
+        swal({
+            title: "您确定要启用选中的信息吗",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonColor: "#23c6c8",
+            confirmButtonText: "确定",
+            closeOnConfirm: false
+        }, function () {
+            var data = {};
+            data.selection = getDataListForMime(check);
+            data.statusType = 'enable';
+            var url = '/admin/stats.html';
+            var location = '/admin/index';
+            console.log(data);
+            subActionAjaxForMime('post', url, data, location);
+        });
+    });
+
+    /**
+     * 禁用
+     */
+    $('[data-form="disable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(false == verifyChecked){
+            return false;
+        }
+        swal({
+            title: "您确定要禁用选中的信息吗",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonColor: "#f8ac59",
+            confirmButtonText: "确定",
+            closeOnConfirm: false
+        }, function () {
+            var data = {};
+            data.selection = getDataListForMime(check);
+            data.statusType = 'disable';
+            var url = '/admin/stats.html';
+            var location = '/admin/index';
+            console.log(data);
+            subActionAjaxForMime('post', url, data, location);
+        });
+    });
+});
+</script>
+
+{% endblock %}

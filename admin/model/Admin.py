@@ -2,19 +2,20 @@
 from mongoengine import *
 from datetime import *
 import bson
-
+from django.conf import settings # import the settings file
 class Admin(Document):
-    tables = 'md_admin'  # 获得表
-    username = StringField()
-    nickname = StringField()
-    password = StringField()
+    meta = {'collection': settings.MONGODB_PREFIX+'admin'}
+    username = StringField(max_length=20, required=True)
+    createTime = DateTimeField()
+    nickname = StringField(max_length=20) 
+    password = StringField(max_length=20, required=True)
     email = EmailField()
-    status = StringField()
-    id = StringField()
+    status = IntField()
+    _id = StringField()
 
     # 查询
     def find(self, **kwargs):
-        return self.tables.find(kwargs)
+        return self.find(kwargs)
 
     # 添加
     def add(self, **kwargs):
