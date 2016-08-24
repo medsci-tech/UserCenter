@@ -130,3 +130,6 @@ def stats(request):
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+def test(request):
+    return render(request, 'common/test.html')
