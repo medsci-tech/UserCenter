@@ -10,3 +10,4 @@
 /users/tests.py
 /users/model/__pycache__
 /users/controller/__pycache__
+/templates/common/test.html
