@@ -9,7 +9,6 @@
     <div class="row">
         <form action="" method="post">
 
-
         <div class="col-xs-12 center">
             <label>昵称：
                 <input type="text" name="nickname" value="{{ request.nickname }}">
@@ -27,6 +26,57 @@
         </div>
         </form>
     </div>
+    
+    
+    <div class="row">
+					<div class="col-xs-12">
+						<div class="widget-box">
+							<div class="widget-title">
+								<span class="icon">
+									<i class="fa fa-align-justify"></i>									
+								</span>
+								<h5>Basic validation</h5>
+								<span class="label label-danger">48 notices</span>
+							</div>
+							<div class="widget-content nopadding">
+								<form class="form-horizontal" method="post" action="#" name="basic_validate" id="basic_validate" novalidate="novalidate">
+                                    <div class="form-group">
+                                        <label class="col-sm-3 col-md-3 col-lg-2 control-label">Required Field</label>
+                                        <div class="col-sm-9 col-md-9 col-lg-10">
+                                            <input type="text" class="form-control input-sm" name="required" id="required">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 col-md-3 col-lg-2 control-label">Email</label>
+                                        <div class="col-sm-9 col-md-9 col-lg-10">
+                                            <input type="text" class="form-control input-sm" name="email" id="email">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 col-md-3 col-lg-2 control-label">Date</label>
+                                        <div class="col-sm-9 col-md-9 col-lg-10">
+                                            <input type="text" class="form-control input-sm" name="date" id="date">
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="col-sm-3 col-md-3 col-lg-2 control-label">URL</label>
+                                        <div class="col-sm-9 col-md-9 col-lg-10">
+                                            <input type="text" class="form-control input-sm" name="url" id="url">
+                                        </div>
+                                    </div>
+                                    <div class="form-actions">
+                                        <input type="submit" value="Validate" class="btn btn-primary">
+                                    </div>
+                                </form>
+							</div>
+						</div>			
+					</div>
+				</div>
+				
+				
+				
+				
+    
     <div class="row">
         <div class="col-xs-12">
 
@@ -100,115 +150,5 @@
         </div>
     </div>
 </div>
-
-
-
-<script>
-$(function () {
-    /**
-     * 点击添加按钮触发的操作
-     */
-    $('[data-form="add-model"]').click(function () {
-        var kong = '';
-        $('#form-id').val(kong);
-        $('#form-nickname').val(kong);
-        $('#form-username').val(kong);
-        $('#form-password').val(kong);
-        $('#form-email').val(kong);
-        $('#form-status').val(1);
-    });
-    /**
-     * 点击修改按钮触发的操作
-     */
-    $('[data-form="edit-model"]').click(function () {
-        var id = $(this).attr('data-id');
-        var nickname = $(this).attr('data-nickname');
-        var username = $(this).attr('data-username');
-        var password = $(this).attr('data-password');
-        var email = $(this).attr('data-email');
-        var status = $(this).attr('data-status');
-        $('#form-id').val(id);
-        $('#form-nickname').val(nickname);
-        $('#form-username').val(username);
-        $('#form-password').val(password);
-        $('#form-email').val(email);
-        $('#form-status').val(status);
-    });
-    /**
-     * 点击form提交按钮触发的操作
-     */
-    $('#form-submit').click(function () {
-        var data = {};
-        data.id = $('#form-id').val();
-        data.nickname = $('#form-nickname').val();
-        data.username = $('#form-username').val();
-        data.password = $('#form-password').val();
-        data.email = $('#form-email').val();
-        data.status = $('#form-status').val();
-        var url = '/admin/form.html';
-        var location = '/admin/index';
-        console.log(data);
-        subActionAjaxForMime('post', url, data, location);
-    });
-
-    /**
-    * 启用
-    */
-    $('[data-form="enable"]').click(function() {
-        /*判断是否有选中*/
-        var check = $('#data-list-form').find('input[data-form="check-model"]');
-        var verifyChecked = verifyCheckedForMime(check);
-        if(false == verifyChecked){
-            return false;
-        }
-        swal({
-            title: "您确定要启用选中的信息吗",
-            type: "warning",
-            showCancelButton: true,
-            cancelButtonText: '取消',
-            confirmButtonColor: "#23c6c8",
-            confirmButtonText: "确定",
-            closeOnConfirm: false
-        }, function () {
-            var data = {};
-            data.selection = getDataListForMime(check);
-            data.statusType = 'enable';
-            var url = '/admin/stats.html';
-            var location = '/admin/index';
-            console.log(data);
-            subActionAjaxForMime('post', url, data, location);
-        });
-    });
-
-    /**
-     * 禁用
-     */
-    $('[data-form="disable"]').click(function() {
-        /*判断是否有选中*/
-        var check = $('#data-list-form').find('input[data-form="check-model"]');
-        var verifyChecked = verifyCheckedForMime(check);
-        if(false == verifyChecked){
-            return false;
-        }
-        swal({
-            title: "您确定要禁用选中的信息吗",
-            type: "warning",
-            showCancelButton: true,
-            cancelButtonText: '取消',
-            confirmButtonColor: "#f8ac59",
-            confirmButtonText: "确定",
-            closeOnConfirm: false
-        }, function () {
-            var data = {};
-            data.selection = getDataListForMime(check);
-            data.statusType = 'disable';
-            var url = '/admin/stats.html';
-            var location = '/admin/index';
-            console.log(data);
-            subActionAjaxForMime('post', url, data, location);
-        });
-    });
-});
-</script>
 
 {% endblock %}
