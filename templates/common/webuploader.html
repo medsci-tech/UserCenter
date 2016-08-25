@@ -12,7 +12,7 @@
 .webuploader-container {
     position: relative;
     float: left;
-    padding: 0 15px;
+    padding: 0 10px;
 }
 .webuploader-element-invisible {
     position: absolute !important;
@@ -51,6 +51,7 @@
     margin: 0;
     margin-top: 7px;
     padding: 0;
+    width: 160px;
 }
 .webuploader-input{
     margin-top: 2px;
@@ -66,7 +67,7 @@
     <div id="saveInput-{{ saveInput|default:'one' }}"></div>
     <div id="filePicker-{{ saveInput|default:'one' }}">上传</div>
 
-    <div class="progress webuploader-progress col-sm-4 col-md-4 col-lg-4">
+    <div class="progress webuploader-progress">
         <div id="fileList-{{ saveInput|default:'one' }}" role="progressbar" class="progress-bar progress-bar-info">
             <span></span>
         </div>
