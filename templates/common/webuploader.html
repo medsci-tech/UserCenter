@@ -8,58 +8,6 @@
 -->
 <link href="/static/plugins/webuploader/webuploader.css" type="text/css" rel="stylesheet">
 
-<style type="text/css">
-.webuploader-container {
-    position: relative;
-    float: left;
-    padding: 0 10px;
-}
-.webuploader-element-invisible {
-    position: absolute !important;
-    clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
-    clip: rect(1px,1px,1px,1px);
-}
-.webuploader-pick {
-    position: relative;
-    cursor: pointer;
-    padding: 6px 12px;
-    text-align: center;
-    border-radius: 3px;
-    overflow: hidden;
-    background-color: #f8ac59;
-    color: #FFF;
-    font-size: 14px;
-    font-weight: 400;
-    line-height: 1.42857143;
-    margin-bottom: 0;
-    border: 1px solid #f8ac59;
-}
-.webuploader-pick-hover {
-    background-color: #f7a54a;
-    border-color: #f7a54a;
-    color: #FFF
-}
-
-.webuploader-pick-disable {
-    opacity: 0.6;
-    pointer-events:none;
-}
-.webuploader-container label{
-    margin: 0;
-}
-.webuploader-progress{
-    margin: 0;
-    margin-top: 7px;
-    padding: 0;
-    width: 160px;
-}
-.webuploader-input{
-    margin-top: 2px;
-}
-</style>
-
-
-
 <div class=" col-sm-9 col-md-9 col-lg-10">
     <div class="col-sm-5 col-md-5 col-lg-5" style="margin: 0;padding: 0">
         <input readonly class="form-control input-sm webuploader-input" type="text" data-toggle="upload-progressInput-{{ saveInput|default:'one' }}">
@@ -75,7 +23,7 @@
 </div>
 
 
-<script src="/static/plugins/webuploader/webuploader.min.js" type="text/javascript"></script>
+<script src="/static/plugins/webuploader/webuploader.js" type="text/javascript"></script>
 <script>
 // 初始化Web Uploader
 var probar{{ saveInput|default:'one' }} = $('#fileList-{{ saveInput|default:'one' }}');

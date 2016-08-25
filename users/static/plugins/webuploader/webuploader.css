@@ -1,5 +1,7 @@
 .webuploader-container {
 	position: relative;
+    float: left;
+    padding: 0 10px;
 }
 .webuploader-element-invisible {
 	position: absolute !important;
@@ -11,8 +13,12 @@
 	display: inline-block;
 	cursor: pointer;
 	background: #00b7ee;
-	padding: 10px 15px;
+    padding: 6px 12px;
 	color: #fff;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.42857143;
+    margin-bottom: 0;
 	text-align: center;
 	border-radius: 3px;
 	overflow: hidden;
@@ -24,5 +30,17 @@
 .webuploader-pick-disable {
 	opacity: 0.6;
 	pointer-events:none;
+}
+.webuploader-container label{
+    margin: 0;
+}
+.webuploader-progress{
+    margin: 0;
+    margin-top: 7px;
+    padding: 0;
+    width: 160px;
+}
+.webuploader-input{
+    margin-top: 2px;
 }
 
