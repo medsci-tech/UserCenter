@@ -26,57 +26,7 @@
         </div>
         </form>
     </div>
-    
-    
-    <div class="row">
-					<div class="col-xs-12">
-						<div class="widget-box">
-							<div class="widget-title">
-								<span class="icon">
-									<i class="fa fa-align-justify"></i>									
-								</span>
-								<h5>Basic validation</h5>
-								<span class="label label-danger">48 notices</span>
-							</div>
-							<div class="widget-content nopadding">
-								<form class="form-horizontal" method="post" action="#" name="basic_validate" id="basic_validate" novalidate="novalidate">
-                                    <div class="form-group">
-                                        <label class="col-sm-3 col-md-3 col-lg-2 control-label">Required Field</label>
-                                        <div class="col-sm-9 col-md-9 col-lg-10">
-                                            <input type="text" class="form-control input-sm" name="required" id="required">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 col-md-3 col-lg-2 control-label">Email</label>
-                                        <div class="col-sm-9 col-md-9 col-lg-10">
-                                            <input type="text" class="form-control input-sm" name="email" id="email">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 col-md-3 col-lg-2 control-label">Date</label>
-                                        <div class="col-sm-9 col-md-9 col-lg-10">
-                                            <input type="text" class="form-control input-sm" name="date" id="date">
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-3 col-md-3 col-lg-2 control-label">URL</label>
-                                        <div class="col-sm-9 col-md-9 col-lg-10">
-                                            <input type="text" class="form-control input-sm" name="url" id="url">
-                                        </div>
-                                    </div>
-                                    <div class="form-actions">
-                                        <input type="submit" value="Validate" class="btn btn-primary">
-                                    </div>
-                                </form>
-							</div>
-						</div>			
-					</div>
-				</div>
-				
-				
-				
-				
-    
+    			 
     <div class="row">
         <div class="col-xs-12">
 
@@ -104,27 +54,35 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for list in topics.object_list  %}
+                        	{% if list %}
+                    			{% for data in list  %}
                             <tr>
                                 <td>
-                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ data.id }}"/>
                                 </td>
-                                <td>{{ list.nickname }}</td>
-                                <td>{{ list.username }}</td>
-                                <td>{{ list.email }}</td>
-                                <td>{{ list.status }}</td>
-                                <td>{{ list.createTime }}</td>
+                                <td>{{ data.nickname }}</td>
+                                <td>{{ data.username }}</td>
+                                <td>{{ data.email }}</td>
+                                <td>
+                                	{% ifequal data.status '1' %}
+                        	 		<button class="btn btn-info btn-xs">启用</button>	 
+									{% else %}
+								    	<button class="btn btn-warning btn-xs">禁用</button>
+									{% endifequal %}
+                                </td>
+                                <td>{{ data.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
-                                       data-id="{{ list.id }}"
-                                       data-nickname="{{ list.nickname }}"
-                                       data-username="{{ list.username }}"
-                                       data-email="{{ list.email }}"
-                                       data-status="{{ list.status }}"
+                                       data-id="{{ data.id }}"
+                                       data-nickname="{{ data.nickname }}"
+                                       data-username="{{ data.username }}"
+                                       data-email="{{ data.email }}"
+                                       data-status="{{ data.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
                             </tr>
-                            {% endfor %}
+                            	{% endfor %}
+                            {% endif %}
                         </tbody>
                     </table>
                     {% include 'admin/layouts/page.html' %}
@@ -143,10 +101,11 @@
             <div class="modal-body">
                 {% include 'admin/admin/form.html' %}
             </div>
-            <div class="modal-footer">
+            
+   <!--         <div class="modal-footer">
                 <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
                 <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">取消</a>
-            </div>
+            </div>-->
         </div>
     </div>
 </div>

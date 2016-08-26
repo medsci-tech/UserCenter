@@ -1,9 +1,9 @@
-# coding:utf-8
+#_*_coding:utf-8_*_
 # 管理员管理
-# zhaiyu
+__author__ = 'lxhui'
+
 from django.shortcuts import render
 from admin.model.Admin import Admin
-from admin.model.Employee import Employee
 from django.http import HttpResponse
 from django.contrib.auth.hashers import make_password
 from django.core.paginator import Paginator
@@ -12,6 +12,19 @@ from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 import json
 
+'''
+管理员列表
+'''
+@csrf_exempt
+def list(request):
+    post = request.POST
+   
+    list = Admin.objects.all().order_by("-id")
+
+
+    return render(request, 'admin/admin/index.html',{'list':list, 'request': post})
+
+
 def detail(request, question_id):
     try:
         question = Question.objects.get(pk=question_id)
@@ -19,33 +32,7 @@ def detail(request, question_id):
         raise Http404("Question does not exist")
     return render(request, 'admin/detail.html', {'question': question})
  
-@csrf_exempt
-def list(request):
-    post = request.POST
-    param = {}
-    if request.method == "POST":
-        nickname = post.get('nickname')
-        username = post.get('username')
-        email = post.get('email')
-        if nickname:
-            param.update(nickname={'$regex': nickname})
-        if username:
-            param.update(username={'$regex': username})
-        if email:
-            param.update(email={'$regex': email})
-    data = Admin.objects.all()
-    limit = 20  # 每页显示的记录数
-    paginator = Paginator(data, limit)  # 实例化一个分页对象
-    page = request.GET.get('page')  # 获取页码
-    try:
-        topics = paginator.page(page)  # 获取某页对应的记录
-    except PageNotAnInteger:  # 如果页码不是个整数
-        topics = paginator.page(1)  # 取第一页的记录
-    except EmptyPage:  # 如果页码太大，没有相应的记录
-        topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
-
-    return render(request, 'admin/admin/index.html',{'topics':topics, 'request': post})
-
+ 
 # 添加操作--protected
 def _add(**param):
     id = param.get('id')

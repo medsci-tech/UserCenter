@@ -277,20 +277,20 @@ $.extend($.validator, {
 	setDefaults: function( settings ) {
 		$.extend( $.validator.defaults, settings );
 	},
-
 	messages: {
-		required: "This field is required.",
+		required: "不能为空.",
+		username: "请输入用户名.",
 		remote: "Please fix this field.",
-		email: "Please enter a valid email address.",
+		email: "请输入有效的email地址.",
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
 		dateISO: "Please enter a valid date (ISO).",
 		number: "Please enter a valid number.",
 		digits: "Please enter only digits.",
 		creditcard: "Please enter a valid credit card number.",
-		equalTo: "Please enter the same value again.",
-		maxlength: $.validator.format("Please enter no more than {0} characters."),
-		minlength: $.validator.format("Please enter at least {0} characters."),
+		equalTo: "两次输入的不一致.",
+		maxlength: $.validator.format("请输入不多于 {0} 个字符."),
+		minlength: $.validator.format("请至少输入 {0} 个字符."),
 		rangelength: $.validator.format("Please enter a value between {0} and {1} characters long."),
 		range: $.validator.format("Please enter a value between {0} and {1}."),
 		max: $.validator.format("Please enter a value less than or equal to {0}."),

@@ -2,6 +2,7 @@
  * Unicorn Admin Template
  * Version 2.2.0
  * Diablo9983 -> diablo9983@gmail.com
+ * edit by lxhui
 **/
 
 $(document).ready(function(){
@@ -18,6 +19,22 @@ $(document).ready(function(){
 		rules:{
 			required:{
 				required:true
+			},
+			username:{
+				required: true,
+				minlength:2,
+				maxlength:20
+			},
+			pwd:{
+				required: true,
+				minlength:6,
+				maxlength:20
+			},
+			pwd2:{
+				required:true,
+				minlength:6,
+				maxlength:20,
+				equalTo:"#pwd"
 			},
 			email:{
 				required:true,
