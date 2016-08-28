@@ -147,6 +147,7 @@ $(function () {
         data.img = $('#form-img').val();
         data.startTime = $('#form-startTime').val();
         data.endTime = $('#form-endTime').val();
+        data.img = $('[data-toggle="upload-saveInput-one"]').val();
         var url = '/contract/form.html';
         var location = '/contract/index';
         console.log(data);
