@@ -1,4 +1,4 @@
-<form class="form-horizontal" method="post" action="/admin/form.html">
+<div class="form-horizontal" >
     <input type="hidden" name="id" id="form-id" value="">
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">合同名称</label>
@@ -21,7 +21,7 @@
 
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">缩略图</label>
-        {% include 'common/file-uplaod.html' with saveInput='one' actionCtrl='img' uploadPath='img' %}
+        {% include 'common/file-uplaod.html' with inputId='one' actionCtrl='img' uploadPath='img' %}
     </div>
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">开始时间</label>
@@ -35,4 +35,4 @@
             <input type="text" class="form-control input-sm" name="endTime" id="form-endTime">
         </div>
     </div>
-</form>
+</div>
