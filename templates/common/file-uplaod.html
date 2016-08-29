@@ -8,7 +8,6 @@
     <div class="col-sm-5 col-md-5 col-lg-5" style="margin: 0;padding: 0">
         <input data-toggle="upload-progressInput-{{ inputId|default:'one' }}" readonly="" class="form-control input-sm webuploader-input" type="text">
     </div>
-    <div id="saveInput-{{ inputId|default:'one' }}"></div>
     <div id="fileupload-{{ inputId|default:'one' }}" class="webuploader-container">
         <div class="webuploader-pick">上传</div>
         <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple">
@@ -42,13 +41,11 @@ $(function () {
             if(200 == result.code){
                 probar{{ inputId|default:'one' }}.removeClass('progress-bar-info');
                 probar{{ inputId|default:'one' }}.addClass('progress-bar-success');
-                $('[data-toggle="upload-progressInput-{{ inputId|default:'one' }}"]').val(result.data.tName);
-                saveInput(result.data.saveName);
+                $('[data-toggle="upload-progressInput-{{ inputId|default:'one' }}"]').val(result.data.saveName);
             }else {
                 probar{{ inputId|default:'one' }}.removeClass('progress-bar-info');
                 probar{{ inputId|default:'one' }}.addClass('progress-bar-danger');
                 $('[data-toggle="upload-progressInput-{{ inputId|default:'one' }}"]').val('');
-                saveInput(false);
             }
             probar{{ inputId|default:'one' }}.find('span').text(result.msg);
             $('#form-submit-{{ inputId|default:'one' }}').button('reset');
@@ -65,15 +62,4 @@ $(function () {
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
 });
 
-var saveInput =	function (list) {
-    var html ='';
-    if(list){
-        for(var i = 0; i < list.length; i++){
-            html += '<input type="hidden" data-toggle="upload-saveInput-{{ inputId|default:'one' }}" name="{{ modelName|default:'' }}" value="';
-            html += list[i];
-            html += '">';
-        }
-    }
-    $('#saveInput-{{ inputId|default:'one' }}').html(html);
-}
 </script>
