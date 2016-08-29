@@ -51,6 +51,7 @@ $(function () {
                 saveInput(false);
             }
             probar{{ inputId|default:'one' }}.find('span').text(result.msg);
+            $('#form-submit-{{ inputId|default:'one' }}').button('reset');
         },
         progressall: function (e, data) {
             var progress = parseInt(data.loaded / data.total * 100, 10);
@@ -58,6 +59,7 @@ $(function () {
             probar{{ inputId|default:'one' }}.addClass('progress-bar-info');
             probar{{ inputId|default:'one' }}.css('width', progress + '%');
             probar{{ inputId|default:'one' }}.find('span').text(Math.round(progress) + '%');
+            $('#form-submit-{{ inputId|default:'one' }}').button('loading');
         }
     }).prop('disabled', !$.support.fileInput)
         .parent().addClass($.support.fileInput ? undefined : 'disabled');
