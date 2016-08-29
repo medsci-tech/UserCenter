@@ -112,7 +112,10 @@
                 <h3>查看合同</h3>
             </div>
             <div class="modal-body">
-                tupian
+                <div class="form-group">
+                    <p data-toggle="form-name">dewfge</p>
+                </div>
+                <div align="center" data-toggle="form-img"></div>
             </div>
             <div class="modal-footer">
                 <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">关闭</a>
@@ -235,7 +238,26 @@ $(function () {
     /**
      * 上传
      */
+    /*查看详情*/
+    $('[data-form="view-model"]').click(function(){
+        var name = $(this).attr('data-name');
+        var img = $(this).attr('data-img');
+        var html = '';
+        if(img){
+            var fix = '';
+            var pattern = /^http:\/\//i;
+            var preg = pattern.test(img);
+            if(false == preg){
+                fix = 'http://' + window.location.host;
+            }
+            html += '<img class="img-thumbnail" max-width="100%" max-height="100%"  src="' + fix + img + '">';
+        }else {
+            html += '<p class="single-line">无图片</p>';
+        }
 
+        $('[data-toggle="form-name"]').text(name);
+        $('[data-toggle="form-img"]').html(html);
+    });
 });
 </script>
 

@@ -4,7 +4,7 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from UserCenter.global_templates import configParam
-from UserCenter.settings import UPLOAD_ROOT
+from UserCenter.settings import UPLOAD_ROOT, UPLOAD_URL
 from datetime import *
 import time
 import os
@@ -27,7 +27,7 @@ def handle_uploaded_file (filepath, file):
     try:
         for chunk in file.chunks():
             fd.write(chunk)
-        returnData = {'code': '200', 'msg': '成功', 'data': '/%s/%s' % (save_path, save_name)}
+        returnData = {'code': '200', 'msg': '成功', 'data': '%s%s/%s' % (UPLOAD_URL, save_path, save_name)}
     except Exception:
         returnData = {'code': '900', 'msg': '失败', 'data': ''}
     finally:
