@@ -84,3 +84,7 @@ var getDataListForMime = function(dataList) {
     }
     return list;
 };
+
+var uploadDataReset = function (inputId) {
+    $('#progress-' + inputId + ' .progress-bar').width(0).find('span').text('');
+};
