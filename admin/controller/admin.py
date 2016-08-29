@@ -21,6 +21,7 @@ def list(request):
    
     list = Admin.objects.all().order_by("-id")
 
+    #return HttpResponse(Admin.meta.collection)
 
     return render(request, 'admin/admin/index.html',{'list':list, 'request': post})
 
