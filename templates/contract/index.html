@@ -238,9 +238,8 @@ $(function () {
     });
 
     /**
-     * 上传
+     * 查看详情
      */
-    /*查看详情*/
     $('[data-form="view-model"]').click(function(){
         var name = $(this).attr('data-name');
         var img = $(this).attr('data-img');
@@ -260,6 +259,20 @@ $(function () {
         $('[data-toggle="form-name"]').text(name);
         $('[data-toggle="form-img"]').html(html);
     });
+
+    /**
+     * 日期插件
+     */
+    $('#form-startTime').datepicker({
+		onClose: function( selectedDate ) {
+			$( "#form-endTime" ).datepicker( "option", "minDate", selectedDate );
+		}
+	});
+	$('#form-endTime').datepicker({
+		onClose: function( selectedDate ) {
+			$( "#form-startTime" ).datepicker( "option", "maxDate", selectedDate );
+		}
+	});
 });
 </script>
 
