@@ -1,0 +1,65 @@
+{#    {{ inputId|default:'one' }} 为了区分上传一#}
+{#    {{ modelName|default:'' }} 上传form表单的name#}
+{#    {{ actionCtrl|default:'img' }}//上传function#}
+{#    {{ uploadPath|default:'img' }}//上传到远程目录#}
+<link href="/static/plugins/jquery-file-upload/webuploader.css" type="text/css" rel="stylesheet">
+
+<div class=" col-sm-9 col-md-9 col-lg-10">
+    <div class="col-sm-5 col-md-5 col-lg-5" style="margin: 0;padding: 0">
+        <input data-toggle="upload-progressInput-{{ inputId|default:'one' }}" readonly="" class="form-control input-sm webuploader-input" type="text">
+    </div>
+    <div id="fileupload-{{ inputId|default:'one' }}" class="webuploader-container">
+        <div class="webuploader-pick">上传</div>
+        <input type="file" name="file" class="webuploader-element-invisible" multiple="multiple">
+    </div>
+
+    <div id="progress-{{ inputId|default:'one' }}" class="progress webuploader-progress">
+        <div role="progressbar" class="progress-bar progress-bar-info">
+            <span></span>
+        </div>
+    </div>
+    <div id="files-{{ inputId|default:'one' }}"></div>
+</div>
+
+<script src="/static/js/jquery.ui.widget.js"></script>
+<script src="/static/js/jquery.iframe-transport.js"></script>
+<script src="/static/plugins/jquery-file-upload/jquery.fileupload.js"></script>
+<script>
+/*jslint unparam: true */
+/*global window, $ */
+$(function () {
+    'use strict';
+    var probar{{ inputId|default:'one' }} = $('#progress-{{ inputId|default:'one' }} .progress-bar');
+    $('#fileupload-{{ inputId|default:'one' }} .webuploader-pick').click(function () {
+        $('#fileupload-{{ inputId|default:'one' }} input[type="file"]').click();
+    });
+    $('#fileupload-{{ inputId|default:'one' }}').fileupload({
+        url: '/upload/{{ actionCtrl|default:'img' }}?path={{ uploadPath|default:'img' }}',
+        dataType: 'json',
+        done: function (e, data) {
+            var result = data.result;
+            if(200 == result.code){
+                probar{{ inputId|default:'one' }}.removeClass('progress-bar-info');
+                probar{{ inputId|default:'one' }}.addClass('progress-bar-success');
+                $('[data-toggle="upload-progressInput-{{ inputId|default:'one' }}"]').val(result.data.saveName);
+            }else {
+                probar{{ inputId|default:'one' }}.removeClass('progress-bar-info');
+                probar{{ inputId|default:'one' }}.addClass('progress-bar-danger');
+                $('[data-toggle="upload-progressInput-{{ inputId|default:'one' }}"]').val('');
+            }
+            probar{{ inputId|default:'one' }}.find('span').text(result.msg);
+            $('#form-submit-{{ inputId|default:'one' }}').button('reset');
+        },
+        progressall: function (e, data) {
+            var progress = parseInt(data.loaded / data.total * 100, 10);
+            probar{{ inputId|default:'one' }}.removeClass('progress-bar-danger progress-bar-success');
+            probar{{ inputId|default:'one' }}.addClass('progress-bar-info');
+            probar{{ inputId|default:'one' }}.css('width', progress + '%');
+            probar{{ inputId|default:'one' }}.find('span').text(Math.round(progress) + '%');
+            $('#form-submit-{{ inputId|default:'one' }}').button('loading');
+        }
+    }).prop('disabled', !$.support.fileInput)
+        .parent().addClass($.support.fileInput ? undefined : 'disabled');
+});
+
+</script>

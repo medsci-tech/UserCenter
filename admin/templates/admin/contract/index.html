@@ -1,0 +1,279 @@
+{% extends 'admin/layouts/base.html' %}
+
+{% block content %}
+
+<div id="content">
+    <div id="content-header" class="mini">
+        <h1>合同管理</h1>
+    </div>
+    <div class="row">
+        <form action="" method="post">
+        <div class="col-xs-12 center">
+            <label>合同名称：
+                <input type="text" name="name" value="{{ request.name }}">
+            </label>
+            <label>合同编号：
+                <input type="text" name="number" value="{{ request.number }}">
+            </label>
+            <button type="submit" class="btn btn-primary">查询</button>
+            <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
+{#            <button class="btn btn-success" data-form="enable">启用</button>#}
+{#            <button class="btn btn-warning" data-form="disable">禁用</button>#}
+        </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-th"></i>
+                    </span>
+                    <h5>合同列表</h5>
+                </div>
+                <div class="widget-content">
+                    <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
+                                    <input type="hidden" id="form-statusType" name="statusType" value="enable" />
+                                </th>
+                                <th>合同名称</th>
+                                <th>合同编号</th>
+                                <th>合同金额</th>
+                                <th>开始时间</th>
+                                <th>结束时间</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for list in topics.object_list  %}
+                            <tr>
+                                <td>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
+                                <td>{{ list.name }}</td>
+                                <td>{{ list.number }}</td>
+                                <td>{{ list.amount }}</td>
+                                <td>{{ list.startTime }}</td>
+                                <td>{{ list.endTime }}</td>
+                                <td>{{ list.createTime }}</td>
+                                <td>
+                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-name="{{ list.name }}"
+                                       data-number="{{ list.number }}"
+                                       data-amount="{{ list.amount }}"
+                                       data-img="{{ list.img }}"
+                                       data-startTime="{{ list.startTime }}"
+                                       data-endTime="{{ list.endTime }}"
+                                    ><i class="fa fa-edit"></i> 编辑</a>
+                                    <a href="#viewModal" data-toggle="modal" data-form="view-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-name="{{ list.name }}"
+                                       data-img="{{ list.img }}"
+                                    ><i class="fa fa-eye"></i> 查看</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include 'admin/common/page.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>合同管理</h3>
+            </div>
+            <div class="modal-body">
+                {% include 'admin/contract/form.html' %}
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit-one" data-loading-text="确定" autocomplete="off">确定</a>
+                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">取消</a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="viewModal" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>查看合同</h3>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <p data-toggle="form-name"></p>
+                </div>
+                <div align="center" data-toggle="form-img"></div>
+            </div>
+            <div class="modal-footer">
+                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(function () {
+    /**
+     * 点击添加按钮触发的操作
+     */
+    $('[data-form="add-model"]').click(function () {
+        var kong = '';
+        $('#form-id').val(kong);
+        $('#form-name').val(kong);
+        $('#form-number').val(kong);
+        $('#form-amount').val(kong);
+        $('#form-startTime').val(kong);
+        $('#form-endTime').val(kong);
+        $('[data-toggle="upload-progressInput-one"]').val(kong);
+        uploadDataReset('one');
+    });
+    /**
+     * 点击修改按钮触发的操作
+     */
+    $('[data-form="edit-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        var name = $(this).attr('data-name');
+        var number = $(this).attr('data-number');
+        var amount = $(this).attr('data-amount');
+        var img = $(this).attr('data-img');
+        var startTime = $(this).attr('data-startTime');
+        var endTime = $(this).attr('data-endTime');
+        $('#form-id').val(id);
+        $('#form-name').val(name);
+        $('#form-number').val(number);
+        $('#form-amount').val(amount);
+        $('[data-toggle="upload-progressInput-one"]').val(img);
+        $('#form-startTime').val(startTime);
+        $('#form-endTime').val(endTime);
+        uploadDataReset('one');
+    });
+    /**
+     * 点击form提交按钮触发的操作
+     */
+    $('#form-submit-one').click(function () {
+        var data = {};
+        data.id = $('#form-id').val();
+        data.name = $('#form-name').val();
+        data.number = $('#form-number').val();
+        data.amount = $('#form-amount').val();
+        data.img = $('#form-img').val();
+        data.startTime = $('#form-startTime').val();
+        data.endTime = $('#form-endTime').val();
+        data.img = $('[data-toggle="upload-progressInput-one"]').val();
+        var url = '/contract/form.html';
+        var location = '/contract/index';
+        console.log(data);
+        subActionAjaxForMime('post', url, data, location);
+    });
+
+    /**
+    * 启用
+    */
+    $('[data-form="enable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(false == verifyChecked){
+            return false;
+        }
+        swal({
+            title: "您确定要启用选中的信息吗",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonColor: "#23c6c8",
+            confirmButtonText: "确定",
+            closeOnConfirm: false
+        }, function () {
+            var data = {};
+            data.selection = getDataListForMime(check);
+            data.statusType = 'enable';
+            var url = '/contract/stats.html';
+            var location = '/contract/index';
+            console.log(data);
+            subActionAjaxForMime('post', url, data, location);
+        });
+    });
+
+    /**
+     * 禁用
+     */
+    $('[data-form="disable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(false == verifyChecked){
+            return false;
+        }
+        swal({
+            title: "您确定要禁用选中的信息吗",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonColor: "#f8ac59",
+            confirmButtonText: "确定",
+            closeOnConfirm: false
+        }, function () {
+            var data = {};
+            data.selection = getDataListForMime(check);
+            data.statusType = 'disable';
+            var url = '/contract/stats.html';
+            var location = '/contract/index';
+            console.log(data);
+            subActionAjaxForMime('post', url, data, location);
+        });
+    });
+
+    /**
+     * 查看详情
+     */
+    $('[data-form="view-model"]').click(function(){
+        var name = $(this).attr('data-name');
+        var img = $(this).attr('data-img');
+        var html = '';
+        if(img){
+            var fix = '';
+            var pattern = /^http:\/\//i;
+            var preg = pattern.test(img);
+            if(false == preg){
+                fix = 'http://' + window.location.host;
+            }
+            html += '<img class="img-thumbnail" max-width="100%" max-height="100%"  src="' + fix + img + '">';
+        }else {
+            html += '<p class="single-line">无图片</p>';
+        }
+
+        $('[data-toggle="form-name"]').text(name);
+        $('[data-toggle="form-img"]').html(html);
+    });
+
+    /**
+     * 日期插件
+     */
+    $('#form-startTime').datepicker({
+		onClose: function( selectedDate ) {
+			$( "#form-endTime" ).datepicker( "option", "minDate", selectedDate );
+		}
+	});
+	$('#form-endTime').datepicker({
+		onClose: function( selectedDate ) {
+			$( "#form-startTime" ).datepicker( "option", "maxDate", selectedDate );
+		}
+	});
+});
+</script>
+
+{% endblock %}

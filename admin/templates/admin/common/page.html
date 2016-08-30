@@ -4,13 +4,17 @@
     {% else %}
         <li class="disabled"><a href="javascript:;">Prev</a></li>
     {% endif %}
-    {% for page in topics.paginator.page_range %}
-        {% ifequal page topics.number %}
-            <li class="active"><a href="javascript:;">{{ page }}</a></li>
-        {% else %}
-            <li><a href="?page={{ page }}">{{ page }}</a></li>
-        {% endifequal  %}
-    {% endfor %}
+    {% if page %}
+        {% for page in topics.paginator.page_range %}
+            {% ifequal page topics.number %}
+                <li class="active"><a href="javascript:;">{{ page }}</a></li>
+            {% else %}
+                <li><a href="?page={{ page }}">{{ page }}</a></li>
+            {% endifequal  %}
+        {% endfor %}
+    {% else %}
+        <li class="active"><a href="javascript:;">1</a></li>
+    {% endif %}
     {% if topics.has_next %}
         <li><a href="?page={{ topics.next_page_number }}">Next</a></li>
     {% else %}
