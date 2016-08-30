@@ -10,8 +10,8 @@ def create_validata_code(size=(120,30),chars=init_chars,img_type='jpg',
                             font_size=18,font_type='arial.ttf',
                             length=4,draw_lines=True,n_line=(1,2),
                             draw_points=True,point_chance=2):
-    width,height = size;
-    img = Image.new(mode, size, bg_color);
+    width,height = size
+    img = Image.new(mode, size, bg_color)
     draw = ImageDraw.Draw(img)
     
     def get_chars():
