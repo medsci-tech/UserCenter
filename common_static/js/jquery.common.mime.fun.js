@@ -84,3 +84,11 @@ var getDataListForMime = function(dataList) {
     }
     return list;
 };
+
+/**
+ * 重置文件上传进度条状态
+ * @param inputId
+ */
+var uploadDataReset = function (inputId) {
+    $('#progress-' + inputId + ' .progress-bar').width(0).find('span').text('');
+};

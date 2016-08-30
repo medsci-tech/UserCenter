@@ -10,5 +10,5 @@
 /admin/tests.py
 /admin/model/__pycache__
 /admin/controller/__pycache__
-/templates/common/test.html
+/admin/templates/admin/common/test.html
 /admin/helper/__pycache__

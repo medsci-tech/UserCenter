@@ -21,7 +21,7 @@ def index(request):
             param.update(name={'$regex': name})
         if number:
             param.update(number={'$regex': number})
-    data = Contract().find(**param)
+    data = Contract.objects.all().order_by("id")
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -32,7 +32,7 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'contract/index.html',{'topics':topics, 'request': post})
+    return render(request, 'admin/contract/index.html',{'topics':topics, 'request': post})
 
 # 添加操作--protected
 def _add(**param):
@@ -132,4 +132,4 @@ def stats(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 def test(request):
-    return render(request, 'common/test.html')
+    return render(request, 'admin/common/test.html')

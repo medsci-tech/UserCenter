@@ -19,7 +19,7 @@ import json
 def list(request):
     post = request.POST
    
-    list = Admin.objects.all().order_by("-id")
+    list = Admin.objects.all().order_by("_id")
 
     #return HttpResponse(Admin.meta.collection)
 
