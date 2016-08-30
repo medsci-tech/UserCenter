@@ -6,6 +6,6 @@ urlpatterns = [
     url(r'^login/',accounts.login, name='login'),#登录
     url(r'^accounts/captcha', accounts.captcha,name='captcha'), #验证码
     url(r'^list/',admin.list, name='list'),#管理员列表
-    url(r'^contract/', contract.index, name='index'),
+    url(r'^contract/index', contract.index, name='index'),
     #url(r'^logout/', admin.logout, name='logout'),
 ]
