@@ -1,0 +1,14 @@
+/.idea
+/runtime
+
+/MyProject.komodoproject
+/static
+/UserCenter/__pycache__
+/admin/__pycache__
+/admin/migrations/__pycache__
+/templates/__pycache__
+/admin/tests.py
+/admin/model/__pycache__
+/admin/controller/__pycache__
+/templates/common/test.html
+/admin/helper/__pycache__
