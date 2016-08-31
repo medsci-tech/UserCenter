@@ -1,5 +1,5 @@
 #_*_coding:utf-8_*_
-# 管理员管理
+# 迈豆积分管理
 
 from django.shortcuts import render
 from admin.model.Mdset import Mdset
@@ -12,7 +12,7 @@ from django.views.decorators.csrf import csrf_exempt
 import json
 
 '''
-管理员列表
+迈豆积分列表
 '''
 @csrf_exempt
 def index(request):
@@ -43,12 +43,7 @@ def index(request):
 # 添加操作--protected
 def _add(**param):
     id = param.get('id')
-    password = param.get('password')
     if not id:
-        if not password:
-            # 如果没有填密码则为默认密码
-            password = '123456'
-        param.update(password=make_password(password, None, 'pbkdf2_sha256'))
         try:
             model = Mdset(**param).add(**param)
             if model:
@@ -64,14 +59,7 @@ def _add(**param):
 # 修改操作--protected
 def _editById(**param):
     id = param.get('id')
-    password = param.get('password')
     if id:
-        if hasattr(param, 'password'):
-            if password:
-                param.update(password=make_password(password, None, 'pbkdf2_sha256'))
-            else:
-                # 如果留空则移除password属性，不修改密码
-                param.pop('password')
         try:
             model = Mdset(**param).editById(**param)
             '''
@@ -100,11 +88,9 @@ def form(request):
     post = request.POST
     id = post.get('id')
     param = {
-        'username': post.get('username'),
-        'nickname': post.get('nickname'),
-        'password': post.get('password'),
-        'email': post.get('email'),
-        'status': post.get('status'),
+        'appId': post.get('appId'),
+        'ratio': post.get('ratio'),
+        'createTime': post.get('startTime'),
     }
     if id:
         # 修改

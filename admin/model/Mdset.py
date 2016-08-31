@@ -9,10 +9,10 @@ class Mdset(Auth):
             'collection': settings.MONGODB_PREFIX+'mdset',
             'indexes':['_id'],
             }
-    appId = StringField(required=True)
-    ratio = StringField(max_length=20, required=True)
+    appId = StringField()
+    ratio = StringField(required=True)
     status = StringField()
-    _id = StringField(choices=(0,1))
+    _id = StringField()
 
     # 查询
     def find(self, **kwargs):
@@ -21,7 +21,7 @@ class Mdset(Auth):
     # 添加
     def add(self, **kwargs):
         kwargs.update(createTime=datetime.now())
-        return self.tables.insert(kwargs)
+        return self.meta.insert(kwargs)
 
     # 修改
     def editById(self, **kwargs):
