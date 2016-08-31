@@ -34,7 +34,7 @@ $(function () {
         $('#fileupload-{{ inputId|default:'one' }} input[type="file"]').click();
     });
     $('#fileupload-{{ inputId|default:'one' }}').fileupload({
-        url: '/upload/{{ actionCtrl|default:'img' }}?path={{ uploadPath|default:'img' }}',
+        url: '/admin/upload/{{ actionCtrl|default:'img' }}?path={{ uploadPath|default:'img' }}',
         dataType: 'json',
         done: function (e, data) {
             var result = data.result;
