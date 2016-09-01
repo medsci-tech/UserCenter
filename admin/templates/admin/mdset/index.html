@@ -8,17 +8,12 @@
     </div>
     <div class="row">
         <form action="" method="post">
-
-
         <div class="col-xs-12 center">
-            <label>昵称：
-                <input type="text" name="nickname" value="{{ request.nickname }}">
+            <label>应用ID：
+                <input type="text" name="appId" value="{{ request.appId }}">
             </label>
-            <label>用户名：
-                <input type="text" name="username" value="{{ request.username }}">
-            </label>
-            <label>邮箱：
-                <input type="text" name="email" value="{{ request.email }}">
+            <label>应用名称：
+                <input type="text" name="appName" value="{{ request.appName }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -29,13 +24,12 @@
     </div>
     <div class="row">
         <div class="col-xs-12">
-
             <div class="widget-box">
                 <div class="widget-title">
                     <span class="icon">
                         <i class="fa fa-th"></i>
                     </span>
-                    <h5>管理员列表</h5>
+                    <h5>迈豆积分配置列表</h5>
                 </div>
                 <div class="widget-content">
                     <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
@@ -45,9 +39,9 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>昵称</th>
-                                <th>用户名</th>
-                                <th>邮箱</th>
+                                <th>应用ID</th>
+                                <th>应用名称</th>
+                                <th>兑换比例</th>
                                 <th>状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
@@ -59,17 +53,16 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.nickname }}</td>
-                                <td>{{ list.username }}</td>
-                                <td>{{ list.email }}</td>
+                                <td>{{ list.appId }}</td>
+                                <td>{{ list.appName }}</td>
+                                <td>{{ list.ratio }}</td>
                                 <td>{{ list.status }}</td>
                                 <td>{{ list.createTime }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
-                                       data-nickname="{{ list.nickname }}"
-                                       data-username="{{ list.username }}"
-                                       data-email="{{ list.email }}"
+                                       data-appId="{{ list.appId }}"
+                                       data-ratio="{{ list.ratio }}"
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
@@ -91,7 +84,7 @@
                 <h3>管理员管理</h3>
             </div>
             <div class="modal-body">
-                {% include 'admin/admin/form.html' %}
+                {% include 'admin/mdset/form.html' %}
             </div>
             <div class="modal-footer">
                 <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>

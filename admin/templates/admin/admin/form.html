@@ -28,8 +28,9 @@
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
             <select class="form-control" name="status" id="form-status">
-                <option value="1">启用</option>
-                <option value="0">禁用</option>
+                {% for key,value in c_status.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
             </select>
         </div>
     </div>

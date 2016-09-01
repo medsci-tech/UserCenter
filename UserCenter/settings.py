@@ -80,6 +80,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                #全局变量输出到模板，比如登录者的信息
+                'UserCenter.global_templates.configParam',
             ],
         },
     },
