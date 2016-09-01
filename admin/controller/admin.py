@@ -10,6 +10,7 @@ from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
+from datetime import *
 import json
 
 '''
@@ -18,20 +19,37 @@ import json
 @csrf_exempt
 def list(request):
     post = request.POST
-   
-    list = Admin.objects.all().order_by("id")
+    param = {}
+    if request.method == "POST":
+        nickname = post.get('nickname')
+        username = post.get('username')
+        email = post.get('email')
+        if nickname:
+            param.update(nickname={'$regex': nickname})
+        if username:
+            param.update(username={'$regex': username})
+        if email:
+            param.update(email={'$regex': email})
+    data = Admin.objects.filter(**param).order_by('id')
+    limit = 20  # 每页显示的记录数
+    paginator = Paginator(data, limit)  # 实例化一个分页对象
+    page = request.GET.get('page')  # 获取页码
+    try:
+        topics = paginator.page(page)  # 获取某页对应的记录
+    except PageNotAnInteger:  # 如果页码不是个整数
+        topics = paginator.page(1)  # 取第一页的记录
+    except EmptyPage:  # 如果页码太大，没有相应的记录
+        topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    #return HttpResponse(Admin.meta.collection)
-
-    return render(request, 'admin/admin/index.html',{'list':list, 'request': post})
-
+    return render(request, 'admin/admin/index.html',{'topics':topics, 'request': post})
 
 def detail(request, question_id):
-    try:
-        question = Question.objects.get(pk=question_id)
-    except Question.DoesNotExist:
-        raise Http404("Question does not exist")
-    return render(request, 'admin/admin/detail.html', {'question': question})
+    pass
+    # try:
+    #     question = Question.objects.get(pk=question_id)
+    # except Question.DoesNotExist:
+    #     raise Http404("Question does not exist")
+    # return render(request, 'admin/admin/detail.html', {'question': question})
  
  
 # 添加操作--protected
@@ -44,7 +62,7 @@ def _add(**param):
             password = '123456'
         param.update(password=make_password(password, None, 'pbkdf2_sha256'))
         try:
-            model = Admin(**param).add(**param)
+            model = Admin.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
             else:
@@ -67,7 +85,7 @@ def _editById(**param):
                 # 如果留空则移除password属性，不修改密码
                 param.pop('password')
         try:
-            model = Admin(**param).editById(**param)
+            model = Admin.objects.filter(id=id).update(**param)
             '''
                 返回值 model
                 nModified:修改成功1，修改失败0
@@ -75,13 +93,10 @@ def _editById(**param):
                 n:根据条件查询结果，有1，无0
                 ok:1
             '''
-            if model.get('n'):
-                if model.get('ok'):
-                    returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-                else:
-                    returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+            if model == 1:
+                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
-                returnData = {'code': '802', 'msg': '不存在的数据集', 'data': ''}
+                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
     else:
@@ -125,14 +140,12 @@ def stats(request):
     }
 
     try:
-        model = Admin(**param).editByFilter(selection, **param)
-        if model.get('n'):
-            if model.get('ok'):
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+        # model = Admin(**param).editByFilter(selection, **param)
+        model = Admin.objects.filter(id=selection).update(**param)
+        if model == 1:
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
         else:
-            returnData = {'code': '802', 'msg': '不存在的数据集', 'data': ''}
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
     except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
