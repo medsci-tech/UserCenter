@@ -19,7 +19,7 @@ import json
 def list(request):
     post = request.POST
    
-    list = Admin.objects.all().order_by("_id")
+    list = Admin.objects.all().order_by("id")
 
     #return HttpResponse(Admin.meta.collection)
 
@@ -31,7 +31,7 @@ def detail(request, question_id):
         question = Question.objects.get(pk=question_id)
     except Question.DoesNotExist:
         raise Http404("Question does not exist")
-    return render(request, 'admin/detail.html', {'question': question})
+    return render(request, 'admin/admin/detail.html', {'question': question})
  
  
 # 添加操作--protected

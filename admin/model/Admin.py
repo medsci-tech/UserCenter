@@ -7,7 +7,7 @@ from admin.model.Auth import Auth
 class Admin(Auth):
     meta = Document.meta = {
             'collection': settings.MONGODB_PREFIX+'admin',
-            'indexes':['username','password'],    
+            'indexes':[],
             }
     username = StringField(max_length=20, required=True)
     createTime = DateTimeField()
@@ -15,7 +15,7 @@ class Admin(Auth):
     password = StringField(max_length=20, required=True)
     email = EmailField()
     status = IntField()
-    _id = StringField(choices=(0,1))
+    _id = StringField()
 
     # 查询
     def find(self, **kwargs):
