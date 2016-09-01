@@ -4,7 +4,7 @@
     {% else %}
         <li class="disabled"><a href="javascript:;">Prev</a></li>
     {% endif %}
-    {% if page %}
+    {% if topics %}
         {% for page in topics.paginator.page_range %}
             {% ifequal page topics.number %}
                 <li class="active"><a href="javascript:;">{{ page }}</a></li>

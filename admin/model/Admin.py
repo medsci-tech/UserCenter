@@ -10,16 +10,15 @@ class Admin(Auth):
             'indexes':[],
             }
     username = StringField(max_length=20, required=True)
-    createTime = DateTimeField()
     nickname = StringField(max_length=20) 
-    password = StringField(max_length=20, required=True)
+    password = StringField()
     email = EmailField()
-    status = IntField()
-    _id = StringField()
+    createTime = DateTimeField(default=datetime.now())
+    status = IntField(default=1)
 
     # 查询
     def find(self, **kwargs):
-        return self.find(kwargs)
+        return self.meta.find(kwargs)
 
     # 添加
     def add(self, **kwargs):

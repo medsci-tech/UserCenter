@@ -104,6 +104,9 @@
 
 <script>
 $(function () {
+    var stats_url = '{% url 'admin:admin_stats' %}';
+    var form_url = '{% url 'admin:admin_form' %}';
+    var index_url = '{% url 'admin:admin' %}';
     /**
      * 点击添加按钮触发的操作
      */
@@ -144,10 +147,8 @@ $(function () {
         data.password = $('#form-password').val();
         data.email = $('#form-email').val();
         data.status = $('#form-status').val();
-        var url = '/admin/form.html';
-        var location = '/admin/index';
         console.log(data);
-        subActionAjaxForMime('post', url, data, location);
+        subActionAjaxForMime('post', form_url, data, index_url);
     });
 
     /**
@@ -172,10 +173,8 @@ $(function () {
             var data = {};
             data.selection = getDataListForMime(check);
             data.statusType = 'enable';
-            var url = '/admin/stats.html';
-            var location = '/admin/index';
             console.log(data);
-            subActionAjaxForMime('post', url, data, location);
+            subActionAjaxForMime('post', stats_url, data, index_url);
         });
     });
 
@@ -201,10 +200,8 @@ $(function () {
             var data = {};
             data.selection = getDataListForMime(check);
             data.statusType = 'disable';
-            var url = '/admin/stats.html';
-            var location = '/admin/index';
             console.log(data);
-            subActionAjaxForMime('post', url, data, location);
+            subActionAjaxForMime('post', stats_url, data, index_url);
         });
     });
 });
