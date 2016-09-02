@@ -12,7 +12,7 @@ console.log('jq-common-mime');
  * @param check array
  * @returns {boolean}
  */
-verifyCheckedForMime = function (check) {
+var verifyCheckedForMime = function (check) {
     var checked = 0;
     for(var i =0; i < check.length; i++){
         if(check[i].checked == true){
@@ -34,7 +34,7 @@ verifyCheckedForMime = function (check) {
  * @param data
  * @param location
  */
-subActionAjaxForMime = function (type, url, data, location) {
+var subActionAjaxForMime = function (type, url, data, location) {
     $.ajax({
         type: type,
         url: url,
@@ -139,4 +139,38 @@ var disableDataMultiple = function (check, stats_url, index_url) {
         console.log(data);
         subActionAjaxForMime('post', stats_url, data, index_url);
     });
+};
+
+/**
+ * ajax获取接口列表
+ * @param url
+ * @param data
+ * @param element
+ */
+var getListDataByAjaxForMime = function (url, data, element) {
+    var list = {};
+    $.ajax({
+        type: 'post',
+        url: url,
+        data: data,
+        success: function(res){
+            if(res.code == 200){
+                list = res.data;
+                selectOptionHtmlForMime(list, element)
+            }
+        }
+    });
+};
+
+/**
+ *
+ * @param list
+ * @param element
+ */
+var selectOptionHtmlForMime = function (list, element) {
+    var html = '';
+    for(i in list){
+        html += '<option value="">' + i + '</option>';
+    }
+    $(element).html(html);
 };
