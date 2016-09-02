@@ -10,7 +10,7 @@
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>应用名称：
-                <input type="text" name="appName" value="{{ request.appName }}">
+                <input type="text" name="name" value="{{ request.name }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -36,8 +36,8 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>应用名称</th>
-                                <th>兑换比例</th>
+                                <th>名称</th>
+                                <th>描述</th>
                                 <th>状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
@@ -49,9 +49,8 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.appId }}</td>
-                                <td>{{ list.appName }}</td>
-                                <td>{{ list.ratio }}</td>
+                                <td>{{ list.name }}</td>
+                                <td>{{ list.description }}</td>
                                 <td>
                                     {{ list.status }}
 {#                                    {% for key, val in c_status.items %}#}
@@ -66,8 +65,8 @@
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
-                                       data-appId="{{ list.appId }}"
-                                       data-ratio="{{ list.ratio }}"
+                                       data-name="{{ list.name }}"
+                                       data-description="{{ list.description }}"
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
@@ -89,7 +88,7 @@
                 <h3>管理员管理</h3>
             </div>
             <div class="modal-body">
-                {% include 'admin/mdset/form.html' %}
+                {% include 'admin/app/form.html' %}
             </div>
             <div class="modal-footer">
                 <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
@@ -102,21 +101,17 @@
 
 <script>
 $(function () {
-    var stats_url = '{% url 'admin:mdset_stats' %}';
-    var form_url = '{% url 'admin:mdset_form' %}';
-    var index_url = '{% url 'admin:mdset' %}';
-    var app_url = '{% url 'admin:app_applist' %}';
-
-    //获取应用列表
-{#    getListDataByAjaxForMime(app_url, []);#}
+    var stats_url = '{% url 'admin:app_stats' %}';
+    var form_url = '{% url 'admin:app_form' %}';
+    var index_url = '{% url 'admin:app' %}';
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
         $('#form-id').val(kong);
-        $('#form-appId').val(1);
-        $('#form-ratio').val(kong);
+        $('#form-name').val(kong);
+        $('#form-description').val(kong);
         $('#form-status').val(1);
     });
     /**
@@ -124,12 +119,12 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
-        var appId = $(this).attr('data-appId');
-        var ratio = $(this).attr('data-ratio');
+        var name = $(this).attr('data-name');
+        var description = $(this).attr('data-description');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
-        $('#form-appId').val(appId);
-        $('#form-ratio').val(ratio);
+        $('#form-name').val(name);
+        $('#form-description').val(description);
         $('#form-status').val(status);
     });
     /**
@@ -138,8 +133,8 @@ $(function () {
     $('#form-submit').click(function () {
         var data = {};
         data.id = $('#form-id').val();
-        data.appId = $('#form-appId').val();
-        data.ratio = $('#form-ratio').val();
+        data.name = $('#form-name').val();
+        data.description = $('#form-description').val();
         data.status = $('#form-status').val();
         console.log(data);
         subActionAjaxForMime('post', form_url, data, index_url);

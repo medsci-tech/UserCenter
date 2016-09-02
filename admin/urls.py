@@ -1,5 +1,6 @@
 from django.conf.urls import url
-from admin.controller import admin,accounts, contract, mdset, upload
+from admin.controller import admin,accounts, contract, mdset, upload, app
+
 urlpatterns = [
     # 登录
     url(r'^$', accounts.index, name='index'),
@@ -18,11 +19,17 @@ urlpatterns = [
     url(r'^contract/stats', contract.stats, name='contract_stats'),
     url(r'^contract/index', contract.index, name='contract'),
 
-    # 迈豆积分设置
+    # 迈豆积分
     url(r'^mdset/form', mdset.form, name='mdset_form'),
     url(r'^mdset/stats', mdset.stats, name='mdset_stats'),
     url(r'^mdset/index', mdset.index, name='mdset'),
 
     # 文件上传
     url(r'^upload/img', upload.img, name='upload_img'),
+
+    # 应用平台
+    url(r'^app/form', app.form, name='app_form'),
+    url(r'^app/stats', app.stats, name='app_stats'),
+    url(r'^app/applist', app.applist, name='app_applist'),
+    url(r'^app/index', app.index, name='app'),
 ]
