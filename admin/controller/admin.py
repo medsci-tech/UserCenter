@@ -4,8 +4,8 @@ __author__ = 'lxhui'
 
 from django.shortcuts import render
 from admin.model.Admin import Admin
-from django.http import HttpResponse
-from django.contrib.auth.hashers import make_password
+from django.http import HttpResponsed
+from django.contrib.auth.hashers import make_password, check_password
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
@@ -42,6 +42,18 @@ def list(request):
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
     return render(request, 'admin/admin/index.html',{'topics':topics, 'request': post})
+
+'''
+保存管理员
+'''
+def save():
+    pass
+    
+    
+    
+    
+    
+
 
 def detail(request, question_id):
     pass
