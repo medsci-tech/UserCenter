@@ -4,8 +4,8 @@ __author__ = 'lxhui'
 
 from django.shortcuts import render
 from admin.model.Admin import Admin
-from django.http import HttpResponsed
-from django.contrib.auth.hashers import make_password, check_password
+from django.http import HttpResponse
+from django.contrib.auth.hashers import make_password,check_password
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
@@ -46,13 +46,24 @@ def list(request):
 '''
 保存管理员
 '''
-def save():
-    pass
-    
-    
-    
-    
-    
+def save(request, **param):
+    post = request.POST
+    post = request.GET
+    if request.method == 'GET':
+        username = post.get('username') #用户
+        password = post.get('password','123456') #密码
+        password = make_password(password, None, 'pbkdf2_sha256') #加密
+        nickname = post.get('nickname',None) #昵称
+        email = post.get('email') #邮箱
+        status = post.get('status',1) #状态
+        # Admin.objects.create(
+        #     username = username,
+        #     password = password,
+        #     nickname = nickname,
+        #     email = email,
+        #     status = status
+        # )
+    return HttpResponse(json.dumps({'response':200}))
 
 
 def detail(request, question_id):

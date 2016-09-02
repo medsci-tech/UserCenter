@@ -12,3 +12,6 @@
 /admin/controller/__pycache__
 /admin/templates/admin/common/test.html
 /admin/helper/__pycache__
+/md_usercenter
+/.project
+/.pydevproject
