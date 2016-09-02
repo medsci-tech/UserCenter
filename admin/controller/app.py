@@ -1,10 +1,8 @@
 #_*_coding:utf-8_*_
-# 迈豆积分管理
+# 应用平台管理
 
 from django.shortcuts import render
-from admin.model.Mdset import Mdset
 from admin.model.App import App
-from admin.controller.app import applist
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
@@ -12,25 +10,15 @@ from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 import json
 
-'''
-迈豆积分列表
-'''
 @csrf_exempt
 def index(request):
     post = request.POST
     param = {}
-    appId = []
     if request.method == "POST":
-        appName = post.get('appName')
-        if appName:
-            app = App.objects.filter(name={'$regex': '应用'}, status=1).order_by("id")
-            if app:
-                for ids in app:
-                    appId.append(ids['id'])
-                param.update(appId__in=appId)
-            else:
-                param.update(id=0)
-    data = Mdset.objects.filter(**param).order_by("id")
+        name = post.get('name')
+        if name:
+            param.update(name={'$regex': name})
+    data = App.objects.filter(**param).order_by("id")
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -41,7 +29,7 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/mdset/index.html',{'topics':topics, 'request': post})
+    return render(request, 'admin/app/index.html',{'topics':topics, 'request': post})
 
  
  
@@ -50,7 +38,7 @@ def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = Mdset.objects.create(**param)
+            model = App.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
             else:
@@ -66,7 +54,7 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = Mdset.objects.filter(id=id).update(**param)
+            model = App.objects.get(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
@@ -83,8 +71,8 @@ def form(request):
     post = request.POST
     id = post.get('id')
     param = {
-        'appId': post.get('appId'),
-        'ratio': post.get('ratio'),
+        'name': post.get('name'),
+        'description': post.get('description'),
         'status': post.get('status'),
     }
     if id:
@@ -111,12 +99,25 @@ def stats(request):
         'status': status,
     }
     try:
-        model = Mdset.objects.filter(id__in=selection).update(**param)
+        model = App.objects.filter(id__in=selection).update(**param)
         if model:
             returnData = {'code': '200', 'msg': '操作成功', 'data': model}
         else:
             returnData = {'code': '801', 'msg': '操作失败', 'data': model}
     except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+@csrf_exempt
+def applist(request):
+    data = {}
+    app = App.objects.filter(status=1).order_by("id")
+    if app:
+        for list in app:
+            data[str(list.id)] = list.name
+        returnData = {'code': '200', 'msg': '操作成功', 'data': data}
+    else:
+        returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
