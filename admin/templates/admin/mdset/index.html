@@ -17,8 +17,8 @@
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
-            <button class="btn btn-success" data-form="enable">启用</button>
-            <button class="btn btn-warning" data-form="disable">禁用</button>
+            <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
+            <a href="javascript:;" class="btn btn-warning" data-form="disable">禁用</a>
         </div>
         </form>
     </div>
@@ -56,8 +56,17 @@
                                 <td>{{ list.appId }}</td>
                                 <td>{{ list.appName }}</td>
                                 <td>{{ list.ratio }}</td>
-                                <td>{{ list.status }}</td>
-                                <td>{{ list.createTime }}</td>
+                                <td>
+                                    {{ list.status }}
+{#                                    {% for key, val in c_status.items %}#}
+{#                                        {% if key.name == 1 %}#}
+{#                                            {{ key }}#}
+{#                                            {{ val }}#}
+{#                                            {{ list.status }}#}
+{#                                        {% endif %}#}
+{#                                    {% endfor %}#}
+                                </td>
+                                <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
@@ -97,16 +106,17 @@
 
 <script>
 $(function () {
+    var stats_url = '{% url 'admin:mdset_stats' %}';
+    var form_url = '{% url 'admin:mdset_form' %}';
+    var index_url = '{% url 'admin:mdset' %}';
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
         $('#form-id').val(kong);
-        $('#form-nickname').val(kong);
-        $('#form-username').val(kong);
-        $('#form-password').val(kong);
-        $('#form-email').val(kong);
+        $('#form-appId').val(1);
+        $('#form-ratio').val(kong);
         $('#form-status').val(1);
     });
     /**
@@ -114,16 +124,12 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
-        var nickname = $(this).attr('data-nickname');
-        var username = $(this).attr('data-username');
-        var password = $(this).attr('data-password');
-        var email = $(this).attr('data-email');
+        var appId = $(this).attr('data-appId');
+        var ratio = $(this).attr('data-ratio');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
-        $('#form-nickname').val(nickname);
-        $('#form-username').val(username);
-        $('#form-password').val(password);
-        $('#form-email').val(email);
+        $('#form-appId').val(appId);
+        $('#form-ratio').val(ratio);
         $('#form-status').val(status);
     });
     /**
@@ -132,44 +138,25 @@ $(function () {
     $('#form-submit').click(function () {
         var data = {};
         data.id = $('#form-id').val();
-        data.nickname = $('#form-nickname').val();
-        data.username = $('#form-username').val();
-        data.password = $('#form-password').val();
-        data.email = $('#form-email').val();
+        data.appId = $('#form-appId').val();
+        data.ratio = $('#form-ratio').val();
         data.status = $('#form-status').val();
-        var url = '/admin/form.html';
-        var location = '/admin/index';
         console.log(data);
-        subActionAjaxForMime('post', url, data, location);
+        subActionAjaxForMime('post', form_url, data, index_url);
     });
 
     /**
-    * 启用
-    */
+     * 启用
+     */
     $('[data-form="enable"]').click(function() {
         /*判断是否有选中*/
         var check = $('#data-list-form').find('input[data-form="check-model"]');
         var verifyChecked = verifyCheckedForMime(check);
-        if(false == verifyChecked){
+        if(true == verifyChecked){
+            enableDataMultiple(check, stats_url, index_url);
+        }else {
             return false;
         }
-        swal({
-            title: "您确定要启用选中的信息吗",
-            type: "warning",
-            showCancelButton: true,
-            cancelButtonText: '取消',
-            confirmButtonColor: "#23c6c8",
-            confirmButtonText: "确定",
-            closeOnConfirm: false
-        }, function () {
-            var data = {};
-            data.selection = getDataListForMime(check);
-            data.statusType = 'enable';
-            var url = '/admin/stats.html';
-            var location = '/admin/index';
-            console.log(data);
-            subActionAjaxForMime('post', url, data, location);
-        });
     });
 
     /**
@@ -179,26 +166,11 @@ $(function () {
         /*判断是否有选中*/
         var check = $('#data-list-form').find('input[data-form="check-model"]');
         var verifyChecked = verifyCheckedForMime(check);
-        if(false == verifyChecked){
+        if(true == verifyChecked){
+            disableDataMultiple(check, stats_url, index_url);
+        }else {
             return false;
         }
-        swal({
-            title: "您确定要禁用选中的信息吗",
-            type: "warning",
-            showCancelButton: true,
-            cancelButtonText: '取消',
-            confirmButtonColor: "#f8ac59",
-            confirmButtonText: "确定",
-            closeOnConfirm: false
-        }, function () {
-            var data = {};
-            data.selection = getDataListForMime(check);
-            data.statusType = 'disable';
-            var url = '/admin/stats.html';
-            var location = '/admin/index';
-            console.log(data);
-            subActionAjaxForMime('post', url, data, location);
-        });
     });
 });
 </script>

@@ -92,3 +92,51 @@ var getDataListForMime = function(dataList) {
 var uploadDataReset = function (inputId) {
     $('#progress-' + inputId + ' .progress-bar').width(0).find('span').text('');
 };
+
+/**
+ * 启用操作
+ * @param check
+ * @param stats_url
+ * @param index_url
+ */
+var enableDataMultiple = function (check, stats_url, index_url) {
+    swal({
+        title: "您确定要启用选中的信息吗",
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: '取消',
+        confirmButtonColor: "#23c6c8",
+        confirmButtonText: "确定",
+        closeOnConfirm: false
+    }, function () {
+        var data = {};
+        data.selection = getDataListForMime(check);
+        data.statusType = 'enable';
+        console.log(data);
+        subActionAjaxForMime('post', stats_url, data, index_url);
+    });
+};
+
+/**
+ * 禁用操作
+ * @param check
+ * @param stats_url
+ * @param index_url
+ */
+var disableDataMultiple = function (check, stats_url, index_url) {
+    swal({
+        title: "您确定要禁用选中的信息吗",
+        type: "warning",
+        showCancelButton: true,
+        cancelButtonText: '取消',
+        confirmButtonColor: "#f8ac59",
+        confirmButtonText: "确定",
+        closeOnConfirm: false
+    }, function () {
+        var data = {};
+        data.selection = getDataListForMime(check);
+        data.statusType = 'disable';
+        console.log(data);
+        subActionAjaxForMime('post', stats_url, data, index_url);
+    });
+};

@@ -25,7 +25,7 @@ def index(request):
             param.update(name={'$regex': name})
         if number:
             param.update(number={'$regex': number})
-    data = Mdset.objects.all().order_by("id")
+    data = Mdset.objects.filter(**param).order_by("id")
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -36,7 +36,7 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/mdset/index.html',{'list':list, 'request': post})
+    return render(request, 'admin/mdset/index.html',{'topics':topics, 'request': post})
 
  
  
@@ -45,13 +45,13 @@ def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = Mdset(**param).add(**param)
+            model = Mdset.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
             else:
                 returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
     else:
         returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
     return returnData
@@ -61,21 +61,11 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = Mdset(**param).editById(**param)
-            '''
-                返回值 model
-                nModified:修改成功1，修改失败0
-                updatedExisting:根据条件查询结果，有true，无false
-                n:根据条件查询结果，有1，无0
-                ok:1
-            '''
-            if model.get('n'):
-                if model.get('ok'):
-                    returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-                else:
-                    returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+            model = Mdset.objects.filter(id=id).update(**param)
+            if model == 1:
+                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
-                returnData = {'code': '802', 'msg': '不存在的数据集', 'data': ''}
+                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
     else:
@@ -90,7 +80,7 @@ def form(request):
     param = {
         'appId': post.get('appId'),
         'ratio': post.get('ratio'),
-        'createTime': post.get('startTime'),
+        'status': post.get('status'),
     }
     if id:
         # 修改
@@ -109,23 +99,19 @@ def stats(request):
     selection = post.getlist('selection[]')
     statusType = post.get('statusType')
     if statusType == 'enable':
-        status = '1'
+        status = 1
     else:
-        status = '0'
+        status = 0
     param = {
         'status': status,
     }
-
     try:
-        model = Mdset(**param).editByFilter(selection, **param)
-        if model.get('n'):
-            if model.get('ok'):
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+        model = Mdset.objects.filter(id__in=selection).update(**param)
+        if model:
+            returnData = {'code': '200', 'msg': '操作成功', 'data': model}
         else:
-            returnData = {'code': '802', 'msg': '不存在的数据集', 'data': ''}
+            returnData = {'code': '801', 'msg': '操作失败', 'data': model}
     except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
