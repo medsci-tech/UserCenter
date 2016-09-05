@@ -49,7 +49,6 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.appId }}</td>
                                 <td>{{ list.appName }}</td>
                                 <td>{{ list.ratio }}</td>
                                 <td>
@@ -108,14 +107,17 @@ $(function () {
     var app_url = '{% url 'admin:app_applist' %}';
 
     //获取应用列表
-{#    getListDataByAjaxForMime(app_url, []);#}
+    getListDataByAjaxForMime(app_url, [], '#form-appId', 'option');
+
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
+        var appId = $('#form-appId');
+        var defaultSelected = appId.find('option:first').val();
         $('#form-id').val(kong);
-        $('#form-appId').val(1);
+        appId.val(defaultSelected);
         $('#form-ratio').val(kong);
         $('#form-status').val(1);
     });

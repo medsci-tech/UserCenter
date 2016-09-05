@@ -146,8 +146,9 @@ var disableDataMultiple = function (check, stats_url, index_url) {
  * @param url
  * @param data
  * @param element
+ * @param child
  */
-var getListDataByAjaxForMime = function (url, data, element) {
+var getListDataByAjaxForMime = function (url, data, element, child) {
     var list = {};
     $.ajax({
         type: 'post',
@@ -156,7 +157,9 @@ var getListDataByAjaxForMime = function (url, data, element) {
         success: function(res){
             if(res.code == 200){
                 list = res.data;
-                selectOptionHtmlForMime(list, element)
+                if('option' == child){
+                    selectOptionHtmlForMime(list, element);
+                }
             }
         }
     });
@@ -169,8 +172,8 @@ var getListDataByAjaxForMime = function (url, data, element) {
  */
 var selectOptionHtmlForMime = function (list, element) {
     var html = '';
-    for(i in list){
-        html += '<option value="">' + i + '</option>';
+    for(var i in list){
+        html += '<option value="' + i + '">' + list[i] + '</option>';
     }
     $(element).html(html);
 };
