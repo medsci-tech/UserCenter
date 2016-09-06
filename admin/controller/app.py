@@ -1,5 +1,5 @@
 #_*_coding:utf-8_*_
-# 迈豆积分管理
+# 应用平台管理
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -8,42 +8,26 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 
-from admin.model.Mdset import Mdset
 from admin.model.App import App
-from admin.controller.app import applist
 from UserCenter.global_templates import configParam
 import json
 
-'''
-迈豆积分列表
-'''
 @csrf_exempt
 def index(request):
     post = request.POST
     param = {}
-    appId = []
-    # 获取所有启用应用列表
-    apps = applist(request)
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
     if request.method == "POST":
-        appName = post.get('appName')
-        if appName:
-            app = App.objects.filter(name={'$regex': '应用'}, status=1).order_by("id")  # 根据搜索条件查询app列表
-            # 将app列表的id作为积分的查询条件
-            if app:
-                for ids in app:
-                    appId.append(ids['id'])
-                param.update(appId__in=appId)
-            else:
-                param.update(id=0)
-    data = Mdset.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
+        name = post.get('name')
+        if name:
+            param.update(name={'$regex': name})
+    data = App.objects.filter(**param).order_by("id")
     # 增强文字可读性
     for val in data:
-        val.update(appName=apps.get(val['appId']))
         val.update(statusName=status_list.get(val['status']))
-    limit = cfg_param.get('c_page')  # 每页显示的记录数
+    limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
     try:
@@ -53,15 +37,16 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    # return HttpResponse(status_list)
-    return render(request, 'admin/mdset/index.html',{'topics':topics, 'request': post, 'appList': apps})
+    return render(request, 'admin/app/index.html',{'topics':topics, 'request': post})
 
+ 
+ 
 # 添加操作--protected
 def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = Mdset.objects.create(**param)
+            model = App.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
             else:
@@ -77,7 +62,7 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = Mdset.objects.filter(id=id).update(**param)
+            model = App.objects.get(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
@@ -94,8 +79,8 @@ def form(request):
     post = request.POST
     id = post.get('id')
     param = {
-        'appId': post.get('appId'),
-        'ratio': post.get('ratio'),
+        'name': post.get('name'),
+        'description': post.get('description'),
         'status': post.get('status'),
     }
     if id:
@@ -122,7 +107,7 @@ def stats(request):
         'status': status,
     }
     try:
-        model = Mdset.objects.filter(id__in=selection).update(**param)
+        model = App.objects.filter(id__in=selection).update(**param)
         if model:
             returnData = {'code': '200', 'msg': '操作成功', 'data': model}
         else:
@@ -131,3 +116,18 @@ def stats(request):
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+@csrf_exempt
+def applist(request):
+    data = {}
+    app = App.objects.filter(status=1).order_by("id")
+    if app:
+        for list in app:
+            data[str(list.id)] = list.name
+        returnData = {'code': '200', 'msg': '操作成功', 'data': data}
+    else:
+        returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
+    if request.method == 'POST':
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        return returnData.get('data')
