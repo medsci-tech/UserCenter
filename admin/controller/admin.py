@@ -4,7 +4,6 @@ __author__ = 'lxhui'
 
 from django.shortcuts import render
 from admin.model.Admin import Admin
-from django.http import HttpResponsed
 from django.contrib.auth.hashers import make_password, check_password
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
@@ -48,7 +47,6 @@ def list(request):
 '''
 def save():
     pass
-    
     
     
     
