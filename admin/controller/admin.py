@@ -4,8 +4,12 @@ __author__ = 'lxhui'
 
 from django.shortcuts import render
 from admin.model.Admin import Admin
+<<<<<<< HEAD
 from django.http import HttpResponse
 from django.contrib.auth.hashers import make_password,check_password
+=======
+from django.contrib.auth.hashers import make_password, check_password
+>>>>>>> dev
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
@@ -46,6 +50,7 @@ def list(request):
 '''
 保存管理员
 '''
+<<<<<<< HEAD
 def save(request, **param):
     post = request.POST
     post = request.GET
@@ -64,6 +69,14 @@ def save(request, **param):
         #     status = status
         # )
     return HttpResponse(json.dumps({'response':200}))
+=======
+def save():
+    pass
+    
+    
+    
+    
+>>>>>>> dev
 
 
 def detail(request, question_id):
