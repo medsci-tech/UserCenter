@@ -51,16 +51,7 @@
                                 </td>
                                 <td>{{ list.appName }}</td>
                                 <td>{{ list.ratio }}</td>
-                                <td>
-                                    {{ list.status }}
-{#                                    {% for key, val in c_status.items %}#}
-{#                                        {% if key.name == 1 %}#}
-{#                                            {{ key }}#}
-{#                                            {{ val }}#}
-{#                                            {{ list.status }}#}
-{#                                        {% endif %}#}
-{#                                    {% endfor %}#}
-                                </td>
+                                <td>{{ list.statusName }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
@@ -104,10 +95,6 @@ $(function () {
     var stats_url = '{% url 'admin:mdset_stats' %}';
     var form_url = '{% url 'admin:mdset_form' %}';
     var index_url = '{% url 'admin:mdset' %}';
-    var app_url = '{% url 'admin:app_applist' %}';
-
-    //获取应用列表
-    getListDataByAjaxForMime(app_url, [], '#form-appId', 'option');
 
     /**
      * 点击添加按钮触发的操作

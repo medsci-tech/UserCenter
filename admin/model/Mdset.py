@@ -10,6 +10,8 @@ class Mdset(Auth):
             'indexes': [],
             }
     appId = StringField()
+    appName = StringField()  # 不要删
     ratio = StringField(required=True)
     createTime = DateTimeField(default=datetime.now())
     status = IntField(default=1)
+    statusName = StringField()  # 不要删

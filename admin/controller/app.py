@@ -2,23 +2,31 @@
 # 应用平台管理
 
 from django.shortcuts import render
-from admin.model.App import App
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
+
+from admin.model.App import App
+from UserCenter.global_templates import configParam
 import json
 
 @csrf_exempt
 def index(request):
     post = request.POST
     param = {}
+    # 获取所有状态列表
+    cfg_param = configParam(request)
+    status_list = cfg_param.get('c_status')
     if request.method == "POST":
         name = post.get('name')
         if name:
             param.update(name={'$regex': name})
     data = App.objects.filter(**param).order_by("id")
+    # 增强文字可读性
+    for val in data:
+        val.update(statusName=status_list.get(val['status']))
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -119,5 +127,7 @@ def applist(request):
         returnData = {'code': '200', 'msg': '操作成功', 'data': data}
     else:
         returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
-
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if request.method == 'POST':
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        return returnData.get('data')
