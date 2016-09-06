@@ -9,8 +9,8 @@ def configParam(request):
             'username': 'zhaiyu',
         },
         'c_status': {
-            '0': '禁用',
-            '1': '启用',
+            0: '禁用',
+            1: '启用',
         },
         'c_img_type':{
             'image/jpeg',
@@ -20,4 +20,5 @@ def configParam(request):
         'c_excel_type':{
             'application/vnd.ms-excel',
         },
+        'c_page': 20,
     }

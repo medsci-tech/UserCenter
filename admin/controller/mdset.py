@@ -2,14 +2,16 @@
 # 迈豆积分管理
 
 from django.shortcuts import render
-from admin.model.Mdset import Mdset
-from admin.model.App import App
-from admin.controller.app import applist
 from django.http import HttpResponse
 from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
+
+from admin.model.Mdset import Mdset
+from admin.model.App import App
+from admin.controller.app import applist
+from UserCenter.global_templates import configParam
 import json
 
 '''
@@ -20,18 +22,28 @@ def index(request):
     post = request.POST
     param = {}
     appId = []
+    # 获取所有启用应用列表
+    apps = applist(request)
+    # 获取所有状态列表
+    cfg_param = configParam(request)
+    status_list = cfg_param.get('c_status')
     if request.method == "POST":
         appName = post.get('appName')
         if appName:
-            app = App.objects.filter(name={'$regex': '应用'}, status=1).order_by("id")
+            app = App.objects.filter(name={'$regex': '应用'}, status=1).order_by("id")  # 根据搜索条件查询app列表
+            # 将app列表的id作为积分的查询条件
             if app:
                 for ids in app:
                     appId.append(ids['id'])
                 param.update(appId__in=appId)
             else:
                 param.update(id=0)
-    data = Mdset.objects.filter(**param).order_by("id")
-    limit = 20  # 每页显示的记录数
+    data = Mdset.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
+    # 增强文字可读性
+    for val in data:
+        val.update(appName=apps.get(val['appId']))
+        val.update(statusName=status_list.get(val['status']))
+    limit = cfg_param.get('c_page')  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
     try:
@@ -41,10 +53,9 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/mdset/index.html',{'topics':topics, 'request': post})
+    # return HttpResponse(status_list)
+    return render(request, 'admin/mdset/index.html',{'topics':topics, 'request': post, 'appList': apps})
 
- 
- 
 # 添加操作--protected
 def _add(**param):
     id = param.get('id')

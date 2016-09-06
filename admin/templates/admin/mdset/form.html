@@ -4,7 +4,9 @@
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">应用平台</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
             <select class="form-control" name="appId" id="form-appId">
-                <option value="">默认应用</option>
+                {% for key, val in appList.items %}
+                    <option value="{{ key }}">{{ val }}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
