@@ -23,21 +23,21 @@ def index(request):
     param = {}
     appId = []
     # 获取所有启用应用列表
-    apps = applist(request)
+    apps = applist('data')
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
     if request.method == "POST":
-        appName = post.get('appName')
+        appName = post.get('appName').strip()
         if appName:
-            app = App.objects.filter(name={'$regex': '应用'}, status=1).order_by("id")  # 根据搜索条件查询app列表
+            app = App.objects.filter(name={'$regex': appName}).order_by('id')  # 根据搜索条件查询app列表
             # 将app列表的id作为积分的查询条件
             if app:
                 for ids in app:
-                    appId.append(ids['id'])
+                    appId.append(str(ids['id']))
                 param.update(appId__in=appId)
             else:
-                param.update(id=0)
+                param.update(id='00000000000000000000000a')  # 无效的24位id
     data = Mdset.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
     for val in data:

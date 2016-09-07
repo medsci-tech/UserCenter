@@ -20,7 +20,7 @@ def index(request):
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
     if request.method == "POST":
-        name = post.get('name')
+        name = post.get('name').strip()
         if name:
             param.update(name={'$regex': name})
     data = App.objects.filter(**param).order_by("id")
@@ -118,7 +118,7 @@ def stats(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 @csrf_exempt
-def applist(request):
+def applist(format):
     data = {}
     app = App.objects.filter(status=1).order_by("id")
     if app:
@@ -127,7 +127,7 @@ def applist(request):
         returnData = {'code': '200', 'msg': '操作成功', 'data': data}
     else:
         returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
-    if request.method == 'POST':
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
-    else:
+    if format == 'data':
         return returnData.get('data')
+    else:
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
