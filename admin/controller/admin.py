@@ -2,7 +2,7 @@
 # 管理员管理
 __author__ = 'lxhui'
 
-from django.shortcuts import render
+from django.shortcuts import render,render_to_response,HttpResponse
 from admin.model.Admin import Admin
 from django.contrib.auth.hashers import make_password,check_password
 from django.core.paginator import Paginator
@@ -47,14 +47,15 @@ def list(request):
 '''
 def save(request, **param):
     post = request.POST
-    post = request.GET
-    if request.method == 'GET':
-        username = post.get('username') #用户
-        password = post.get('password','123456') #密码
-        password = make_password(password, None, 'pbkdf2_sha256') #加密
-        nickname = post.get('nickname',None) #昵称
-        email = post.get('email') #邮箱
-        status = post.get('status',1) #状态
+    if request.method == 'POST':
+        username = post.get('username') # 用户
+        res = Admin.checkUsername(username)
+        return HttpResponse(json.dumps({'response': res}))
+        password = post.get('password','123456') # 密码
+        password = make_password(password, None, 'pbkdf2_sha256') # 加密
+        nickname = post.get('nickname',None) # 昵称
+        email = post.get('email') # 邮箱
+        status = post.get('status',1) # 状态
         # Admin.objects.create(
         #     username = username,
         #     password = password,
