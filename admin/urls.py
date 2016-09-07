@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from admin.controller import admin,accounts, contract, mdset, upload, app
+from admin.controller import admin,accounts, contract, mdset, upload, app, system, tactics
 
 urlpatterns = [
     # 登录
@@ -18,7 +18,7 @@ urlpatterns = [
     url(r'^contract/stats', contract.stats, name='contract_stats'),
     url(r'^contract/index', contract.index, name='contract'),
 
-    # 迈豆积分
+    # 迈豆兑换
     url(r'^mdset/form', mdset.form, name='mdset_form'),
     url(r'^mdset/stats', mdset.stats, name='mdset_stats'),
     url(r'^mdset/index', mdset.index, name='mdset'),
@@ -31,4 +31,14 @@ urlpatterns = [
     url(r'^app/stats', app.stats, name='app_stats'),
     url(r'^app/applist', app.applist, name='app_applist'),
     url(r'^app/index', app.index, name='app'),
+
+    # 积分基础配置
+    url(r'^system/form', system.form, name='system_form'),
+    url(r'^system/stats', system.stats, name='system_stats'),
+    url(r'^system/index', system.index, name='system'),
+
+    # 积分策略配置
+    url(r'^tactics/form', tactics.form, name='tactics_form'),
+    url(r'^tactics/stats', tactics.stats, name='tactics_stats'),
+    url(r'^tactics/index', tactics.index, name='tactics'),
 ]
