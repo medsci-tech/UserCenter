@@ -1,5 +1,5 @@
-#_*_coding:utf-8_*_
-# 迈豆积分管理
+# coding:utf-8
+# 扩展基础管理
 
 from django.shortcuts import render
 from django.http import HttpResponse
@@ -8,8 +8,7 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 
-from admin.model.Tactics import Tactics
-from admin.model.App import App
+from admin.model.CreditRule import CreditRule
 from admin.controller.app import applist
 from UserCenter.global_templates import configParam
 import json
@@ -19,30 +18,28 @@ import json
 '''
 @csrf_exempt
 def index(request):
-    post = request.POST
+    get = request.GET
     param = {}
-    appId = []
     # 获取所有启用应用列表
-    apps = applist(request)
+    apps = applist('data')
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
-    if request.method == "POST":
-        appName = post.get('appName')
-        if appName:
-            app = App.objects.filter(name={'$regex': '应用'}, status=1).order_by("id")  # 根据搜索条件查询app列表
-            # 将app列表的id作为积分的查询条件
-            if app:
-                for ids in app:
-                    appId.append(ids['id'])
-                param.update(appId__in=appId)
-            else:
-                param.update(id=0)
-    data = Tactics.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
+    searchAppId = get.get('appId')
+    if searchAppId:
+        param.update(appId=searchAppId)
+    else:
+        dataOne = CreditRule.objects.all().order_by('id')[:1]  # 获取第一条数据
+        if dataOne:
+            param.update(appId=dataOne[0]['appId'])
+    data = CreditRule.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
-    for val in data:
-        val.update(appName=apps.get(val['appId']))
-        val.update(statusName=status_list.get(val['status']))
+    if data:
+        for val in data:
+            val.update(statusName=status_list.get(val['status']))
+        selectData = data[0]
+    else:
+        selectData = get
     limit = cfg_param.get('c_page')  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -53,21 +50,21 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    # return HttpResponse(status_list)
-    return render(request, 'admin/tactics/index.html',{'topics': topics, 'request': post, 'appList': apps})
+    # return HttpResponse(dataOne['id'])
+    return render(request, 'admin/credit_rule/index.html', {'topics': topics, 'request': selectData, 'appList': apps})
 
 # 添加操作--protected
 def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = Tactics.objects.create(**param)
+            model = CreditRule.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
             else:
                 returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
     else:
         returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
     return returnData
@@ -77,7 +74,7 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = Tactics.objects.filter(id=id).update(**param)
+            model = CreditRule.objects.get(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
@@ -95,6 +92,10 @@ def form(request):
     id = post.get('id')
     param = {
         'appId': post.get('appId'),
+        'credit': post.get('credit'),
+        'name': post.get('name'),
+        'icon': post.get('icon'),
+        'initNum': post.get('initNum'),
         'ratio': post.get('ratio'),
         'status': post.get('status'),
     }
@@ -122,12 +123,12 @@ def stats(request):
         'status': status,
     }
     try:
-        model = Tactics.objects.filter(id__in=selection).update(**param)
+        model = CreditRule.objects.filter(id__in=selection).update(**param)
         if model:
             returnData = {'code': '200', 'msg': '操作成功', 'data': model}
         else:
             returnData = {'code': '801', 'msg': '操作失败', 'data': model}
     except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")

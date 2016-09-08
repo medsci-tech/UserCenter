@@ -67,7 +67,7 @@ def _add(**param):
             else:
                 returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
     else:
         returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
     return returnData
@@ -128,6 +128,6 @@ def stats(request):
         else:
             returnData = {'code': '801', 'msg': '操作失败', 'data': model}
     except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
