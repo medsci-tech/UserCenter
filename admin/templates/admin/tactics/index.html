@@ -1,0 +1,167 @@
+{% extends 'admin/layouts/base.html' %}
+
+{% block content %}
+
+<div id="content">
+    <div id="content-header" class="mini">
+        <h1>迈豆积分配置</h1>
+    </div>
+    <div class="row">
+        <form action="" method="post">
+        <div class="col-xs-12 center">
+            <label>应用名称：
+                <input type="text" name="appName" value="{{ request.appName }}">
+            </label>
+            <button type="submit" class="btn btn-primary">查询</button>
+            <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
+            <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
+            <a href="javascript:;" class="btn btn-warning" data-form="disable">禁用</a>
+        </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-th"></i>
+                    </span>
+                    <h5>迈豆积分配置列表</h5>
+                </div>
+                <div class="widget-content">
+                    <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
+                                    <input type="hidden" id="form-statusType" name="statusType" value="enable" />
+                                </th>
+                                <th>应用名称</th>
+                                <th>兑换比例</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for list in topics.object_list  %}
+                            <tr>
+                                <td>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
+                                <td>{{ list.appName }}</td>
+                                <td>{{ list.ratio }}</td>
+                                <td>{{ list.statusName }}</td>
+                                <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
+                                <td>
+                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-appId="{{ list.appId }}"
+                                       data-ratio="{{ list.ratio }}"
+                                       data-status="{{ list.status }}"
+                                    ><i class="fa fa-edit"></i> 编辑</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include 'admin/common/page.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>管理员管理</h3>
+            </div>
+            <div class="modal-body">
+                {% include 'admin/tactics/form.html' %}
+            </div>
+            <div class="modal-footer">
+                <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
+                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">取消</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+$(function () {
+    var stats_url = '{% url 'admin:tactics_stats' %}';
+    var form_url = '{% url 'admin:tactics_form' %}';
+    var index_url = '{% url 'admin:tactics' %}';
+
+    /**
+     * 点击添加按钮触发的操作
+     */
+    $('[data-form="add-model"]').click(function () {
+        var kong = '';
+        var appId = $('#form-appId');
+        var defaultSelected = appId.find('option:first').val();
+        $('#form-id').val(kong);
+        appId.val(defaultSelected);
+        $('#form-ratio').val(kong);
+        $('#form-status').val(1);
+    });
+    /**
+     * 点击修改按钮触发的操作
+     */
+    $('[data-form="edit-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        var appId = $(this).attr('data-appId');
+        var ratio = $(this).attr('data-ratio');
+        var status = $(this).attr('data-status');
+        $('#form-id').val(id);
+        $('#form-appId').val(appId);
+        $('#form-ratio').val(ratio);
+        $('#form-status').val(status);
+    });
+    /**
+     * 点击form提交按钮触发的操作
+     */
+    $('#form-submit').click(function () {
+        var data = {};
+        data.id = $('#form-id').val();
+        data.appId = $('#form-appId').val();
+        data.ratio = $('#form-ratio').val();
+        data.status = $('#form-status').val();
+        console.log(data);
+        subActionAjaxForMime('post', form_url, data, index_url);
+    });
+
+    /**
+     * 启用
+     */
+    $('[data-form="enable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(true == verifyChecked){
+            enableDataMultiple(check, stats_url, index_url);
+        }else {
+            return false;
+        }
+    });
+
+    /**
+     * 禁用
+     */
+    $('[data-form="disable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(true == verifyChecked){
+            disableDataMultiple(check, stats_url, index_url);
+        }else {
+            return false;
+        }
+    });
+});
+</script>
+
+{% endblock %}

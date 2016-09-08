@@ -8,7 +8,7 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 
-from admin.model.Mdset import Mdset
+from admin.model.Tactics import Tactics
 from admin.model.App import App
 from admin.controller.app import applist
 from UserCenter.global_templates import configParam
@@ -23,22 +23,22 @@ def index(request):
     param = {}
     appId = []
     # 获取所有启用应用列表
-    apps = applist('data')
+    apps = applist(request)
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
     if request.method == "POST":
-        appName = post.get('appName').strip()
+        appName = post.get('appName')
         if appName:
-            app = App.objects.filter(name={'$regex': appName}).order_by('id')  # 根据搜索条件查询app列表
+            app = App.objects.filter(name={'$regex': '应用'}, status=1).order_by("id")  # 根据搜索条件查询app列表
             # 将app列表的id作为积分的查询条件
             if app:
                 for ids in app:
-                    appId.append(str(ids['id']))
+                    appId.append(ids['id'])
                 param.update(appId__in=appId)
             else:
-                param.update(id='00000000000000000000000a')  # 无效的24位id
-    data = Mdset.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
+                param.update(id=0)
+    data = Tactics.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
     for val in data:
         val.update(appName=apps.get(val['appId']))
@@ -54,14 +54,14 @@ def index(request):
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
     # return HttpResponse(status_list)
-    return render(request, 'admin/mdset/index.html',{'topics':topics, 'request': post, 'appList': apps})
+    return render(request, 'admin/tactics/index.html',{'topics': topics, 'request': post, 'appList': apps})
 
 # 添加操作--protected
 def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = Mdset.objects.create(**param)
+            model = Tactics.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
             else:
@@ -77,7 +77,7 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = Mdset.objects.get(id=id).update(**param)
+            model = Tactics.objects.filter(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
@@ -122,7 +122,7 @@ def stats(request):
         'status': status,
     }
     try:
-        model = Mdset.objects.filter(id__in=selection).update(**param)
+        model = Tactics.objects.filter(id__in=selection).update(**param)
         if model:
             returnData = {'code': '200', 'msg': '操作成功', 'data': model}
         else:
