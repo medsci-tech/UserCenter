@@ -4,13 +4,17 @@
 
 <div id="content">
     <div id="content-header" class="mini">
-        <h1>迈豆积分配置</h1>
+        <h1>积分策略配置</h1>
     </div>
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>应用名称：
-                <input type="text" name="appName" value="{{ request.appName }}">
+                <select class="form-control" name="appId" id="form-searchAppId">
+                    {% for key, val in appList.items %}
+                        <option value="{{ key }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -26,7 +30,7 @@
                     <span class="icon">
                         <i class="fa fa-th"></i>
                     </span>
-                    <h5>迈豆积分配置列表</h5>
+                    <h5>积分策略列表</h5>
                 </div>
                 <div class="widget-content">
                     <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
@@ -36,7 +40,7 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>应用名称</th>
+                                <th>策略名称</th>
                                 <th>兑换比例</th>
                                 <th>状态</th>
                                 <th>创建时间</th>
@@ -76,10 +80,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>管理员管理</h3>
+                <h3>积分策略</h3>
             </div>
             <div class="modal-body">
-                {% include 'admin/tactics/form.html' %}
+                {% include 'admin/credit_rule/form.html' %}
             </div>
             <div class="modal-footer">
                 <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
@@ -92,9 +96,15 @@
 
 <script>
 $(function () {
-    var stats_url = '{% url 'admin:tactics_stats' %}';
-    var form_url = '{% url 'admin:tactics_form' %}';
-    var index_url = '{% url 'admin:tactics' %}';
+    var stats_url = '{% url 'admin:credit_rule_stats' %}';
+    var form_url = '{% url 'admin:credit_rule_form' %}';
+    var index_url = window.location.href;
+
+    //选中应用
+    var searchAppId = '{{ request.appId }}';
+    if(searchAppId){
+        $('#form-searchAppId').val(searchAppId);
+    }
 
     /**
      * 点击添加按钮触发的操作

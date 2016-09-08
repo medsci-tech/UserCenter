@@ -4,9 +4,9 @@ from datetime import *
 from django.conf import settings  # import the settings file
 from admin.model.Auth import Auth
 
-class Extcredits(Auth):
+class CreditRule(Auth):
     meta = Document.meta = {
-            'collection': settings.MONGODB_PREFIX+'extcredits',
+            'collection': settings.MONGODB_PREFIX+'credit_rule',
             'indexes': [],
             }
     appId = StringField()
@@ -15,7 +15,7 @@ class Extcredits(Auth):
     status = IntField(default=1)
     statusName = StringField()  # 不要删
 
-    name = StringField()  # 扩展名称
-    icon = StringField()  # 初始积分
-    initNum = FloatField(default=0)  # 初始值
-    ratio = FloatField(default=0)  # 兑换比例
+    name = StringField()
+    icon = StringField()
+    initNum = IntField(default=0)
+    ratio = IntField(default=0)

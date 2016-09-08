@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from admin.controller import admin,accounts, contract, mdset, upload, app, extcredits, tactics
+from admin.controller import admin,accounts, contract, mdset, upload, app, credit, credit_rule
 
 urlpatterns = [
     # 登录
@@ -33,12 +33,12 @@ urlpatterns = [
     url(r'^app/index', app.index, name='app'),
 
     # 积分基础配置
-    url(r'^extcredits/form', extcredits.form, name='extcredits_form'),
-    url(r'^extcredits/stats', extcredits.stats, name='extcredits_stats'),
-    url(r'^extcredits/index', extcredits.index, name='extcredits'),
+    url(r'^credit/form', credit.form, name='credit_form'),
+    url(r'^credit/stats', credit.stats, name='credit_stats'),
+    url(r'^credit/index', credit.index, name='credit'),
 
     # 积分策略配置
-    url(r'^tactics/form', tactics.form, name='tactics_form'),
-    url(r'^tactics/stats', tactics.stats, name='tactics_stats'),
-    url(r'^tactics/index', tactics.index, name='tactics'),
+    url(r'^credit_rule/form', credit_rule.form, name='credit_rule_form'),
+    url(r'^credit_rule/stats', credit_rule.stats, name='credit_rule_stats'),
+    url(r'^credit_rule/index', credit_rule.index, name='credit_rule'),
 ]
