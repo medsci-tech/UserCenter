@@ -4,9 +4,9 @@ from datetime import *
 import bson
 from django.conf import settings # import the settings file
 from admin.model.Auth import Auth
-from django_laravel_validator.validator import *
-import bson
-class Admin(Auth,Validator):
+#from django_laravel_validator.validator import *
+import json
+class Admin(Auth):
     meta = Document.meta = {
             'collection': settings.MONGODB_PREFIX+'admin',
             'indexes':[],
@@ -20,20 +20,9 @@ class Admin(Auth,Validator):
 
     # 用户唯一验证数据
     def checkUsername(self, **kwargs):
-        if Admin.objects(username=kwargs):
-            response = {'status':0, 'msg': u'该用户已存在'}
-            return kwargs
+        if Admin.objects.filter(username=kwargs):
+            response = {'status':0, 'msg': u'该用户已存在!'}
+            return json.dumps(response)
         else:
-            return 1
-
-    # email验证数据
-    def checkEmail(self, **kwargs):
-        if self.objects.filter(email=kwargs).exists():
-            response = {'status': 0, 'msg': u'该email已存在'}
-            return response
-
-    def checkPasswor(self,**kwargs):
-        if password1 and password2:
-            if password1 != password2:
-                response = {'status': 0, 'msg': u'两个密码字段不一致。'}
-        return response
+            response = {'status': 1, 'msg': None}
+            return json.dumps(response)

@@ -17,7 +17,26 @@ $(document).ready(function(){
 
                     },
                     success: function(data, textStatus){
-                        alert(110)
+                    	 if(data.status > 0){
+							swal({
+								title: "保存成功",
+								type: "success",
+								confirmButtonColor: "#1ab394",
+								confirmButtonText: "确定",
+								closeOnConfirm: false
+							}, function () {
+								window.location.href = location;
+							});
+						}else {
+							swal({
+								title: "保存失败",
+								text: data.msg,
+								type: "warning",
+								confirmButtonColor: "#1ab394",
+								confirmButtonText: "确定",
+								closeOnConfirm: false
+							});
+						}
                     },
                     complete: function(XMLHttpRequest, textStatus){
 
@@ -45,12 +64,12 @@ $(document).ready(function(){
 				maxlength:20
 			},
 			pwd:{
-				required: true,
+				required: false,
 				minlength:6,
 				maxlength:20
 			},
 			pwd2:{
-				required:true,
+				required:false,
 				minlength:6,
 				maxlength:20,
 				equalTo:"#pwd"

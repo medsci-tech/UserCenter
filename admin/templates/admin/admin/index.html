@@ -8,8 +8,6 @@
     </div>
     <div class="row">
         <form action="" method="post">
-
-
         <div class="col-xs-12 center">
             <label>昵称：
                 <input type="text" name="nickname" value="{{ request.nickname }}">
@@ -45,8 +43,8 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>昵称</th>
                                 <th>用户名</th>
+                                <th>昵称</th>
                                 <th>邮箱</th>
                                 <th>状态</th>
                                 <th>创建时间</th>
@@ -60,11 +58,11 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ data.id }}"/>
                                 </td>
-                                <td>{{ data.nickname }}</td>
                                 <td>{{ data.username }}</td>
+                                <td>{{ data.nickname }}</td>
                                 <td>{{ data.email }}</td>
                                 <td align="center">
-                                	{% ifequal data.status '1' %}
+                                	{% ifequal data.status 1 %}
                         	 		<button class="btn btn-info btn-xs">启用</button>
 									{% else %}
 								    	<button class="btn btn-warning btn-xs">禁用</button>
@@ -133,12 +131,14 @@ $(function () {
         var password = $(this).attr('data-password');
         var email = $(this).attr('data-email');
         var status = $(this).attr('data-status');
-        $('#form-id').val(id);
-        $('#form-nickname').val(nickname);
-        $('#form-username').val(username);
-        $('#form-password').val(password);
-        $('#form-email').val(email);
-        $('#form-status').val(status);
+        $("input[type=radio][name=status][value="+status+"]").parent('div').addClass('checked');
+        $("input[type=radio][name=status][value="+status+"]").parent().parent().siblings().find('div').removeClass('checked')
+        $('#id').val(id);
+        $('#nickname').val(nickname);
+        $('#username').val(username);
+        $('#password').val(password);
+        $('#email').val(email);
+        $('#status').val(status);
     });
     /**
      * 点击form提交按钮触发的操作

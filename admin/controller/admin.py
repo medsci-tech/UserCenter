@@ -48,22 +48,34 @@ def list(request):
 def save(request, **param):
     post = request.POST
     if request.method == 'POST':
-        username = post.get('username') # 用户
-        res = Admin.checkUsername(username)
-        return HttpResponse(json.dumps({'response': res}))
-        password = post.get('password','123456') # 密码
-        password = make_password(password, None, 'pbkdf2_sha256') # 加密
-        nickname = post.get('nickname',None) # 昵称
-        email = post.get('email') # 邮箱
-        status = post.get('status',1) # 状态
-        # Admin.objects.create(
-        #     username = username,
-        #     password = password,
-        #     nickname = nickname,
-        #     email = email,
-        #     status = status
-        # )
-    return HttpResponse(json.dumps({'response':200}))
+        model = Admin()
+        param = {
+            'id': post.get('id'),  # objectid
+            'username':post.get('username'), # 用户名
+            'password': make_password(post.get('pwd', '123456'), None, 'pbkdf2_sha256'), # 加密,
+            'nickname':post.get('nickname', None),  # 昵称
+            'email': post.get('email'),  # 邮箱
+            'status': post.get('status', 1)  # 状态
+        }
+        id = param.get('id',0)
+        param.pop('id') # 剔除主键
+        json_str = model.checkUsername(username=param.get('username',None))
+        try:
+            decoded = json.loads(json_str)
+            if(not id): # 添加操作
+                if(not decoded['status']): # 如果用户存在
+                    return HttpResponse(json_str)
+                else:
+                    Admin.objects.create(**param)
+                    return HttpResponse(json_str)
+            else: # 更新
+                if(not param.get('password')): # 密码为空则不修改密码
+                    param.pop('password')
+                Admin.objects.filter(id=id).update(**param)
+                return HttpResponse(json.dumps({'status': 1, 'msg': '修改成功'}))
+        except (ValueError, KeyError, TypeError):
+            return HttpResponse(json.dumps({'status': 0,'msg':'json格式错误'}))
+
 
 def detail(request, question_id):
     pass
@@ -72,80 +84,6 @@ def detail(request, question_id):
     # except Question.DoesNotExist:
     #     raise Http404("Question does not exist")
     # return render(request, 'admin/admin/detail.html', {'question': question})
- 
- 
-# 添加操作--protected
-def _add(**param):
-    id = param.get('id')
-    password = param.get('password')
-    if not id:
-        if not password:
-            # 如果没有填密码则为默认密码
-            password = '123456'
-        param.update(password=make_password(password, None, 'pbkdf2_sha256'))
-        try:
-            model = Admin.objects.create(**param)
-            if model:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-        except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-    else:
-        returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
-    return returnData
-
-# 修改操作--protected
-def _editById(**param):
-    id = param.get('id')
-    password = param.get('password')
-    if id:
-        if hasattr(param, 'password'):
-            if password:
-                param.update(password=make_password(password, None, 'pbkdf2_sha256'))
-            else:
-                # 如果留空则移除password属性，不修改密码
-                param.pop('password')
-        try:
-            model = Admin.objects.filter(id=id).update(**param)
-            '''
-                返回值 model
-                nModified:修改成功1，修改失败0
-                updatedExisting:根据条件查询结果，有true，无false
-                n:根据条件查询结果，有1，无0
-                ok:1
-            '''
-            if model == 1:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-        except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-    else:
-        returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
-    return returnData
-
-# 修改操作
-@csrf_exempt
-def form(request):
-    post = request.POST
-    id = post.get('id')
-    param = {
-        'username': post.get('username'),
-        'nickname': post.get('nickname'),
-        'password': post.get('password'),
-        'email': post.get('email'),
-        'status': post.get('status'),
-    }
-    if id:
-        # 修改
-        param.update(id=id)
-        returnData = _editById(**param)
-    else:
-        # 添加
-        returnData = _add(**param)
-
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
 @csrf_exempt

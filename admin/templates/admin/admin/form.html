@@ -16,7 +16,7 @@
     <div class="form-group">
 		<label class="col-sm-3 col-md-3 col-lg-2 control-label">密码</label>
 		<div class="col-sm-9 col-md-9 col-lg-10">
-			<input type="password" class="form-control input-sm" name="pwd" id="pwd" />
+			<input type="password" class="form-control input-sm" name="pwd" id="pwd" placeholder="若不修改密码,请留空!"/>
 		</div>
 	</div>
 
@@ -35,14 +35,15 @@
 	<div class="form-group">
 		<label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
 		<div class="col-sm-9 col-md-9 col-lg-10">
-			<label><input type="radio" name="radios" checked/> 启用</label>
-			<label><input type="radio" name="radios" /> 禁用</label>
+			<label><input type="radio"  name="status" value="1"/> 启用</label>
+			<label><input type="radio"  name="status" value="0" /> 禁用</label>
 		</div>
 	</div>
 	<div class="form-actions">
 	    <input type="submit" value="确定" class="btn btn-primary" id="submit">
         <button class="btn btn-default" data-dismiss="" id="ResetButton">重置</button>
 	</div>
+    <input type="hidden" name="id" id="id">
 	</form>
 </div>
 <script>
