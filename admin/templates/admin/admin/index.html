@@ -107,20 +107,7 @@
 <script>
 $(function () {
     var stats_url = '{% url 'admin:admin_stats' %}';
-    var form_url = '{% url 'admin:admin_form' %}';
     var index_url = '{% url 'admin:admin' %}';
-    /**
-     * 点击添加按钮触发的操作
-     */
-    $('[data-form="add-model"]').click(function () {
-        var kong = '';
-        $('#form-id').val(kong);
-        $('#form-nickname').val(kong);
-        $('#form-username').val(kong);
-        $('#form-password').val(kong);
-        $('#form-email').val(kong);
-        $('#form-status').val(1);
-    });
     /**
      * 点击修改按钮触发的操作
      */
@@ -140,21 +127,6 @@ $(function () {
         $('#email').val(email);
         $('#status').val(status);
     });
-    /**
-     * 点击form提交按钮触发的操作
-     */
-    $('#form-submit').click(function () {
-        var data = {};
-        data.id = $('#form-id').val();
-        data.nickname = $('#form-nickname').val();
-        data.username = $('#form-username').val();
-        data.password = $('#form-password').val();
-        data.email = $('#form-email').val();
-        data.status = $('#form-status').val();
-        console.log(data);
-        subActionAjaxForMime('post', form_url, data, index_url);
-    });
-
     /**
     * 启用
     */

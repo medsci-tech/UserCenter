@@ -9,7 +9,6 @@ urlpatterns = [
 
     # 管理员
     url(r'^detail/$', admin.detail, name='admin_detail'),
-    url(r'^admin/form/',admin.form, name='admin_form'),
     url(r'^admin/stats/',admin.stats, name='admin_stats'),
     url(r'^admin/list/',admin.list, name='admin'),# 管理员列表
     url(r'^admin/save/',admin.save, name='save'),# 保存管理员
