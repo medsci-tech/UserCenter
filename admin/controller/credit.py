@@ -132,3 +132,21 @@ def stats(request):
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+'''
+根据条件获取启用的积分扩展列表
+'''
+@csrf_exempt
+def creditlist(appId, format):
+    data = {}
+    app = Credit.objects.filter(appId=appId, status=1).order_by("id")
+    if app:
+        for list in app:
+            data[str(list.credit)] = list.name
+        returnData = {'code': '200', 'msg': '操作成功', 'data': data}
+    else:
+        returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
+    if format == 'data':
+        return returnData.get('data')
+    else:
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
