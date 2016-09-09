@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from admin.controller import admin,accounts, contract, mdset, upload, app
+from admin.controller import admin,accounts, contract, mdset, upload, app, credit, credit_rule
 
 urlpatterns = [
     # 登录
@@ -19,7 +19,7 @@ urlpatterns = [
     url(r'^contract/stats', contract.stats, name='contract_stats'),
     url(r'^contract/index', contract.index, name='contract'),
 
-    # 迈豆积分
+    # 迈豆兑换
     url(r'^mdset/form', mdset.form, name='mdset_form'),
     url(r'^mdset/stats', mdset.stats, name='mdset_stats'),
     url(r'^mdset/index', mdset.index, name='mdset'),
@@ -32,4 +32,14 @@ urlpatterns = [
     url(r'^app/stats', app.stats, name='app_stats'),
     url(r'^app/applist', app.applist, name='app_applist'),
     url(r'^app/index', app.index, name='app'),
+
+    # 积分基础配置
+    url(r'^credit/form', credit.form, name='credit_form'),
+    url(r'^credit/stats', credit.stats, name='credit_stats'),
+    url(r'^credit/index', credit.index, name='credit'),
+
+    # 积分策略配置
+    url(r'^credit_rule/form', credit_rule.form, name='credit_rule_form'),
+    url(r'^credit_rule/stats', credit_rule.stats, name='credit_rule_stats'),
+    url(r'^credit_rule/index', credit_rule.index, name='credit_rule'),
 ]

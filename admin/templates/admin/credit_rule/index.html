@@ -4,13 +4,17 @@
 
 <div id="content">
     <div id="content-header" class="mini">
-        <h1>应用平台管理</h1>
+        <h1>积分策略配置</h1>
     </div>
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>应用名称：
-                <input type="text" name="name" value="{{ request.name }}">
+                <select class="form-control" name="appId" id="form-searchAppId">
+                    {% for key, val in appList.items %}
+                        <option value="{{ key }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -26,7 +30,7 @@
                     <span class="icon">
                         <i class="fa fa-th"></i>
                     </span>
-                    <h5>应用平台列表</h5>
+                    <h5>积分策略列表</h5>
                 </div>
                 <div class="widget-content">
                     <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
@@ -36,8 +40,8 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>名称</th>
-                                <th>描述</th>
+                                <th>策略名称</th>
+                                <th>兑换比例</th>
                                 <th>状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
@@ -49,15 +53,15 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.name }}</td>
-                                <td>{{ list.description }}</td>
+                                <td>{{ list.appName }}</td>
+                                <td>{{ list.ratio }}</td>
                                 <td>{{ list.statusName }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
-                                       data-name="{{ list.name }}"
-                                       data-description="{{ list.description }}"
+                                       data-appId="{{ list.appId }}"
+                                       data-ratio="{{ list.ratio }}"
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
@@ -76,10 +80,10 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>应用平台</h3>
+                <h3>积分策略</h3>
             </div>
             <div class="modal-body">
-                {% include 'admin/app/form.html' %}
+                {% include 'admin/credit_rule/form.html' %}
             </div>
             <div class="modal-footer">
                 <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
@@ -92,17 +96,26 @@
 
 <script>
 $(function () {
-    var stats_url = '{% url 'admin:app_stats' %}';
-    var form_url = '{% url 'admin:app_form' %}';
-    var index_url = '{% url 'admin:app' %}';
+    var stats_url = '{% url 'admin:credit_rule_stats' %}';
+    var form_url = '{% url 'admin:credit_rule_form' %}';
+    var index_url = window.location.href;
+
+    //选中应用
+    var searchAppId = '{{ request.appId }}';
+    if(searchAppId){
+        $('#form-searchAppId').val(searchAppId);
+    }
+
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
+        var appId = $('#form-appId');
+        var defaultSelected = appId.find('option:first').val();
         $('#form-id').val(kong);
-        $('#form-name').val(kong);
-        $('#form-description').val(kong);
+        appId.val(defaultSelected);
+        $('#form-ratio').val(kong);
         $('#form-status').val(1);
     });
     /**
@@ -110,12 +123,12 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
-        var name = $(this).attr('data-name');
-        var description = $(this).attr('data-description');
+        var appId = $(this).attr('data-appId');
+        var ratio = $(this).attr('data-ratio');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
-        $('#form-name').val(name);
-        $('#form-description').val(description);
+        $('#form-appId').val(appId);
+        $('#form-ratio').val(ratio);
         $('#form-status').val(status);
     });
     /**
@@ -124,8 +137,8 @@ $(function () {
     $('#form-submit').click(function () {
         var data = {};
         data.id = $('#form-id').val();
-        data.name = $('#form-name').val();
-        data.description = $('#form-description').val();
+        data.appId = $('#form-appId').val();
+        data.ratio = $('#form-ratio').val();
         data.status = $('#form-status').val();
         console.log(data);
         subActionAjaxForMime('post', form_url, data, index_url);

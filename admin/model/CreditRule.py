@@ -4,14 +4,18 @@ from datetime import *
 from django.conf import settings  # import the settings file
 from admin.model.Auth import Auth
 
-class Mdset(Auth):
+class CreditRule(Auth):
     meta = Document.meta = {
-            'collection': settings.MONGODB_PREFIX+'mdset',
+            'collection': settings.MONGODB_PREFIX+'credit_rule',
             'indexes': [],
             }
     appId = StringField()
     appName = StringField()  # 不要删
-    ratio = StringField(required=True)
     createTime = DateTimeField(default=datetime.now())
     status = IntField(default=1)
     statusName = StringField()  # 不要删
+
+    name = StringField()
+    icon = StringField()
+    initNum = IntField(default=0)
+    ratio = IntField(default=0)

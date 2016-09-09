@@ -23,21 +23,21 @@ def index(request):
     param = {}
     appId = []
     # 获取所有启用应用列表
-    apps = applist(request)
+    apps = applist('data')
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
     if request.method == "POST":
-        appName = post.get('appName')
+        appName = post.get('appName').strip()
         if appName:
-            app = App.objects.filter(name={'$regex': '应用'}, status=1).order_by("id")  # 根据搜索条件查询app列表
+            app = App.objects.filter(name={'$regex': appName}).order_by('id')  # 根据搜索条件查询app列表
             # 将app列表的id作为积分的查询条件
             if app:
                 for ids in app:
-                    appId.append(ids['id'])
+                    appId.append(str(ids['id']))
                 param.update(appId__in=appId)
             else:
-                param.update(id=0)
+                param.update(id='00000000000000000000000a')  # 无效的24位id
     data = Mdset.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
     for val in data:
@@ -67,7 +67,7 @@ def _add(**param):
             else:
                 returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
     else:
         returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
     return returnData
@@ -77,7 +77,7 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = Mdset.objects.filter(id=id).update(**param)
+            model = Mdset.objects.get(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
@@ -128,6 +128,6 @@ def stats(request):
         else:
             returnData = {'code': '801', 'msg': '操作失败', 'data': model}
     except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
