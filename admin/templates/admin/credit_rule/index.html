@@ -7,7 +7,7 @@
         <h1>积分策略配置</h1>
     </div>
     <div class="row">
-        <form action="" method="post">
+        <form action="" method="get">
         <div class="col-xs-12 center">
             <label>应用名称：
                 <select class="form-control" name="appId" id="form-searchAppId">
@@ -41,7 +41,11 @@
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
                                 <th>策略名称</th>
-                                <th>兑换比例</th>
+                                <th>奖励周期</th>
+                                <th>次数</th>
+                                {% for key, val in creditList.items %}
+                                <th>{{ val }}</th>
+                                {% endfor %}
                                 <th>状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
@@ -53,14 +57,22 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.appName }}</td>
-                                <td>{{ list.ratio }}</td>
+                                <td>{{ list.name }}</td>
+                                <td>{{ list.cycleName }}</td>
+                                <td>{{ list.rewardNum }}</td>
+                                {% for val in creditList %}
+                                <th>{{ val }}</th>
+                                {% endfor %}
                                 <td>{{ list.statusName }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
                                        data-appId="{{ list.appId }}"
+                                       data-name="{{ list.name }}"
+                                       data-credit="{{ list.credit }}"
+                                       data-cycle="{{ list.cycle }}"
+                                       data-rewardNum="{{ list.rewardNum }}"
                                        data-ratio="{{ list.ratio }}"
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
@@ -75,6 +87,11 @@
         </div>
     </div>
 </div>
+        name = StringField()  # 策略名称
+    credit = StringField()  # 扩展字段
+    creditName = StringField()  # 扩展字段名称
+    cycle = StringField()  # 周期
+    rewardNum = StringField()  # 周期内最多奖励次数
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -115,6 +132,10 @@ $(function () {
         var defaultSelected = appId.find('option:first').val();
         $('#form-id').val(kong);
         appId.val(defaultSelected);
+        $('#form-name').val(kong);
+        $('#form-credit').val(kong);
+        $('#form-cycle').val(kong);
+        $('#form-rewardNum').val(kong);
         $('#form-ratio').val(kong);
         $('#form-status').val(1);
     });
@@ -124,10 +145,18 @@ $(function () {
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
         var appId = $(this).attr('data-appId');
+        var name = $(this).attr('data-name');
+        var credit = $(this).attr('data-credit');
+        var cycle = $(this).attr('data-cycle');
+        var rewardNum = $(this).attr('data-rewardNum');
         var ratio = $(this).attr('data-ratio');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
         $('#form-appId').val(appId);
+        $('#form-name').val(name);
+        $('#form-credit').val(credit);
+        $('#form-cycle').val(cycle);
+        $('#form-rewardNum').val(rewardNum);
         $('#form-ratio').val(ratio);
         $('#form-status').val(status);
     });
@@ -138,6 +167,10 @@ $(function () {
         var data = {};
         data.id = $('#form-id').val();
         data.appId = $('#form-appId').val();
+        data.name = $('#form-name').val();
+        data.credit = $('#form-credit').val();
+        data.cycle = $('#form-cycle').val();
+        data.rewardNum = $('#form-rewardNum').val();
         data.ratio = $('#form-ratio').val();
         data.status = $('#form-status').val();
         console.log(data);

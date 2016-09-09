@@ -9,7 +9,9 @@ from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 
 from admin.model.CreditRule import CreditRule
+from admin.model.Credit import Credit
 from admin.controller.app import applist
+from admin.controller.credit import creditlist
 from UserCenter.global_templates import configParam
 import json
 
@@ -20,26 +22,25 @@ import json
 def index(request):
     get = request.GET
     param = {}
-    # 获取所有启用应用列表
-    apps = applist('data')
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
+    cycle_list = cfg_param.get('c_cycle')
     searchAppId = get.get('appId')
+    selectData = get
     if searchAppId:
         param.update(appId=searchAppId)
     else:
-        dataOne = CreditRule.objects.all().order_by('id')[:1]  # 获取第一条数据
+        dataOne = Credit.objects.all().order_by('id')[:1]  # 获取第一条数据
         if dataOne:
             param.update(appId=dataOne[0]['appId'])
+            selectData = dataOne[0]
     data = CreditRule.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
     if data:
         for val in data:
             val.update(statusName=status_list.get(val['status']))
-        selectData = data[0]
-    else:
-        selectData = get
+            val.update(cycleName=cycle_list.get(val['cycle']))
     limit = cfg_param.get('c_page')  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -50,8 +51,17 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    # return HttpResponse(dataOne['id'])
-    return render(request, 'admin/credit_rule/index.html', {'topics': topics, 'request': selectData, 'appList': apps})
+    # 获取所有启用应用列表
+    app_list = applist('data')
+    # 获取所有启用扩展列表
+    credit_list = creditlist(selectData['appId'], 'data')
+    # return HttpResponse(credit_list)
+    return render(request, 'admin/credit_rule/index.html', {
+        'topics': topics,
+        'request': selectData,
+        'appList': app_list,
+        'creditList': credit_list,
+    })
 
 # 添加操作--protected
 def _add(**param):
@@ -94,9 +104,9 @@ def form(request):
         'appId': post.get('appId'),
         'credit': post.get('credit'),
         'name': post.get('name'),
-        'icon': post.get('icon'),
-        'initNum': post.get('initNum'),
-        'ratio': post.get('ratio'),
+        'cycle': post.get('cycle'),
+        'rewardNum': post.get('rewardNum'),
+        'extends': post.get('extends'),
         'status': post.get('status'),
     }
     if id:
