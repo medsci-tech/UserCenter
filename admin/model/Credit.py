@@ -10,7 +10,6 @@ class Credit(Auth):
             'indexes': [],
             }
     appId = StringField()
-    appName = StringField()  # 不要删
     createTime = DateTimeField(default=datetime.now())
     status = IntField(default=1)
     statusName = StringField()  # 不要删
