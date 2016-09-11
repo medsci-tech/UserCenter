@@ -85,28 +85,23 @@ def detail(request, question_id):
     #     raise Http404("Question does not exist")
     # return render(request, 'admin/admin/detail.html', {'question': question})
 
-# 更改状态操作
-@csrf_exempt
-def stats(request):
+'''
+保存管理员
+'''
+def updateStatus(request, **param):
     post = request.POST
     selection = post.getlist('selection[]')
-    statusType = post.get('statusType')
-    if statusType == 'enable':
-        status = '1'
-    else:
-        status = '0'
+    status = post.get('status')
     param = {
         'status': status,
     }
-
     try:
-        # model = Admin(**param).editByFilter(selection, **param)
-        model = Admin.objects.filter(id=selection).update(**param)
-        if model == 1:
-            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        model = Admin.objects.filter(pk__in=selection).update(**param)
+        if model:
+            returnData = {'status':1, 'msg': '操作成功'}
         else:
-            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+            returnData = {'status': '0', 'msg': '操作失败'}
     except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            returnData = {'code': '0', 'msg': '非法请求!'}
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+    return HttpResponse(json.dumps(returnData))
