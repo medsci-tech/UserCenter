@@ -87,11 +87,7 @@
         </div>
     </div>
 </div>
-        name = StringField()  # 策略名称
-    credit = StringField()  # 扩展字段
-    creditName = StringField()  # 扩展字段名称
-    cycle = StringField()  # 周期
-    rewardNum = StringField()  # 周期内最多奖励次数
+
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -129,12 +125,16 @@ $(function () {
     $('[data-form="add-model"]').click(function () {
         var kong = '';
         var appId = $('#form-appId');
-        var defaultSelected = appId.find('option:first').val();
+        var credit = $('#form-credit');
+        var cycle = $('#form-cycle');
+        var defaultAppId = appId.find('option:first').val();
+        var defaultCredit = credit.find('option:first').val();
+        var defaultCycle = cycle.find('option:first').val();
+        appId.val(defaultAppId);
+        credit.val(defaultCredit);
+        cycle.val(defaultCycle);
         $('#form-id').val(kong);
-        appId.val(defaultSelected);
         $('#form-name').val(kong);
-        $('#form-credit').val(kong);
-        $('#form-cycle').val(kong);
         $('#form-rewardNum').val(kong);
         $('#form-ratio').val(kong);
         $('#form-status').val(1);
