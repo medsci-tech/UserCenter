@@ -25,6 +25,7 @@ def index(request):
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
+    credit_list = cfg_param.get('c_ext_credit')
     searchAppId = get.get('appId')
     if searchAppId:
         param.update(appId=searchAppId)
@@ -37,6 +38,7 @@ def index(request):
     if data:
         for val in data:
             val.update(statusName=status_list.get(val['status']))
+            val.update(creditName=credit_list.get(val['credit']))
         selectData = data[0]
     else:
         selectData = get

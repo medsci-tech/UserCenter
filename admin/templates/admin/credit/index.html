@@ -56,7 +56,7 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.credit }}</td>
+                                <td>{{ list.creditName }}</td>
                                 <td>{{ list.name }}</td>
                                 <td>{{ list.icon }}</td>
                                 <td>{{ list.initNum }}</td>
@@ -122,11 +122,13 @@ $(function () {
     $('[data-form="add-model"]').click(function () {
         var kong = '';
         var appId = $('#form-appId');
-        var defaultSelected = appId.find('option:first').val();
+        var credit = $('#form-credit');
+        var defaultAppId = appId.find('option:first').val();
+        var defaultCredit = credit.find('option:first').val();
+        appId.val(defaultAppId);
+        credit.val(defaultCredit);
         $('#form-id').val(kong);
-        appId.val(defaultSelected);
         $('#form-name').val(kong);
-        $('#form-credit').val(kong).attr('disabled', false);
         $('#form-icon').val(kong);
         $('#form-initNum').val(kong);
         $('#form-ratio').val(kong);
@@ -146,7 +148,7 @@ $(function () {
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
         $('#form-appId').val(appId);
-        $('#form-credit').val(credit).attr('disabled', true);
+        $('#form-credit').val(credit);
         $('#form-name').val(name);
         $('#form-icon').val(icon);
         $('#form-initNum').val(initNum);
