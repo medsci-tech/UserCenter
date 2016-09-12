@@ -88,8 +88,6 @@ $(document).ready(function(){
     	radioClass: 'iradio_flat-blue'
 	});
 	
-	$('select').select2();
-	
 	// 管理员表单验证
         var validator = $("#basic_validate").validate({
 		rules:{
