@@ -72,9 +72,9 @@ def save(request, **param):
                 if(not param.get('password')): # 密码为空则不修改密码
                     param.pop('password')
                 Admin.objects.filter(id=id).update(**param)
-                return HttpResponse(json.dumps({'status': 1, 'msg': '修改成功'}))
+                return HttpResponse(json.dumps({'status': 1, 'msg': '修改成功!'}))
         except (ValueError, KeyError, TypeError):
-            return HttpResponse(json.dumps({'status': 0,'msg':'json格式错误'}))
+            return HttpResponse(json.dumps({'status': 0,'msg':'json格式错误!'}))
 
 
 def detail(request, question_id):
@@ -98,9 +98,9 @@ def updateStatus(request, **param):
     try:
         model = Admin.objects.filter(pk__in=selection).update(**param)
         if model:
-            returnData = {'status':1, 'msg': '操作成功'}
+            returnData = {'status':1, 'msg': '操作成功!'}
         else:
-            returnData = {'status': '0', 'msg': '操作失败'}
+            returnData = {'status': '0', 'msg': '操作失败!'}
     except Exception:
             returnData = {'code': '0', 'msg': '非法请求!'}
 
