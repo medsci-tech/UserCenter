@@ -36,6 +36,7 @@ urlpatterns = [
     # 积分基础配置
     url(r'^credit/form', credit.form, name='credit_form'),
     url(r'^credit/stats', credit.stats, name='credit_stats'),
+    url(r'^credit/creditlist', credit.creditlist, name='credit_creditlist'),
     url(r'^credit/index', credit.index, name='credit'),
 
     # 积分策略配置

@@ -44,9 +44,9 @@
                                 <th>奖励周期</th>
                                 <th>次数</th>
                                 {% for key, val in creditList.items %}
-                                <th>{{ val }}</th>
+                                    <td>{{ val }}</td>
                                 {% endfor %}
-                                <th>状态</th>
+                                <th id="title-status">状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
                             </tr>
@@ -60,17 +60,19 @@
                                 <td>{{ list.name }}</td>
                                 <td>{{ list.cycleName }}</td>
                                 <td>{{ list.rewardNum }}</td>
-                                {% for val in creditList %}
-                                <th>{{ val }}</th>
+                                {% for key, val in list.extend.items %}
+                                    <td>{{ val }}</td>
                                 {% endfor %}
-                                <td>{{ list.statusName }}</td>
+                                <td id="content-status">{{ list.statusName }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
                                        data-appId="{{ list.appId }}"
                                        data-name="{{ list.name }}"
-                                       data-credit="{{ list.credit }}"
+                                       {% for key, val in list.extend.items %}
+                                       data-{{ key }}="{{ val }}"
+                                       {% endfor %}
                                        data-cycle="{{ list.cycle }}"
                                        data-rewardNum="{{ list.rewardNum }}"
                                        data-ratio="{{ list.ratio }}"
@@ -87,11 +89,7 @@
         </div>
     </div>
 </div>
-        name = StringField()  # 策略名称
-    credit = StringField()  # 扩展字段
-    creditName = StringField()  # 扩展字段名称
-    cycle = StringField()  # 周期
-    rewardNum = StringField()  # 周期内最多奖励次数
+
 <div id="myModal" class="modal fade">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -115,8 +113,33 @@
 $(function () {
     var stats_url = '{% url 'admin:credit_rule_stats' %}';
     var form_url = '{% url 'admin:credit_rule_form' %}';
+    var creditlist_url = '{% url 'admin:credit_creditlist' %}';
     var index_url = window.location.href;
 
+    //页面加载时执行的脚本
+    var credit_list = [];
+    {% for key, val in creditList.items %}
+        credit_list['{{ key }}'] = '{{ val }}';
+    {% endfor %}
+    var credit_full_list = [];
+    {% for key, val in c_ext_credit.items %}
+        credit_full_list['{{ key }}'] = '{{ val }}';
+    {% endfor %}
+    //如果对应的应用扩展配置为空则不能进行添加策略
+    if($.isEmptyObject(credit_list)){
+        $('[data-form="add-model"]').attr('disabled', true);
+    }else {
+        $('[data-form="add-model"]').attr('disabled', false);
+        credit_list.sort();
+    }
+{#    var title_prepend = '', content_prepend = '';#}
+{#    for(var i in credit_list){#}
+{#        title_prepend += '<th>' + credit_list[i] + '</th>';#}
+{#        content_prepend += '<td>' + i + '</td>';#}
+{#    }#}
+{#    $('#title-status').before(title_prepend);#}
+{#    $('#content-status').before(content_prepend);#}
+    console.log(credit_full_list);
     //选中应用
     var searchAppId = '{{ request.appId }}';
     if(searchAppId){
@@ -129,15 +152,19 @@ $(function () {
     $('[data-form="add-model"]').click(function () {
         var kong = '';
         var appId = $('#form-appId');
-        var defaultSelected = appId.find('option:first').val();
+        var cycle = $('#form-cycle');
+        var defaultAppId = $('#form-searchAppId').val();
+        var defaultCycle = cycle.find('option:first').val();
+        appId.val(defaultAppId);
+        cycle.val(defaultCycle);
         $('#form-id').val(kong);
-        appId.val(defaultSelected);
         $('#form-name').val(kong);
-        $('#form-credit').val(kong);
-        $('#form-cycle').val(kong);
         $('#form-rewardNum').val(kong);
         $('#form-ratio').val(kong);
         $('#form-status').val(1);
+        for(var i in credit_list){
+            $('#form-' + i).val(kong);
+        }
     });
     /**
      * 点击修改按钮触发的操作
@@ -146,7 +173,6 @@ $(function () {
         var id = $(this).attr('data-id');
         var appId = $(this).attr('data-appId');
         var name = $(this).attr('data-name');
-        var credit = $(this).attr('data-credit');
         var cycle = $(this).attr('data-cycle');
         var rewardNum = $(this).attr('data-rewardNum');
         var ratio = $(this).attr('data-ratio');
@@ -154,25 +180,31 @@ $(function () {
         $('#form-id').val(id);
         $('#form-appId').val(appId);
         $('#form-name').val(name);
-        $('#form-credit').val(credit);
         $('#form-cycle').val(cycle);
         $('#form-rewardNum').val(rewardNum);
         $('#form-ratio').val(ratio);
         $('#form-status').val(status);
+        for(var i in credit_full_list){
+            $('#form-' + i).val($(this).attr('data-' + i));
+        }
     });
     /**
      * 点击form提交按钮触发的操作
      */
     $('#form-submit').click(function () {
         var data = {};
+        var extend = {};
         data.id = $('#form-id').val();
         data.appId = $('#form-appId').val();
         data.name = $('#form-name').val();
-        data.credit = $('#form-credit').val();
         data.cycle = $('#form-cycle').val();
         data.rewardNum = $('#form-rewardNum').val();
         data.ratio = $('#form-ratio').val();
         data.status = $('#form-status').val();
+        for(var i in credit_list){
+            extend[i] = $('#form-' + i).val();
+        }
+        data.extend = extend;
         console.log(data);
         subActionAjaxForMime('post', form_url, data, index_url);
     });
@@ -204,6 +236,17 @@ $(function () {
             return false;
         }
     });
+
+    /**
+     * 编辑状态点击改变应用改变对应的扩展列表
+     */
+    $('#form-appId').change(function () {
+        var data = {
+            'appId': $(this).val()
+        };
+        changeListDataByAjaxForMime(creditlist_url, data, '#form-extend', 'formHtml')
+    });
+
 });
 </script>
 

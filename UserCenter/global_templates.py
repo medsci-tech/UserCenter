@@ -28,4 +28,14 @@ def configParam(request):
             3: '整点',
             4: '间隔分钟',
         },
+        'c_ext_credit': {
+            'credit1': '扩展1',
+            'credit2': '扩展2',
+            'credit3': '扩展3',
+            'credit4': '扩展4',
+            'credit5': '扩展5',
+            'credit6': '扩展6',
+            'credit7': '扩展7',
+            'credit8': '扩展8',
+        },
     }

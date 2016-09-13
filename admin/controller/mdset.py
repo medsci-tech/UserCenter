@@ -23,7 +23,7 @@ def index(request):
     param = {}
     appId = []
     # 获取所有启用应用列表
-    apps = applist('data')
+    apps = applist(request)
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')

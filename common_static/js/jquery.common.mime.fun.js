@@ -142,23 +142,26 @@ var disableDataMultiple = function (check, stats_url, index_url) {
 };
 
 /**
- * ajax获取接口列表
+ * ajax根据appId变化获取扩展列表
  * @param url
  * @param data
  * @param element
- * @param child
+ * @param type
  */
-var getListDataByAjaxForMime = function (url, data, element, child) {
-    var list = {};
+var changeListDataByAjaxForMime = function (url, data, element, type) {
     $.ajax({
         type: 'post',
         url: url,
         data: data,
         success: function(res){
             if(res.code == 200){
-                list = res.data;
-                if('option' == child){
-                    selectOptionHtmlForMime(list, element);
+                // console.log(res.data);
+                if('optionHtml' == type){
+                    selectOptionHtmlForMime(res.data, element);
+                }else if('optionPrepend' == type){
+                    selectOptionPrependForMime(res.data, element);
+                }else if('formHtml' == type){
+                    formHtmlForMime(res.data, element);
                 }
             }
         }
@@ -166,7 +169,7 @@ var getListDataByAjaxForMime = function (url, data, element, child) {
 };
 
 /**
- *
+ * select 内容遍历替换
  * @param list
  * @param element
  */
@@ -174,6 +177,37 @@ var selectOptionHtmlForMime = function (list, element) {
     var html = '';
     for(var i in list){
         html += '<option value="' + i + '">' + list[i] + '</option>';
+    }
+    $(element).html(html);
+};
+
+/**
+ * select 内容遍历追加
+ * @param list
+ * @param element
+ */
+var selectOptionPrependForMime = function (list, element) {
+    var html = '';
+    for(var i in list){
+        html += '<option value="' + i + '">' + list[i] + '</option>';
+    }
+    $(element).prepend(html);
+};
+
+/**
+ * form html 内容遍历替换
+ * @param list
+ * @param element
+ */
+var formHtmlForMime = function (list, element) {
+    var html = '';
+    for(var i in list){
+        html += '<div class="form-group">';
+        html += '    <label class="col-sm-3 col-md-3 col-lg-2 control-label">' + list[i] + '</label>';
+        html += '    <div class="col-sm-9 col-md-9 col-lg-10">';
+        html += '        <input type="text" class="form-control input-sm" name="' + i + '" id="form-' + i + '">';
+        html += '    </div>';
+        html += '</div>';
     }
     $(element).html(html);
 };
