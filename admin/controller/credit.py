@@ -21,7 +21,7 @@ def index(request):
     get = request.GET
     param = {}
     # 获取所有启用应用列表
-    apps = applist('data')
+    apps = applist(request)
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
@@ -139,7 +139,9 @@ def stats(request):
 根据条件获取启用的积分扩展列表
 '''
 @csrf_exempt
-def creditlist(appId, format):
+def creditlist(request):
+    post = request.POST
+    appId = post.get('appId')
     data = {}
     app = Credit.objects.filter(appId=appId, status=1).order_by("id")
     if app:
@@ -148,7 +150,8 @@ def creditlist(appId, format):
         returnData = {'code': '200', 'msg': '操作成功', 'data': data}
     else:
         returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
-    if format == 'data':
-        return returnData.get('data')
-    else:
+
+    if request.method == 'POST':
         return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        return returnData.get('data')

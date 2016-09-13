@@ -52,9 +52,12 @@ def index(request):
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
     # 获取所有启用应用列表
-    app_list = applist('data')
+    app_list = applist(request)
     # 获取所有启用扩展列表
-    credit_list = creditlist(selectData['appId'], 'data')
+    post = {'appId': selectData['appId']}
+    request.POST = post
+    credit_list = creditlist(request)
+
     # return HttpResponse(credit_list)
     return render(request, 'admin/credit_rule/index.html', {
         'topics': topics,
@@ -105,10 +108,10 @@ def form(request):
     cfg_param = configParam(request)
     ext_credit_list = cfg_param.get('c_ext_credit')
     for key in ext_credit_list:
-        extend_list[str(key)] = post.get('extend[' + key + ']')
+        if post.get('extend[' + key + ']'):
+            extend_list[str(key)] = post.get('extend[' + key + ']')
     param = {
         'appId': post.get('appId'),
-        'credit': post.get('credit'),
         'name': post.get('name'),
         'cycle': post.get('cycle'),
         'rewardNum': post.get('rewardNum'),

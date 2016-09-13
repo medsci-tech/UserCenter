@@ -10,14 +10,6 @@
             </select>
         </div>
     </div>
-    {% for key, val in creditList.items %}
-        <div class="form-group">
-            <label class="col-sm-3 col-md-3 col-lg-2 control-label">{{ val }}</label>
-            <div class="col-sm-9 col-md-9 col-lg-10">
-                <input type="text" class="form-control input-sm" name="{{ key }}" id="form-{{ key }}">
-            </div>
-        </div>
-    {% endfor %}
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">策略名称</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
@@ -39,6 +31,16 @@
         <div class="col-sm-9 col-md-9 col-lg-10">
             <input type="text" class="form-control input-sm" name="rewardNum" id="form-rewardNum">
         </div>
+    </div>
+    <div id="form-extend">
+    {% for key, val in creditList.items %}
+        <div class="form-group">
+            <label class="col-sm-3 col-md-3 col-lg-2 control-label">{{ val }}</label>
+            <div class="col-sm-9 col-md-9 col-lg-10">
+                <input type="text" class="form-control input-sm" name="{{ key }}" id="form-{{ key }}">
+            </div>
+        </div>
+    {% endfor %}
     </div>
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>

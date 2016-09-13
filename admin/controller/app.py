@@ -118,7 +118,7 @@ def stats(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 @csrf_exempt
-def applist(format):
+def applist(request):
     data = {}
     app = App.objects.filter(status=1).order_by("id")
     if app:
@@ -127,7 +127,8 @@ def applist(format):
         returnData = {'code': '200', 'msg': '操作成功', 'data': data}
     else:
         returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
-    if format == 'data':
-        return returnData.get('data')
-    else:
+
+    if request.method == 'POST':
         return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        return returnData.get('data')
