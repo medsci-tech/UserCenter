@@ -5,6 +5,7 @@ urlpatterns = [
     # 登录
     url(r'^$', accounts.index, name='index'),
     url(r'^login/',accounts.login, name='accounts_login'),# 登录
+    url(r'^logout/', accounts.logout, name='accounts_logout'),  # 注销退出
     url(r'^accounts/captcha', accounts.captcha,name='accounts_captcha'), # 验证码
 
     # 管理员

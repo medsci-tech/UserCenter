@@ -50,6 +50,21 @@ $(document).ready(function(){
             loginbox.effect('shake');
             return false;
         } else {
+        /* 提交数据 */
+        $.ajax({
+            type: 'POST',
+            url: '/admin/login/',
+            dataType: "json",
+            data: {username:userinput.val(),password:passinput.val(),verycode:verycodeinput.val()},
+            success: function(res){
+                if(res.code == 1){
+
+                }else {
+                    swal("验证码错误!", "请重新输入!", "error");
+                    return false;
+                }
+            }
+        });
             e.preventDefault();
             loginbox.animate({'top':'+=100px','opacity':'0'},250,function(){
                 $('.user_name').text(userinput.val());
