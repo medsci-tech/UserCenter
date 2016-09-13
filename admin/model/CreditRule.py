@@ -20,4 +20,4 @@ class CreditRule(Auth):
     cycle = IntField(default=0)  # 周期
     cycleName = StringField()  # 周期名称 不要删
     rewardNum = IntField(default=0)  # 周期内最多奖励次数
-    extends = DictField()
+    extend = DictField()

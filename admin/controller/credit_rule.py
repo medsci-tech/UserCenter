@@ -22,7 +22,7 @@ import json
 def index(request):
     get = request.GET
     param = {}
-    # 获取所有状态列表
+    # 获取配置列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
     cycle_list = cfg_param.get('c_cycle')
@@ -100,13 +100,19 @@ def _editById(**param):
 def form(request):
     post = request.POST
     id = post.get('id')
+    extend_list = {}
+    # 获取配置列表
+    cfg_param = configParam(request)
+    ext_credit_list = cfg_param.get('c_ext_credit')
+    for key in ext_credit_list:
+        extend_list[str(key)] = post.get('extend[' + key + ']')
     param = {
         'appId': post.get('appId'),
         'credit': post.get('credit'),
         'name': post.get('name'),
         'cycle': post.get('cycle'),
         'rewardNum': post.get('rewardNum'),
-        'extends': post.get('extends'),
+        'extend': extend_list,
         'status': post.get('status'),
     }
     if id:
