@@ -75,16 +75,6 @@ $(document).ready(function(){
                 }
             }
         });
-            return false;
-            e.preventDefault();
-            loginbox.animate({'top':'+=100px','opacity':'0'},250,function(){
-                $('.user_name').text(userinput.val());
-                userbox.animate({'top':"+=75px",'opacity':'1'},250,function(){
-                    setTimeout(function(){
-                        thisForm.unbind('submit').submit();
-                    },600);
-                });
-            });
             return true;
         }       
     });
