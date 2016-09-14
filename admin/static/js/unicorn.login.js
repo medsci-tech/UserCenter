@@ -57,14 +57,25 @@ $(document).ready(function(){
             dataType: "json",
             data: {username:userinput.val(),password:passinput.val(),verycode:verycodeinput.val()},
             success: function(res){
-                if(res.code == 1){
-
+                if(res.status == 1){
+                    e.preventDefault();
+                    loginbox.animate({'top':'+=100px','opacity':'0'},250,function(){
+                        $('.user_name').text(userinput.val());
+                        userbox.animate({'top':"+=75px",'opacity':'1'},250,function(){
+                            setTimeout(function(){
+                                $(thisForm).unbind('submit').submit();
+                            },600);
+                        });
+                    });
                 }else {
-                    swal("验证码错误!", "请重新输入!", "error");
+                    go = false;
+                    swal(res.msg, "请重新输入!", "error");
+                    $('#codeImg').trigger('click');
                     return false;
                 }
             }
         });
+            return false;
             e.preventDefault();
             loginbox.animate({'top':'+=100px','opacity':'0'},250,function(){
                 $('.user_name').text(userinput.val());

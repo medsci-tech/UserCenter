@@ -23,7 +23,7 @@
                 </div>
             </div>
             <div id="loginbox">            
-                <form id="loginform" action="{% url 'admin:accounts_login' %}">
+                <form id="loginform" action="{% url 'admin:index' %}">
     				<p>Enter username and password to continue.</p>
                     <div class="input-group input-sm">
                         <span class="input-group-addon"><i class="fa fa-user"></i></span><input class="form-control" type="text" id="username" placeholder="用户名" />
@@ -35,7 +35,7 @@
 						<span class="input-group-addon"><i class="glyphicon glyphicon-eye-open red"></i></span>
 						<input type="text" id="verifycode" class="form-control" name="verifycode" placeholder="验证码">
 						<div class="input-group-addon" style="padding:0px; cursor: pointer" title
-="点击更换验证码"> <img onclick="this.setAttribute('src','{% url "admin:accounts_captcha" %}/?nocache='+Math.random());" src="{% url "admin:accounts_captcha" %}" alt="点击更换验证码"/>
+="点击更换验证码"> <img id="codeImg" onclick="this.setAttribute('src','{% url "admin:accounts_captcha" %}/?nocache='+Math.random());" src="{% url "admin:accounts_captcha" %}" alt="点击更换验证码"/>
 						</div>					
 						</div>
                     <div class="form-actions clearfix">
