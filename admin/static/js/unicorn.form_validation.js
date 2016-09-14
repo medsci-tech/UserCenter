@@ -162,7 +162,7 @@ $(document).ready(function(){
 			$(element).parents('.form-group').addClass('has-success');
 		}
 	});
-	
+	/* 密码验证 */
 	$("#password_validate").validate({
 		rules:{
 			pwd:{
