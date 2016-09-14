@@ -5,7 +5,6 @@
  * edit by lxhui
 **/
 
-
 /**
  * 判断多选框是否有勾选，有勾选返回true，没有则弹窗提示并返回false
  * @param check array
