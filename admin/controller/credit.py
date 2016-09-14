@@ -53,7 +53,7 @@ def index(request):
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
     # return HttpResponse(dataOne['id'])
-    return render(request, 'admin/credit/index.html', {'topics': topics, 'request': selectData, 'appList': apps})
+    return render(request, 'admin/credit/index.html', {'topics': topics, 'ctrlList': selectData, 'appList': apps})
 
 # 添加操作--protected
 def _add(**param):
@@ -141,6 +141,7 @@ def stats(request):
 @csrf_exempt
 def creditlist(request):
     post = request.POST
+    returnFormat = post.get('returnFormat')
     appId = post.get('appId')
     data = {}
     app = Credit.objects.filter(appId=appId, status=1).order_by("id")
@@ -151,7 +152,9 @@ def creditlist(request):
     else:
         returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
 
-    if request.method == 'POST':
+    if returnFormat:
+        return returnData.get('data')
+    elif request.method == 'POST':
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         return returnData.get('data')

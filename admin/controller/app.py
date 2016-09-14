@@ -37,7 +37,7 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/app/index.html',{'topics':topics, 'request': post})
+    return render(request, 'admin/app/index.html',{'topics':topics, 'ctrlList': post})
 
  
  
@@ -119,6 +119,8 @@ def stats(request):
 
 @csrf_exempt
 def applist(request):
+    post = request.POST
+    returnFormat = post.get('returnFormat')
     data = {}
     app = App.objects.filter(status=1).order_by("id")
     if app:
@@ -128,7 +130,9 @@ def applist(request):
     else:
         returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
 
-    if request.method == 'POST':
+    if returnFormat:
+        return returnData.get('data')
+    elif request.method == 'POST':
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         return returnData.get('data')

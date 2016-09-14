@@ -9,8 +9,9 @@
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
+            <input type="hidden" name="returnFormat" value="True">
             <label>应用名称：
-                <input type="text" name="appName" value="{{ request.appName }}">
+                <input type="text" name="appName" value="{{ ctrlList.appName }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
