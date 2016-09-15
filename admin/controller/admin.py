@@ -17,6 +17,7 @@ import json
 '''
 @csrf_exempt
 def list(request):
+    request.session["username"] = 'loose'
     post = request.POST
     param = {}
     if request.method == "POST":
@@ -40,7 +41,7 @@ def list(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/admin/index.html',{'topics':topics, 'request': post})
+    return render(request, 'admin/admin/index.html',{'topics':topics})
 
 '''
 保存管理员
