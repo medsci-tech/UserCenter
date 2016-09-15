@@ -44,7 +44,7 @@
                                 <th>奖励周期</th>
                                 <th>次数</th>
                                 {% for key, val in creditList.items %}
-                                    <td>{{ val }}</td>
+                                    <th>{{ val }}</th>
                                 {% endfor %}
                                 <th id="title-status">状态</th>
                                 <th>创建时间</th>
@@ -141,7 +141,7 @@ $(function () {
 {#    $('#content-status').before(content_prepend);#}
     console.log(credit_full_list);
     //选中应用
-    var searchAppId = '{{ request.appId }}';
+    var searchAppId = '{{ ctrlList.appId }}';
     if(searchAppId){
         $('#form-searchAppId').val(searchAppId);
     }

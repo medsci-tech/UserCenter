@@ -111,7 +111,7 @@ $(function () {
     var index_url = window.location.href;
 
     //选中应用
-    var searchAppId = '{{ request.appId }}';
+    var searchAppId = '{{ ctrlList.appId }}';
     if(searchAppId){
         $('#form-searchAppId').val(searchAppId);
     }

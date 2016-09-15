@@ -61,7 +61,7 @@ def index(request):
     # return HttpResponse(credit_list)
     return render(request, 'admin/credit_rule/index.html', {
         'topics': topics,
-        'request': selectData,
+        'ctrlList': selectData,
         'appList': app_list,
         'creditList': credit_list,
     })

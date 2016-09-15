@@ -53,8 +53,8 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    # return HttpResponse(status_list)
-    return render(request, 'admin/mdset/index.html',{'topics':topics, 'request': post, 'appList': apps})
+    # return HttpResponse(post)
+    return render(request, 'admin/mdset/index.html',{'topics':topics, 'ctrlList': post, 'appList': apps})
 
 # 添加操作--protected
 def _add(**param):
