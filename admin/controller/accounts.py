@@ -74,7 +74,7 @@ Create : 2016-09-12
 '''
 def logout(request):
     try:
-        del request.session['uid']
+        del request.session['uid'],request.session['username']
     except KeyError:
         pass
     return render(request, 'admin/login.html')
