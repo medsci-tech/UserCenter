@@ -11,8 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 from admin.model.App import App
 from UserCenter.global_templates import configParam
 import json
-
+from admin.controller.auth import *
 @csrf_exempt
+@auth # 引用登录权限验证
 def index(request):
     post = request.POST
     param = {}
@@ -37,11 +38,12 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/app/index.html',{'topics':topics, 'request': post})
+    return render(request, 'admin/app/index.html',{'topics':topics, 'ctrlList': post})
 
  
  
 # 添加操作--protected
+@auth # 引用登录权限验证
 def _add(**param):
     id = param.get('id')
     if not id:
@@ -58,6 +60,7 @@ def _add(**param):
     return returnData
 
 # 修改操作--protected
+@auth # 引用登录权限验证
 def _editById(**param):
     id = param.get('id')
     if id:
@@ -75,6 +78,7 @@ def _editById(**param):
 
 # 修改操作
 @csrf_exempt
+@auth # 引用登录权限验证
 def form(request):
     post = request.POST
     id = post.get('id')
@@ -95,6 +99,7 @@ def form(request):
 
 # 更改状态操作
 @csrf_exempt
+@auth # 引用登录权限验证
 def stats(request):
     post = request.POST
     selection = post.getlist('selection[]')
@@ -118,7 +123,10 @@ def stats(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 @csrf_exempt
+@auth # 引用登录权限验证
 def applist(request):
+    post = request.POST
+    returnFormat = post.get('returnFormat')
     data = {}
     app = App.objects.filter(status=1).order_by("id")
     if app:
@@ -128,7 +136,9 @@ def applist(request):
     else:
         returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
 
-    if request.method == 'POST':
+    if returnFormat:
+        return returnData.get('data')
+    elif request.method == 'POST':
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         return returnData.get('data')

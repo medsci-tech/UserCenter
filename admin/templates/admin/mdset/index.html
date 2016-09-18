@@ -9,8 +9,9 @@
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
+            <input type="hidden" name="returnFormat" value="True">
             <label>应用名称：
-                <input type="text" name="appName" value="{{ request.appName }}">
+                <input type="text" name="appName" value="{{ ctrlList.appName }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -78,13 +79,15 @@
                 <button data-dismiss="modal" class="close" type="button">×</button>
                 <h3>管理员管理</h3>
             </div>
+            <form id="mdset_form_validate" novalidate="novalidate">
             <div class="modal-body">
                 {% include 'admin/mdset/form.html' %}
             </div>
             <div class="modal-footer">
-                <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
-                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">取消</a>
+                <button class="btn btn-primary btn-small" id="form-submit">确定</button>
+                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -95,6 +98,9 @@ $(function () {
     var stats_url = '{% url 'admin:mdset_stats' %}';
     var form_url = '{% url 'admin:mdset_form' %}';
     var index_url = '{% url 'admin:mdset' %}';
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+    });
 
     /**
      * 点击添加按钮触发的操作
@@ -122,17 +128,15 @@ $(function () {
         $('#form-status').val(status);
     });
     /**
-     * 点击form提交按钮触发的操作
+     * 表单验证提交按钮触发的操作
      */
-    $('#form-submit').click(function () {
-        var data = {};
-        data.id = $('#form-id').val();
-        data.appId = $('#form-appId').val();
-        data.ratio = $('#form-ratio').val();
-        data.status = $('#form-status').val();
-        console.log(data);
-        subActionAjaxForMime('post', form_url, data, index_url);
-    });
+    var rules = {
+        ratio:{
+            required:true,
+            number:true
+        }
+    };
+    subActionAjaxValidateForMime('#mdset_form_validate', rules, form_url, index_url);
 
     /**
      * 启用

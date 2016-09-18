@@ -11,11 +11,13 @@ from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 from datetime import *
 import json
+from admin.controller.auth import *
 
 '''
 管理员列表
 '''
 @csrf_exempt
+@auth # 引用登录权限验证
 def list(request):
     post = request.POST
     param = {}
@@ -40,11 +42,12 @@ def list(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/admin/index.html',{'topics':topics, 'request': post})
+    return render(request, 'admin/admin/index.html',{'topics':topics})
 
 '''
 保存管理员
 '''
+@auth # 引用登录权限验证
 def save(request, **param):
     post = request.POST
     if request.method == 'POST':
@@ -105,3 +108,4 @@ def updateStatus(request, **param):
             returnData = {'code': '0', 'msg': '非法请求!'}
 
     return HttpResponse(json.dumps(returnData))
+

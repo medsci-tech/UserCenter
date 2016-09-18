@@ -53,8 +53,8 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    # return HttpResponse(status_list)
-    return render(request, 'admin/mdset/index.html',{'topics':topics, 'request': post, 'appList': apps})
+    # return HttpResponse(post)
+    return render(request, 'admin/mdset/index.html',{'topics':topics, 'ctrlList': post, 'appList': apps})
 
 # 添加操作--protected
 def _add(**param):
@@ -89,7 +89,6 @@ def _editById(**param):
     return returnData
 
 # 修改操作
-@csrf_exempt
 def form(request):
     post = request.POST
     id = post.get('id')
@@ -109,7 +108,6 @@ def form(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
-@csrf_exempt
 def stats(request):
     post = request.POST
     selection = post.getlist('selection[]')

@@ -6,6 +6,8 @@ from io import StringIO,BytesIO
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.hashers import make_password,check_password
 from admin.model.Admin import Admin
+from django.core.exceptions import ObjectDoesNotExist
+#from django.http import HttpResponseRedirect
 import http.cookiejar,json
 
 def captcha(request):
@@ -16,7 +18,6 @@ def captcha(request):
     # 将验证码保存到session
     request.session["verycode"] = validate_code[1]
     return HttpResponse(mstream.getvalue())
-
 
 '''
 系统首页
@@ -43,18 +44,27 @@ def login(request):
             return HttpResponse("You've already logod.")
 
         session_code = request.session.get('verycode','')
-        if session_code.strip().lower() != verycode.lower():
+        if session_code.strip().lower() != verycode.strip().lower():
             return HttpResponse(json.dumps({'status': 0, 'msg': '验证码不匹配!'}))
         else:
-            '''验证用户密码'''
-            model = Admin.objects.get(username=username)
-            return HttpResponse(json.dumps({'status': 0, 'msg':model.username}))
-            dj_ps = make_password(password, None, 'pbkdf2_sha256')
-            ps_bool = check_password(password, dj_ps)  # check_password 返回值为一个Bool类型，验证密码的正确与否
-
-
-            return HttpResponse(json.dumps({'status': 0, 'msg': '账户不存在!'}))
-    return render(request, 'admin/login.html', {'question': 1})
+            try:
+                '''验证用户密码'''
+                model = Admin.objects.get(username=username)
+                if not model:
+                    return HttpResponse(json.dumps({'status': 0, 'msg': '用户名不存在!'}))
+                else:
+                    dj_ps = model.password
+                    ps_bool = check_password(password, dj_ps)  # check_password 返回值为一个Bool类型，验证密码的正确与否
+                    if not ps_bool:  # 密码验证错误
+                        return HttpResponse(json.dumps({'status': 0, 'msg': '密码输入错误!'}))
+                    else:  # 验证成功
+                        '''记录会话session'''
+                        request.session['uid'] = str(model.id)
+                        request.session['username'] = model.username
+                        return HttpResponse(json.dumps({'status': 1, 'msg': '登录成功!'}))
+            except Admin.DoesNotExist:
+                return HttpResponse(json.dumps({'status': 0, 'msg': '账号不存在!'}))
+    return render(request, 'admin/login.html')
     #return render_to_response('/admin/login.html',{'error':"",'username':'','pwd':'' })
 
 '''
@@ -64,7 +74,7 @@ Create : 2016-09-12
 '''
 def logout(request):
     try:
-        del request.session['uid']
+        del request.session['uid'],request.session['username']
     except KeyError:
         pass
     return render(request, 'admin/login.html')

@@ -11,7 +11,7 @@ class Mdset(Auth):
             }
     appId = StringField()
     appName = StringField()  # 不要删
-    ratio = StringField(required=True)
+    ratio = FloatField(default=0)
     createTime = DateTimeField(default=datetime.now())
     status = IntField(default=1)
     statusName = StringField()  # 不要删
