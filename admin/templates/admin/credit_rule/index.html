@@ -97,13 +97,15 @@
                 <button data-dismiss="modal" class="close" type="button">×</button>
                 <h3>积分策略</h3>
             </div>
+            <form id="credit_rule_form_validate" novalidate="novalidate">
             <div class="modal-body">
                 {% include 'admin/credit_rule/form.html' %}
             </div>
             <div class="modal-footer">
-                <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
-                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">取消</a>
+                <button class="btn btn-primary btn-small" id="form-submit">确定</button>
+                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -135,13 +137,6 @@ $(function () {
         $('[data-form="add-model"]').attr('disabled', false);
         credit_list.sort();
     }
-{#    var title_prepend = '', content_prepend = '';#}
-{#    for(var i in credit_list){#}
-{#        title_prepend += '<th>' + credit_list[i] + '</th>';#}
-{#        content_prepend += '<td>' + i + '</td>';#}
-{#    }#}
-{#    $('#title-status').before(title_prepend);#}
-{#    $('#content-status').before(content_prepend);#}
     console.log(credit_full_list);
     //选中应用
     var searchAppId = '{{ ctrlList.appId }}';
@@ -192,25 +187,25 @@ $(function () {
         }
     });
     /**
-     * 点击form提交按钮触发的操作
+     * 表单验证提交按钮触发的操作
      */
-    $('#form-submit').click(function () {
-        var data = {};
-        var extend = {};
-        data.id = $('#form-id').val();
-        data.appId = $('#form-appId').val();
-        data.name = $('#form-name').val();
-        data.cycle = $('#form-cycle').val();
-        data.rewardNum = $('#form-rewardNum').val();
-        data.ratio = $('#form-ratio').val();
-        data.status = $('#form-status').val();
-        for(var i in credit_list){
-            extend[i] = $('#form-' + i).val();
+    var rules = {
+        required:true,
+        name:{
+            required:true
+        },
+        rewardNum:{
+            required:true,
+            number:true
         }
-        data.extend = extend;
-        console.log(data);
-        subActionAjaxForMime('post', form_url, data, index_url);
-    });
+        {% for key in c_ext_credit %}
+            ,'extend[{{ key }}]':{
+                required:true,
+                number:true
+            }
+        {% endfor %}
+    };
+    subActionAjaxValidateForMime('#credit_rule_form_validate', rules, form_url, index_url);
 
     /**
      * 启用

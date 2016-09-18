@@ -285,7 +285,7 @@ $.extend($.validator, {
 		url: "Please enter a valid URL.",
 		date: "Please enter a valid date.",
 		dateISO: "Please enter a valid date (ISO).",
-		number: "Please enter a valid number.",
+		number: "请输入数字类型",
 		digits: "Please enter only digits.",
 		creditcard: "Please enter a valid credit card number.",
 		equalTo: "两次输入的不一致.",

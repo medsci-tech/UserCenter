@@ -92,13 +92,15 @@
                 <button data-dismiss="modal" class="close" type="button">×</button>
                 <h3>积分扩展</h3>
             </div>
+            <form id="credit_form_validate" novalidate="novalidate">
             <div class="modal-body">
                 {% include 'admin/credit/form.html' %}
             </div>
             <div class="modal-footer">
-                <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit">确定</a>
-                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">取消</a>
+                <button class="btn btn-primary btn-small" id="form-submit">确定</button>
+                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -159,21 +161,22 @@ $(function () {
         $('#form-status').val(status);
     });
     /**
-     * 点击form提交按钮触发的操作
+     * 表单验证提交按钮触发的操作
      */
-    $('#form-submit').click(function () {
-        var data = {};
-        data.id = $('#form-id').val();
-        data.appId = $('#form-appId').val();
-        data.credit = $('#form-credit').val();
-        data.name = $('#form-name').val();
-        data.icon = $('#form-icon').val();
-        data.initNum = $('#form-initNum').val();
-        data.ratio = $('#form-ratio').val();
-        data.status = $('#form-status').val();
-        console.log(data);
-        subActionAjaxForMime('post', form_url, data, index_url);
-    });
+    var rules = {
+        name:{
+            required:true
+        },
+        initNum:{
+            required:true,
+            number:true
+        },
+        ratio:{
+            required:true,
+            number:true
+        }
+    };
+    subActionAjaxValidateForMime('#credit_form_validate', rules, form_url, index_url);
 
     /**
      * 启用
