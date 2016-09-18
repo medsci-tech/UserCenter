@@ -211,3 +211,29 @@ var formHtmlForMime = function (list, element) {
     }
     $(element).html(html);
 };
+
+/**
+ * 有表单验证的ajax提交
+ * @param formId
+ * @param rules
+ * @param form_url
+ * @param index_url
+ */
+var subActionAjaxValidateForMime = function (formId, rules, form_url, index_url) {
+    $(formId).validate({
+        rules:rules,
+        errorClass: "help-inline",
+        errorElement: "span",
+        highlight:function(element, errorClass, validClass) {
+            $(element).parents('.form-group').removeClass('has-success').addClass('has-error');
+        },
+        unhighlight: function(element, errorClass, validClass) {
+            $(element).parents('.form-group').removeClass('has-error').addClass('has-success');
+        },
+        submitHandler:function(form) {
+            var data = $(formId).serialize();
+            console.log(data);
+            subActionAjaxForMime('post', form_url, data, index_url);
+        } //这是关键的语句，配置这个参数后表单不会自动提交，验证通过之后会去调用的方法
+    });
+};
