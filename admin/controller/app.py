@@ -11,8 +11,9 @@ from django.views.decorators.csrf import csrf_exempt
 from admin.model.App import App
 from UserCenter.global_templates import configParam
 import json
-
+from admin.controller.auth import *
 @csrf_exempt
+@auth # 引用登录权限验证
 def index(request):
     post = request.POST
     param = {}
@@ -42,6 +43,7 @@ def index(request):
  
  
 # 添加操作--protected
+@auth # 引用登录权限验证
 def _add(**param):
     id = param.get('id')
     if not id:
@@ -58,6 +60,7 @@ def _add(**param):
     return returnData
 
 # 修改操作--protected
+@auth # 引用登录权限验证
 def _editById(**param):
     id = param.get('id')
     if id:
@@ -74,6 +77,7 @@ def _editById(**param):
     return returnData
 
 # 修改操作
+@auth # 引用登录权限验证
 @csrf_exempt
 def form(request):
     post = request.POST
@@ -94,6 +98,7 @@ def form(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
+@auth # 引用登录权限验证
 @csrf_exempt
 def stats(request):
     post = request.POST
@@ -118,6 +123,7 @@ def stats(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 @csrf_exempt
+@auth # 引用登录权限验证
 def applist(request):
     post = request.POST
     returnFormat = post.get('returnFormat')

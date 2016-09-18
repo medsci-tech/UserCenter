@@ -9,31 +9,15 @@ from django.core.paginator import Paginator
 from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
-from django.http import HttpResponseRedirect
 from datetime import *
 import json
+from admin.controller.auth import *
 
 '''
 管理员列表
 '''
-
-def _auth(args):#args 是传入的，需要验证的权限
-  def __auth(func):
-    def _login(request):
-        if request.session.get('login_user', False): #判断是否登录
-            pass
-    return HttpResponse(json.dumps({'status': 0, 'msg': 'wwwwwww!'}))
-  return __auth
-
-def login(request):
-    if request.session.get('login_user', False): #判断是否登录
-        pass
-    else:#如果没登录就跳转到登录界面
-        return HttpResponse(json.dumps({'status': 0, 'msg': 'wwwwwww!'}))
-    return 2
-
 @csrf_exempt
-@_auth('admin')
+@auth # 引用登录权限验证
 def list(request):
     post = request.POST
     param = {}
@@ -63,6 +47,7 @@ def list(request):
 '''
 保存管理员
 '''
+@auth # 引用登录权限验证
 def save(request, **param):
     post = request.POST
     if request.method == 'POST':
@@ -123,3 +108,4 @@ def updateStatus(request, **param):
             returnData = {'code': '0', 'msg': '非法请求!'}
 
     return HttpResponse(json.dumps(returnData))
+

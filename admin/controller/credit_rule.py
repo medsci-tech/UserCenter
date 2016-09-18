@@ -14,11 +14,12 @@ from admin.controller.app import applist
 from admin.controller.credit import creditlist
 from UserCenter.global_templates import configParam
 import json
-
+from admin.controller.auth import *
 '''
 迈豆积分列表
 '''
 @csrf_exempt
+@auth # 引用登录权限验证
 def index(request):
     get = request.GET
     param = {}
@@ -67,6 +68,7 @@ def index(request):
     })
 
 # 添加操作--protected
+@auth # 引用登录权限验证
 def _add(**param):
     id = param.get('id')
     if not id:
@@ -83,6 +85,7 @@ def _add(**param):
     return returnData
 
 # 修改操作--protected
+@auth # 引用登录权限验证
 def _editById(**param):
     id = param.get('id')
     if id:
@@ -100,6 +103,7 @@ def _editById(**param):
 
 # 修改操作
 @csrf_exempt
+@auth # 引用登录权限验证
 def form(request):
     post = request.POST
     id = post.get('id')
@@ -130,6 +134,7 @@ def form(request):
 
 # 更改状态操作
 @csrf_exempt
+@auth # 引用登录权限验证
 def stats(request):
     post = request.POST
     selection = post.getlist('selection[]')
