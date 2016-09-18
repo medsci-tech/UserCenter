@@ -102,11 +102,8 @@ def _editById(**param):
     return returnData
 
 # 修改操作
-<<<<<<< HEAD
 @csrf_exempt
 @auth # 引用登录权限验证
-=======
->>>>>>> 7501d3906dc3f42a1e6e61767fa0c69bf91d499d
 def form(request):
     post = request.POST
     id = post.get('id')
@@ -136,11 +133,8 @@ def form(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
-<<<<<<< HEAD
 @csrf_exempt
 @auth # 引用登录权限验证
-=======
->>>>>>> 7501d3906dc3f42a1e6e61767fa0c69bf91d499d
 def stats(request):
     post = request.POST
     selection = post.getlist('selection[]')
