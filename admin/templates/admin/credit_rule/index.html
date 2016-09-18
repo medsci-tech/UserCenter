@@ -115,6 +115,9 @@ $(function () {
     var form_url = '{% url 'admin:credit_rule_form' %}';
     var creditlist_url = '{% url 'admin:credit_creditlist' %}';
     var index_url = window.location.href;
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+    });
 
     //页面加载时执行的脚本
     var credit_list = [];

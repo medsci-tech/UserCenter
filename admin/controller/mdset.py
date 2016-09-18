@@ -89,7 +89,6 @@ def _editById(**param):
     return returnData
 
 # 修改操作
-@csrf_exempt
 def form(request):
     post = request.POST
     id = post.get('id')
@@ -109,7 +108,6 @@ def form(request):
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
-@csrf_exempt
 def stats(request):
     post = request.POST
     selection = post.getlist('selection[]')

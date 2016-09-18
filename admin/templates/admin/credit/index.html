@@ -109,6 +109,9 @@ $(function () {
     var stats_url = '{% url 'admin:credit_stats' %}';
     var form_url = '{% url 'admin:credit_form' %}';
     var index_url = window.location.href;
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+    });
 
     //选中应用
     var searchAppId = '{{ ctrlList.appId }}';

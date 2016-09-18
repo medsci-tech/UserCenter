@@ -95,6 +95,9 @@ $(function () {
     var stats_url = '{% url 'admin:app_stats' %}';
     var form_url = '{% url 'admin:app_form' %}';
     var index_url = '{% url 'admin:app' %}';
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+    });
     /**
      * 点击添加按钮触发的操作
      */

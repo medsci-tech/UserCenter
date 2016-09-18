@@ -96,6 +96,9 @@ $(function () {
     var stats_url = '{% url 'admin:mdset_stats' %}';
     var form_url = '{% url 'admin:mdset_form' %}';
     var index_url = '{% url 'admin:mdset' %}';
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+    });
 
     /**
      * 点击添加按钮触发的操作
