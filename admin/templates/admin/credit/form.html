@@ -1,4 +1,5 @@
 <div class="form-horizontal">
+    {% csrf_token %}
     <input type="hidden" name="id" id="form-id" value="">
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">应用平台</label>
@@ -23,7 +24,7 @@
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">名称</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="name" id="form-name">
+            <input type="text" class="form-control input-sm" name="name" id="form-name" placeholder="不可为空">
         </div>
     </div>
     <div class="form-group">
@@ -35,13 +36,13 @@
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">初始值</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="initNum" id="form-initNum">
+            <input type="text" class="form-control input-sm" name="initNum" id="form-initNum" placeholder="数字类型，不可为空">
         </div>
     </div>
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">兑换比例</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="ratio" id="form-ratio">
+            <input type="text" class="form-control input-sm" name="ratio" id="form-ratio" placeholder="数字类型，不可为空">
         </div>
     </div>
     <div class="form-group">
