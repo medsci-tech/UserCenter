@@ -72,7 +72,7 @@ def save(request, **param):
                     Admin.objects.create(**param)
                     return HttpResponse(json_str)
             else: # 更新
-                if(not param.get('password')): # 密码为空则不修改密码
+                if(not post.get('pwd')): # 密码为空则不修改密码
                     param.pop('password')
                 Admin.objects.filter(id=id).update(**param)
                 return HttpResponse(json.dumps({'status': 1, 'msg': '修改成功!'}))
