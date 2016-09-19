@@ -9,7 +9,7 @@ from admin.model.Admin import Admin
 from django.core.exceptions import ObjectDoesNotExist
 #from django.http import HttpResponseRedirect
 import http.cookiejar,json
-
+from admin.controller.auth import *
 def captcha(request):
     mstream = BytesIO()
     validate_code = checkcode.create_validata_code()
@@ -24,6 +24,7 @@ def captcha(request):
 Author : lxhui
 Create : 2016-08-19
 '''
+@auth # 引用登录权限验证
 def index(request):
     return render(request, 'admin/index.html')
 
