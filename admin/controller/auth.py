@@ -13,8 +13,7 @@ def auth(func):
     def inner(request,*arg, **kwargs):
         is_login = login(request)
         if not is_login:
-            return HttpResponseRedirect('/admin/login')  # 跳转到index界面
-        # func代指 fetch_server_list 原函数
+            return HttpResponseRedirect('/admin/login')  # 跳转到登录界面
         temp = func(request,*arg,**kwargs)
         return temp
     return inner
