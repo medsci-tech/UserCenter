@@ -91,6 +91,7 @@ def detail(request, question_id):
 '''
 保存管理员
 '''
+@auth # 引用登录权限验证
 def updateStatus(request, **param):
     post = request.POST
     selection = post.getlist('selection[]')
