@@ -43,13 +43,43 @@
                                 <th>合同名称</th>
                                 <th>合同编号</th>
                                 <th>合同金额</th>
-                                <th>开始时间</th>
-                                <th>结束时间</th>
+                                <th>兑换比例</th>
+
                                 <th>创建时间</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
+                          <tr>
+                                <td>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
+                                <td>迈德科技</td>
+                                <td>2019394959966</td>
+                                <td>20000</td>
+                                <td>2</td>
+                                <td>2016-12-12</td>
+                                <td>
+                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-name="{{ list.name }}"
+                                       data-number="{{ list.number }}"
+                                       data-amount="{{ list.amount }}"
+                                       data-img="{{ list.img }}"
+                                       data-startTime="{{ list.startTime }}"
+                                       data-endTime="{{ list.endTime }}"
+                                    ><i class="fa fa-edit"></i> 编辑</a>
+                                    <a href="#viewModal" data-toggle="modal" data-form="view-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-name="{{ list.name }}"
+                                       data-img="{{ list.img }}"
+                                    ><i class="fa fa-eye"></i> 查看</a>
+                                      <a href="#viewModal2" data-toggle="modal" data-form="view-model" class="btn btn-default btn-xs"
+                                    ><i class="fa fa-eye"></i> 迈豆发放</a>
+                                </td>
+                            </tr>
+
+
                             {% for list in topics.object_list  %}
                             <tr>
                                 <td>
@@ -109,7 +139,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>查看合同</h3>
+                <h3>查看迈豆规则列表</h3>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -117,6 +147,55 @@
                 </div>
                 <div align="center" data-toggle="form-img"></div>
             </div>
+            <div class="modal-footer">
+                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">关闭</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<div id="viewModal2" class="modal fade">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>迈豆发放</h3>
+            </div>
+<div class="form-horizontal">
+    {% csrf_token %}
+    <input type="hidden" name="id" id="form-id" value="">
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">应用平台</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="appId" id="form-appId">
+                {% for key, val in appList.items %}
+                    <option value="{{ key }}">{{ val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">迈豆值</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="initNum" id="form-initNum" placeholder="数字类型，不可为空">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="status" id="form-status">
+                {% for key,value in c_status.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
+
             <div class="modal-footer">
                 <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">关闭</a>
             </div>
@@ -251,9 +330,9 @@ $(function () {
             if(false == preg){
                 fix = 'http://' + window.location.host;
             }
-            html += '<img class="img-thumbnail" max-width="100%" max-height="100%"  src="' + fix + img + '">';
+            //html += '<img class="img-thumbnail" max-width="100%" max-height="100%"  src="' + fix + img + '">';
         }else {
-            html += '<p class="single-line">无图片</p>';
+            //html += '<p class="single-line">无数据</p>';
         }
 
         $('[data-toggle="form-name"]').text(name);

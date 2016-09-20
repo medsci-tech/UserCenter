@@ -33,7 +33,7 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/contract/index.html',{'topics':topics, 'request': post})
+    return render(request, 'admin/contract/index.html',{'topics':topics, 'request2': post})
 
 # 添加操作--protected
 @auth # 引用登录权限验证

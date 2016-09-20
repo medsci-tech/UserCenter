@@ -18,6 +18,12 @@
             <input type="text" class="form-control input-sm" name="amount" id="form-amount">
         </div>
     </div>
+        <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">兑换比例</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="amount" id="form-amount" placeholder="填写数字:该数字X合同金额=迈豆值">
+        </div>
+    </div>
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">缩略图</label>
         {% include 'admin/common/file-uplaod.html' with inputId='one' actionCtrl='img' uploadPath='img' %}
