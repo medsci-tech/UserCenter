@@ -30,17 +30,19 @@
 			<ul>
 				<li><a href="{% url 'admin:contract' %}">企业合同管理</a></li>
 				<li><a href="{% url 'admin:app' %}">Web应用管理</a></li>
-				<li><a href="{% url 'admin:mdset' %}">迈豆积分配置</a></li>
+<!--				<li><a href="{% url 'admin:mdset' %}">迈豆积分配置</a></li>-->
 			</ul>
 		</li>
 		<li class="submenu">
 			<a href="#"><i class="fa fa-file"></i> <span>积分规则管理</span> <i class="arrow fa fa-chevron-right"></i></a>
 			<ul>
-				<li><a href="{% url 'admin:credit' %}">积分基本设置</a></li>
+				<!--<li><a href="{% url 'admin:credit' %}">积分基本设置</a></li>-->
 				<li><a href="{% url 'admin:credit_rule' %}">积分策略设置</a></li>
 			</ul>
 		</li>
-		
+		<li>
+			<a href="{% url 'admin:logs' %}"><i class="fa fa-signal"></i> <span>系统操作记录</span></a>
+		</li>
 		<li class="submenu">
 			<a href="#"><i class="fa fa-flask"></i> <span>用户管理</span> <i class="arrow fa fa-chevron-right"></i></a>
 			<ul>
@@ -48,11 +50,11 @@
 			</ul>
 		</li>
 		<li>
-			<a href="charts.html"><i class="fa fa-signal"></i> <span>用户列表</span></a>
+			<a href="charts.html"><i class="fa fa-signal"></i> <span>日志列表</span></a>
 		</li>
-		<li>
+<!--		<li>
 			<a href="widgets.html"><i class="fa fa-inbox"></i> <span>用户设置</span></a>
-		</li>
+		</li>-->
 	</ul>  
 
 </div>
