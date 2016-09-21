@@ -11,6 +11,7 @@ from django.views.decorators.csrf import csrf_exempt
 from admin.model.Mdset import Mdset
 from admin.model.App import App
 from admin.controller.app import applist
+from admin.controller.syslog import logsform
 from UserCenter.global_templates import configParam
 import json
 from admin.controller.auth import *
@@ -100,13 +101,25 @@ def form(request):
         'ratio': post.get('ratio'),
         'status': post.get('status'),
     }
+    logParam = {
+        'table': 'mdset',
+        'after': param,
+    }
     if id:
         # 修改
         param.update(id=id)
         returnData = _editById(**param)
+        logParam.update(tableId=id)
+        logParam.update(action=2)
     else:
         # 添加
         returnData = _add(**param)
+        logParam.update(tableId=returnData.get('data'))
+        logParam.update(action=1)
+
+    # 操作成功添加操作记录
+    if returnData.get('code') == '200':
+        logsform(request, logParam)
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 

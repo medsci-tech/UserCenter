@@ -45,10 +45,9 @@
                                 <th>集合</th>
                                 <th>集合ID</th>
                                 <th>动作</th>
-{#                                <th>操作前</th>#}
-{#                                <th>操作后</th>#}
-{#                                <th>操作人</th>#}
-{#                                <th>IP</th>#}
+                                <th>操作后</th>
+                                <th>操作人</th>
+                                <th>IP</th>
                                 <th>创建时间</th>
                             </tr>
                         </thead>
@@ -61,11 +60,10 @@
                                 </td>
                                 <td>{{ list.table }}</td>
                                 <td>{{ list.tableId }}</td>
-                                <td>{{ list.action }}</td>
-{#                                <td>{{ list.before }}</td>#}
-{#                                <td>{{ list.after }}</td>#}
-{#                                <td>{{ list.adminName }}</td>#}
-{#                                <td>{{ list.ip }}</td>#}
+                                <td>{{ list.actionName }}</td>
+                                <td>{{ list.after }}</td>
+                                <td>{{ list.adminName }}</td>
+                                <td>{{ list.ip }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                             </tr>
                             {% endfor %}

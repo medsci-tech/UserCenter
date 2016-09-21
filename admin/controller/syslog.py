@@ -21,10 +21,14 @@ from admin.controller.auth import *
 def index(request):
     get = request.GET
     param = {}
+    admin_all_list = {}
     adminId = []
     # 获取所有状态列表
     cfg_param = configParam(request)
     logs_operate = cfg_param.get('c_logs_operate')
+    adminAllList = Admin.objects.all().order_by('id')
+    for ids in adminAllList:
+        admin_all_list[str(ids['id'])] = ids['username']
     table = get.get('table')
     action = get.get('action')
     username = get.get('username')
@@ -43,9 +47,10 @@ def index(request):
             param.update(id='00000000000000000000000a')  # 无效的24位id
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
-    # if data:
-    #     for val in data:
-    #         val.update(actionName=logs_operate.get(val['action']))
+    if data:
+        for val in data:
+            val.update(actionName=logs_operate.get(val['action']))
+            val.update(adminName=admin_all_list.get(val['adminId']))
     limit = cfg_param.get('c_page')  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -74,7 +79,7 @@ def _add(**param):
 
 
 '''
-修改操作
+修改操作--用于controller之间的调用，外部url不能直接访问
     param = {
         'table': 'table',
         'tableId': 'tableId',
@@ -82,22 +87,21 @@ def _add(**param):
         'after': 'after',
     }
 '''
-@csrf_exempt
-def form(request):
-    param = {
-        'table': 'table',
-        'tableId': 'mdset',
-        'action': 2,
-    }
-    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-    # if x_forwarded_for:
-    #     ip = x_forwarded_for.split(',')[0]
-    # else:
-    #     ip = request.META.get('REMOTE_ADDR')
-    # param.update(ip=ip)
-    # param.update(adminId=request.session.get('uid'))
-    # returnData = Model.objects.create(**param)
-    returnData = Model.objects.create(**param)
+def logsform(request, param):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    param.update(ip=ip)
+    param.update(adminId=request.session.get('uid'))
+    try:
+        model = Model.objects.create(**param)
+        if model:
+            returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+    except Exception:
+        returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
     return returnData
