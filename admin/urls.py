@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from admin.controller import admin,accounts, contract, mdset, upload, app, credit, credit_rule, logs
+from admin.controller import (admin, accounts, contract, mdset, upload, app, credit, credit_rule, syslog, company)
 
 urlpatterns = [
     # 登录
@@ -45,6 +45,11 @@ urlpatterns = [
     url(r'^credit_rule/index', credit_rule.index, name='credit_rule'),
 
     # 系统操作日志
-    url(r'^logs/save', logs.logsave, name='logs_save'),
-    url(r'^logs/index', logs.index, name='logs'),
+    url(r'^logs/form', syslog.form, name='logs_form'),
+    url(r'^logs/index', syslog.index, name='logs'),
+
+    # 企业管理
+    url(r'^company/form', company.form, name='company_form'),
+    url(r'^company/stats', company.stats, name='company_stats'),
+    url(r'^company/index', company.index, name='company'),
 ]
