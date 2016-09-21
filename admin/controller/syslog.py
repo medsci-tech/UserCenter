@@ -8,7 +8,7 @@ from django.core.paginator import EmptyPage
 from django.core.paginator import PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 
-from admin.model.Logs import Logs as Model
+from admin.model.Syslog import Syslog as Model
 from admin.model.Admin import Admin
 from UserCenter.global_templates import configParam
 import json
@@ -43,9 +43,9 @@ def index(request):
             param.update(id='00000000000000000000000a')  # 无效的24位id
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
-    if data:
-        for val in data:
-            val.update(actionName=logs_operate.get(val['action']))
+    # if data:
+    #     for val in data:
+    #         val.update(actionName=logs_operate.get(val['action']))
     limit = cfg_param.get('c_page')  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -61,28 +61,43 @@ def index(request):
 
 # 添加操作--protected
 def _add(**param):
-    id = param.get('id')
-    if not id:
-        try:
-            model = Model.objects.create(**param)
-            if model:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-        except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-    else:
-        returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
+    try:
+        model = Model.objects.create(**param)
+        if model:
+            returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+    except Exception:
+        returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+
     return returnData
 
-# 修改操作
+
+'''
+修改操作
+    param = {
+        'table': 'table',
+        'tableId': 'tableId',
+        'action': 'action',
+        'after': 'after',
+    }
+'''
 @csrf_exempt
-def logsave(request, param):
-    if request.META.has_key('HTTP_X_FORWARDED_FOR'):
-        ip = request.META['HTTP_X_FORWARDED_FOR']
-    else:
-        ip = request.META['REMOTE_ADDR']
-    param.update(ip=ip)
-    returnData = _add(**param)
+def form(request):
+    param = {
+        'table': 'table',
+        'tableId': 'mdset',
+        'action': 2,
+    }
+    # x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    # if x_forwarded_for:
+    #     ip = x_forwarded_for.split(',')[0]
+    # else:
+    #     ip = request.META.get('REMOTE_ADDR')
+    # param.update(ip=ip)
+    # param.update(adminId=request.session.get('uid'))
+    # returnData = Model.objects.create(**param)
+    returnData = Model.objects.create(**param)
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
+    return returnData
