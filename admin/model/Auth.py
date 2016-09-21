@@ -10,13 +10,12 @@ class Auth(Document):
         meta = { 'allow_inheritance': True, 'abstract': True }# 允许继承
         '登录权限验证'
         def __init__(self, *args, **kwargs):
-                super(Document, self).__init__(self, *args, **kwargs)
+                super(Document, self).__init__(*args, **kwargs)
                 #self.uid = request.session.get('uid', False)
                 #self.username = request.session.get('uid', False)
                 #Document.__init__(self)
                 #self.xx= 'test'
                 #self.check_permissions(self)
-                return None
 
         #def __init__(self):
                 #return HttpResponse('no access')
