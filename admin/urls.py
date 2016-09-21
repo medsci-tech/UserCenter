@@ -45,7 +45,6 @@ urlpatterns = [
     url(r'^credit_rule/index', credit_rule.index, name='credit_rule'),
 
     # 系统操作日志
-    url(r'^logs/form', syslog.form, name='logs_form'),
     url(r'^logs/index', syslog.index, name='logs'),
 
     # 企业管理

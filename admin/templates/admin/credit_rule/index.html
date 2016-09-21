@@ -60,8 +60,14 @@
                                 <td>{{ list.name }}</td>
                                 <td>{{ list.cycleName }}</td>
                                 <td>{{ list.rewardNum }}</td>
-                                {% for key, val in list.extend.items %}
-                                    <td>{{ val }}</td>
+                                {% for key, val in creditList.items %}
+                                    <th>
+                                    {% for k, v in list.extend.items %}
+                                        {% if key == k %}
+                                            {{ v }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </th>
                                 {% endfor %}
                                 <td id="content-status">{{ list.statusName }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
