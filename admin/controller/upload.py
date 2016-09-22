@@ -1,4 +1,4 @@
-# coding:utf-8
+# -*- coding: utf-8 -*-
 # 管理员管理
 # zhaiyu
 from django.http import HttpResponse

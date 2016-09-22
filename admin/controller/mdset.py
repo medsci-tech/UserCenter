@@ -1,19 +1,12 @@
-#_*_coding:utf-8_*_
+# -*- coding: utf-8 -*-
 # 迈豆积分管理
 
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.core.paginator import Paginator
-from django.core.paginator import EmptyPage
-from django.core.paginator import PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt
+# 公共引入文件
+from admin.controller.common_import import *
 
 from admin.model.Mdset import Mdset
 from admin.model.App import App
 from admin.controller.app import applist
-from UserCenter.global_templates import configParam
-import json
-from admin.controller.auth import *
 
 '''
 迈豆积分列表
@@ -65,7 +58,7 @@ def _add(**param):
         try:
             model = Mdset.objects.create(**param)
             if model:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
+                returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
             else:
                 returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
@@ -108,6 +101,23 @@ def form(request):
         # 添加
         returnData = _add(**param)
 
+    # 操作成功添加log操作记录
+    if returnData.get('code') == '200':
+        # log记录参数
+        logParam = {
+            'table': 'mdset',
+            'after': param,
+        }
+        if id:
+            logParam.update(tableId=id)  # log记录参数
+            logParam.update(action=2)  # log记录参数,action=2为修改
+        else:
+            logParam.update(tableId=returnData.get('data'))  # log记录参数
+            logParam.update(action=1)  # log记录参数,action=1为添加
+        if 'id' in logParam['after']:
+            del logParam['after']['id']
+        logsform(request, logParam)
+
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
@@ -126,9 +136,9 @@ def stats(request):
     try:
         model = Mdset.objects.filter(id__in=selection).update(**param)
         if model:
-            returnData = {'code': '200', 'msg': '操作成功', 'data': model}
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
         else:
-            returnData = {'code': '801', 'msg': '操作失败', 'data': model}
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
     except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
