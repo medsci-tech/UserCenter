@@ -87,75 +87,83 @@ def _editById(**param):
 @auth  # 引用登录权限验证
 def form(request):
     post = request.POST
-    id = post.get('id')
-    param = {
-        'appId': post.get('appId'),
-        'ratio': post.get('ratio'),
-        'status': post.get('status'),
-    }
-    if id:
-        # 修改
-        param.update(id=id)
-        returnData = _editById(**param)
-    else:
-        # 添加
-        returnData = _add(**param)
-
-    # 操作成功添加log操作记录
-    if returnData.get('code') == '200':
-        # log记录参数
-        logParam = {
-            'table': 'mdset',
-            'after': param,
+    if post:
+        id = post.get('id')
+        param = {
+            'appId': post.get('appId'),
+            'ratio': post.get('ratio'),
+            'status': post.get('status'),
         }
         if id:
-            logParam.update(tableId=id)  # log记录参数
-            logParam.update(action=2)  # log记录参数,action=2为修改
+            # 修改
+            param.update(id=id)
+            returnData = _editById(**param)
         else:
-            logParam.update(tableId=returnData.get('data'))  # log记录参数
-            logParam.update(action=1)  # log记录参数,action=1为添加
-        if 'id' in logParam['after']:
-            del logParam['after']['id']
-        logsform(request, logParam)
+            # 添加
+            returnData = _add(**param)
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+        # 操作成功添加log操作记录
+        if returnData.get('code') == '200':
+            # log记录参数
+            logParam = {
+                'table': 'mdset',
+                'after': param,
+            }
+            if id:
+                logParam.update(tableId=id)  # log记录参数
+                logParam.update(action=2)  # log记录参数,action=2为修改
+            else:
+                logParam.update(tableId=returnData.get('data'))  # log记录参数
+                logParam.update(action=1)  # log记录参数,action=1为添加
+            if 'id' in logParam['after']:
+                del logParam['after']['id']
+            logsform(request, logParam)
+
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
 @auth  # 引用登录权限验证
 def stats(request):
     post = request.POST
-    selection = post.getlist('selection[]')
-    statusType = post.get('statusType')
-    if statusType == 'enable':
-        status = 1
-    else:
-        status = 0
-    param = {
-        'status': status,
-    }
-    try:
-        model = Mdset.objects.filter(id__in=selection).update(**param)
-        if model:
-            # 操作成功添加log操作记录
-            for id in selection:
-                # log记录参数
-                logParam = {
-                    'table': 'mdset',
-                    'after': param,
-                    'tableId': id,
-                }
-                if statusType == 'enable':
-                    logParam.update(action=3)  # log记录参数,action=3为启用
-                else:
-                    logParam.update(action=4)  # log记录参数,action=4为禁用
-                if 'id' in logParam['after']:
-                    del logParam['after']['id']
-                logsform(request, logParam)
-
-            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+    if post:
+        selection = post.getlist('selection[]')
+        statusType = post.get('statusType')
+        if statusType == 'enable':
+            status = 1
         else:
-            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-    except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            status = 0
+        param = {
+            'status': status,
+        }
+        try:
+            model = Mdset.objects.filter(id__in=selection).update(**param)
+            if model:
+                # 操作成功添加log操作记录
+                for id in selection:
+                    # log记录参数
+                    logParam = {
+                        'table': 'mdset',
+                        'after': param,
+                        'tableId': id,
+                    }
+                    if statusType == 'enable':
+                        logParam.update(action=3)  # log记录参数,action=3为启用
+                    else:
+                        logParam.update(action=4)  # log记录参数,action=4为禁用
+                    if 'id' in logParam['after']:
+                        del logParam['after']['id']
+                    logsform(request, logParam)
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+            else:
+                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+        except Exception:
+                returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
