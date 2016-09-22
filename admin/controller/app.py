@@ -123,6 +123,22 @@ def stats(request):
     try:
         model = App.objects.filter(id__in=selection).update(**param)
         if model:
+            # 操作成功添加log操作记录
+            for id in selection:
+                # log记录参数
+                logParam = {
+                    'table': 'app',
+                    'after': param,
+                    'tableId': id,
+                }
+                if statusType == 'enable':
+                    logParam.update(action=3)  # log记录参数,action=3为启用
+                else:
+                    logParam.update(action=4)  # log记录参数,action=4为禁用
+                if 'id' in logParam['after']:
+                    del logParam['after']['id']
+                logsform(request, logParam)
+
             returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
         else:
             returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
