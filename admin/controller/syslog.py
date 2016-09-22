@@ -1,23 +1,17 @@
 # -*- coding: utf-8 -*-
 # 扩展基础管理
 
-from django.shortcuts import render
-from django.http import HttpResponse
-from django.core.paginator import Paginator
-from django.core.paginator import EmptyPage
-from django.core.paginator import PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt
+# 公共引入文件
+from admin.controller.common_import import *
 
 from admin.model.Syslog import Syslog as Model
 from admin.model.Admin import Admin
-from UserCenter.global_templates import configParam
-import json
-from admin.controller.auth import *
+
 '''
 迈豆积分列表
 '''
 @csrf_exempt
-@auth # 引用登录权限验证
+@auth  # 引用登录权限验证
 def index(request):
     get = request.GET
     param = {}
@@ -64,22 +58,9 @@ def index(request):
     # return HttpResponse(dataOne['id'])
     return render(request, 'admin/logs/index.html', {'topics': topics})
 
-# 添加操作--protected
-def _add(**param):
-    try:
-        model = Model.objects.create(**param)
-        if model:
-            returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
-        else:
-            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-    except Exception:
-        returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-
-    return returnData
-
 
 '''
-修改操作--用于controller之间的调用，外部url不能直接访问
+添加log记录--用于controller之间的调用，外部url不能直接访问
     param = {
         'table': 'table',
         'tableId': 'tableId',
@@ -98,7 +79,7 @@ def logsform(request, param):
     try:
         model = Model.objects.create(**param)
         if model:
-            returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
+            returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
         else:
             returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
     except Exception:

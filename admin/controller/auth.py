@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-#coding:utf-8
+# -*- coding: utf-8 -*-
 from django.http import HttpResponseRedirect
 def login(request):
     uid = request.session.get('uid', False)
