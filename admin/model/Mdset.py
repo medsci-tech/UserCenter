@@ -1,4 +1,4 @@
-# coding:utf8
+# -*- coding: utf-8 -*-
 from mongoengine import *
 from datetime import *
 from django.conf import settings  # import the settings file
