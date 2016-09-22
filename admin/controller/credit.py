@@ -16,7 +16,7 @@ def index(request):
     get = request.GET
     param = {}
     # 获取所有启用应用列表
-    apps = applist(request)
+    app_list = applist(request)
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
@@ -25,7 +25,7 @@ def index(request):
     if searchAppId:
         param.update(appId=searchAppId)
     else:
-        dataOne = Credit.objects.all().order_by('id')[:1]  # 获取第一条数据
+        dataOne = Credit.objects.filter(appId__in=app_list.keys()).order_by('id')[:1]  # 获取第一条数据
         if dataOne:
             param.update(appId=dataOne[0]['appId'])
     data = Credit.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
@@ -48,7 +48,11 @@ def index(request):
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
     # return HttpResponse(dataOne['id'])
-    return render(request, 'admin/credit/index.html', {'topics': topics, 'ctrlList': selectData, 'appList': apps})
+    return render(request, 'admin/credit/index.html', {
+        'topics': topics,
+        'ctrlList': selectData,
+        'appList': app_list
+    })
 
 # 添加操作--protected
 def _add(**param):
@@ -86,66 +90,90 @@ def _editById(**param):
 @auth  # 引用登录权限验证
 def form(request):
     post = request.POST
-    id = post.get('id')
-    param = {
-        'appId': post.get('appId'),
-        'credit': post.get('credit'),
-        'name': post.get('name'),
-        'icon': post.get('icon'),
-        'initNum': post.get('initNum'),
-        'ratio': post.get('ratio'),
-        'status': post.get('status'),
-    }
-    if id:
-        # 修改
-        param.update(id=id)
-        returnData = _editById(**param)
-    else:
-        # 添加
-        returnData = _add(**param)
-
-    # 操作成功添加log操作记录
-    if returnData.get('code') == '200':
-        # log记录参数
-        logParam = {
-            'table': 'credit',
-            'after': param,
+    if post:
+        id = post.get('id')
+        param = {
+            'appId': post.get('appId'),
+            'credit': post.get('credit'),
+            'name': post.get('name'),
+            'icon': post.get('icon'),
+            'initNum': post.get('initNum'),
+            'ratio': post.get('ratio'),
+            'status': post.get('status'),
         }
         if id:
-            logParam.update(tableId=id)  # log记录参数
-            logParam.update(action=2)  # log记录参数,action=2为修改
+            # 修改
+            param.update(id=id)
+            returnData = _editById(**param)
         else:
-            logParam.update(tableId=returnData.get('data'))  # log记录参数
-            logParam.update(action=1)  # log记录参数,action=1为添加
-        if 'id' in logParam['after']:
-            del logParam['after']['id']
-        logsform(request, logParam)
+            # 添加
+            returnData = _add(**param)
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+        # 操作成功添加log操作记录
+        if returnData.get('code') == '200':
+            # log记录参数
+            logParam = {
+                'table': 'credit',
+                'after': param,
+            }
+            if id:
+                logParam.update(tableId=id)  # log记录参数
+                logParam.update(action=2)  # log记录参数,action=2为修改
+            else:
+                logParam.update(tableId=returnData.get('data'))  # log记录参数
+                logParam.update(action=1)  # log记录参数,action=1为添加
+            if 'id' in logParam['after']:
+                del logParam['after']['id']
+            logsform(request, logParam)
+
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
 @auth  # 引用登录权限验证
 def stats(request):
     post = request.POST
-    selection = post.getlist('selection[]')
-    statusType = post.get('statusType')
-    if statusType == 'enable':
-        status = 1
-    else:
-        status = 0
-    param = {
-        'status': status,
-    }
-    try:
-        model = Credit.objects.filter(id__in=selection).update(**param)
-        if model:
-            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+    if post:
+        selection = post.getlist('selection[]')
+        statusType = post.get('statusType')
+        if statusType == 'enable':
+            status = 1
         else:
-            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-    except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            status = 0
+        param = {
+            'status': status,
+        }
+        try:
+            model = Credit.objects.filter(id__in=selection).update(**param)
+            if model:
+                # 操作成功添加log操作记录
+                for id in selection:
+                    # log记录参数
+                    logParam = {
+                        'table': 'credit',
+                        'after': param,
+                        'tableId': id,
+                    }
+                    if statusType == 'enable':
+                        logParam.update(action=3)  # log记录参数,action=3为启用
+                    else:
+                        logParam.update(action=4)  # log记录参数,action=4为禁用
+                    if 'id' in logParam['after']:
+                        del logParam['after']['id']
+                    logsform(request, logParam)
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+            else:
+                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+        except Exception:
+                returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 '''
 根据条件获取启用的积分扩展列表
