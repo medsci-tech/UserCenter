@@ -85,8 +85,5 @@ def logsform(request, param):
     except Exception:
         returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
 
-<<<<<<< HEAD
-    return HttpResponse(json.dumps(param), content_type="application/json")
-=======
->>>>>>> 417246df048ca36e3074f9a984d07461c9019cd0
+
     return returnData
