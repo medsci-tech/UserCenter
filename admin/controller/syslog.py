@@ -99,5 +99,5 @@ def form(request):
     # returnData = Model.objects.create(**param)
     returnData = Model.objects.create(**param)
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+    return HttpResponse(json.dumps(param), content_type="application/json")
     return returnData

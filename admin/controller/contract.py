@@ -1,12 +1,10 @@
 # coding:utf-8
 # 管理员管理
-# zhaiyu
+__author__ = 'lxhui'
 from django.shortcuts import render
 from admin.model.Contract import Contract
 from django.http import HttpResponse
-from django.core.paginator import Paginator
-from django.core.paginator import EmptyPage
-from django.core.paginator import PageNotAnInteger
+from django.core.paginator import Paginator,InvalidPage,EmptyPage,PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 import json
 from admin.controller.auth import *
@@ -14,26 +12,22 @@ from admin.controller.auth import *
 @auth # 引用登录权限验证
 def index(request):
     post = request.POST
-    param = {}
-    if request.method == "POST":
-        name = post.get('name')
-        number = post.get('number')
-        if name:
-            param.update(name={'$regex': name})
-        if number:
-            param.update(number={'$regex': number})
-    data = Contract.objects.all().order_by("id")
+    name = post.get('name','').strip()
+    number = post.get('number','').strip()
+    data = Contract.objects.filter(name__icontains=name,number__icontains=number).order_by('id')
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
-    try:
-        topics = paginator.page(page)  # 获取某页对应的记录
-    except PageNotAnInteger:  # 如果页码不是个整数
-        topics = paginator.page(1)  # 取第一页的记录
-    except EmptyPage:  # 如果页码太大，没有相应的记录
-        topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/contract/index.html',{'topics':topics, 'request2': post})
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+    try:
+        list = paginator.page(page)
+    except (EmptyPage, InvalidPage):
+        list = paginator.page(paginator.num_pages)
+    return render(request, 'admin/contract/index.html',{'list':list, 'request2': post})
 
 # 添加操作--protected
 @auth # 引用登录权限验证

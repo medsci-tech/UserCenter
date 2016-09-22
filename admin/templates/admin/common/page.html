@@ -1,12 +1,12 @@
 <ul class="pagination">
-    {% if topics.has_previous %}
-        <li><a href="?page={{ topics.previous_page_number }}">Prev</a></li>
+    {% if list.has_previous %}
+        <li><a href="?page={{ list.previous_page_number }}">Prev</a></li>
     {% else %}
         <li class="disabled"><a href="javascript:;">Prev</a></li>
     {% endif %}
-    {% if topics %}
-        {% for page in topics.paginator.page_range %}
-            {% ifequal page topics.number %}
+    {% if list %}
+        {% for page in list.paginator.page_range %}
+            {% ifequal page list.number %}
                 <li class="active"><a href="javascript:;">{{ page }}</a></li>
             {% else %}
                 <li><a href="?page={{ page }}">{{ page }}</a></li>
@@ -15,8 +15,8 @@
     {% else %}
         <li class="active"><a href="javascript:;">1</a></li>
     {% endif %}
-    {% if topics.has_next %}
-        <li><a href="?page={{ topics.next_page_number }}">Next</a></li>
+    {% if list.has_next %}
+        <li><a href="?page={{ list.next_page_number }}">Next</a></li>
     {% else %}
         <li class="disabled"><a href="javascript:;">Next</a></li>
     {% endif %}

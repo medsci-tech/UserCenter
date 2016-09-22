@@ -1,9 +1,22 @@
 <div class="form-horizontal">
+    <form class="form-horizontal" method="post" action="" name="contract_validate" id="contract_validate" novalidate="novalidate">
+    {% csrf_token %}
     <input type="hidden" name="id" id="form-id" value="">
+
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">合作企业</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="appId" id="form-appId">
+                <option value="{{ key }}">请选择所属企业</option>
+                    <option value="{{ key }}">诺和诺德</option>
+
+            </select>
+        </div>
+    </div>
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">合同名称</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="name" id="form-name">
+            <input type="text" class="form-control input-sm" name="name" id="form-name"  placeholder="不能为空">
         </div>
     </div>
     <div class="form-group">
@@ -38,4 +51,28 @@
             </div>
         </div>
     </div>
+    <div class="modal-footer">
+        <input type="submit" value="确定" class="btn btn-primary" id="submit">
+        <button data-dismiss="modal" class="btn btn-default btn-small" id="ResetButton">重置</button>
+    </div>
+    <input type="hidden" name="id" id="id">
+    </form>
 </div>
+<script>
+    var stats_url = '{% url 'admin:company_stats' %}';
+    var form_url = '{% url 'admin:company_form' %}';
+	/* 表单重置 */
+	$("#ResetButton").click(function() {
+		$('#basic_validate').get(0).reset();//清空表单
+	});
+    /**
+     * 表单验证提交按钮触发的操作
+     */
+    var rules = {
+        required:true,
+        name:{
+            required:true
+        }
+    };
+    subActionAjaxValidateForMime('#contract_validate', rules, form_url, '');
+</script>

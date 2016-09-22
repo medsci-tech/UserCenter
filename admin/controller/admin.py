@@ -21,8 +21,8 @@ def list(request):
     username = post.get('username','').strip()
     nickname = post.get('nickname','').strip()
     email = post.get('email','').strip()
-    data = Admin.objects.filter(username__icontains=username,email__icontains=email,nickname__icontains=nickname ).order_by('id')
-    limit = 2  # 每页显示的记录数
+    data = Admin.objects.filter(username__icontains=username,email__icontains=email,nickname__icontains=nickname).order_by('id')
+    limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     try:
         page = int(request.GET.get('page', '1'))
