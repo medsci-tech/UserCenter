@@ -1,9 +1,6 @@
-# coding:utf8
-
-from mongoengine import *
-from datetime import *
-from django.conf import settings
-from admin.model.Auth import Auth
+# -*- coding: utf-8 -*-
+# 公共引入文件
+from admin.model.Common_import import *
 
 class App(Auth):
     meta = Document.meta = {
