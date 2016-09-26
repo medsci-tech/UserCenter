@@ -30,11 +30,11 @@ def list(request):
         page = 1
 
     try:
-        topics = paginator.page(page)  # 获取某页对应的记录
+        list = paginator.page(page)  # 获取某页对应的记录
     except (EmptyPage, InvalidPage):
-        topics = paginator.page(paginator.num_pages)  # 取第一页的记录
+        list = paginator.page(paginator.num_pages)  # 取第一页的记录
 
-    return render(request, 'admin/admin/index.html',{'list':topics,'post': post})
+    return render(request, 'admin/admin/index.html',{'list':list,'post': post})
 
 '''
 保存管理员

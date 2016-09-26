@@ -1,24 +1,20 @@
 # coding:utf-8
 # 管理员管理
 __author__ = 'lxhui'
-from django.shortcuts import render
+from admin.controller.common_import import * # 公共引入文件
 from admin.model.Contract import Contract
-from django.http import HttpResponse
-from django.core.paginator import Paginator,InvalidPage,EmptyPage,PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt
-import json
-from admin.controller.auth import *
+from admin.model.Company import Company
 @csrf_exempt
 @auth # 引用登录权限验证
 def index(request):
     post = request.POST
+    cid = post.get('cid',0)
     name = post.get('name','').strip()
     number = post.get('number','').strip()
     data = Contract.objects.filter(name__icontains=name,number__icontains=number).order_by('id')
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
-
     try:
         page = int(request.GET.get('page', '1'))
     except ValueError:
@@ -27,7 +23,10 @@ def index(request):
         list = paginator.page(page)
     except (EmptyPage, InvalidPage):
         list = paginator.page(paginator.num_pages)
-    return render(request, 'admin/contract/index.html',{'list':list, 'request2': post})
+
+    '''企业信息'''
+    comList = Company.objects.filter(status=1).order_by("id")
+    return render(request, 'admin/contract/index.html',{'list':list, 'post': post, 'comList': comList})
 
 # 添加操作--protected
 @auth # 引用登录权限验证
