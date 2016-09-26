@@ -4,7 +4,8 @@
 # 公共引入文件
 from admin.controller.common_import import *
 
-from admin.model.Credit import Credit
+from admin.model.CreditConfig import CreditConfig as Model
+from admin.controller.company import companylist
 from admin.controller.app import applist
 
 '''
@@ -15,25 +16,25 @@ from admin.controller.app import applist
 def index(request):
     get = request.GET
     param = {}
-    # 获取所有启用应用列表
+    # 获取所有启用企业列表
+    company_list = companylist(request)
     app_list = applist(request)
     # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
-    credit_list = cfg_param.get('c_ext_credit')
-    searchAppId = get.get('appId')
-    if searchAppId:
-        param.update(appId=searchAppId)
+    searchCompanyId = get.get('companyId')
+    if searchCompanyId:
+        param.update(companyId=searchCompanyId)
     else:
-        dataOne = Credit.objects.filter(appId__in=app_list.keys()).order_by('id')[:1]  # 获取第一条数据
+        dataOne = Model.objects.filter(companyId__in=company_list.keys()).order_by('id')[:1]  # 获取第一条数据
         if dataOne:
-            param.update(appId=dataOne[0]['appId'])
-    data = Credit.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
+            param.update(companyId=dataOne[0]['companyId'])
+    data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
     if data:
         for val in data:
             val.update(statusName=status_list.get(val['status']))
-            val.update(creditName=credit_list.get(val['credit']))
+            val.update(appName=app_list.get(val['appId']))
         selectData = data[0]
     else:
         selectData = get
@@ -48,10 +49,11 @@ def index(request):
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
     # return HttpResponse(dataOne['id'])
-    return render(request, 'admin/credit/index.html', {
+    return render(request, 'admin/credit_config/index.html', {
         'topics': topics,
         'ctrlList': selectData,
-        'appList': app_list
+        'companyList': company_list,
+        'appList': app_list,
     })
 
 # 添加操作--protected
@@ -59,7 +61,7 @@ def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = Credit.objects.create(**param)
+            model = Model.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
             else:
@@ -75,7 +77,7 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = Credit.objects.get(id=id).update(**param)
+            model = Model.objects.get(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
@@ -94,11 +96,8 @@ def form(request):
         id = post.get('id')
         param = {
             'appId': post.get('appId'),
-            'credit': post.get('credit'),
-            'name': post.get('name'),
-            'icon': post.get('icon'),
-            'initNum': post.get('initNum'),
-            'ratio': post.get('ratio'),
+            'companyId': post.get('companyId'),
+            'number': post.get('number'),
             'status': post.get('status'),
         }
         if id:
@@ -113,7 +112,7 @@ def form(request):
         if returnData.get('code') == '200':
             # log记录参数
             logParam = {
-                'table': 'credit',
+                'table': 'credit_config',
                 'after': param,
             }
             if id:
@@ -146,13 +145,13 @@ def stats(request):
             'status': status,
         }
         try:
-            model = Credit.objects.filter(id__in=selection).update(**param)
+            model = Model.objects.filter(id__in=selection).update(**param)
             if model:
                 # 操作成功添加log操作记录
                 for id in selection:
                     # log记录参数
                     logParam = {
-                        'table': 'credit',
+                        'table': 'credit_config',
                         'after': param,
                         'tableId': id,
                     }
@@ -174,27 +173,3 @@ def stats(request):
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
-
-'''
-根据条件获取启用的积分扩展列表
-'''
-@auth  # 引用登录权限验证
-def creditlist(request):
-    post = request.POST
-    returnFormat = post.get('returnFormat')
-    appId = post.get('appId')
-    data = {}
-    app = Credit.objects.filter(appId=appId, status=1).order_by("id")
-    if app:
-        for list in app:
-            data[str(list.credit)] = list.name
-        returnData = {'code': '200', 'msg': '操作成功', 'data': data}
-    else:
-        returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
-
-    if returnFormat:
-        return returnData.get('data')
-    elif request.method == 'POST':
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
-    else:
-        return returnData.get('data')

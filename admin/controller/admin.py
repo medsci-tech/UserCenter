@@ -5,9 +5,7 @@ __author__ = 'lxhui'
 from django.shortcuts import render,render_to_response,HttpResponse
 from admin.model.Admin import Admin
 from django.contrib.auth.hashers import make_password,check_password
-from django.core.paginator import Paginator
-from django.core.paginator import EmptyPage
-from django.core.paginator import PageNotAnInteger
+from django.core.paginator import Paginator,InvalidPage,EmptyPage,PageNotAnInteger
 from django.views.decorators.csrf import csrf_exempt
 from datetime import *
 import json
@@ -20,29 +18,23 @@ from admin.controller.auth import *
 @auth # 引用登录权限验证
 def list(request):
     post = request.POST
-    param = {}
-    if request.method == "POST":
-        nickname = post.get('nickname')
-        username = post.get('username')
-        email = post.get('email')
-        if nickname:
-            param.update(nickname={'$regex': nickname})
-        if username:
-            param.update(username={'$regex': username})
-        if email:
-            param.update(email={'$regex': email})
-    data = Admin.objects.filter(**param).order_by('id')
+    username = post.get('username','').strip()
+    nickname = post.get('nickname','').strip()
+    email = post.get('email','').strip()
+    data = Admin.objects.filter(username__icontains=username,email__icontains=email,nickname__icontains=nickname).order_by('id')
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
-    page = request.GET.get('page')  # 获取页码
     try:
-        topics = paginator.page(page)  # 获取某页对应的记录
-    except PageNotAnInteger:  # 如果页码不是个整数
-        topics = paginator.page(1)  # 取第一页的记录
-    except EmptyPage:  # 如果页码太大，没有相应的记录
-        topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
 
-    return render(request, 'admin/admin/index.html',{'topics':topics})
+    try:
+        list = paginator.page(page)  # 获取某页对应的记录
+    except (EmptyPage, InvalidPage):
+        list = paginator.page(paginator.num_pages)  # 取第一页的记录
+
+    return render(request, 'admin/admin/index.html',{'list':list,'post': post})
 
 '''
 保存管理员

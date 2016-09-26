@@ -9,11 +9,19 @@
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
+            <label>
+               <select id="form-appId" name="cid" class="form-control">
+                    <option value="0">请选择所属企业</option>
+                    {% for data in comList reversed  %}
+                        <option value="{{ data.id }}" {% ifequal data.id data.cid %} selected {%endifequal%}>{{ data.name }}</option>
+                    {% endfor %}
+            </select>
+            </label>
             <label>合同名称：
-                <input type="text" name="name" value="{{ request.name }}">
+                <input type="text" name="name" value="{{ post.name }}">
             </label>
             <label>合同编号：
-                <input type="text" name="number" value="{{ request.number }}">
+                <input type="text" name="number" value="{{ post.code }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -44,67 +52,38 @@
                                 <th>合同编号</th>
                                 <th>合同金额</th>
                                 <th>兑换比例</th>
-
-                                <th>创建时间</th>
+                                <th>合同时间</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
-                          <tr>
-                                <td>
-                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
-                                </td>
-                                <td>迈德科技</td>
-                                <td>2019394959966</td>
-                                <td>20000</td>
-                                <td>2</td>
-                                <td>2016-12-12</td>
-                                <td>
-                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
-                                       data-id="{{ list.id }}"
-                                       data-name="{{ list.name }}"
-                                       data-number="{{ list.number }}"
-                                       data-amount="{{ list.amount }}"
-                                       data-img="{{ list.img }}"
-                                       data-startTime="{{ list.startTime }}"
-                                       data-endTime="{{ list.endTime }}"
-                                    ><i class="fa fa-edit"></i> 编辑</a>
-                                    <a href="#viewModal" data-toggle="modal" data-form="view-model" class="btn btn-default btn-xs"
-                                       data-id="{{ list.id }}"
-                                       data-name="{{ list.name }}"
-                                       data-img="{{ list.img }}"
-                                    ><i class="fa fa-eye"></i> 查看</a>
-                                      <a href="#viewModal2" data-toggle="modal" data-form="view-model" class="btn btn-default btn-xs"
-                                    ><i class="fa fa-eye"></i> 迈豆发放</a>
-                                </td>
-                            </tr>
 
-
-                            {% for list in topics.object_list  %}
+                            {% for data in  list  %}
                             <tr>
                                 <td>
-                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ data.id }}"/>
                                 </td>
-                                <td>{{ list.name }}</td>
-                                <td>{{ list.number }}</td>
-                                <td>{{ list.amount }}</td>
-                                <td>{{ list.startTime }}</td>
-                                <td>{{ list.endTime }}</td>
-                                <td>{{ list.createTime }}</td>
+                                <td>{{ data.name }}</td>
+                                <td>{{ data.code }}</td>
+                                <td>{{ data.amount }}</td>
+                                <td>{{ data.number }}</td>
+                                <td>{{ data.createTime }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
-                                       data-id="{{ list.id }}"
-                                       data-name="{{ list.name }}"
-                                       data-number="{{ list.number }}"
-                                       data-amount="{{ list.amount }}"
-                                       data-img="{{ list.img }}"
-                                       data-startTime="{{ list.startTime }}"
-                                       data-endTime="{{ list.endTime }}"
+                                       data-id="{{ data.id }}"
+                                       data-cid="{{ data.cid }}"
+                                       data-name="{{ data.name }}"
+                                       data-code="{{ data.code }}"
+                                       data-number="{{ data.number }}"
+                                       data-amount="{{ data.amount }}"
+                                       data-img="{{ data.img }}"
+                                       data-startTime="{{ data.startTime }}"
+                                       data-endTime="{{ data.endTime }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                     <a href="#viewModal" data-toggle="modal" data-form="view-model" class="btn btn-default btn-xs"
-                                       data-id="{{ list.id }}"
-                                       data-name="{{ list.name }}"
-                                       data-img="{{ list.img }}"
+                                       data-id="{{ data.id }}"
+                                       data-name="{{ data.name }}"
+                                       data-img="{{ data.img }}"
                                     ><i class="fa fa-eye"></i> 查看</a>
                                 </td>
                             </tr>
@@ -126,10 +105,6 @@
             </div>
             <div class="modal-body">
                 {% include 'admin/contract/form.html' %}
-            </div>
-            <div class="modal-footer">
-                <a class="btn btn-primary btn-small" href="javascript:;" id="form-submit-one" data-loading-text="确定" autocomplete="off">确定</a>
-                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">取消</a>
             </div>
         </div>
     </div>
@@ -224,15 +199,19 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
+        var cid = $(this).attr('data-cid');
         var name = $(this).attr('data-name');
+        var code = $(this).attr('data-code');
         var number = $(this).attr('data-number');
         var amount = $(this).attr('data-amount');
         var img = $(this).attr('data-img');
         var startTime = $(this).attr('data-startTime');
         var endTime = $(this).attr('data-endTime');
         $('#form-id').val(id);
+        $('#form-cid').val(cid);
         $('#form-name').val(name);
         $('#form-number').val(number);
+        $('#form-code').val(code);
         $('#form-amount').val(amount);
         $('[data-toggle="upload-progressInput-one"]').val(img);
         $('#form-startTime').val(startTime);

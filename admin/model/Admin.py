@@ -1,10 +1,7 @@
-# coding:utf8
-from mongoengine import *
-from datetime import *
-import bson
-from django.conf import settings # import the settings file
-from admin.model.Auth import Auth
-#from django_laravel_validator.validator import *
+# -*- coding: utf-8 -*-
+# 公共引入文件
+from admin.model.Common_import import *
+
 import json
 class Admin(Auth):
     meta = Document.meta = {

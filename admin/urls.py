@@ -1,5 +1,17 @@
 from django.conf.urls import url
-from admin.controller import admin,accounts, contract, mdset, upload, app, credit, credit_rule, logs
+from admin.controller import (
+    admin,
+    accounts,
+    contract,
+    mdset,
+    upload,
+    app,
+    credit,
+    credit_rule,
+    syslog,
+    company,
+    credit_config,
+)
 
 urlpatterns = [
     # 登录
@@ -15,7 +27,7 @@ urlpatterns = [
     url(r'^admin/save/',admin.save, name='save'),# 保存管理员
 
     # 合同
-    url(r'^contract/form', contract.form, name='contract_form'),
+    url(r'^contract/save', contract.save, name='contract_save'),# 保存合同
     url(r'^contract/stats', contract.stats, name='contract_stats'),
     url(r'^contract/index', contract.index, name='contract'),
 
@@ -45,6 +57,15 @@ urlpatterns = [
     url(r'^credit_rule/index', credit_rule.index, name='credit_rule'),
 
     # 系统操作日志
-    url(r'^logs/save', logs.logsave, name='logs_save'),
-    url(r'^logs/index', logs.index, name='logs'),
+    url(r'^logs/index', syslog.index, name='logs'),
+
+    # 企业管理
+    url(r'^company/form', company.form, name='company_form'),
+    url(r'^company/stats', company.stats, name='company_stats'),
+    url(r'^company/index', company.index, name='company'),
+
+    # 积分基础配置
+    url(r'^credit_config/form', credit_config.form, name='credit_config_form'),
+    url(r'^credit_config/stats', credit_config.stats, name='credit_config_stats'),
+    url(r'^credit_config/index', credit_config.index, name='credit_config'),
 ]

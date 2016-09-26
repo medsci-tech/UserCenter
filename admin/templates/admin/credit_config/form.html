@@ -1,0 +1,40 @@
+<div class="form-horizontal">
+    {% csrf_token %}
+    <input type="hidden" name="id" id="form-id" value="">
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">企业</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="companyId" id="form-companyId">
+                {% for key, val in companyList.items %}
+                    <option value="{{ key }}">{{ val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">应用平台</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="appId" id="form-appId">
+                {% for key, val in appList.items %}
+                    <option value="{{ key }}">{{ val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">迈豆数</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="number" id="form-number" placeholder="数字类型，不可为空">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="status" id="form-status">
+                {% for key,value in c_status.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>
