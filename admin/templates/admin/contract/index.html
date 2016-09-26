@@ -9,11 +9,19 @@
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
+            <label>
+               <select id="form-appId" name="cid" class="form-control">
+                    <option value="0">请选择所属企业</option>
+                    {% for data in comList reversed  %}
+                        <option value="{{ data.id }}" {% ifequal data.id data.cid %} selected {%endifequal%}>{{ data.name }}</option>
+                    {% endfor %}
+            </select>
+            </label>
             <label>合同名称：
-                <input type="text" name="name" value="{{ request.name }}">
+                <input type="text" name="name" value="{{ post.name }}">
             </label>
             <label>合同编号：
-                <input type="text" name="number" value="{{ request.number }}">
+                <input type="text" name="number" value="{{ post.number }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -44,7 +52,6 @@
                                 <th>合同编号</th>
                                 <th>合同金额</th>
                                 <th>兑换比例</th>
-
                                 <th>创建时间</th>
                                 <th>操作</th>
                             </tr>
