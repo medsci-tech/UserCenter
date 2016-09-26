@@ -10,8 +10,8 @@ def index(request):
     post = request.POST
     cid = post.get('cid',0)
     name = post.get('name','').strip()
-    number = post.get('number','').strip()
-    data = Contract.objects.filter(name__icontains=name,number__icontains=number).order_by('id')
+    code = post.get('code','').strip()
+    data = Contract.objects.filter(name__icontains=name,code__icontains=code).order_by('id')
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码

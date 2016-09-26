@@ -12,6 +12,7 @@ class Contract(Auth):
             }
     id = StringField()
     name = StringField()
+    code = StringField()
     number = StringField()
     amount = StringField()
     img = StringField()

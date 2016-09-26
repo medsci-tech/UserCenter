@@ -21,7 +21,7 @@
                 <input type="text" name="name" value="{{ post.name }}">
             </label>
             <label>合同编号：
-                <input type="text" name="number" value="{{ post.number }}">
+                <input type="text" name="number" value="{{ post.code }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -64,7 +64,7 @@
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ data.id }}"/>
                                 </td>
                                 <td>{{ data.name }}</td>
-                                <td>{{ data.number }}</td>
+                                <td>{{ data.code }}</td>
                                 <td>{{ data.amount }}</td>
                                 <td>{{ data.startTime }}</td>
                                 <td>{{ data.endTime }}</td>
