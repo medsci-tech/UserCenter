@@ -36,104 +36,28 @@ def index(request):
 def save(request, **param):
     post = request.POST
     if request.method == 'POST':
-        model = Contract()
         param = {
             'id': post.get('id'),  # objectid
-            'name':post.get('name'), # 企业id
-            'password': make_password(post.get('pwd', '123456'), None, 'pbkdf2_sha256'), # 加密,
-            'nickname':post.get('nickname', None),  # 昵称
-            'email': post.get('email'),  # 邮箱
-            'status': post.get('status', 1)  # 状态
+            'cid': post.get('cid'),  # 企业id
+            'name':post.get('name'), # 合同名
+            'code': post.get('code'),  # 合同编号
+            'amount': post.get('amount'),# 合同金额
+            'number': post.get('number'),  # 合同比例
+            'img': post.get('img'),# 合同照片
+            'startTime': post.get('startTime'),# 合同有效期
+            'endTime': post.get('endTime'),# 合同截止日期
         }
         id = param.get('id',0)
         param.pop('id') # 剔除主键
-        json_str = model.checkUsername(username=param.get('username',None))
         try:
-            decoded = json.loads(json_str)
             if(not id): # 添加操作
-                if(not decoded['status']): # 如果用户存在
-                    return HttpResponse(json_str)
-                else:
-                    Admin.objects.create(**param)
-                    return HttpResponse(json_str)
+                Contract.objects.create(**param)
             else: # 更新
-                if(not post.get('pwd')): # 密码为空则不修改密码
-                    param.pop('password')
-                Admin.objects.filter(id=id).update(**param)
-                return HttpResponse(json.dumps({'status': 1, 'msg': '修改成功!'}))
+                Contract.objects.filter(id=id).update(**param)
+
+            return HttpResponse(json.dumps({'code': 200, 'msg': '操作成功!'}), content_type="application/json")
         except (ValueError, KeyError, TypeError):
-            return HttpResponse(json.dumps({'status': 0,'msg':'json格式错误!'}))
-# 添加操作--protected
-@auth # 引用登录权限验证
-def _add(**param):
-    id = param.get('id')
-    if not id:
-        try:
-            model = Contract(**param).add(**param)
-            if model:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': str(model)}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-        except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-    else:
-        returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
-    return returnData
-
-# 修改操作--protected
-@auth # 引用登录权限验证
-def _editById(**param):
-    id = param.get('id')
-    img = param.get('img')
-    if id:
-        if not img:
-            # 如果留空则移除img属性，不做修改
-            param.pop('img')
-        try:
-            model = Contract(**param).editById(**param)
-            '''
-                返回值 model
-                nModified:修改成功1，修改失败0
-                updatedExisting:根据条件查询结果，有true，无false
-                n:根据条件查询结果，有1，无0
-                ok:1
-            '''
-            if model.get('n'):
-                if model.get('ok'):
-                    returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-                else:
-                    returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-            else:
-                returnData = {'code': '802', 'msg': '不存在的数据集', 'data': ''}
-        except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-    else:
-        returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
-    return returnData
-
-# 修改操作
-@csrf_exempt
-@auth # 引用登录权限验证
-def form(request):
-    post = request.POST
-    id = post.get('id')
-    param = {
-        'name': post.get('name'),
-        'number': post.get('number'),
-        'amount': post.get('amount'),
-        'img': post.get('img'),
-        'startTime': post.get('startTime'),
-        'endTime': post.get('endTime'),
-    }
-    if id:
-        # 修改
-        param.update(id=id)
-        returnData = _editById(**param)
-    else:
-        # 添加
-        returnData = _add(**param)
-
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return HttpResponse(json.dumps({'code': 0,'msg':'json格式错误!'}), content_type="application/json")
 
 # 更改状态操作
 @csrf_exempt

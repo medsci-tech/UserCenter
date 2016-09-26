@@ -52,7 +52,7 @@
                                 <th>合同编号</th>
                                 <th>合同金额</th>
                                 <th>兑换比例</th>
-                                <th>创建时间</th>
+                                <th>合同时间</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -66,13 +66,14 @@
                                 <td>{{ data.name }}</td>
                                 <td>{{ data.code }}</td>
                                 <td>{{ data.amount }}</td>
-                                <td>{{ data.startTime }}</td>
-                                <td>{{ data.endTime }}</td>
+                                <td>{{ data.number }}</td>
                                 <td>{{ data.createTime }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
+                                       data-cid="{{ data.cid }}"
                                        data-name="{{ data.name }}"
+                                       data-code="{{ data.code }}"
                                        data-number="{{ data.number }}"
                                        data-amount="{{ data.amount }}"
                                        data-img="{{ data.img }}"
@@ -198,15 +199,19 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
+        var cid = $(this).attr('data-cid');
         var name = $(this).attr('data-name');
+        var code = $(this).attr('data-code');
         var number = $(this).attr('data-number');
         var amount = $(this).attr('data-amount');
         var img = $(this).attr('data-img');
         var startTime = $(this).attr('data-startTime');
         var endTime = $(this).attr('data-endTime');
         $('#form-id').val(id);
+        $('#form-cid').val(cid);
         $('#form-name').val(name);
         $('#form-number').val(number);
+        $('#form-code').val(code);
         $('#form-amount').val(amount);
         $('[data-toggle="upload-progressInput-one"]').val(img);
         $('#form-startTime').val(startTime);

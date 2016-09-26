@@ -4,7 +4,7 @@
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">合作企业</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <select class="form-control" name="cid" id="form-appId">
+            <select class="form-control" name="cid" id="form-cid">
                 <option value="0">请选择所属企业</option>
                 {% for data in comList reversed  %}
                     <option value="{{ data.id }}" {% ifequal data.id data.cid %} selected {%endifequal%}>{{ data.name }}</option>
@@ -33,7 +33,7 @@
         <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">兑换比例</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="number" id="form-amount" placeholder="填写数字:该数字X合同金额=迈豆值">
+            <input type="text" class="form-control input-sm" name="number" id="form-number" placeholder="填写数字:该数字X合同金额=迈豆值">
         </div>
     </div>
     <div class="form-group">
@@ -54,12 +54,11 @@
         <input type="submit" value="确定" class="btn btn-primary" id="submit">
         <button data-dismiss="modal" class="btn btn-default btn-small" id="ResetButton">重置</button>
     </div>
-    <input type="hidden" name="id" id="id">
+    <input type="hidden" name="id" id="form-id">
     </form>
 </div>
 <script>
     var stats_url = '{% url 'admin:company_stats' %}';
-    var form_url = '{% url 'admin:company_save' %}';
 	/* 表单重置 */
 	$("#ResetButton").click(function() {
 		$('#basic_validate').get(0).reset();//清空表单
@@ -77,5 +76,5 @@
         },
 
     };
-    subActionAjaxValidateForMime('#contract_validate', rules, form_url, '');
+    subActionAjaxValidateForMime('#contract_validate', rules, '/admin/contract/save', '');
 </script>
