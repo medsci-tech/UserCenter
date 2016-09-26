@@ -81,7 +81,7 @@ def detail(request, question_id):
     # return render(request, 'admin/admin/detail.html', {'question': question})
 
 '''
-保存管理员
+更新状态
 '''
 @auth # 引用登录权限验证
 def updateStatus(request, **param):

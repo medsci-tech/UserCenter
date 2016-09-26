@@ -28,8 +28,8 @@ urlpatterns = [
 
     # 合同
     url(r'^contract/save', contract.save, name='contract_save'),# 保存合同
-    url(r'^contract/stats', contract.stats, name='contract_stats'),
-    url(r'^contract/index', contract.index, name='contract'),
+    url(r'^contract/updateStatus', contract.updateStatus, name='contract_updateStatus'),
+    url(r'^contract/index', contract.index, name='contract'), # 合同列表
 
     # 迈豆兑换
     url(r'^mdset/form', mdset.form, name='mdset_form'),

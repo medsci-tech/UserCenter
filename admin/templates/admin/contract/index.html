@@ -26,7 +26,7 @@
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
 {#            <button class="btn btn-success" data-form="enable">启用</button>#}
-{#            <button class="btn btn-warning" data-form="disable">禁用</button>#}
+            <button class="btn btn-warning" data-form="disable">删除</button>
         </div>
         </form>
     </div>
@@ -180,6 +180,9 @@
 
 <script>
 $(function () {
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
     /**
      * 点击添加按钮触发的操作
      */
@@ -232,42 +235,13 @@ $(function () {
         data.endTime = $('#form-endTime').val();
         data.img = $('[data-toggle="upload-progressInput-one"]').val();
         var url = '/contract/form.html';
-        var location = '/contract/index';
+        var location = '/admin/contract/index';
         console.log(data);
         subActionAjaxForMime('post', url, data, location);
     });
 
     /**
-    * 启用
-    */
-    $('[data-form="enable"]').click(function() {
-        /*判断是否有选中*/
-        var check = $('#data-list-form').find('input[data-form="check-model"]');
-        var verifyChecked = verifyCheckedForMime(check);
-        if(false == verifyChecked){
-            return false;
-        }
-        swal({
-            title: "您确定要启用选中的信息吗",
-            type: "warning",
-            showCancelButton: true,
-            cancelButtonText: '取消',
-            confirmButtonColor: "#23c6c8",
-            confirmButtonText: "确定",
-            closeOnConfirm: false
-        }, function () {
-            var data = {};
-            data.selection = getDataListForMime(check);
-            data.statusType = 'enable';
-            var url = '/contract/stats.html';
-            var location = '/contract/index';
-            console.log(data);
-            subActionAjaxForMime('post', url, data, location);
-        });
-    });
-
-    /**
-     * 禁用
+     * 删除
      */
     $('[data-form="disable"]').click(function() {
         /*判断是否有选中*/
@@ -277,7 +251,7 @@ $(function () {
             return false;
         }
         swal({
-            title: "您确定要禁用选中的信息吗",
+            title: "您确定要删除选中的信息吗?",
             type: "warning",
             showCancelButton: true,
             cancelButtonText: '取消',
@@ -287,12 +261,12 @@ $(function () {
         }, function () {
             var data = {};
             data.selection = getDataListForMime(check);
-            data.statusType = 'disable';
-            var url = '/contract/stats.html';
+            var url = '/admin/contract/updateStatus';
             var location = '/contract/index';
             console.log(data);
             subActionAjaxForMime('post', url, data, location);
         });
+        return false;
     });
 
     /**
