@@ -1,9 +1,6 @@
-# coding:utf8
-from django.conf import settings # import the settings file
-from admin.model.Auth import Auth
-from mongoengine import *
-from datetime import *
-import bson
+# -*- coding: utf-8 -*-
+# 公共引入文件
+from admin.model.Common_import import *
 
 class Contract(Auth):
     meta = Document.meta = {
