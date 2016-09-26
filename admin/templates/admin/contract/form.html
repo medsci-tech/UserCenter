@@ -1,8 +1,6 @@
 <div class="form-horizontal">
     <form class="form-horizontal" method="post" action="" name="contract_validate" id="contract_validate" novalidate="novalidate">
     {% csrf_token %}
-    <input type="hidden" name="id" id="form-id" value="">
-
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">合作企业</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
@@ -61,7 +59,7 @@
 </div>
 <script>
     var stats_url = '{% url 'admin:company_stats' %}';
-    var form_url = '{% url 'admin:company_form' %}';
+    var form_url = '{% url 'admin:company_save' %}';
 	/* 表单重置 */
 	$("#ResetButton").click(function() {
 		$('#basic_validate').get(0).reset();//清空表单
@@ -77,9 +75,7 @@
         number:{
             required:true
         },
-        amount:{
-            required:true
-        }
+
     };
     subActionAjaxValidateForMime('#contract_validate', rules, form_url, '');
 </script>

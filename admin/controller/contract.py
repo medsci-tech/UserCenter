@@ -28,6 +28,41 @@ def index(request):
     comList = Company.objects.filter(status=1).order_by("id")
     return render(request, 'admin/contract/index.html',{'list':list, 'post': post, 'comList': comList})
 
+
+'''
+保存合同信息
+'''
+@auth # 引用登录权限验证
+def save(request, **param):
+    post = request.POST
+    if request.method == 'POST':
+        model = Contract()
+        param = {
+            'id': post.get('id'),  # objectid
+            'name':post.get('name'), # 企业id
+            'password': make_password(post.get('pwd', '123456'), None, 'pbkdf2_sha256'), # 加密,
+            'nickname':post.get('nickname', None),  # 昵称
+            'email': post.get('email'),  # 邮箱
+            'status': post.get('status', 1)  # 状态
+        }
+        id = param.get('id',0)
+        param.pop('id') # 剔除主键
+        json_str = model.checkUsername(username=param.get('username',None))
+        try:
+            decoded = json.loads(json_str)
+            if(not id): # 添加操作
+                if(not decoded['status']): # 如果用户存在
+                    return HttpResponse(json_str)
+                else:
+                    Admin.objects.create(**param)
+                    return HttpResponse(json_str)
+            else: # 更新
+                if(not post.get('pwd')): # 密码为空则不修改密码
+                    param.pop('password')
+                Admin.objects.filter(id=id).update(**param)
+                return HttpResponse(json.dumps({'status': 1, 'msg': '修改成功!'}))
+        except (ValueError, KeyError, TypeError):
+            return HttpResponse(json.dumps({'status': 0,'msg':'json格式错误!'}))
 # 添加操作--protected
 @auth # 引用登录权限验证
 def _add(**param):
