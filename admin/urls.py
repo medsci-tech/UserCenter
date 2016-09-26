@@ -1,5 +1,17 @@
 from django.conf.urls import url
-from admin.controller import (admin, accounts, contract, mdset, upload, app, credit, credit_rule, syslog, company)
+from admin.controller import (
+    admin,
+    accounts,
+    contract,
+    mdset,
+    upload,
+    app,
+    credit,
+    credit_rule,
+    syslog,
+    company,
+    credit_config,
+)
 
 urlpatterns = [
     # 登录
@@ -51,4 +63,9 @@ urlpatterns = [
     url(r'^company/form', company.form, name='company_form'),
     url(r'^company/stats', company.stats, name='company_stats'),
     url(r'^company/index', company.index, name='company'),
+
+    # 积分基础配置
+    url(r'^credit_config/form', credit_config.form, name='credit_config_form'),
+    url(r'^credit_config/stats', credit_config.stats, name='credit_config_stats'),
+    url(r'^credit_config/index', credit_config.index, name='credit_config'),
 ]

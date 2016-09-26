@@ -1,30 +1,43 @@
 # -*- coding: utf-8 -*-
-# 企业管理
+# 扩展基础管理
 
 # 公共引入文件
 from admin.controller.common_import import *
 
-from admin.model.Company import Company as Model
+from admin.model.CreditConfig import CreditConfig as Model
+from admin.controller.company import companylist
+from admin.controller.app import applist
 
 '''
 迈豆积分列表
 '''
 @csrf_exempt
-@auth # 引用登录权限验证
+@auth  # 引用登录权限验证
 def index(request):
-    post = request.POST
+    get = request.GET
     param = {}
-    # 获取配置列表
+    # 获取所有启用企业列表
+    company_list = companylist(request)
+    app_list = applist(request)
+    # 获取所有状态列表
     cfg_param = configParam(request)
     status_list = cfg_param.get('c_status')
-    searchName = post.get('name')
-    if searchName:
-        param.update(name={'$reg':searchName})
+    searchCompanyId = get.get('companyId')
+    if searchCompanyId:
+        param.update(companyId=searchCompanyId)
+    else:
+        dataOne = Model.objects.filter(companyId__in=company_list.keys()).order_by('id')[:1]  # 获取第一条数据
+        if dataOne:
+            param.update(companyId=dataOne[0]['companyId'])
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
     if data:
         for val in data:
             val.update(statusName=status_list.get(val['status']))
+            val.update(appName=app_list.get(val['appId']))
+        selectData = data[0]
+    else:
+        selectData = get
     limit = cfg_param.get('c_page')  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -35,28 +48,26 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    # return HttpResponse(credit_list)
-    return render(request, 'admin/company/index.html', {
+    # return HttpResponse(dataOne['id'])
+    return render(request, 'admin/credit_config/index.html', {
         'topics': topics,
-        'ctrlList': post,
+        'ctrlList': selectData,
+        'companyList': company_list,
+        'appList': app_list,
     })
 
 # 添加操作--protected
 def _add(**param):
     id = param.get('id')
     if not id:
-        company = Model.objects.get(name=param.get('name'))
-        if company:
-            returnData = {'code': '901', 'msg': '公司名已存在', 'data': ''}
-        else:
-            try:
-                model = Model.objects.create(**param)
-                if model:
-                    returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
-                else:
-                    returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-            except Exception:
-                returnData = {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+        try:
+            model = Model.objects.create(**param)
+            if model:
+                returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
+            else:
+                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+        except Exception:
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
     else:
         returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
     return returnData
@@ -84,7 +95,9 @@ def form(request):
     if post:
         id = post.get('id')
         param = {
-            'name': post.get('name'),
+            'appId': post.get('appId'),
+            'companyId': post.get('companyId'),
+            'number': post.get('number'),
             'status': post.get('status'),
         }
         if id:
@@ -99,7 +112,7 @@ def form(request):
         if returnData.get('code') == '200':
             # log记录参数
             logParam = {
-                'table': 'company',
+                'table': 'credit_config',
                 'after': param,
             }
             if id:
@@ -138,7 +151,7 @@ def stats(request):
                 for id in selection:
                     # log记录参数
                     logParam = {
-                        'table': 'company',
+                        'table': 'credit_config',
                         'after': param,
                         'tableId': id,
                     }
@@ -160,24 +173,3 @@ def stats(request):
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
-
-@csrf_exempt
-@auth  # 引用登录权限验证
-def companylist(request):
-    post = request.POST
-    returnFormat = post.get('returnFormat')
-    data = {}
-    model = Model.objects.filter(status=1).order_by("id")
-    if model:
-        for list in model:
-            data[str(list.id)] = list.name
-        returnData = {'code': '200', 'msg': '操作成功', 'data': data}
-    else:
-        returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
-
-    if returnFormat:
-        return returnData.get('data')
-    elif request.method == 'POST':
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
-    else:
-        return returnData.get('data')
