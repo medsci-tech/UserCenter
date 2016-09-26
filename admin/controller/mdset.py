@@ -42,14 +42,14 @@ def index(request):
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
     try:
-        topics = paginator.page(page)  # 获取某页对应的记录
+        list = paginator.page(page)  # 获取某页对应的记录
     except PageNotAnInteger:  # 如果页码不是个整数
-        topics = paginator.page(1)  # 取第一页的记录
+        list = paginator.page(1)  # 取第一页的记录
     except EmptyPage:  # 如果页码太大，没有相应的记录
-        topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
+        list = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
     # return HttpResponse(post)
-    return render(request, 'admin/mdset/index.html',{'topics':topics, 'ctrlList': post, 'appList': apps})
+    return render(request, 'admin/mdset/index.html',{'list':list, 'ctrlList': post, 'appList': apps})
 
 # 添加操作--protected
 def _add(**param):
