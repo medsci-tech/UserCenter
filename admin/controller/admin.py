@@ -1,16 +1,9 @@
 #_*_coding:utf-8_*_
 # 管理员管理
 __author__ = 'lxhui'
-
-from django.shortcuts import render,render_to_response,HttpResponse
+from admin.controller.common_import import * # 公共引入文件
 from admin.model.Admin import Admin
 from django.contrib.auth.hashers import make_password,check_password
-from django.core.paginator import Paginator,InvalidPage,EmptyPage,PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt
-from datetime import *
-import json
-from admin.controller.auth import *
-
 '''
 管理员列表
 '''
