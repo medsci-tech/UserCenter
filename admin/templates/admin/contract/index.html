@@ -11,10 +11,10 @@
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>
-               <select id="form-appId" name="cid" class="form-control">
+               <select id="form-cid" name="cid" class="form-control">
                     <option value="0">请选择所属企业</option>
                     {% for data in comList reversed  %}
-                        <option value="{{ data.id }}" {% ifequal data.id data.cid %} selected {%endifequal%}>{{ data.name }}</option>
+                        <option value="{{ data.id }}">{{ data.name }}</option>
                     {% endfor %}
             </select>
             </label>
@@ -53,12 +53,13 @@
                                 <th>合同编号</th>
                                 <th>合同金额</th>
                                 <th>兑换比例</th>
+                                <th>迈豆等值</th>
                                 <th>合同时间</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
-
+                        {% if list %}
                             {% for data in  list  %}
                             <tr>
                                 <td>
@@ -68,6 +69,7 @@
                                 <td>{{ data.code }}</td>
                                 <td>{{ data.amount }}</td>
                                 <td>{{ data.number }}</td>
+                                <td><button disabled="" class="btn btn-dark-green btn-xs">{% widthratio data.amount 1 data.number %}</button></td>
                                 <td>{{ data.startTime }}-{{ data.endTime }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
@@ -89,6 +91,7 @@
                                 </td>
                             </tr>
                             {% endfor %}
+                         {% endif %}
                         </tbody>
                     </table>
                     {% include 'admin/common/page.html' %}
@@ -171,7 +174,6 @@
         </div>
     </div>
 </div>
-
             <div class="modal-footer">
                 <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">关闭</a>
             </div>
@@ -184,6 +186,12 @@ $(function () {
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });
+
+    var cid = '{{ post.cid }}';
+    if(cid){
+        $('#form-cid').val(cid);
+    }
+
     /**
      * 点击添加按钮触发的操作
      */
@@ -268,29 +276,6 @@ $(function () {
             subActionAjaxForMime('post', url, data, location);
         });
         return false;
-    });
-
-    /**
-     * 查看详情
-     */
-    $('[data-form="view-model"]').click(function(){
-        var name = $(this).attr('data-name');
-        var img = $(this).attr('data-img');
-        var html = '';
-        if(img){
-            var fix = '';
-            var pattern = /^http:\/\//i;
-            var preg = pattern.test(img);
-            if(false == preg){
-                fix = 'http://' + window.location.host;
-            }
-            //html += '<img class="img-thumbnail" max-width="100%" max-height="100%"  src="' + fix + img + '">';
-        }else {
-            //html += '<p class="single-line">无数据</p>';
-        }
-
-        $('[data-toggle="form-name"]').text(name);
-        $('[data-toggle="form-img"]').html(html);
     });
 
     /**

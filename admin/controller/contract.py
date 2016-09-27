@@ -8,7 +8,7 @@ from admin.model.Company import Company
 @auth # 引用登录权限验证
 def index(request):
     post = request.POST
-    cid = post.get('cid',0)
+    cid = post.get('cid','')
     name = post.get('name','').strip()
     code = post.get('code','').strip()
     data = Contract.objects.filter(cid__icontains=cid,name__icontains=name,code__icontains=code).order_by('id')
