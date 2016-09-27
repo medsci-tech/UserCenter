@@ -11,7 +11,7 @@ def index(request):
     cid = post.get('cid',0)
     name = post.get('name','').strip()
     code = post.get('code','').strip()
-    data = Contract.objects.filter(name__icontains=name,code__icontains=code).order_by('id')
+    data = Contract.objects.filter(cid__icontains=cid,name__icontains=name,code__icontains=code).order_by('id')
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
@@ -59,34 +59,20 @@ def save(request, **param):
         except (ValueError, KeyError, TypeError):
             return HttpResponse(json.dumps({'code': 0,'msg':'json格式错误!'}), content_type="application/json")
 
-# 更改状态操作
-@csrf_exempt
+'''
+更新状态
+'''
 @auth # 引用登录权限验证
-def stats(request):
+def updateStatus(request, **param):
     post = request.POST
     selection = post.getlist('selection[]')
-    statusType = post.get('statusType')
-    if statusType == 'enable':
-        status = '1'
-    else:
-        status = '0'
-    param = {
-        'status': status,
-    }
-
     try:
-        model = Contract(**param).editByIds(selection, **param)
-        if model.get('n'):
-            if model.get('ok'):
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+        model = Contract.objects.filter(pk__in=selection).delete()
+        if model:
+            returnData = {'code':'200', 'msg': '操作成功!'}
         else:
-            returnData = {'code': '802', 'msg': '不存在的数据集', 'data': ''}
+            returnData = {'code': '0', 'msg': '操作失败!'}
     except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            returnData = {'code': '-1', 'msg': '非法请求!'}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
-
-def test(request):
-    return render(request, 'admin/common/test.html')

@@ -35,7 +35,6 @@ def handle_uploaded_file (filepath, file):
     return returnData
 
 # 上传图片
-@csrf_exempt
 def img(request):
     cfg_param = configParam(request)
     file = request.FILES.get('file')

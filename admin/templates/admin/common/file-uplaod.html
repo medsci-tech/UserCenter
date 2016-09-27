@@ -6,7 +6,7 @@
 
 <div class=" col-sm-9 col-md-9 col-lg-10">
     <div class="col-sm-5 col-md-5 col-lg-5" style="margin: 0;padding: 0">
-        <input data-toggle="upload-progressInput-{{ inputId|default:'one' }}" readonly="" class="form-control input-sm webuploader-input" type="text">
+        <input data-toggle="upload-progressInput-{{ inputId|default:'one' }}" readonly="" class="form-control input-sm webuploader-input" type="text" name="img">
     </div>
     <div id="fileupload-{{ inputId|default:'one' }}" class="webuploader-container">
         <div class="webuploader-pick">上传</div>
@@ -28,6 +28,10 @@
 /*jslint unparam: true */
 /*global window, $ */
 $(function () {
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+
     'use strict';
     var probar{{ inputId|default:'one' }} = $('#progress-{{ inputId|default:'one' }} .progress-bar');
     $('#fileupload-{{ inputId|default:'one' }} .webuploader-pick').click(function () {
