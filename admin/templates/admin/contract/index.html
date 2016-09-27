@@ -1,3 +1,4 @@
+<link rel="stylesheet" href="http://www.yyyweb.com/demo/lightbox/css/lightbox.css">
 {% extends 'admin/layouts/base.html' %}
 
 {% block content %}
@@ -80,11 +81,11 @@
                                        data-startTime="{{ data.startTime }}"
                                        data-endTime="{{ data.endTime }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
-                                    <a href="#viewModal" data-toggle="modal" data-form="view-model" class="btn btn-default btn-xs"
-                                       data-id="{{ data.id }}"
-                                       data-name="{{ data.name }}"
-                                       data-img="{{ data.img }}"
-                                    ><i class="fa fa-eye"></i> 查看</a>
+                                    {%if data.img %}
+                                    <span class="image-row">
+				                        <a class="example-image-link example-image-link btn btn-default btn-xs" href="{{ data.img }}" data-lightbox="example-1"><i class="fa fa-eye "></i> 查看合同</a>
+			                        </span>
+                                    {% endif %}
                                 </td>
                             </tr>
                             {% endfor %}
@@ -177,7 +178,7 @@
         </div>
     </div>
 </div>
-
+<script src="http://www.yyyweb.com/demo/lightbox/js/lightbox.js"></script>
 <script>
 $(function () {
     $.ajaxSetup({
@@ -262,7 +263,7 @@ $(function () {
             var data = {};
             data.selection = getDataListForMime(check);
             var url = '/admin/contract/updateStatus';
-            var location = '/contract/index';
+            var location = '/admin/contract/index';
             console.log(data);
             subActionAjaxForMime('post', url, data, location);
         });

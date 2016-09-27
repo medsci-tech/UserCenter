@@ -11,7 +11,7 @@ def index(request):
     cid = post.get('cid',0)
     name = post.get('name','').strip()
     code = post.get('code','').strip()
-    data = Contract.objects.filter(name__icontains=name,code__icontains=code).order_by('id')
+    data = Contract.objects.filter(cid__icontains=cid,name__icontains=name,code__icontains=code).order_by('id')
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
