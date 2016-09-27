@@ -13,7 +13,7 @@ from admin.model.Admin import Admin
 @csrf_exempt
 @auth  # 引用登录权限验证
 def index(request):
-    get = request.GET
+    post = request.POST
     param = {}
     admin_all_list = {}
     adminId = []
@@ -23,15 +23,15 @@ def index(request):
     adminAllList = Admin.objects.all().order_by('id')
     for ids in adminAllList:
         admin_all_list[str(ids['id'])] = ids['username']
-    table = get.get('table')
-    action = get.get('action')
-    username = get.get('username')
-    if table:
-        param.update(table=table)
+    tableId = post.get('tableId')
+    action = post.get('action')
+    adminName = post.get('adminName')
+    if tableId:
+        param.update(tableId=tableId)
     if action:
         param.update(action=action)
-    if username:
-        adminList = Admin.objects.filter(username={'$regex': username}).order_by('id')
+    if adminName:
+        adminList = Admin.objects.filter(username={'$regex': adminName}).order_by('id')
         # 将app列表的id作为积分的查询条件
         if adminList:
             for ids in adminList:
@@ -49,14 +49,14 @@ def index(request):
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
     try:
-        topics = paginator.page(page)  # 获取某页对应的记录
+        list = paginator.page(page)  # 获取某页对应的记录
     except PageNotAnInteger:  # 如果页码不是个整数
-        topics = paginator.page(1)  # 取第一页的记录
+        list = paginator.page(1)  # 取第一页的记录
     except EmptyPage:  # 如果页码太大，没有相应的记录
-        topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
+        list = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
     # return HttpResponse(dataOne['id'])
-    return render(request, 'admin/logs/index.html', {'topics': topics})
+    return render(request, 'admin/logs/index.html', {'list': list, 'ctrlList': post})
 
 
 '''

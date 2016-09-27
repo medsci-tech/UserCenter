@@ -1,0 +1,48 @@
+<div class="form-horizontal">
+    {% csrf_token %}
+    <input type="hidden" name="id" id="form-id" value="">
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">角色</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="role" id="form-role">
+                {% for key, val in c_user_role.items %}
+                    <option value="{{ key }}">{{ val }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">用户名</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="username" id="form-username"  placeholder="不可为空">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">手机号</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="phone" id="form-phone"  placeholder="不可为空">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">密码</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="password" id="form-password" placeholder="若不修改密码,请留空!">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">迈豆</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="credit1" id="form-credit1"  placeholder="数字类型">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="status" id="form-status">
+                {% for key,value in c_status.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+</div>

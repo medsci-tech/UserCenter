@@ -10,7 +10,8 @@
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>动作：
-                <select class="form-inline2" name="action" id="form-action">
+                <select class="form-inline2" name="action" id="form-searchAction">
+                    <option value="">全部</option>
                     {% for key, val in c_logs_operate.items %}
                         <option value="{{ key }}">{{ val }}</option>
                     {% endfor %}
@@ -53,7 +54,7 @@
                         </thead>
 
                         <tbody>
-                            {% for list in topics.object_list  %}
+                            {% for list in list.object_list  %}
                             <tr>
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>

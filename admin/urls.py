@@ -11,6 +11,7 @@ from admin.controller import (
     syslog,
     company,
     credit_config,
+    user,
 )
 
 urlpatterns = [
@@ -64,8 +65,13 @@ urlpatterns = [
     url(r'^company/stats', company.stats, name='company_stats'),
     url(r'^company/index', company.index, name='company'),
 
-    # 积分基础配置
+    # 迈豆池管理
     url(r'^credit_config/form', credit_config.form, name='credit_config_form'),
     url(r'^credit_config/stats', credit_config.stats, name='credit_config_stats'),
     url(r'^credit_config/index', credit_config.index, name='credit_config'),
+
+    # 用户管理
+    url(r'^user/form', user.form, name='user_form'),
+    url(r'^user/stats', user.stats, name='user_stats'),
+    url(r'^user/index', user.index, name='user'),
 ]
