@@ -220,6 +220,11 @@ var formHtmlForMime = function (list, element) {
  * @param index_url
  */
 var subActionAjaxValidateForMime = function (formId, rules, form_url, index_url) {
+    // 验证手机号
+    jQuery.validator.addMethod("phone", function(value, element) {
+        var tel = /^1[35789]\d{9}$/;
+        return this.optional(element) || (tel.test(value));
+    }, "请填写正确的11位手机号");
     $(formId).validate({
         rules:rules,
         errorClass: "help-inline",

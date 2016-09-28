@@ -103,12 +103,21 @@
     </div>
 </div>
 
-
 <script>
 $(function () {
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });
+    /* add操作处理 */
+    $('[data-form="add-model"]').click(function () {
+        if($("#id")[0]){
+            $("#id").val('');
+        }
+        //重置表单
+        $('#basic_validate')[0].reset()
+
+    })
+
     var status_url = '{% url 'admin:admin_updateStatus' %}';
     var index_url = '{% url 'admin:admin' %}';
     /**

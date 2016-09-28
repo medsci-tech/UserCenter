@@ -1,16 +1,9 @@
 #_*_coding:utf-8_*_
 # 管理员管理
 __author__ = 'lxhui'
-
-from django.shortcuts import render,render_to_response,HttpResponse
+from admin.controller.common_import import * # 公共引入文件
 from admin.model.Admin import Admin
 from django.contrib.auth.hashers import make_password,check_password
-from django.core.paginator import Paginator,InvalidPage,EmptyPage,PageNotAnInteger
-from django.views.decorators.csrf import csrf_exempt
-from datetime import *
-import json
-from admin.controller.auth import *
-
 '''
 管理员列表
 '''
@@ -54,10 +47,11 @@ def save(request, **param):
         }
         id = param.get('id',0)
         param.pop('id') # 剔除主键
-        json_str = model.checkUsername(username=param.get('username',None))
+
         try:
-            decoded = json.loads(json_str)
             if(not id): # 添加操作
+                json_str = model.checkUsername(username=param.get('username', None))
+                decoded = json.loads(json_str)
                 if(not decoded['status']): # 如果用户存在
                     return HttpResponse(json_str)
                 else:
@@ -66,6 +60,15 @@ def save(request, **param):
             else: # 更新
                 if(not post.get('pwd')): # 密码为空则不修改密码
                     param.pop('password')
+
+                '''处理用户是否存在'''
+                res = Admin.objects.get(id=id)
+                if res.username != param.get('username', None):
+                    json_str = model.checkUsername(username=param.get('username', None))
+                    decoded = json.loads(json_str)
+                    if (not decoded['status']):  # 如果用户存在
+                        return HttpResponse(json_str)
+                    
                 Admin.objects.filter(id=id).update(**param)
                 return HttpResponse(json.dumps({'status': 1, 'msg': '修改成功!'}))
         except (ValueError, KeyError, TypeError):

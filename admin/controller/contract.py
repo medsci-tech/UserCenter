@@ -49,12 +49,22 @@ def save(request, **param):
         }
         id = param.get('id',0)
         param.pop('id') # 剔除主键
+        # log记录参数
+        logParam = {
+            'table': 'contract',
+            'after': param,
+        }
         try:
             if(not id): # 添加操作
-                Contract.objects.create(**param)
+                obj = Contract.objects.create(**param)
+                logParam.update(tableId=obj.id)  # log记录参数
+                logParam.update(action=1)  # log记录参数,action=1为添加
             else: # 更新
                 Contract.objects.filter(id=id).update(**param)
+                logParam.update(tableId=id)  # log记录参数
+                logParam.update(action=2)  # log记录参数,action=2为修改
 
+            logsform(request, logParam)
             return HttpResponse(json.dumps({'code': 200, 'msg': '操作成功!'}), content_type="application/json")
         except (ValueError, KeyError, TypeError):
             return HttpResponse(json.dumps({'code': 0,'msg':'json格式错误!'}), content_type="application/json")
@@ -67,7 +77,8 @@ def updateStatus(request, **param):
     post = request.POST
     selection = post.getlist('selection[]')
     try:
-        model = Contract.objects.filter(pk__in=selection).delete()
+        model = Contract.objects.filter(pk__in=selection).delete() # 删除
+        #model = Contract.objects.filter(pk__in=selection).update(**param)
         if model:
             returnData = {'code':'200', 'msg': '操作成功!'}
         else:
