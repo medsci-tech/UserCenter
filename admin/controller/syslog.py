@@ -58,7 +58,6 @@ def index(request):
     # return HttpResponse(dataOne['id'])
     return render(request, 'admin/logs/index.html', {'list': list, 'ctrlList': post})
 
-
 '''
 添加log记录--用于controller之间的调用，外部url不能直接访问
     param = {
@@ -84,6 +83,5 @@ def logsform(request, param):
             returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
     except Exception:
         returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-
 
     return returnData

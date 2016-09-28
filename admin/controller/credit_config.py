@@ -97,7 +97,6 @@ def form(request):
         param = {
             'appId': post.get('appId'),
             'companyId': post.get('companyId'),
-            'number': post.get('number'),
             'status': post.get('status'),
         }
         if id:
@@ -106,6 +105,13 @@ def form(request):
             returnData = _editById(**param)
         else:
             # 添加
+            extend_list = {}
+            # 获取配置列表
+            cfg_param = configParam(request)
+            ext_credit_list = cfg_param.get('c_ext_credit')
+            for key in ext_credit_list:
+                extend_list[str(key)] = post.get('extend[' + key + ']', 0)
+            param.update(extend=extend_list)
             returnData = _add(**param)
 
         # 操作成功添加log操作记录
@@ -124,11 +130,50 @@ def form(request):
             if 'id' in logParam['after']:
                 del logParam['after']['id']
             logsform(request, logParam)
-
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+# 迈豆分配
+@auth  # 引用登录权限验证
+def credit(request):
+    post = request.POST
+    id = post.get('id')
+    if id:
+        try:
+            model = Model.objects.get(id=id)
+        except Exception:
+            returnData = {'code': '910', 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        extend_list = {}
+        # 获取配置列表
+        cfg_param = configParam(request)
+        ext_credit_list = cfg_param.get('c_ext_credit')
+        for key in ext_credit_list:
+            extend_list[str(key)] = int(post.get('extend[' + key + ']', 0)) + int(model['extend'][key])
+        param = {
+            'id': id,
+            'extend': extend_list,
+        }
+        returnData = _editById(**param)
+
+        # 操作成功添加log操作记录
+        if returnData.get('code') == '200':
+            # log记录参数
+            logParam = {
+                'table': 'credit_config',
+                'after': param,
+            }
+            logParam.update(tableId=id)  # log记录参数
+            logParam.update(action=2)  # log记录参数,action=2为修改
+            if 'id' in logParam['after']:
+                del logParam['after']['id']
+            logsform(request, logParam)
+    else:
+        returnData = {'code': '1000', 'msg': '参数缺失', 'data': None}
+
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
 @auth  # 引用登录权限验证
