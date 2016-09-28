@@ -23,11 +23,11 @@ def index(request):
     adminAllList = Admin.objects.all().order_by('id')
     for ids in adminAllList:
         admin_all_list[str(ids['id'])] = ids['username']
-    tableId = post.get('tableId')
+    table = post.get('table')
     action = post.get('action')
     adminName = post.get('adminName')
-    if tableId:
-        param.update(tableId=tableId)
+    if table:
+        param.update(table=table)
     if action:
         param.update(action=action)
     if adminName:
