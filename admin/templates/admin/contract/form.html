@@ -4,7 +4,7 @@
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">合作企业</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <select class="form-control" name="cid" id="form-cid" required>
+            <select class="form-control" name="cid" id="cid" required>
                 <option value="">请选择所属企业</option>
                 {% for data in comList reversed  %}
                     <option value="{{ data.id }}" {% ifequal data.id data.cid %} selected {%endifequal%}>{{ data.name }}</option>

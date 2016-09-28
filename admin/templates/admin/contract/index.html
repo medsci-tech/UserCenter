@@ -69,7 +69,7 @@
                                 <td>{{ data.code }}</td>
                                 <td>{{ data.amount }}</td>
                                 <td>{{ data.number }}</td>
-                                <td><button disabled="" class="btn btn-dark-green btn-xs">{% widthratio data.amount 1 data.number %}</button></td>
+                                <td align="center"><button disabled="" class="btn btn-dark-green btn-xs">{% widthratio data.amount 1 data.number %}</button></td>
                                 <td>{{ data.startTime }}-{{ data.endTime }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
@@ -196,14 +196,11 @@ $(function () {
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
-        var kong = '';
-        $('#form-id').val(kong);
-        $('#form-name').val(kong);
-        $('#form-number').val(kong);
-        $('#form-amount').val(kong);
-        $('#form-startTime').val(kong);
-        $('#form-endTime').val(kong);
-        $('[data-toggle="upload-progressInput-one"]').val(kong);
+        if($("#form-id")[0]){
+            $("#form-id").val('');
+        }
+        //重置表单
+        $('#contract_validate')[0].reset()
         uploadDataReset('one');
     });
     /**
@@ -220,7 +217,8 @@ $(function () {
         var startTime = $(this).attr('data-startTime');
         var endTime = $(this).attr('data-endTime');
         $('#form-id').val(id);
-        $('#form-cid').val(cid);
+        $('#cid').val(cid);
+        //$("#form-cid option[value=cid]").attr("selected", true);
         $('#form-name').val(name);
         $('#form-number').val(number);
         $('#form-code').val(code);
