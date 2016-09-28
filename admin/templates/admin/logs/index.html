@@ -18,10 +18,10 @@
                 </select>
             </label>
             <label>集合：
-                <input type="text" name="table">
+                <input type="text" name="table" value="{{ ctrlList.table }}">
             </label>
             <label>操作人：
-                <input type="text" name="adminName">
+                <input type="text" name="adminName" value="{{ ctrlList.adminName }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
         </div>
@@ -76,5 +76,16 @@
         </div>
     </div>
 </div>
+
+<script>
+$(function () {
+
+    //选中应用
+    var searchAction = '{{ ctrlList.action }}';
+    if(searchAction){
+        $('#form-searchAction').val(searchAction);
+    }
+});
+</script>
 
 {% endblock %}

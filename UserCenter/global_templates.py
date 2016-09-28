@@ -37,14 +37,7 @@ def configParam(request):
 
         # 积分策略扩展
         'c_ext_credit': {
-            'credit1': '扩展1',
-            'credit2': '扩展2',
-            'credit3': '扩展3',
-            'credit4': '扩展4',
-            'credit5': '扩展5',
-            'credit6': '扩展6',
-            'credit7': '扩展7',
-            'credit8': '扩展8',
+            'credit1': '迈豆',
         },
 
         # 系统记录操作

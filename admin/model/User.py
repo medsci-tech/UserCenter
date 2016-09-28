@@ -17,4 +17,4 @@ class User(Auth):
     password = StringField()  # 密码
     role = IntField(default=0)  # 角色
     roleName = StringField()  # 角色
-    credit1 = FloatField()  # 迈豆
+    extend = DictField()  # 扩展
