@@ -38,6 +38,7 @@ def configParam(request):
         # 积分策略扩展
         'c_ext_credit': {
             'credit1': '迈豆',
+            'credit2': '迈豆2',
         },
 
         # 系统记录操作

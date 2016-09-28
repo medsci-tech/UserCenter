@@ -96,8 +96,7 @@ def form(request):
         cfg_param = configParam(request)
         ext_credit_list = cfg_param.get('c_ext_credit')
         for key in ext_credit_list:
-            if post.get('extend[' + key + ']'):
-                extend_list[str(key)] = post.get('extend[' + key + ']')
+            extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
             'appId': post.get('appId'),
             'name': post.get('name'),
@@ -130,11 +129,10 @@ def form(request):
             if 'id' in logParam['after']:
                 del logParam['after']['id']
             logsform(request, logParam)
-
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
 @auth  # 引用登录权限验证

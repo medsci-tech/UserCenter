@@ -12,7 +12,7 @@ class CreditConfig(Auth):
     status = IntField(default=1)
     statusName = StringField()  # 不要删
 
-    companyId = StringField()  # 策略名称
+    companyId = StringField()  # 企业名称
     appId = StringField()  # 应用
-    appName = StringField()  # 扩展字段名称
-    number = IntField(default=0)  # 周期
+    appName = StringField()  # 应用名称
+    extend = DictField()  # 扩展

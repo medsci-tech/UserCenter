@@ -61,13 +61,13 @@
                                 <td>{{ list.cycleName }}</td>
                                 <td>{{ list.rewardNum }}</td>
                                 {% for key, val in c_ext_credit.items %}
-                                    <th>
+                                    <td>
                                     {% for k, v in list.extend.items %}
                                         {% if key == k %}
                                             {{ v }}
                                         {% endif %}
                                     {% endfor %}
-                                    </th>
+                                    </td>
                                 {% endfor %}
                                 <td>{{ list.statusName }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
