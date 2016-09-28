@@ -99,12 +99,18 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
+        extend_list = {}
+        # 获取配置列表
+        cfg_param = configParam(request)
+        ext_credit_list = cfg_param.get('c_ext_credit')
+        for key in ext_credit_list:
+            extend_list[str(key)] = post.get('extend[' + key + ']')
         param = {
             'username': post.get('username'),
             'phone': post.get('phone'),
             'password': post.get('password'),
             'role': post.get('role'),
-            'credit1': post.get('credit1'),
+            'extend': extend_list,
             'status': post.get('status'),
         }
         if id:

@@ -47,7 +47,9 @@
                                 <th>角色</th>
                                 <th>用户名</th>
                                 <th>手机号</th>
-                                <th>迈豆</th>
+                                {% for key, val in c_ext_credit.items %}
+                                    <th>{{ val }}</th>
+                                {% endfor %}
                                 <th>状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
@@ -62,7 +64,15 @@
                                 <td>{{ list.roleName }}</td>
                                 <td>{{ list.username }}</td>
                                 <td>{{ list.phone }}</td>
-                                <td>{{ list.credit1 }}</td>
+                                {% for key, val in c_ext_credit.items %}
+                                    <td>
+                                    {% for k, v in list.extend.items %}
+                                        {% if key == k %}
+                                            {{ v }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </td>
+                                {% endfor %}
                                 <td>{{ list.statusName }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
@@ -71,7 +81,9 @@
                                        data-role="{{ list.role }}"
                                        data-username="{{ list.username }}"
                                        data-phone="{{ list.phone }}"
-                                       data-credit1="{{ list.credit1 }}"
+                                       {% for key, val in list.extend.items %}
+                                       data-{{ key }}="{{ val }}"
+                                       {% endfor %}
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
@@ -116,6 +128,17 @@ $(function () {
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
     });
 
+    //选中应用
+    var searchRole = '{{ ctrlList.role }}';
+    if(searchRole){
+        $('#form-searchRole').val(searchRole);
+    }
+
+    var credit_full_list = [];
+    {% for key, val in c_ext_credit.items %}
+        credit_full_list['{{ key }}'] = '{{ val }}';
+    {% endfor %}
+
     /**
      * 点击添加按钮触发的操作
      */
@@ -128,8 +151,10 @@ $(function () {
         $('#form-id').val(kong);
         $('#form-username').val(kong);
         $('#form-phone').val(kong);
-        $('#form-credit1').val(kong);
         $('#form-status').val(1);
+        for(var i in credit_full_list){
+            $('#form-' + i).val(kong);
+        }
     });
     /**
      * 点击修改按钮触发的操作
@@ -139,14 +164,15 @@ $(function () {
         var role = $(this).attr('data-role');
         var username = $(this).attr('data-username');
         var phone = $(this).attr('data-phone');
-        var credit1 = $(this).attr('data-credit1');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
         $('#form-role').val(role);
         $('#form-username').val(username);
         $('#form-phone').val(phone);
-        $('#form-credit1').val(credit1);
         $('#form-status').val(status);
+        for(var i in credit_full_list){
+            $('#form-' + i).val($(this).attr('data-' + i));
+        }
     });
     /**
      * 表单验证提交按钮触发的操作
@@ -158,11 +184,13 @@ $(function () {
         phone:{
             required:true,
             phone:true
-        },
-        credit1:{
-            required:true,
-            number:true
         }
+        {% for key in c_ext_credit %}
+            ,'extend[{{ key }}]':{
+                required:true,
+                number:true
+            }
+        {% endfor %}
     };
     subActionAjaxValidateForMime('#user_form_validate', rules, form_url, index_url);
 

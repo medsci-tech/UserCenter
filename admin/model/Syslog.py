@@ -8,6 +8,7 @@ class Syslog(Auth):
         'indexes': [],
     }
     createTime = DateTimeField(default=datetime.now())
+    table = StringField()  # 操作集合
     tableId = StringField()  # 操作集合主键对应的id
     action = IntField()  # 动作
     actionName = StringField()  # 动作

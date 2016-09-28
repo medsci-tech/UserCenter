@@ -6,7 +6,6 @@ from admin.controller import (
     mdset,
     upload,
     app,
-    credit,
     credit_rule,
     syslog,
     company,
@@ -45,12 +44,6 @@ urlpatterns = [
     url(r'^app/stats', app.stats, name='app_stats'),
     url(r'^app/applist', app.applist, name='app_applist'),
     url(r'^app/index', app.index, name='app'),
-
-    # 积分基础配置
-    url(r'^credit/form', credit.form, name='credit_form'),
-    url(r'^credit/stats', credit.stats, name='credit_stats'),
-    url(r'^credit/creditlist', credit.creditlist, name='credit_creditlist'),
-    url(r'^credit/index', credit.index, name='credit'),
 
     # 积分策略配置
     url(r'^credit_rule/form', credit_rule.form, name='credit_rule_form'),
