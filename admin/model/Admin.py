@@ -17,7 +17,7 @@ class Admin(Auth):
 
     # 用户唯一验证数据
     def checkUsername(self, **kwargs):
-        if Admin.objects.filter(username=kwargs):
+        if Admin.objects.filter(**kwargs):
             response = {'status':0, 'msg': u'该用户已存在!'}
             return json.dumps(response)
         else:

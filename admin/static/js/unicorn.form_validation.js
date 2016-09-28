@@ -78,6 +78,9 @@ var ajaxFun = function (para,url) {
 			}
 		},
 		complete: function(XMLHttpRequest, textStatus){
+			if($("#id")[0]){
+				//$("#id").remove();
+			}
 		}
 	});
 }

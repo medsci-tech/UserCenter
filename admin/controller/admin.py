@@ -47,10 +47,11 @@ def save(request, **param):
         }
         id = param.get('id',0)
         param.pop('id') # 剔除主键
-        json_str = model.checkUsername(username=param.get('username',None))
+
         try:
-            decoded = json.loads(json_str)
             if(not id): # 添加操作
+                json_str = model.checkUsername(username=param.get('username', None))
+                decoded = json.loads(json_str)
                 if(not decoded['status']): # 如果用户存在
                     return HttpResponse(json_str)
                 else:
@@ -59,6 +60,15 @@ def save(request, **param):
             else: # 更新
                 if(not post.get('pwd')): # 密码为空则不修改密码
                     param.pop('password')
+
+                '''处理用户是否存在'''
+                res = Admin.objects.get(id=id)
+                if res.username != param.get('username', None):
+                    json_str = model.checkUsername(username=param.get('username', None))
+                    decoded = json.loads(json_str)
+                    if (not decoded['status']):  # 如果用户存在
+                        return HttpResponse(json_str)
+                    
                 Admin.objects.filter(id=id).update(**param)
                 return HttpResponse(json.dumps({'status': 1, 'msg': '修改成功!'}))
         except (ValueError, KeyError, TypeError):
