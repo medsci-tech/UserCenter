@@ -5,9 +5,7 @@
 from admin.controller.common_import import *
 
 from admin.model.CreditRule import CreditRule
-from admin.model.Credit import Credit
 from admin.controller.app import applist
-from admin.controller.credit import creditlist
 
 '''
 迈豆积分列表
@@ -28,7 +26,7 @@ def index(request):
     if searchAppId:
         param.update(appId=searchAppId)
     else:
-        dataOne = Credit.objects.filter(appId__in=app_list.keys()).order_by('id')[:1]  # 获取第一条数据
+        dataOne = CreditRule.objects.filter(appId__in=app_list.keys()).order_by('id')[:1]  # 获取第一条数据
         if dataOne:
             param.update(appId=dataOne[0]['appId'])
             selectData = dataOne[0]
@@ -48,17 +46,11 @@ def index(request):
     except EmptyPage:  # 如果页码太大，没有相应的记录
         list = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    # 获取所有启用扩展列表
-    post = {'appId': selectData['appId']}
-    request.POST = post
-    credit_list = creditlist(request)
-
     # return HttpResponse(credit_list)
     return render(request, 'admin/credit_rule/index.html', {
         'list': list,
         'ctrlList': selectData,
         'appList': app_list,
-        'creditList': credit_list,
     })
 
 # 添加操作--protected

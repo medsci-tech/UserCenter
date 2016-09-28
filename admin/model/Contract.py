@@ -15,3 +15,4 @@ class Contract(Auth):
     img = StringField()
     startTime = StringField()
     endTime = StringField()
+    status = IntField(default=1)

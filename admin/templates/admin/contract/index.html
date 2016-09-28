@@ -26,8 +26,8 @@
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
-{#            <button class="btn btn-success" data-form="enable">启用</button>#}
-            <button class="btn btn-warning" data-form="disable">删除</button>
+            <button class="btn btn-success" data-form="enable" name="data-form" status="1">启用</button>
+            <button class="btn btn-warning" data-form="disable" name="data-form" status="0">禁用</button>
         </div>
         </form>
     </div>
@@ -55,6 +55,7 @@
                                 <th>兑换比例</th>
                                 <th>迈豆等值</th>
                                 <th>合同时间</th>
+                                <th>状态</th>
                                 <th>操作</th>
                             </tr>
                         </thead>
@@ -69,13 +70,21 @@
                                 <td>{{ data.code }}</td>
                                 <td>{{ data.amount }}</td>
                                 <td>{{ data.number }}</td>
-                                <td><button disabled="" class="btn btn-dark-green btn-xs">{% widthratio data.amount 1 data.number %}</button></td>
+                                <td align="center"><button disabled="" class="btn btn-dark-green btn-xs">{% widthratio data.amount 1 data.number %}</button></td>
                                 <td>{{ data.startTime }}-{{ data.endTime }}</td>
+                                <td align="center">
+                                	{% ifequal data.status 1 %}
+                        	 		<button class="btn btn-info btn-xs">启用</button>
+									{% else %}
+								    	<button class="btn btn-warning btn-xs">禁用</button>
+									{% endifequal %}
+                                </td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
                                        data-cid="{{ data.cid }}"
                                        data-name="{{ data.name }}"
+                                       data-status="{{ data.status }}"
                                        data-code="{{ data.code }}"
                                        data-number="{{ data.number }}"
                                        data-amount="{{ data.amount }}"
@@ -196,14 +205,11 @@ $(function () {
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
-        var kong = '';
-        $('#form-id').val(kong);
-        $('#form-name').val(kong);
-        $('#form-number').val(kong);
-        $('#form-amount').val(kong);
-        $('#form-startTime').val(kong);
-        $('#form-endTime').val(kong);
-        $('[data-toggle="upload-progressInput-one"]').val(kong);
+        if($("#form-id")[0]){
+            $("#form-id").val('');
+        }
+        //重置表单
+        $('#contract_validate')[0].reset()
         uploadDataReset('one');
     });
     /**
@@ -219,8 +225,10 @@ $(function () {
         var img = $(this).attr('data-img');
         var startTime = $(this).attr('data-startTime');
         var endTime = $(this).attr('data-endTime');
+        var status = $(this).attr('data-status');
         $('#form-id').val(id);
-        $('#form-cid').val(cid);
+        $('#cid').val(cid);
+        //$("#form-cid option[value=cid]").attr("selected", true);
         $('#form-name').val(name);
         $('#form-number').val(number);
         $('#form-code').val(code);
@@ -228,6 +236,9 @@ $(function () {
         $('[data-toggle="upload-progressInput-one"]').val(img);
         $('#form-startTime').val(startTime);
         $('#form-endTime').val(endTime);
+        $("input[type=radio][name=status][value="+status+"]").parent('div').addClass('checked');
+        $("input[type=radio][name=status][value="+status+"]").parent().parent().siblings().find('div').removeClass('checked')
+
         uploadDataReset('one');
     });
     /**
@@ -250,17 +261,18 @@ $(function () {
     });
 
     /**
-     * 删除
+     * 禁用/启用
      */
-    $('[data-form="disable"]').click(function() {
+    $("button[name='data-form']").click(function() {
         /*判断是否有选中*/
         var check = $('#data-list-form').find('input[data-form="check-model"]');
-        var verifyChecked = verifyCheckedForMime(check);
-        if(false == verifyChecked){
+        var verify = verifyChecked(check);
+        var status = $(this).attr('status');
+        if(false == verify){
             return false;
         }
         swal({
-            title: "您确定要删除选中的信息吗?",
+            title: "您确定要操作选中的信息吗?",
             type: "warning",
             showCancelButton: true,
             cancelButtonText: '取消',
@@ -270,6 +282,7 @@ $(function () {
         }, function () {
             var data = {};
             data.selection = getDataListForMime(check);
+            data.status = status;
             var url = '/admin/contract/updateStatus';
             var location = '/admin/contract/index';
             console.log(data);

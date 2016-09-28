@@ -43,7 +43,7 @@ def save(request, **param):
             'password': make_password(post.get('pwd', '123456'), None, 'pbkdf2_sha256'), # 加密,
             'nickname':post.get('nickname', None),  # 昵称
             'email': post.get('email'),  # 邮箱
-            'status': post.get('status', 1)  # 状态
+            'status': post.get('status')  # 状态
         }
         id = param.get('id',0)
         param.pop('id') # 剔除主键

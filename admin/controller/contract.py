@@ -46,6 +46,7 @@ def save(request, **param):
             'img': post.get('img'),# 合同照片
             'startTime': post.get('startTime'),# 合同有效期
             'endTime': post.get('endTime'),# 合同截止日期
+            'status': post.get('status')  # 状态
         }
         id = param.get('id',0)
         param.pop('id') # 剔除主键
@@ -76,9 +77,13 @@ def save(request, **param):
 def updateStatus(request, **param):
     post = request.POST
     selection = post.getlist('selection[]')
+    status = post.get('status')
+    param = {
+        'status': status,
+    }
     try:
-        model = Contract.objects.filter(pk__in=selection).delete() # 删除
-        #model = Contract.objects.filter(pk__in=selection).update(**param)
+        #model = Contract.objects.filter(pk__in=selection).delete() # 删除
+        model = Contract.objects.filter(pk__in=selection).update(**param)
         if model:
             returnData = {'code':'200', 'msg': '操作成功!'}
         else:
