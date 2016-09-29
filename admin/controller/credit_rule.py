@@ -31,11 +31,6 @@ def index(request):
             param.update(appId=dataOne[0]['appId'])
             selectData = dataOne[0]
     data = CreditRule.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-    # 增强文字可读性
-    if data:
-        for val in data:
-            val.update(statusName=status_list.get(val['status']))
-            val.update(cycleName=cycle_list.get(val['cycle']))
     limit = cfg_param.get('c_page')  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码
