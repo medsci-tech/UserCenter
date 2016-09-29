@@ -13,7 +13,6 @@ class CreditRule(Auth):
     statusName = StringField()  # 不要删
 
     name = StringField()  # 策略名称
-    creditName = StringField()  # 扩展字段名称
     cycle = IntField(default=0)  # 周期
     cycleName = StringField()  # 周期名称 不要删
     rewardNum = IntField(default=0)  # 周期内最多奖励次数

@@ -19,7 +19,7 @@ def index(request):
     status_list = cfg_param.get('c_status')
     searchName = post.get('name')
     if searchName:
-        param.update(name={'$reg':searchName})
+        param.update(name={'$regex': searchName})
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
     # 增强文字可读性
     if data:
@@ -111,11 +111,10 @@ def form(request):
             if 'id' in logParam['after']:
                 del logParam['after']['id']
             logsform(request, logParam)
-
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
 @auth  # 引用登录权限验证

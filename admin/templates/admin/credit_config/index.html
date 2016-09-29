@@ -41,7 +41,9 @@
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
                                 <th>应用</th>
-                                <th>迈豆数</th>
+                                {% for key, val in c_ext_credit.items %}
+                                    <th>{{ val }}</th>
+                                {% endfor %}
                                 <th>状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
@@ -54,7 +56,15 @@
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
                                 <td>{{ list.appName }}</td>
-                                <td>{{ list.number }}</td>
+                                {% for key, val in c_ext_credit.items %}
+                                    <td>
+                                    {% for k, v in list.extend.items %}
+                                        {% if key == k %}
+                                            {{ v }}
+                                        {% endif %}
+                                    {% endfor %}
+                                    </td>
+                                {% endfor %}
                                 <td>{{ list.statusName }}</td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
@@ -62,9 +72,11 @@
                                        data-id="{{ list.id }}"
                                        data-appId="{{ list.appId }}"
                                        data-companyId="{{ list.companyId }}"
-                                       data-number="{{ list.number }}"
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
+                                    <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                    ><i class="fa fa-edit"></i> 迈豆分配</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -88,7 +100,26 @@
                 {% include 'admin/credit_config/form.html' %}
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary btn-small" id="form-submit">确定</button>
+                <button class="btn btn-primary btn-small" >确定</button>
+                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+<div id="extendModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>迈豆分配</h3>
+            </div>
+            <form id="credit_config_extend_validate" novalidate="novalidate">
+            <div class="modal-body">
+                {% include 'admin/credit_config/extend.html' %}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-small">确定</button>
                 <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
             </div>
             </form>
@@ -96,16 +127,20 @@
     </div>
 </div>
 
-
 <script>
 $(function () {
     var stats_url = '{% url 'admin:credit_config_stats' %}';
     var form_url = '{% url 'admin:credit_config_form' %}';
+    var credit_url = '{% url 'admin:credit_config_credit' %}';
     var index_url = window.location.href;
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
     });
-
+    // get all credit
+    var credit_full_list = [];
+    {% for key, val in c_ext_credit.items %}
+        credit_full_list['{{ key }}'] = '{{ val }}';
+    {% endfor %}
     //选中应用
     var searchCompanyId = '{{ ctrlList.companyId }}';
     if(searchCompanyId){
@@ -126,6 +161,7 @@ $(function () {
         $('#form-id').val(kong);
         $('#form-number').val(kong);
         $('#form-status').val(1);
+        formHtmlForMime(credit_full_list, '#form-extend-list');
     });
     /**
      * 点击修改按钮触发的操作
@@ -134,24 +170,33 @@ $(function () {
         var id = $(this).attr('data-id');
         var appId = $(this).attr('data-appId');
         var companyId = $(this).attr('data-companyId');
-        var number = $(this).attr('data-number');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
         $('#form-appId').val(appId);
         $('#form-companyId').val(companyId);
-        $('#form-number').val(number);
         $('#form-status').val(status);
+        formHtmlForMime([], '#form-extend-list');
+    });
+    /**
+     * 点击修改按钮触发的操作
+     */
+    $('[data-form="edit-extend-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        $('#extend-id').val(id);
     });
     /**
      * 表单验证提交按钮触发的操作
      */
     var rules = {
-        number:{
-            required:true,
-            number:true
-        }
+        {% for key in c_ext_credit %}
+            'extend[{{ key }}]':{
+                required:true,
+                number:true
+            },
+        {% endfor %}
     };
     subActionAjaxValidateForMime('#credit_config_form_validate', rules, form_url, index_url);
+    subActionAjaxValidateForMime('#credit_config_extend_validate', rules, credit_url, index_url);
 
     /**
      * 启用

@@ -103,11 +103,10 @@ def form(request):
             if 'id' in logParam['after']:
                 del logParam['after']['id']
             logsform(request, logParam)
-
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
 @auth  # 引用登录权限验证
