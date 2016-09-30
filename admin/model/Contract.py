@@ -10,8 +10,9 @@ class Contract(Auth):
     cid = StringField()
     name = StringField()
     code = StringField()
-    number = StringField()
-    amount = StringField()
+    number = FloatField()
+    credit1 = FloatField(default=0)  # 已分配迈豆列表
+    amount = FloatField()
     img = StringField()
     startTime = StringField()
     endTime = StringField()

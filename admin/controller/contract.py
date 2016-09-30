@@ -1,9 +1,13 @@
 # coding:utf-8
 # 管理员管理
 __author__ = 'lxhui'
-from admin.controller.common_import import * # 公共引入文件
+from admin.controller.common_import import *  # 公共引入文件
 from admin.model.Contract import Contract
 from admin.model.Company import Company
+from admin.model.App import App
+from admin.model.CreditConfig import CreditConfig
+from admin.model.CreditLog import CreditLog
+
 @csrf_exempt
 @auth # 引用登录权限验证
 def index(request):
@@ -26,7 +30,8 @@ def index(request):
 
     '''企业信息'''
     comList = Company.objects.filter(status=1).order_by("id")
-    return render(request, 'admin/contract/index.html',{'list':list, 'post': post, 'comList': comList})
+    appList = App.objects.filter(status=1).order_by("id")
+    return render(request, 'admin/contract/index.html',{'list':list, 'post': post, 'comList': comList, 'appList': appList})
 
 
 '''
@@ -90,5 +95,73 @@ def updateStatus(request, **param):
             returnData = {'code': '0', 'msg': '操作失败!'}
     except Exception:
             returnData = {'code': '-1', 'msg': '非法请求!'}
+
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+# 迈豆分配
+@auth  # 引用登录权限验证
+def credit(request):
+    post = request.POST
+    id = post.get('id')
+    companyId = post.get('companyId')
+    appId = post.get('appId')
+    post_credit = int(post.get('credit1'))
+    if id and companyId and appId:
+        try:
+            contractGet = Contract.objects.get(id=id)
+            credit_poor = contractGet['number'] * contractGet['amount'] - contractGet['credit1']
+        except Exception:
+            returnData = {'code': '910', 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        # return HttpResponse(credit_poor)
+        if credit_poor > post_credit:
+            try:
+                modelCreditConfig = CreditConfig.objects.get(companyId=companyId, appId=appId)
+            except Exception:
+                returnData = {'code': '912', 'msg': '找不到对应的应用平台信息', 'data': ''}
+                return HttpResponse(json.dumps(returnData), content_type="application/json")
+        else:
+            returnData = {'code': '911', 'msg': '分配迈豆超出额度', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        extend_list = modelCreditConfig['extend']
+        # 获取配置列表
+        model_credit = modelCreditConfig['extend']['credit1']
+        if model_credit:
+            model_credit_int = int(model_credit)
+        else:
+            model_credit_int = 0
+        if post_credit > 0:
+            post_credit_int = post_credit
+        else:
+            post_credit_int = 0
+        extend_list['credit1'] = model_credit_int + post_credit_int
+        param = {
+            'extend': extend_list,
+        }
+        contractCredit1 = int(contractGet['credit1']) + post_credit_int
+        try:
+            modelContract = Contract.objects.get(id=contractGet['id']).update(credit1=contractCredit1)
+            modelCreditConfigSave = CreditConfig.objects.get(id=modelCreditConfig['id']).update(**param)
+            if modelCreditConfigSave == 1:
+                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+            else:
+                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+        except Exception:
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+
+        # 操作成功添加log操作记录
+        if returnData.get('code') == '200':
+            # log记录参数
+            logParam = {
+                'contractId': str(contractGet['id']),
+                'appId': appId,
+                'credit1': post_credit_int,
+            }
+            try:
+                CreditLog.objects.create(**logParam)
+            except Exception:
+                pass
+    else:
+        returnData = {'code': '1000', 'msg': '参数缺失', 'data': None}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")

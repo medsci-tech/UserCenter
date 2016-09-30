@@ -11,7 +11,7 @@
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>
-               <select id="form-cid" name="cid" class="form-control">
+               <select id="form-cid" name="cid" class="form-inline2">
                     <option value="" selected>请选择所属企业</option>
                     {% for data in comList reversed  %}
                         <option value="{{ data.id }}">{{ data.name }}</option>
@@ -72,12 +72,12 @@
                                 <td>{{ data.number }}</td>
                                 <td align="center"><button disabled="" class="btn btn-dark-green btn-xs">{% widthratio data.amount 1 data.number %}</button></td>
                                 <td>{{ data.startTime }}-{{ data.endTime }}</td>
-                                <td align="center">
-                                	{% ifequal data.status 1 %}
-                        	 		<button class="btn btn-info btn-xs">启用</button>
-									{% else %}
-								    	<button class="btn btn-warning btn-xs">禁用</button>
-									{% endifequal %}
+                                <td>
+                                    {% for key, val in c_status.items %}
+                                        {% if key == data.status %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
                                 </td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
@@ -92,6 +92,16 @@
                                        data-startTime="{{ data.startTime }}"
                                        data-endTime="{{ data.endTime }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
+                                    <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"
+                                       data-id="{{ data.id }}"
+                                       data-cid="{{ data.cid }}"
+                                       data-number="{{ data.number }}"
+                                       data-amount="{{ data.amount }}"
+                                       data-credit1="{{ data.credit1 }}"
+                                       data-startTime="{{ data.startTime }}"
+                                       data-endTime="{{ data.endTime }}"
+                                    ><i class="fa fa-edit"></i> 迈豆分配</a>
+
                                     {%if data.img %}
                                     <span class="image-row">
 				                        <a class="example-image-link example-image-link btn btn-default btn-xs" href="{{ data.img }}" data-lightbox="example-1"><i class="fa fa-eye "></i> 查看合同</a>
@@ -122,73 +132,28 @@
         </div>
     </div>
 </div>
-<div id="viewModal" class="modal fade">
-    <div class="modal-dialog modal-lg">
+
+<div id="extendModal" class="modal fade">
+    <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>查看迈豆规则列表</h3>
+                <h3>迈豆分配</h3>
+                <span>可分配总额度：<label data-extend="credit" class="label label-danger">40</label></span>
             </div>
+            <form id="credit_config_extend_validate" novalidate="novalidate">
             <div class="modal-body">
-                <div class="form-group">
-                    <p data-toggle="form-name"></p>
-                </div>
-                <div align="center" data-toggle="form-img"></div>
+                {% include 'admin/contract/extend.html' %}
             </div>
             <div class="modal-footer">
-                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">关闭</a>
+                <button class="btn btn-primary btn-small">确定</button>
+                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
 
-
-
-<div id="viewModal2" class="modal fade">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>迈豆发放</h3>
-            </div>
-<div class="form-horizontal">
-    {% csrf_token %}
-    <input type="hidden" name="id" id="form-id" value="">
-    <div class="form-group">
-        <label class="col-sm-3 col-md-3 col-lg-2 control-label">应用平台</label>
-        <div class="col-sm-9 col-md-9 col-lg-10">
-            <select class="form-control" name="appId" id="form-appId">
-                {% for key, val in appList.items %}
-                    <option value="{{ key }}">{{ val }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 col-md-3 col-lg-2 control-label">迈豆值</label>
-        <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="initNum" id="form-initNum" placeholder="数字类型，不可为空">
-        </div>
-    </div>
-
-    <div class="form-group">
-        <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
-        <div class="col-sm-9 col-md-9 col-lg-10">
-            <select class="form-control" name="status" id="form-status">
-                {% for key,value in c_status.items %}
-                    <option value="{{ key }}">{{ value }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
-</div>
-            <div class="modal-footer">
-                <a data-dismiss="modal" class="btn btn-default btn-small" href="javascript:;">关闭</a>
-            </div>
-        </div>
-    </div>
-</div>
 <script src="http://www.yyyweb.com/demo/lightbox/js/lightbox.js"></script>
 <script>
 $(function () {
@@ -295,13 +260,13 @@ $(function () {
      * 日期插件
      */
     $('#form-startTime').datepicker({
-        dateFormat: "yy-mm-dd",
+        dateFormat: "yy/mm/dd",
 		onClose: function( selectedDate ) {
 			$( "#form-endTime" ).datepicker( "option", "minDate", selectedDate );
 		}
 	});
 	$('#form-endTime').datepicker({
-        dateFormat: "yy-mm-dd",
+        dateFormat: "yy/mm/dd",
 		onClose: function( selectedDate ) {
 			$( "#form-startTime" ).datepicker( "option", "maxDate", selectedDate );
 		}

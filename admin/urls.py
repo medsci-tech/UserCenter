@@ -29,6 +29,7 @@ urlpatterns = [
     # 合同
     url(r'^contract/save', contract.save, name='contract_save'),# 保存合同
     url(r'^contract/updateStatus', contract.updateStatus, name='contract_updateStatus'),
+    url(r'^contract/credit', contract.credit, name='contract_credit'),
     url(r'^contract/index', contract.index, name='contract'), # 合同列表
 
     # 迈豆兑换
@@ -60,7 +61,6 @@ urlpatterns = [
 
     # 迈豆池管理
     url(r'^credit_config/form', credit_config.form, name='credit_config_form'),
-    url(r'^credit_config/credit', credit_config.credit, name='credit_config_credit'),
     url(r'^credit_config/stats', credit_config.stats, name='credit_config_stats'),
     url(r'^credit_config/index', credit_config.index, name='credit_config'),
 
