@@ -3,7 +3,6 @@ from admin.controller import (
     admin,
     accounts,
     contract,
-    mdset,
     upload,
     app,
     credit_rule,
@@ -31,11 +30,6 @@ urlpatterns = [
     url(r'^contract/updateStatus', contract.updateStatus, name='contract_updateStatus'),
     url(r'^contract/credit', contract.credit, name='contract_credit'),
     url(r'^contract/index', contract.index, name='contract'), # 合同列表
-
-    # 迈豆兑换
-    url(r'^mdset/form', mdset.form, name='mdset_form'),
-    url(r'^mdset/stats', mdset.stats, name='mdset_stats'),
-    url(r'^mdset/index', mdset.index, name='mdset'),
 
     # 文件上传
     url(r'^upload/img', upload.img, name='upload_img'),
