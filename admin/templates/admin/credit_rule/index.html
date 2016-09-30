@@ -10,7 +10,7 @@
         <form action="" method="get">
         <div class="col-xs-12 center">
             <label>应用名称：
-                <select class="form-control" name="appId" id="form-searchAppId">
+                <select class="form-inline2" name="appId" id="form-searchAppId">
                     {% for key, val in appList.items %}
                         <option value="{{ key }}">{{ val }}</option>
                     {% endfor %}
@@ -58,7 +58,13 @@
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
                                 <td>{{ list.name }}</td>
-                                <td>{{ list.cycleName }}</td>
+                                <td>
+                                    {% for key, val in c_cycle.items %}
+                                        {% if key == list.cycle %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ list.rewardNum }}</td>
                                 {% for key, val in c_ext_credit.items %}
                                     <td>
@@ -69,7 +75,13 @@
                                     {% endfor %}
                                     </td>
                                 {% endfor %}
-                                <td>{{ list.statusName }}</td>
+                                <td>
+                                    {% for key, val in c_status.items %}
+                                        {% if key == list.status %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
@@ -184,17 +196,14 @@ $(function () {
      * 表单验证提交按钮触发的操作
      */
     var rules = {
-        required:true,
         name:{
             required:true
         },
         rewardNum:{
-            required:true,
             number:true
         }
         {% for key in c_ext_credit %}
             ,'extend[{{ key }}]':{
-                required:true,
                 number:true
             }
         {% endfor %}

@@ -16,15 +16,11 @@ def index(request):
     param = {}
     # 获取配置列表
     cfg_param = configParam(request)
-    status_list = cfg_param.get('c_status')
     searchName = post.get('name')
     if searchName:
         param.update(name={'$regex': searchName})
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-    # 增强文字可读性
-    if data:
-        for val in data:
-            val.update(statusName=status_list.get(val['status']))
+
     limit = cfg_param.get('c_page')  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码

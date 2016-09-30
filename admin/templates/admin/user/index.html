@@ -61,7 +61,13 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.roleName }}</td>
+                                <td>
+                                    {% for key, val in c_user_role.items %}
+                                        {% if key == list.role %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ list.username }}</td>
                                 <td>{{ list.phone }}</td>
                                 {% for key, val in c_ext_credit.items %}
@@ -73,7 +79,13 @@
                                     {% endfor %}
                                     </td>
                                 {% endfor %}
-                                <td>{{ list.statusName }}</td>
+                                <td>
+                                    {% for key, val in c_status.items %}
+                                        {% if key == list.status %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"

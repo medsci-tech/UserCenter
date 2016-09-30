@@ -13,15 +13,11 @@ def index(request):
     param = {}
     # 获取所有状态列表
     cfg_param = configParam(request)
-    status_list = cfg_param.get('c_status')
     if request.method == "POST":
         name = post.get('name').strip()
         if name:
             param.update(name={'$regex': name})
     data = App.objects.filter(**param).order_by("id")
-    # 增强文字可读性
-    for val in data:
-        val.update(statusName=status_list.get(val['status']))
     limit = 20  # 每页显示的记录数
     paginator = Paginator(data, limit)  # 实例化一个分页对象
     page = request.GET.get('page')  # 获取页码

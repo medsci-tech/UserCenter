@@ -2,11 +2,12 @@
 # 公共引入文件
 from admin.model.Common_import import *
 
-class Company(Auth):
+class CreditLog(Auth):
     meta = Document.meta = {
-            'collection': settings.MONGODB_PREFIX+'company',
+            'collection': settings.MONGODB_PREFIX+'credit_log',
             'indexes': [],
             }
     createTime = DateTimeField(default=datetime.now())
-    status = IntField(default=1)
-    name = StringField()  # 企业名称
+    contractId = StringField()
+    appId = StringField()
+    credit1 = FloatField(default=0)  # 已分配迈豆列表
