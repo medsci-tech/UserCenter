@@ -10,7 +10,7 @@
         <form action="" method="get">
         <div class="col-xs-12 center">
             <label>企业名称：
-                <select class="form-control" name="companyId" id="form-searchCompanyId">
+                <select class="form-inline2" name="companyId" id="form-searchCompanyId">
                     {% for key, val in companyList.items %}
                         <option value="{{ key }}">{{ val }}</option>
                     {% endfor %}
@@ -72,11 +72,11 @@
                                        data-id="{{ list.id }}"
                                        data-appId="{{ list.appId }}"
                                        data-companyId="{{ list.companyId }}"
+                                       {% for key, val in list.extend.items %}
+                                       data-{{ key }}="{{ val }}"
+                                       {% endfor %}
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
-                                    <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"
-                                       data-id="{{ list.id }}"
-                                    ><i class="fa fa-edit"></i> 迈豆分配</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -107,31 +107,11 @@
         </div>
     </div>
 </div>
-<div id="extendModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>迈豆分配</h3>
-            </div>
-            <form id="credit_config_extend_validate" novalidate="novalidate">
-            <div class="modal-body">
-                {% include 'admin/credit_config/extend.html' %}
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary btn-small">确定</button>
-                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <script>
 $(function () {
     var stats_url = '{% url 'admin:credit_config_stats' %}';
     var form_url = '{% url 'admin:credit_config_form' %}';
-    var credit_url = '{% url 'admin:credit_config_credit' %}';
     var index_url = window.location.href;
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
@@ -161,7 +141,9 @@ $(function () {
         $('#form-id').val(kong);
         $('#form-number').val(kong);
         $('#form-status').val(1);
-        formHtmlForMime(credit_full_list, '#form-extend-list');
+        for(var i in credit_full_list){
+            $('#form-' + i).val(kong);
+        }
     });
     /**
      * 点击修改按钮触发的操作
@@ -175,14 +157,9 @@ $(function () {
         $('#form-appId').val(appId);
         $('#form-companyId').val(companyId);
         $('#form-status').val(status);
-        formHtmlForMime([], '#form-extend-list');
-    });
-    /**
-     * 点击修改按钮触发的操作
-     */
-    $('[data-form="edit-extend-model"]').click(function () {
-        var id = $(this).attr('data-id');
-        $('#extend-id').val(id);
+        for(var i in credit_full_list){
+            $('#form-' + i).val($(this).attr('data-' + i));
+        }
     });
     /**
      * 表单验证提交按钮触发的操作
@@ -190,13 +167,11 @@ $(function () {
     var rules = {
         {% for key in c_ext_credit %}
             'extend[{{ key }}]':{
-                required:true,
                 number:true
             },
         {% endfor %}
     };
     subActionAjaxValidateForMime('#credit_config_form_validate', rules, form_url, index_url);
-    subActionAjaxValidateForMime('#credit_config_extend_validate', rules, credit_url, index_url);
 
     /**
      * 启用
