@@ -9,6 +9,4 @@ class Company(Auth):
             }
     createTime = DateTimeField(default=datetime.now())
     status = IntField(default=1)
-    statusName = StringField()  # 不要删
-
-    name = StringField()  # 策略名称
+    name = StringField()  # 企业名称

@@ -10,5 +10,4 @@ class App(Auth):
     name = StringField(required=True)
     description = StringField()
     status = IntField(default=1)
-    statusName = StringField()  # 不要删
     createTime = DateTimeField(default=datetime.now())
