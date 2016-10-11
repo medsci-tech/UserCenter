@@ -10,7 +10,7 @@
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>角色：
-                <select class="form-control" name="role" id="form-searchRole">
+                <select class="form-inline2" name="role" id="form-searchRole">
                     <option value="">全部</option>
                     {% for key, val in c_user_role.items %}
                         <option value="{{ key }}">{{ val }}</option>
