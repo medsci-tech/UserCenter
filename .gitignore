@@ -16,3 +16,7 @@
 /.project
 /.pydevproject
 /collected_static
+/api/__pycache__
+/api/tests.py
+/uploads
+/api/controller/__pycache__
