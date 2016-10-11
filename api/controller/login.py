@@ -14,9 +14,9 @@ def _login(param):
             }
             returnData = {'status': 200, 'msg': '成功', 'data': data}
         else:
-            returnData = {'status': 700, 'msg': '操作失败!', 'data': None}
+            returnData = {'status': 700, 'msg': '失败', 'data': None}
     except Exception:
-            returnData = {'code': 800, 'msg': '非法请求!', 'data': None}
+            returnData = {'code': 800, 'msg': '非法请求', 'data': None}
 
     return returnData
 
@@ -33,7 +33,7 @@ def wechat(request):
     if result.get('code') == 200 & result.get('data')['openId'] == openId:
         returnData = {'status': 200, 'msg': '成功', 'data': None}
     else:
-        returnData = {'status': 700, 'msg': '操作失败!', 'data': None}
+        returnData = {'status': 900, 'msg': '失败', 'data': None}
 
     return HttpResponse(json.dumps(returnData))
 
@@ -50,6 +50,6 @@ def userPwd(request):
     if result.get('code') == 200 & result.get('data')['password'] == password:
         returnData = {'status': 200, 'msg': '成功', 'data': None}
     else:
-        returnData = {'status': 700, 'msg': '操作失败!', 'data': None}
+        returnData = {'status': 900, 'msg': '失败', 'data': None}
 
     return HttpResponse(json.dumps(returnData))
