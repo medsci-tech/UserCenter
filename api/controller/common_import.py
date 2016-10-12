@@ -10,6 +10,9 @@ from django.views.decorators.csrf import csrf_exempt
 # configParam
 from UserCenter.global_templates import configParam
 
+# token验证
+from api.controller.token import *
+
 # json
 import json
 

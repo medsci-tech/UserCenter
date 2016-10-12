@@ -3,7 +3,7 @@
 # @Date    : 20160801
 # @Author  : zhaiyu
 
-def configParam(request):
+def configParam(request=None):
     return {
         # 状态
         'c_status': {
@@ -55,4 +55,7 @@ def configParam(request):
             2: '医生',
             3: '医药代表',
         },
+
+        # 安全令牌密钥
+        'c_token_key': '123abc',
     }
