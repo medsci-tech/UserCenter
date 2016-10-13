@@ -1,11 +1,14 @@
 from django.conf.urls import url
 from api.controller import (
-    login,
+    public,
 )
 
 urlpatterns = [
-    # 用户登录
-    url(r'^login/test', login.test, name='login_test'),
-    url(r'^login/wechat', login.wechat, name='login_wechat'),
-    url(r'^login/user_pwd', login.user_pwd, name='login_userPwd'),
+
+    # 公共访问
+    url(r'^public/get_token', public.get_token, name='public_get_token'),
+    url(r'^public/login', public.login, name='public_login'),
+    url(r'^public/register', public.register, name='public_register'),
+
+    # 用户注册
 ]
