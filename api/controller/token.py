@@ -10,7 +10,7 @@ class QXToken(object):
 
     def generate_auth_token(self, expiration = 3600):
         s = Serializer(self.token_key, expires_in=expiration)
-        return s.dumps({'name': self.name })
+        return str(s.dumps({'name': self.name}), encoding="utf-8")
 
     def verify_auth_token(self, token):
         s = Serializer(self.token_key)
