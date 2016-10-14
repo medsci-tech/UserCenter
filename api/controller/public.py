@@ -14,6 +14,9 @@ from django.contrib.auth.hashers import check_password, make_password
 @csrf_exempt
 def get_token(request):
     post = request.POST
+    if not post:
+        returnData = {'code': 811, 'msg': '非法请求', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
     id = post.get('uc_uid')
     token = QXToken(id).generate_auth_token()
     returnData = {'code': 200, 'msg': '成功', 'data': token}
@@ -43,6 +46,9 @@ def _getUser(param, data_param):
 @csrf_exempt
 def login(request):
     post = request.POST
+    if not post:
+        returnData = {'code': 811, 'msg': '非法请求', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
     # 微信
     unionid = post.get('unionid')
     openid = post.get('openid')
@@ -64,7 +70,8 @@ def login(request):
         data_param = 'password'
         check_value = password
     else:
-        return {'code': 810, 'msg': '非法请求', 'data': None}
+        returnData = {'code': 811, 'msg': '非法请求', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
     result = _getUser(param, data_param)
     if result.get('code') == 200 :
         uc_uid = result.get('data')['uc_uid']
@@ -115,6 +122,9 @@ def _addUser(param):
 @csrf_exempt
 def register(request):
     post = request.POST
+    if not post:
+        returnData = {'code': 811, 'msg': '非法请求', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
     # 微信
     unionid = post.get('unionid')
     openid = post.get('openid')
@@ -136,7 +146,8 @@ def register(request):
             'password': make_password(password, None, 'pbkdf2_sha256'),
         }
     else:
-        return {'code': 810, 'msg': '非法请求', 'data': None}
+        returnData = {'code': 810, 'msg': '非法请求', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
     result = _addUser(param)
     if result.get('code') == 200:
         token = QXToken(result.get('data')).generate_auth_token()
