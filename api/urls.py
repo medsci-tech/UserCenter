@@ -1,9 +1,14 @@
 from django.conf.urls import url
-from api.controller import *
+from api.controller import (
+    public,
+)
 
 urlpatterns = [
-    # 用户管理
-    # url(r'^user/form', user.form, name='user_form'),
-    # url(r'^user/stats', user.stats, name='user_stats'),
-    # url(r'^user/index', user.index, name='user'),
+
+    # 公共访问
+    url(r'^public/get_token', public.get_token, name='public_get_token'),
+    url(r'^public/login', public.login, name='public_login'),
+    url(r'^public/register', public.register, name='public_register'),
+
+    # 用户注册
 ]
