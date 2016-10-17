@@ -1,10 +1,11 @@
 # coding:utf-8
 # 函数
-# zhaiyu# 分页
+# zhaiyu
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import math
 from UserCenter.global_templates import configParam
 
+# 分页
 def paginationForMime(**kwargs):
     data = kwargs.get('data')
     pageStart = int(kwargs.get('page'))  # 获取页码
