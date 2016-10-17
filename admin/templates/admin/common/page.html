@@ -1,13 +1,13 @@
 <ul class="pagination">
     {% if page_has_previous > 0 %}
         <li><a href="?page=1">首页</a></li>
-        <li><a href="?page={{ list.previous_page_number }}">&lt;</a></li>
+        <li><a href="?page={{ data_list.previous_page_number }}">&lt;</a></li>
     {% else %}
         <li class="disabled"><a href="javascript:;">&lt;</a></li>
     {% endif %}
-    {% if list %}
+    {% if data_list %}
         {% for page in page_range %}
-            {% ifequal page list.number %}
+            {% ifequal page data_list.number %}
                 <li class="active"><a href="javascript:;">{{ page }}</a></li>
             {% else %}
                 <li><a href="?page={{ page }}">{{ page }}</a></li>
@@ -17,7 +17,7 @@
         <li class="active"><a href="javascript:;">1</a></li>
     {% endif %}
     {% if page_has_next > 0 %}
-        <li><a href="?page={{ list.next_page_number }}">&gt;</a></li>
+        <li><a href="?page={{ data_list.next_page_number }}">&gt;</a></li>
         <li><a href="?page={{ page_last }}">尾页</a></li>
     {% else %}
         <li class="disabled"><a href="javascript:;">&gt;</a></li>
