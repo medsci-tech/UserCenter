@@ -1,50 +1,31 @@
 # coding:utf-8
 # 函数
-# zhaiyu
-from django.core.paginator import Paginator
+# zhaiyu# 分页
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 import math
+from UserCenter.global_templates import configParam
 
-# 分页函数
-class JuncheePaginator(Paginator):
-    def __init__(self, object_list, per_page, range_num=5, orphans=0, allow_empty_first_page=True):
-        Paginator.__init__(self, object_list, per_page, orphans, allow_empty_first_page)
-        self.range_num = range_num
+def paginationForMime(**kwargs):
+    data = kwargs.get('data')
+    pageStart = int(kwargs.get('page'))  # 获取页码
 
-    def page(self, number):
-        self.page_num = number
-        return super(JuncheePaginator, self).page(number)
+    cfg_param = configParam()
+    limit = cfg_param.get('c_page')  # 每页显示的记录数
 
-    def _page_range_ext(self):
-        num_count = 2 * self.range_num + 1
-        if self.num_pages <= num_count:
-            return range(1, self.num_pages + 1)
-        num_list = []
-        num_list.append(self.page_num)
-        for i in range(1, self.range_num + 1):
-            if self.page_num - i <= 0:
-                num_list.append(num_count + self.page_num - i)
-            else:
-                num_list.append(self.page_num - i)
-
-            if self.page_num + i <= self.num_pages:
-                num_list.append(self.page_num + i)
-            else:
-                num_list.append(self.page_num + i - num_count)
-        num_list.sort()
-        return num_list
-
-    page_range_ext = property(_page_range_ext)
-
-def page(**kwargs):
-    pageStart = int(kwargs.get('page'))  # 当前页码
-    GetListCount = int(kwargs.get('count'))  # 总条数
     try:
         pageSizeLength = int(kwargs.get('length'))  # 当前n页页码
-        size = kwargs.get('size')   # 当前页显示条数
     except Exception as e:
         pageSizeLength = 7  # 默认中间页数
-        size = 20  # 默认当前页显示条数
-    GetListPageCount = int(GetListCount) / int(size)  # 总页数
+
+    paginator = Paginator(data, limit)  # 实例化一个分页对象
+    try:
+        data_list = paginator.page(pageStart)  # 获取某页对应的记录
+    except PageNotAnInteger:  # 如果页码不是个整数
+        data_list = paginator.page(1)  # 取第一页的记录
+    except EmptyPage:  # 如果页码太大，没有相应的记录
+        data_list = paginator.page(paginator.num_pages)  # 取最后一页的记录
+
+    GetListPageCount = int(paginator.num_pages)  # 总页数
     page_pre = pageStart - math.floor(pageSizeLength / 2)
     page_next = pageStart + math.ceil(pageSizeLength / 2)
     assign_pageLengthNext = 0
@@ -66,8 +47,10 @@ def page(**kwargs):
         assign_pageEnd = GetListPageCount + 1
 
     return {
+        'data_list' : data_list,
         'pageLengthPrev' : assign_pageLengthPrev,
         'pageLengthNext' : assign_pageLengthNext,
         'pageStart' : assign_pageStart,
+        'pageLast' : GetListPageCount,
         'pageEnd' : assign_pageEnd,
     }
