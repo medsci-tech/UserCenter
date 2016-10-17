@@ -12,23 +12,23 @@ def index(request):
     post = request.POST
     param = {}
     # 获取所有状态列表
-    cfg_param = configParam(request)
     if request.method == "POST":
         name = post.get('name').strip()
         if name:
             param.update(name={'$regex': name})
     data = App.objects.filter(**param).order_by("id")
-    limit = 20  # 每页显示的记录数
-    paginator = Paginator(data, limit)  # 实例化一个分页对象
-    page = request.GET.get('page')  # 获取页码
-    try:
-        topics = paginator.page(page)  # 获取某页对应的记录
-    except PageNotAnInteger:  # 如果页码不是个整数
-        topics = paginator.page(1)  # 取第一页的记录
-    except EmptyPage:  # 如果页码太大，没有相应的记录
-        topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    return render(request, 'admin/app/index.html',{'topics':topics, 'ctrlList': post})
+    page = request.GET.get('page', 1)  # 获取页码
+    pageData = paginationForMime(page=page, data=data)
+
+    return render(request, 'admin/app/index.html',{
+        'data_list': pageData.get('data_list'),
+        'page_has_previous': pageData.get('pageLengthPrev'),
+        'page_has_next': pageData.get('pageLengthNext'),
+        'page_last': pageData.get('pageLast'),
+        'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
+        'ctrlList': post,
+    })
 
  
  

@@ -6,7 +6,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 
 # 分页
-from django.core.paginator import Paginator,InvalidPage,EmptyPage,PageNotAnInteger
+from admin.controller.funForMime import paginationForMime
 
 # csrf
 from django.views.decorators.csrf import csrf_exempt
