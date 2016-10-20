@@ -96,6 +96,9 @@
                                        {% for key, val in list.extend.items %}
                                        data-{{ key }}="{{ val }}"
                                        {% endfor %}
+                                       data-province="{{ list.province }}"
+                                       data-city="{{ list.city }}"
+                                       data-district="{{ list.district }}"
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
@@ -157,9 +160,7 @@ $(function () {
     $('[data-form="add-model"]').click(function () {
         var kong = '';
         var role = $('#form-role');
-        var searchRole = '{{ ctrlList.role }}';
-        var defaultRole = searchRole.find('option:first').val();
-        role.val(defaultRole);
+        role.val(role.find('option:first').val());
         $('#form-id').val(kong);
         $('#form-username').val(kong);
         $('#form-phone').val(kong);
@@ -167,6 +168,7 @@ $(function () {
         for(var i in credit_full_list){
             $('#form-' + i).val(kong);
         }
+        getRegionInit();
     });
     /**
      * 点击修改按钮触发的操作
@@ -185,6 +187,13 @@ $(function () {
         for(var i in credit_full_list){
             $('#form-' + i).val($(this).attr('data-' + i));
         }
+        /*地区联动*/
+        getRegionInit();
+        var regionValue = {};
+        regionValue.province = $(this).attr('data-province');
+        regionValue.city = $(this).attr('data-city');
+        regionValue.area = $(this).attr('data-area');
+        getRegionDefault(regionValue);
     });
     /**
      * 表单验证提交按钮触发的操作

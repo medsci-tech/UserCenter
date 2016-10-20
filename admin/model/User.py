@@ -17,7 +17,7 @@ class User(Auth):
     role = IntField(default=0)  # 角色
     extend = DictField()  # 扩展
 
-# 导入的字段
+# 用户表
 
     _id = ObjectIdField(default=None)
     id = IntField(default=None)
@@ -39,3 +39,21 @@ class User(Auth):
     qr_code = StringField(default=None)
     created_at = StringField(default=None)
     updated_at = StringField(default=None)
+
+# 用户信息表
+    type = StringField(default=None)
+    level = IntField(default=None)
+    name = StringField(default=None)
+    referred_name = StringField(default=None)
+    referred_phone = StringField(default=None)
+    region = StringField(default=None)
+    region_level = StringField(default=None)
+    responsible = StringField(default=None)
+    province = StringField(default=None)
+    city = StringField(default=None)
+    district = StringField(default=None)
+    hospital = StringField(default=None)
+    hospital_level = StringField(default=None)
+    department = StringField(default=None)
+    remark = StringField(default=None)
+

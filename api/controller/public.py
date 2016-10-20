@@ -73,9 +73,13 @@ def login(request):
         returnData = {'code': 811, 'msg': '非法请求', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     result = _getUser(param, data_param)
-    if result.get('code') == 200 :
-        uc_uid = result.get('data')['uc_uid']
-        if result.get('data')[data_param] == check_value:
+    if result.get('code') == 200:
+        if data_param == 'password':
+            check_code = check_password(password, result.get('data')[data_param])
+        else:
+            check_code = (result.get('data')[data_param] == check_value)
+        if check_code:
+            uc_uid = result.get('data')['uc_uid']
             token = QXToken(uc_uid).generate_auth_token()
             returnData = {'code': 200, 'msg': '成功', 'data': {'uc_uid': uc_uid, 'token': token}}
         else:
@@ -150,8 +154,9 @@ def register(request):
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     result = _addUser(param)
     if result.get('code') == 200:
-        token = QXToken(result.get('data')).generate_auth_token()
-        returnData = {'code': 200, 'msg': '成功', 'data': token}
+        uc_uid = result.get('data')
+        token = QXToken(uc_uid).generate_auth_token()
+        returnData = {'code': 200, 'msg': '成功', 'data': {'uc_uid': uc_uid, 'token': token}}
     else:
         returnData = result
 
