@@ -15,14 +15,7 @@ from admin.model.Admin import Admin
 def index(request):
     post = request.POST
     param = {}
-    admin_all_list = {}
     adminId = []
-    # 获取所有状态列表
-    cfg_param = configParam(request)
-    logs_operate = cfg_param.get('c_logs_operate')
-    adminAllList = Admin.objects.all().order_by('id')
-    for ids in adminAllList:
-        admin_all_list[str(ids['id'])] = ids['username']
     table = post.get('table')
     action = post.get('action')
     adminName = post.get('adminName')
@@ -40,11 +33,6 @@ def index(request):
         else:
             param.update(id='00000000000000000000000a')  # 无效的24位id
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-    # 增强文字可读性
-    if data:
-        for val in data:
-            val.update(actionName=logs_operate.get(val['action']))
-            val.update(adminName=admin_all_list.get(val['adminId']))
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
@@ -75,6 +63,7 @@ def logsform(request, param):
         ip = request.META.get('REMOTE_ADDR')
     param.update(ip=ip)
     param.update(adminId=request.session.get('uid'))
+    param.update(adminName=request.session.get('username'))
     try:
         model = Model.objects.create(**param)
         if model:
