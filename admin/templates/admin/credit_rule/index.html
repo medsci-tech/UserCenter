@@ -40,7 +40,7 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>策略名称</th>
+                                <th>策略备注名称</th>
                                 <th>奖励周期</th>
                                 <th>次数</th>
                                 {% for key, val in c_ext_credit.items %}
@@ -57,7 +57,7 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.name }}</td>
+                                <td>{{ list.remark }}</td>
                                 <td>
                                     {% for key, val in c_cycle.items %}
                                         {% if key == list.cycle %}
@@ -88,6 +88,7 @@
                                        data-id="{{ list.id }}"
                                        data-appId="{{ list.appId }}"
                                        data-name="{{ list.name }}"
+                                       data-remark="{{ list.remark }}"
                                        {% for key, val in list.extend.items %}
                                        data-{{ key }}="{{ val }}"
                                        {% endfor %}
@@ -163,6 +164,7 @@ $(function () {
         cycle.val(defaultCycle);
         $('#form-id').val(kong);
         $('#form-name').val(kong);
+        $('#form-remark').val(kong);
         $('#form-rewardNum').val(kong);
         $('#form-ratio').val(kong);
         $('#form-status').val(1);
@@ -177,6 +179,7 @@ $(function () {
         var id = $(this).attr('data-id');
         var appId = $(this).attr('data-appId');
         var name = $(this).attr('data-name');
+        var remark = $(this).attr('data-remark');
         var cycle = $(this).attr('data-cycle');
         var rewardNum = $(this).attr('data-rewardNum');
         var ratio = $(this).attr('data-ratio');
@@ -184,6 +187,7 @@ $(function () {
         $('#form-id').val(id);
         $('#form-appId').val(appId);
         $('#form-name').val(name);
+        $('#form-remark').val(remark);
         $('#form-cycle').val(cycle);
         $('#form-rewardNum').val(rewardNum);
         $('#form-ratio').val(ratio);
@@ -197,6 +201,9 @@ $(function () {
      */
     var rules = {
         name:{
+            required:true
+        },
+        remark:{
             required:true
         },
         rewardNum:{

@@ -18,9 +18,6 @@ def index(request):
     # 获取所有启用应用列表
     app_list = applist(request)
     # 获取配置列表
-    cfg_param = configParam(request)
-    status_list = cfg_param.get('c_status')
-    cycle_list = cfg_param.get('c_cycle')
     searchAppId = get.get('appId')
     selectData = get
     if searchAppId:
@@ -93,6 +90,7 @@ def form(request):
         param = {
             'appId': post.get('appId'),
             'name': post.get('name'),
+            'remark': post.get('remark'),
             'cycle': post.get('cycle'),
             'rewardNum': post.get('rewardNum'),
             'extend': extend_list,
