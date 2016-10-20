@@ -61,7 +61,13 @@
                                 </td>
                                 <td>{{ list.table }}</td>
                                 <td>{{ list.tableId }}</td>
-                                <td>{{ list.actionName }}</td>
+                                <td>
+                                    {% for key, val in c_logs_operate.items %}
+                                        {% if key == list.action %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>{{ list.after }}</td>
                                 <td>{{ list.adminName }}</td>
                                 <td>{{ list.ip }}</td>
