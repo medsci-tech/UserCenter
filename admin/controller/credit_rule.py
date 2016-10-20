@@ -4,7 +4,7 @@
 # 公共引入文件
 from admin.controller.common_import import *
 
-from admin.model.CreditRule import CreditRule
+from admin.model.CreditRule import CreditRule as Model
 from admin.controller.app import applist
 
 '''
@@ -23,11 +23,11 @@ def index(request):
     if searchAppId:
         param.update(appId=searchAppId)
     else:
-        dataOne = CreditRule.objects.filter(appId__in=app_list.keys()).order_by('id')[:1]  # 获取第一条数据
+        dataOne = Model.objects.filter(appId__in=app_list.keys()).order_by('id')[:1]  # 获取第一条数据
         if dataOne:
             param.update(appId=dataOne[0]['appId'])
             selectData = dataOne[0]
-    data = CreditRule.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
+    data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
@@ -48,7 +48,7 @@ def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = CreditRule.objects.create(**param)
+            model = Model.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
             else:
@@ -64,7 +64,7 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = CreditRule.objects.get(id=id).update(**param)
+            model = Model.objects.get(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
@@ -81,6 +81,15 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
+        name = post.get('name')
+        try:
+            check_name = Model.objects.filter(name=name).order_by('id')
+        except Exception:
+            returnData = {'code': 808, 'msg': '数据验证错误', 'data': check_name}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if check_name:
+            returnData = {'code': 808, 'msg': '规则字段%s已存在' % name, 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
         # 获取配置列表
         cfg_param = configParam(request)
@@ -89,7 +98,7 @@ def form(request):
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
             'appId': post.get('appId'),
-            'name': post.get('name'),
+            'name': name,
             'remark': post.get('remark'),
             'cycle': post.get('cycle'),
             'rewardNum': post.get('rewardNum'),
@@ -140,7 +149,7 @@ def stats(request):
             'status': status,
         }
         try:
-            model = CreditRule.objects.filter(id__in=selection).update(**param)
+            model = Model.objects.filter(id__in=selection).update(**param)
             if model:
                 # 操作成功添加log操作记录
                 for id in selection:
