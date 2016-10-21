@@ -4,7 +4,7 @@
 # 公共引入文件
 from admin.controller.common_import import *
 
-from admin.model.App import App
+from admin.model.App import App as Model
 
 @csrf_exempt
 @auth  # 引用登录权限验证
@@ -16,7 +16,7 @@ def index(request):
         name = post.get('name').strip()
         if name:
             param.update(name={'$regex': name})
-    data = App.objects.filter(**param).order_by("id")
+    data = Model.objects.filter(**param).order_by("id")
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
@@ -37,7 +37,7 @@ def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = App.objects.create(**param)
+            model = Model.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
             else:
@@ -53,7 +53,7 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = App.objects.get(id=id).update(**param)
+            model = Model.objects.get(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
@@ -119,7 +119,7 @@ def stats(request):
             'status': status,
         }
         try:
-            model = App.objects.filter(id__in=selection).update(**param)
+            model = Model.objects.filter(id__in=selection).update(**param)
             if model:
                 # 操作成功添加log操作记录
                 for id in selection:
@@ -154,7 +154,7 @@ def applist(request):
     post = request.POST
     returnFormat = post.get('returnFormat')
     data = {}
-    app = App.objects.filter(status=1).order_by("id")
+    app = Model.objects.filter(status=1).order_by("id")
     if app:
         for list in app:
             data[str(list.id)] = list.name
@@ -168,3 +168,32 @@ def applist(request):
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         return returnData.get('data')
+
+# 删除操作
+@auth  # 引用登录权限验证
+def delete(request):
+    post = request.POST
+    if post:
+        selection = post.getlist('selection[]')
+        try:
+            model = Model.objects.filter(id__in=selection).delete()
+        except Exception:
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if model:
+            # 操作成功添加log操作记录
+            for id in selection:
+                # log记录参数
+                logParam = {
+                    'table': 'company',
+                    'after': {},
+                    'tableId': id,
+                }
+                logParam.update(action=5)  # log记录参数,action=5为删除
+                logsform(request, logParam)
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+    else:
+        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+    return HttpResponse(json.dumps(returnData), content_type="application/json")

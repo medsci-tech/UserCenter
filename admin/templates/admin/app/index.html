@@ -16,6 +16,7 @@
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
             <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
             <a href="javascript:;" class="btn btn-warning" data-form="disable">禁用</a>
+            <a href="javascript:;" class="btn btn-danger" data-form="delete">删除</a>
         </div>
         </form>
     </div>
@@ -100,6 +101,7 @@
 
 <script>
 $(function () {
+    var delete_url = '{% url 'admin:app_delete' %}';
     var stats_url = '{% url 'admin:app_stats' %}';
     var form_url = '{% url 'admin:app_form' %}';
     var index_url = '{% url 'admin:app' %}';
@@ -166,6 +168,21 @@ $(function () {
             return false;
         }
     });
+
+    /**
+     * 删除
+     */
+    $('[data-form="delete"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(true == verifyChecked){
+            deleteDataMultiple(check, delete_url, index_url);
+        }else {
+            return false;
+        }
+    });
+
 });
 </script>
 

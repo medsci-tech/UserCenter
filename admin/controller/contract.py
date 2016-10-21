@@ -2,7 +2,7 @@
 # 管理员管理
 __author__ = 'lxhui'
 from admin.controller.common_import import *  # 公共引入文件
-from admin.model.Contract import Contract
+from admin.model.Contract import Contract as Model
 from admin.model.Company import Company
 from admin.model.App import App
 from admin.model.CreditConfig import CreditConfig
@@ -15,7 +15,7 @@ def index(request):
     cid = post.get('cid','')
     name = post.get('name','').strip()
     code = post.get('code','').strip()
-    data = Contract.objects.filter(cid__icontains=cid,name__icontains=name,code__icontains=code).order_by('id')
+    data = Model.objects.filter(cid__icontains=cid,name__icontains=name,code__icontains=code).order_by('id')
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
@@ -64,11 +64,11 @@ def save(request, **param):
         }
         try:
             if(not id): # 添加操作
-                obj = Contract.objects.create(**param)
+                obj = Model.objects.create(**param)
                 logParam.update(tableId=obj.id)  # log记录参数
                 logParam.update(action=1)  # log记录参数,action=1为添加
             else: # 更新
-                Contract.objects.filter(id=id).update(**param)
+                Model.objects.filter(id=id).update(**param)
                 logParam.update(tableId=id)  # log记录参数
                 logParam.update(action=2)  # log记录参数,action=2为修改
 
@@ -89,8 +89,8 @@ def updateStatus(request, **param):
         'status': status,
     }
     try:
-        #model = Contract.objects.filter(pk__in=selection).delete() # 删除
-        model = Contract.objects.filter(pk__in=selection).update(**param)
+        #model = Model.objects.filter(pk__in=selection).delete() # 删除
+        model = Model.objects.filter(pk__in=selection).update(**param)
         if model:
             returnData = {'code':'200', 'msg': '操作成功!'}
         else:
@@ -110,7 +110,7 @@ def credit(request):
     post_credit = int(post.get('credit1'))
     if id and companyId and appId:
         try:
-            contractGet = Contract.objects.get(id=id)
+            contractGet = Model.objects.get(id=id)
             credit_poor = contractGet['number'] * contractGet['amount'] - contractGet['credit1']
         except Exception:
             returnData = {'code': '910', 'msg': '数据验证错误', 'data': ''}
@@ -142,7 +142,7 @@ def credit(request):
         }
         contractCredit1 = int(contractGet['credit1']) + post_credit_int
         try:
-            modelContract = Contract.objects.get(id=contractGet['id']).update(credit1=contractCredit1)
+            modelContract = Model.objects.get(id=contractGet['id']).update(credit1=contractCredit1)
             modelCreditConfigSave = CreditConfig.objects.get(id=modelCreditConfig['id']).update(**param)
             if modelCreditConfigSave == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
@@ -166,4 +166,33 @@ def credit(request):
     else:
         returnData = {'code': '1000', 'msg': '参数缺失', 'data': None}
 
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+# 删除操作
+@auth  # 引用登录权限验证
+def delete(request):
+    post = request.POST
+    if post:
+        selection = post.getlist('selection[]')
+        try:
+            model = Model.objects.filter(id__in=selection).delete()
+        except Exception:
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if model:
+            # 操作成功添加log操作记录
+            for id in selection:
+                # log记录参数
+                logParam = {
+                    'table': 'company',
+                    'after': {},
+                    'tableId': id,
+                }
+                logParam.update(action=5)  # log记录参数,action=5为删除
+                logsform(request, logParam)
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+    else:
+        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
     return HttpResponse(json.dumps(returnData), content_type="application/json")

@@ -142,6 +142,29 @@ var disableDataMultiple = function (check, stats_url, index_url) {
 };
 
 /**
+ * 禁用操作
+ * @param check
+ * @param delete_url
+ * @param index_url
+ */
+var deleteDataMultiple = function (check, delete_url, index_url) {
+    swal({
+        title: "此操作不可恢复，您确定要删除选中的信息吗",
+        type: "error",
+        showCancelButton: true,
+        cancelButtonText: '取消',
+        confirmButtonColor: "#f27474",
+        confirmButtonText: "确定",
+        closeOnConfirm: false
+    }, function () {
+        var data = {};
+        data.selection = getDataListForMime(check);
+        console.log(data);
+        subActionAjaxForMime('post', delete_url, data, index_url);
+    });
+};
+
+/**
  * ajax根据appId变化获取扩展列表
  * @param url
  * @param data
