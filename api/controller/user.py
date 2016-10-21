@@ -24,7 +24,7 @@ def _editUser(param):
     return returnData
 
 # ============================
-# 用户注册
+# 修改
 # ============================
 @csrf_exempt
 def edit(request):

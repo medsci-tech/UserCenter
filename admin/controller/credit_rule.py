@@ -88,7 +88,7 @@ def form(request):
             returnData = {'code': 808, 'msg': '数据验证错误', 'data': check_name}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if check_name:
-            returnData = {'code': 808, 'msg': '规则字段%s已存在' % name, 'data': None}
+            returnData = {'code': 808, 'msg': '策略字段%s已存在' % name, 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
         # 获取配置列表

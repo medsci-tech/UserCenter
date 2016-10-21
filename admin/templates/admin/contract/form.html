@@ -83,8 +83,8 @@
         },
         number:{
             required:true
-        },
+        }
 
     };
-    subActionAjaxValidateForMime('#contract_validate', rules, '/admin/contract/save', '');
+    subActionAjaxValidateForMime('#contract_validate', rules, '{% url 'admin:contract_save' %}', window.location.href);
 </script>
