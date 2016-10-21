@@ -13,4 +13,6 @@ class CreditConfig(Auth):
 
     companyId = StringField()  # 企业名称
     appId = StringField()  # 应用
+    name = StringField()  # 名称
+    remarkName = StringField()  # 名称
     extend = DictField()  # 扩展
