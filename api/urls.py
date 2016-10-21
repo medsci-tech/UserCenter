@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from api.controller import (
     public,
+    user,
+    credit,
 )
 
 urlpatterns = [
@@ -10,5 +12,9 @@ urlpatterns = [
     url(r'^public/login', public.login, name='public_login'),
     url(r'^public/register', public.register, name='public_register'),
 
-    # 用户注册
+    # 用户信息修改
+    url(r'^user/edit', user.edit, name='user_edit'),
+
+    # 迈豆积分接口
+    url(r'^credit/edit', credit.user, name='credit_user'),
 ]

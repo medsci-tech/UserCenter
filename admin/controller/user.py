@@ -98,6 +98,10 @@ def form(request):
             'phone': post.get('phone'),
             'password': post.get('password'),
             'role': post.get('role'),
+            'name': post.get('name'),
+            'province': post.get('province'),
+            'city': post.get('city'),
+            'district': post.get('district'),
             'extend': extend_list,
             'status': post.get('status'),
         }
