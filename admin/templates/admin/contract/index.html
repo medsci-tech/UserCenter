@@ -155,6 +155,9 @@
 <script src="http://www.yyyweb.com/demo/lightbox/js/lightbox.js"></script>
 <script>
 $(function () {
+    var stats_url = '{% url 'admin:contract_updateStatus' %}';
+    var form_url = '{% url 'admin:contract_save' %}';
+    var index_url = 'http://www.baidu.com';
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });
@@ -217,10 +220,8 @@ $(function () {
         data.startTime = $('#form-startTime').val();
         data.endTime = $('#form-endTime').val();
         data.img = $('[data-toggle="upload-progressInput-one"]').val();
-        var url = '/contract/form.html';
-        var location = '/admin/contract/index';
         console.log(data);
-        subActionAjaxForMime('post', url, data, location);
+        subActionAjaxForMime('post', form_url, data, index_url);
     });
 
     /**
@@ -246,10 +247,8 @@ $(function () {
             var data = {};
             data.selection = getDataListForMime(check);
             data.status = status;
-            var url = '/admin/contract/updateStatus';
-            var location = '/admin/contract/index';
             console.log(data);
-            subActionAjaxForMime('post', url, data, location);
+            subActionAjaxForMime('post', stats_url, data, index_url);
         });
         return false;
     });
