@@ -164,9 +164,15 @@ def stats(request):
 @auth  # 引用登录权限验证
 def applist(request):
     post = request.POST
+    param = {
+        'status': 1,
+    }
+    companyId = post.get('companyId')
+    if companyId:
+        param.update(companyId=companyId)
     returnFormat = post.get('returnFormat')
     data = {}
-    app = Model.objects.filter(status=1).order_by("id")
+    app = Model.objects.filter(**param).order_by("id")
     if app:
         for list in app:
             data[str(list.id)] = list.name

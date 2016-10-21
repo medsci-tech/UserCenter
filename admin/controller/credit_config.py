@@ -18,7 +18,6 @@ def index(request):
     param = {}
     # 获取所有启用企业列表
     company_list = companylist(request)
-    app_list = applist(request)
     # 获取所有状态列表
     searchCompanyId = get.get('companyId')
     if searchCompanyId:
@@ -36,7 +35,7 @@ def index(request):
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
-
+    app_list = applist(request)
     return render(request, 'admin/credit_config/index.html', {
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),
@@ -95,6 +94,8 @@ def form(request):
         param = {
             'appId': post.get('appId'),
             'companyId': post.get('companyId'),
+            'name': post.get('name'),
+            'remarkName': post.get('remarkName'),
             'extend': extend_list,
             'status': post.get('status'),
         }

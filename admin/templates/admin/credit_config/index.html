@@ -16,6 +16,14 @@
                     {% endfor %}
                 </select>
             </label>
+            <label>应用名称：
+                <select class="form-inline2" name="appId" id="form-searchAppId">
+                    <option value="" selected>请选择</option>
+                    {% for key, val in appList.items %}
+                        <option value="{{ key }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
+            </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
             <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
@@ -40,7 +48,8 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>应用</th>
+                                <th>所属应用</th>
+                                <th>备注名</th>
                                 {% for key, val in c_ext_credit.items %}
                                     <th>{{ val }}</th>
                                 {% endfor %}
@@ -62,6 +71,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
+                                <td>{{ list.remarkName }}</td>
                                 {% for key, val in c_ext_credit.items %}
                                     <td>
                                     {% for k, v in list.extend.items %}
@@ -84,6 +94,8 @@
                                        data-id="{{ list.id }}"
                                        data-appId="{{ list.appId }}"
                                        data-companyId="{{ list.companyId }}"
+                                       data-name="{{ list.name }}"
+                                       data-remarkName="{{ list.remarkName }}"
                                        {% for key, val in list.extend.items %}
                                        data-{{ key }}="{{ val }}"
                                        {% endfor %}
@@ -122,6 +134,7 @@
 
 <script>
 $(function () {
+    var app_list_url = '{% url 'admin:app_applist' %}';
     var stats_url = '{% url 'admin:credit_config_stats' %}';
     var form_url = '{% url 'admin:credit_config_form' %}';
     var index_url = window.location.href;
@@ -138,7 +151,10 @@ $(function () {
     if(searchCompanyId){
         $('#form-searchCompanyId').val(searchCompanyId);
     }
-
+    var searchAppId = '{{ ctrlList.appId }}';
+    if(searchAppId){
+        $('#form-searchAppId').val(searchAppId);
+    }
     /**
      * 点击添加按钮触发的操作
      */
@@ -146,12 +162,11 @@ $(function () {
         var kong = '';
         var appId = $('#form-appId');
         var companyId = $('#form-companyId');
-        var defaultAppId = appId.find('option:first').val();
         var defaultCompany = companyId.find('option:first').val();
-        appId.val(defaultAppId);
         companyId.val(defaultCompany);
         $('#form-id').val(kong);
-        $('#form-number').val(kong);
+        $('#form-name').val(kong);
+        $('#form-remarkName').val(kong);
         $('#form-status').val(1);
         for(var i in credit_full_list){
             $('#form-' + i).val(kong);
@@ -164,10 +179,14 @@ $(function () {
         var id = $(this).attr('data-id');
         var appId = $(this).attr('data-appId');
         var companyId = $(this).attr('data-companyId');
+        var name = $(this).attr('data-name');
+        var remarkName = $(this).attr('data-remarkName');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
         $('#form-appId').val(appId);
         $('#form-companyId').val(companyId);
+        $('#form-name').val(name);
+        $('#form-remarkName').val(remarkName);
         $('#form-status').val(status);
         for(var i in credit_full_list){
             $('#form-' + i).val($(this).attr('data-' + i));
@@ -212,6 +231,11 @@ $(function () {
             return false;
         }
     });
+
+    $('#form-companyId').change(function () {
+{#        changeListDataByAjaxForMime(app_list_url, data, element, type);#}
+        console.log(this.value);
+    })
 });
 </script>
 
