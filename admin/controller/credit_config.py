@@ -20,7 +20,6 @@ def index(request):
     company_list = companylist(request)
     app_list = applist(request)
     # 获取所有状态列表
-    cfg_param = configParam(request)
     searchCompanyId = get.get('companyId')
     if searchCompanyId:
         param.update(companyId=searchCompanyId)
@@ -29,7 +28,7 @@ def index(request):
         if dataOne:
             param.update(companyId=dataOne[0]['companyId'])
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-    # 增强文字可读性
+
     if data:
         selectData = data[0]
     else:

@@ -5,18 +5,28 @@
 from admin.controller.common_import import *
 
 from admin.model.App import App as Model
+from admin.controller.company import companylist
 
 @csrf_exempt
 @auth  # 引用登录权限验证
 def index(request):
-    post = request.POST
+    req = request.GET
     param = {}
     # 获取所有状态列表
-    if request.method == "POST":
-        name = post.get('name').strip()
-        if name:
-            param.update(name={'$regex': name})
+    company_list = companylist(request)
+    searchCompanyId = req.get('companyId')
+    if searchCompanyId:
+        param.update(companyId=searchCompanyId)
+    else:
+        dataOne = Model.objects.filter(companyId__in=company_list.keys()).order_by('id')[:1]  # 获取第一条数据
+        if dataOne:
+            param.update(companyId=dataOne[0]['companyId'])
     data = Model.objects.filter(**param).order_by("id")
+
+    if data:
+        selectData = data[0]
+    else:
+        selectData = req
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
@@ -27,7 +37,8 @@ def index(request):
         'page_has_next': pageData.get('pageLengthNext'),
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
-        'ctrlList': post,
+        'ctrlList': selectData,
+        'companyList': company_list,
     })
 
  
@@ -72,6 +83,7 @@ def form(request):
         id = post.get('id')
         param = {
             'name': post.get('name'),
+            'companyId': post.get('companyId'),
             'description': post.get('description'),
             'status': post.get('status'),
         }
