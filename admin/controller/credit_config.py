@@ -7,6 +7,7 @@ from admin.controller.common_import import *
 from admin.model.CreditConfig import CreditConfig as Model
 from admin.controller.company import companylist
 from admin.controller.app import applist
+from admin.model.App import App
 
 '''
 迈豆积分列表
@@ -35,7 +36,7 @@ def index(request):
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
-    app_list = applist(request)
+    app_list = applist(request, companyId=selectData['companyId'])
     return render(request, 'admin/credit_config/index.html', {
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),

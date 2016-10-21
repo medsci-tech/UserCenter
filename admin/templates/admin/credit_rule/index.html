@@ -9,9 +9,9 @@
     <div class="row">
         <form action="" method="get">
         <div class="col-xs-12 center">
-            <label>应用名称：
-                <select class="form-inline2" name="appId" id="form-searchAppId">
-                    {% for key, val in appList.items %}
+            <label>企业名称：
+                <select class="form-inline2" name="companyId" id="form-searchCompanyId">
+                    {% for key, val in companyList.items %}
                         <option value="{{ key }}">{{ val }}</option>
                     {% endfor %}
                 </select>
@@ -40,7 +40,8 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>策略备注名称</th>
+                                <th>所属应用</th>
+                                <th>备注名</th>
                                 <th>奖励周期</th>
                                 <th>次数</th>
                                 {% for key, val in c_ext_credit.items %}
@@ -56,6 +57,13 @@
                             <tr>
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
+                                <td>
+                                    {% for key, val in appList.items %}
+                                        {% if key == list.appId %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
                                 </td>
                                 <td>{{ list.remark }}</td>
                                 <td>
@@ -132,6 +140,7 @@
 
 <script>
 $(function () {
+    var app_list_url = '{% url 'admin:app_applist' %}';
     var stats_url = '{% url 'admin:credit_rule_stats' %}';
     var form_url = '{% url 'admin:credit_rule_form' %}';
     var index_url = window.location.href;
@@ -245,6 +254,13 @@ $(function () {
         }
     });
 
+  /**
+   * 获取企业应用列表
+   */
+    $('#form-companyId').change(function () {
+      changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
+        console.log(this.value);
+    })
 });
 </script>
 

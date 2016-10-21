@@ -16,14 +16,6 @@
                     {% endfor %}
                 </select>
             </label>
-            <label>应用名称：
-                <select class="form-inline2" name="appId" id="form-searchAppId">
-                    <option value="" selected>请选择</option>
-                    {% for key, val in appList.items %}
-                        <option value="{{ key }}">{{ val }}</option>
-                    {% endfor %}
-                </select>
-            </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
             <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
@@ -151,16 +143,11 @@ $(function () {
     if(searchCompanyId){
         $('#form-searchCompanyId').val(searchCompanyId);
     }
-    var searchAppId = '{{ ctrlList.appId }}';
-    if(searchAppId){
-        $('#form-searchAppId').val(searchAppId);
-    }
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
-        var appId = $('#form-appId');
         var companyId = $('#form-companyId');
         var defaultCompany = companyId.find('option:first').val();
         companyId.val(defaultCompany);
@@ -232,8 +219,11 @@ $(function () {
         }
     });
 
+  /**
+   * 获取企业应用列表
+   */
     $('#form-companyId').change(function () {
-{#        changeListDataByAjaxForMime(app_list_url, data, element, type);#}
+      changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
         console.log(this.value);
     })
 });

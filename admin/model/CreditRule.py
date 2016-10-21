@@ -8,6 +8,7 @@ class CreditRule(Auth):
             'indexes': [],
             }
     appId = StringField()
+    companyId = StringField()
     createTime = DateTimeField(default=datetime.now())
     status = IntField(default=1)
 

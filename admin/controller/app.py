@@ -5,6 +5,7 @@
 from admin.controller.common_import import *
 
 from admin.model.App import App as Model
+from admin.model.Company import Company
 from admin.controller.company import companylist
 
 @csrf_exempt
@@ -159,26 +160,32 @@ def stats(request):
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
-
-@csrf_exempt
+'''
+前端访问接口
+'''
 @auth  # 引用登录权限验证
-def applist(request):
-    post = request.POST
-    param = {
-        'status': 1,
-    }
-    companyId = post.get('companyId')
-    if companyId:
-        param.update(companyId=companyId)
-    returnFormat = post.get('returnFormat')
-    data = {}
-    app = Model.objects.filter(**param).order_by("id")
-    if app:
-        for list in app:
-            data[str(list.id)] = list.name
-        returnData = {'code': '200', 'msg': '操作成功', 'data': data}
+def applist(request, **kwargs):
+    if request.method == 'POST':
+        req = request.POST
+        companyId = req.get('companyId')
     else:
-        returnData = {'code': '200', 'msg': '暂无数据', 'data': data}
+        companyId = kwargs.get('companyId')
+    returnFormat = kwargs.get('returnFormat')
+    if companyId:
+        data = {}
+        try:
+            app = Model.objects.filter(status=1, companyId=companyId).order_by("id")
+        except Exception:
+            app = {}
+        if app:
+            for val in app:
+                data[str(val.id)] = val.name
+        if data:
+            returnData = {'code': 200, 'msg': '操作成功', 'data': data}
+        else:
+            returnData = {'code': 200, 'msg': '暂无数据', 'data': None}
+    else:
+        returnData = {'code': 200, 'msg': '参数缺失', 'data': None}
 
     if returnFormat:
         return returnData.get('data')

@@ -6,6 +6,7 @@ from admin.controller.common_import import *
 
 from admin.model.CreditRule import CreditRule as Model
 from admin.controller.app import applist
+from admin.controller.company import companylist
 
 '''
 迈豆积分列表
@@ -16,22 +17,26 @@ def index(request):
     get = request.GET
     param = {}
     # 获取所有启用应用列表
-    app_list = applist(request)
+    company_list = companylist(request)
+
     # 获取配置列表
-    searchAppId = get.get('appId')
-    selectData = get
-    if searchAppId:
-        param.update(appId=searchAppId)
+    searchCompanyId = get.get('companyId')
+    if searchCompanyId:
+        param.update(companyId=searchCompanyId)
     else:
-        dataOne = Model.objects.filter(appId__in=app_list.keys()).order_by('id')[:1]  # 获取第一条数据
+        dataOne = Model.objects.filter().order_by('id')[:1]  # 获取第一条数据
         if dataOne:
-            param.update(appId=dataOne[0]['appId'])
-            selectData = dataOne[0]
+            param.update(companyId=dataOne[0]['companyId'])
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
+
+    if data:
+        selectData = data[0]
+    else:
+        selectData = get
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
-
+    app_list = applist(request, companyId=selectData['companyId'])
     # return HttpResponse(credit_list)
     return render(request, 'admin/credit_rule/index.html', {
         'data_list': pageData.get('data_list'),
@@ -40,6 +45,7 @@ def index(request):
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': selectData,
+        'companyList': company_list,
         'appList': app_list,
     })
 
@@ -65,12 +71,12 @@ def _editById(**param):
     if id:
         try:
             model = Model.objects.get(id=id).update(**param)
-            if model == 1:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            return {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+        if model:
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
     else:
         returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
     return returnData
@@ -82,10 +88,11 @@ def form(request):
     if post:
         id = post.get('id')
         name = post.get('name')
+        appId = post.get('appId')
         try:
-            check_name = Model.objects.filter(name=name).order_by('id')
+            check_name = Model.objects.filter(name=name, appId=appId).order_by('id')
         except Exception:
-            returnData = {'code': 808, 'msg': '数据验证错误', 'data': check_name}
+            returnData = {'code': 808, 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if check_name:
             returnData = {'code': 808, 'msg': '策略字段%s已存在' % name, 'data': None}
@@ -97,7 +104,8 @@ def form(request):
         for key in ext_credit_list:
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
-            'appId': post.get('appId'),
+            'appId': appId,
+            'companyId': post.get('companyId'),
             'name': name,
             'remark': post.get('remark'),
             'cycle': post.get('cycle'),

@@ -178,7 +178,7 @@ var changeListDataByAjaxForMime = function (url, data, element, type) {
         data: data,
         success: function(res){
             if(res.code == 200){
-                // console.log(res.data);
+                console.log(res.data);
                 if('optionHtml' == type){
                     selectOptionHtmlForMime(res.data, element);
                 }else if('optionPrepend' == type){
@@ -197,7 +197,7 @@ var changeListDataByAjaxForMime = function (url, data, element, type) {
  * @param element
  */
 var selectOptionHtmlForMime = function (list, element) {
-    var html = '';
+    var html = '<option value="" selected>请选择</option>';
     for(var i in list){
         html += '<option value="' + i + '">' + list[i] + '</option>';
     }
