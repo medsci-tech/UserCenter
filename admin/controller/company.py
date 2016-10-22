@@ -187,12 +187,11 @@ def delete(request):
         except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
-        finally:
+        if model:
             App.objects.filter(companyId__in=selection).delete()
             CreditConfig.objects.filter(companyId__in=selection).delete()
             CreditRule.objects.filter(companyId__in=selection).delete()
             Contract.objects.filter(cid__in=selection).delete()
-        if model:
             # 操作成功添加log操作记录
             for id in selection:
                 # log记录参数
