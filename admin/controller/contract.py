@@ -116,7 +116,7 @@ def credit(request):
             try:
                 modelCreditConfig = CreditConfig.objects.get(contractId=id)
             except Exception:
-                returnData = {'code': '912', 'msg': '找不到对应的应用平台信息', 'data': ''}
+                returnData = {'code': '912', 'msg': '找不到对应的迈豆池信息', 'data': ''}
                 return HttpResponse(json.dumps(returnData), content_type="application/json")
         else:
             returnData = {'code': '911', 'msg': '分配迈豆超出额度', 'data': ''}
