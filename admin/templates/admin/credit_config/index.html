@@ -63,7 +63,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ list.remarkName }}</td>
+                                <td><a href="{% url 'admin:credit_rule' %}?companyId={{ list.companyId }}" target="_blank">{{ list.remarkName }}</a></td>
                                 {% for key, val in c_ext_credit.items %}
                                     <td>
                                     {% for k, v in list.extend.items %}

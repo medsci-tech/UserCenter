@@ -153,7 +153,11 @@ $(function () {
     {% for key, val in c_ext_credit.items %}
         credit_full_list['{{ key }}'] = '{{ val }}';
     {% endfor %}
-
+    //选中应用
+    var searchCompanyId = '{{ ctrlList.companyId }}';
+    if(searchCompanyId){
+        $('#form-searchCompanyId').val(searchCompanyId);
+    }
     console.log(credit_full_list);
 
     /**

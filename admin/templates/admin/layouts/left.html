@@ -25,20 +25,12 @@
 				<li><a href="{% url 'admin:admin' %}">管理员列表</a></li>
 			</ul>
 		</li>
-		<li class="submenu">
-			<a href="#"><i class="fa fa-th-list"></i> <span>基础数据平台</span> <i class="arrow fa fa-chevron-right"></i></a>
-			<ul>
-				<li><a href="{% url 'admin:company' %}">企业信息管理</a></li>
-				<li><a href="{% url 'admin:app' %}">应用平台管理</a></li>
-				<li><a href="{% url 'admin:contract' %}">企业合同管理</a></li>
-				<li><a href="{% url 'admin:credit_config' %}">迈豆池管理</a></li>
-			</ul>
+
+		<li>
+			<a href="{% url 'admin:company' %}"><i class="fa fa-th-list"></i> <span>企业信息管理</span></a>
 		</li>
-		<li class="submenu">
-			<a href="#"><i class="fa fa-file"></i> <span>积分规则管理</span> <i class="arrow fa fa-chevron-right"></i></a>
-			<ul>
-				<li><a href="{% url 'admin:credit_rule' %}">积分策略设置</a></li>
-			</ul>
+		<li>
+			<a href="{% url 'admin:contract' %}"><i class="fa fa-th-list"></i> <span>企业合同管理</span></a>
 		</li>
 		<li>
 			<a href="{% url 'admin:logs' %}"><i class="fa fa-signal"></i> <span>系统操作记录</span></a>
