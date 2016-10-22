@@ -95,6 +95,7 @@ def form(request):
         param = {
             'appId': post.get('appId'),
             'companyId': post.get('companyId'),
+            'contractId': post.get('contractId'),
             'name': post.get('name'),
             'remarkName': post.get('remarkName'),
             'extend': extend_list,

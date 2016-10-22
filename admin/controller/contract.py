@@ -103,10 +103,8 @@ def updateStatus(request, **param):
 def credit(request):
     post = request.POST
     id = post.get('id')
-    companyId = post.get('companyId')
-    appId = post.get('appId')
     post_credit = int(post.get('credit1'))
-    if id and companyId and appId:
+    if id:
         try:
             contractGet = Model.objects.get(id=id)
             credit_poor = contractGet['number'] * contractGet['amount'] - contractGet['credit1']
@@ -116,7 +114,7 @@ def credit(request):
         # return HttpResponse(credit_poor)
         if credit_poor > post_credit:
             try:
-                modelCreditConfig = CreditConfig.objects.get(companyId=companyId, appId=appId)
+                modelCreditConfig = CreditConfig.objects.get(contractId=id)
             except Exception:
                 returnData = {'code': '912', 'msg': '找不到对应的应用平台信息', 'data': ''}
                 return HttpResponse(json.dumps(returnData), content_type="application/json")
@@ -154,7 +152,6 @@ def credit(request):
             # log记录参数
             logParam = {
                 'contractId': str(contractGet['id']),
-                'appId': appId,
                 'credit1': post_credit_int,
             }
             try:
@@ -194,3 +191,37 @@ def delete(request):
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
     return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+'''
+前端访问接口
+'''
+@auth  # 引用登录权限验证
+def contractlist(request, **kwargs):
+    if request.method == 'POST':
+        req = request.POST
+        appId = req.get('appId')
+    else:
+        appId = kwargs.get('appId')
+    returnFormat = kwargs.get('returnFormat')
+    if appId:
+        data = {}
+        try:
+            modelData = Model.objects.filter(status=1, appId=appId).order_by("id")
+        except Exception:
+            modelData = {}
+        if modelData:
+            for val in modelData:
+                data[str(val.id)] = val.name
+        if data:
+            returnData = {'code': 200, 'msg': '操作成功', 'data': data}
+        else:
+            returnData = {'code': 200, 'msg': '暂无数据', 'data': None}
+    else:
+        returnData = {'code': 200, 'msg': '参数缺失', 'data': None}
+
+    if returnFormat:
+        return returnData.get('data')
+    elif request.method == 'POST':
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        return returnData.get('data')
