@@ -171,7 +171,7 @@ var deleteDataMultiple = function (check, delete_url, index_url) {
  * @param element
  * @param type
  */
-var changeListDataByAjaxForMime = function (url, data, element, type) {
+var changeListDataByAjaxForMime = function (url, data, element, type, defaultVal) {
     $.ajax({
         type: 'post',
         url: url,
@@ -180,7 +180,7 @@ var changeListDataByAjaxForMime = function (url, data, element, type) {
             if(res.code == 200){
                 console.log(res.data);
                 if('optionHtml' == type){
-                    selectOptionHtmlForMime(res.data, element);
+                    selectOptionHtmlForMime(res.data, element, defaultVal);
                 }else if('optionPrepend' == type){
                     selectOptionPrependForMime(res.data, element);
                 }else if('formHtml' == type){
@@ -196,10 +196,15 @@ var changeListDataByAjaxForMime = function (url, data, element, type) {
  * @param list
  * @param element
  */
-var selectOptionHtmlForMime = function (list, element) {
-    var html = '<option value="" selected>请选择</option>';
+var selectOptionHtmlForMime = function (list, element, defaultVal) {
+
+    var html = '<option value="">请选择</option>';
     for(var i in list){
-        html += '<option value="' + i + '">' + list[i] + '</option>';
+        html += '<option value="' + i + '"' ;
+        if(defaultVal == i){
+            html += 'selected ';
+        }
+        html +=  '>' + list[i] + '</option>';
     }
     $(element).html(html);
 };

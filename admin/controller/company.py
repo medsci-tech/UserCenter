@@ -5,6 +5,10 @@
 from admin.controller.common_import import *
 
 from admin.model.Company import Company as Model
+from admin.model.App import App
+from admin.model.CreditConfig import CreditConfig
+from admin.model.CreditRule import CreditRule
+from admin.model.Contract import Contract
 
 '''
 迈豆积分列表
@@ -183,6 +187,11 @@ def delete(request):
         except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
+        finally:
+            App.objects.filter(companyId__in=selection).delete()
+            CreditConfig.objects.filter(companyId__in=selection).delete()
+            CreditRule.objects.filter(companyId__in=selection).delete()
+            Contract.objects.filter(cid__in=selection).delete()
         if model:
             # 操作成功添加log操作记录
             for id in selection:

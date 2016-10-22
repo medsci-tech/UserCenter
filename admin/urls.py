@@ -26,6 +26,7 @@ urlpatterns = [
     url(r'^admin/save/',admin.save, name='save'),# 保存管理员
 
     # 合同
+    url(r'^contract/contractlist', contract.contractlist, name='contract_contractlist'),# 保存合同
     url(r'^contract/delete', contract.delete, name='contract_delete'),# 保存合同
     url(r'^contract/save', contract.save, name='contract_save'),# 保存合同
     url(r'^contract/updateStatus', contract.updateStatus, name='contract_updateStatus'),

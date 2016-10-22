@@ -86,6 +86,16 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
+        contractId = post.get('contractId')
+        try:
+            check_name = Model.objects.filter(contractId=contractId).order_by('id')
+        except Exception:
+            returnData = {'code': 801, 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if check_name:
+            if str(check_name[0]['id']) != id:
+                returnData = {'code': 802, 'msg': '合同已有对应的迈豆池', 'data': None}
+                return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
         # 获取配置列表
         cfg_param = configParam(request)
@@ -95,6 +105,7 @@ def form(request):
         param = {
             'appId': post.get('appId'),
             'companyId': post.get('companyId'),
+            'contractId': contractId,
             'name': post.get('name'),
             'remarkName': post.get('remarkName'),
             'extend': extend_list,

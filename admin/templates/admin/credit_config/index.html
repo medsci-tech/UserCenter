@@ -86,6 +86,7 @@
                                        data-id="{{ list.id }}"
                                        data-appId="{{ list.appId }}"
                                        data-companyId="{{ list.companyId }}"
+                                       data-contractId="{{ list.contractId }}"
                                        data-name="{{ list.name }}"
                                        data-remarkName="{{ list.remarkName }}"
                                        {% for key, val in list.extend.items %}
@@ -127,6 +128,7 @@
 <script>
 $(function () {
     var app_list_url = '{% url 'admin:app_applist' %}';
+    var contract_list_url = '{% url 'admin:contract_contractlist' %}';
     var stats_url = '{% url 'admin:credit_config_stats' %}';
     var form_url = '{% url 'admin:credit_config_form' %}';
     var index_url = window.location.href;
@@ -148,9 +150,9 @@ $(function () {
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
-        var companyId = $('#form-companyId');
-        var defaultCompany = companyId.find('option:first').val();
-        companyId.val(defaultCompany);
+        selectOptionHtmlForMime({}, '#form-appId');
+        selectOptionHtmlForMime({}, '#form-contractId');
+        $('#form-companyId').val(kong);
         $('#form-id').val(kong);
         $('#form-name').val(kong);
         $('#form-remarkName').val(kong);
@@ -166,11 +168,13 @@ $(function () {
         var id = $(this).attr('data-id');
         var appId = $(this).attr('data-appId');
         var companyId = $(this).attr('data-companyId');
+        var contractId = $(this).attr('data-contractId');
         var name = $(this).attr('data-name');
         var remarkName = $(this).attr('data-remarkName');
         var status = $(this).attr('data-status');
+        changeListDataByAjaxForMime(app_list_url, {'companyId': companyId}, '#form-appId', 'optionHtml', appId);
+        changeListDataByAjaxForMime(contract_list_url, {'appId': appId}, '#form-contractId', 'optionHtml', contractId);
         $('#form-id').val(id);
-        $('#form-appId').val(appId);
         $('#form-companyId').val(companyId);
         $('#form-name').val(name);
         $('#form-remarkName').val(remarkName);
@@ -225,7 +229,11 @@ $(function () {
     $('#form-companyId').change(function () {
       changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
         console.log(this.value);
-    })
+    });
+    $('#form-appId').change(function () {
+      changeListDataByAjaxForMime(contract_list_url, {'appId': this.value}, '#form-contractId', 'optionHtml');
+        console.log(this.value);
+    });
 });
 </script>
 
