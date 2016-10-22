@@ -6,6 +6,7 @@ from admin.model.Contract import Contract as Model
 from admin.model.Company import Company
 from admin.model.CreditConfig import CreditConfig
 from admin.model.CreditLog import CreditLog
+from admin.model.CreditRule import CreditRule
 
 @csrf_exempt
 @auth # 引用登录权限验证
@@ -171,6 +172,7 @@ def delete(request):
         selection = post.getlist('selection[]')
         try:
             model = Model.objects.filter(id__in=selection).delete()
+            CreditConfig.objects.filter(contractId__in=selection).delete()
         except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")

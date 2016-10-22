@@ -5,7 +5,9 @@
 from admin.controller.common_import import *
 
 from admin.model.App import App as Model
-from admin.model.Company import Company
+from admin.model.CreditConfig import CreditConfig
+from admin.model.CreditRule import CreditRule
+from admin.model.Contract import Contract
 from admin.controller.company import companylist
 
 @csrf_exempt
@@ -202,6 +204,9 @@ def delete(request):
         selection = post.getlist('selection[]')
         try:
             model = Model.objects.filter(id__in=selection).delete()
+            CreditConfig.objects.filter(appId__in=selection).delete()
+            CreditRule.objects.filter(appId__in=selection).delete()
+            Contract.objects.filter(appId__in=selection).delete()
         except Exception:
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
