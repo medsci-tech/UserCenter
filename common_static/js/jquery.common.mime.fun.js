@@ -201,7 +201,7 @@ var selectOptionHtmlForMime = function (list, element, defaultVal) {
     var html = '<option value="">请选择</option>';
     for(var i in list){
         html += '<option value="' + i + '"' ;
-        if(defaultVal){
+        if(defaultVal == i){
             html += 'selected ';
         }
         html +=  '>' + list[i] + '</option>';
