@@ -26,6 +26,8 @@ urlpatterns = [
     url(r'^admin/save/',admin.save, name='save'),# 保存管理员
 
     # 合同
+    url(r'^contract/contractlist', contract.contractlist, name='contract_contractlist'),# 保存合同
+    url(r'^contract/delete', contract.delete, name='contract_delete'),# 保存合同
     url(r'^contract/save', contract.save, name='contract_save'),# 保存合同
     url(r'^contract/updateStatus', contract.updateStatus, name='contract_updateStatus'),
     url(r'^contract/credit', contract.credit, name='contract_credit'),
@@ -35,6 +37,7 @@ urlpatterns = [
     url(r'^upload/img', upload.img, name='upload_img'),
 
     # 应用平台
+    url(r'^app/delete', app.delete, name='app_delete'),
     url(r'^app/form', app.form, name='app_form'),
     url(r'^app/stats', app.stats, name='app_stats'),
     url(r'^app/applist', app.applist, name='app_applist'),
@@ -49,6 +52,7 @@ urlpatterns = [
     url(r'^logs/index', syslog.index, name='logs'),
 
     # 企业管理
+    url(r'^company/delete', company.delete, name='company_delete'),
     url(r'^company/form', company.form, name='company_form'),
     url(r'^company/stats', company.stats, name='company_stats'),
     url(r'^company/index', company.index, name='company'),

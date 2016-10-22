@@ -7,6 +7,7 @@ from admin.controller.common_import import *
 from admin.model.CreditConfig import CreditConfig as Model
 from admin.controller.company import companylist
 from admin.controller.app import applist
+from admin.model.App import App
 
 '''
 迈豆积分列表
@@ -18,9 +19,7 @@ def index(request):
     param = {}
     # 获取所有启用企业列表
     company_list = companylist(request)
-    app_list = applist(request)
     # 获取所有状态列表
-    cfg_param = configParam(request)
     searchCompanyId = get.get('companyId')
     if searchCompanyId:
         param.update(companyId=searchCompanyId)
@@ -29,7 +28,7 @@ def index(request):
         if dataOne:
             param.update(companyId=dataOne[0]['companyId'])
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-    # 增强文字可读性
+
     if data:
         selectData = data[0]
     else:
@@ -37,7 +36,7 @@ def index(request):
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
-
+    app_list = applist(request, companyId=selectData['companyId'])
     return render(request, 'admin/credit_config/index.html', {
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),
@@ -87,6 +86,16 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
+        contractId = post.get('contractId')
+        try:
+            check_name = Model.objects.filter(contractId=contractId).order_by('id')
+        except Exception:
+            returnData = {'code': 801, 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if check_name:
+            if str(check_name[0]['id']) != id:
+                returnData = {'code': 802, 'msg': '合同已有对应的迈豆池', 'data': None}
+                return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
         # 获取配置列表
         cfg_param = configParam(request)
@@ -96,6 +105,9 @@ def form(request):
         param = {
             'appId': post.get('appId'),
             'companyId': post.get('companyId'),
+            'contractId': contractId,
+            'name': post.get('name'),
+            'remarkName': post.get('remarkName'),
             'extend': extend_list,
             'status': post.get('status'),
         }

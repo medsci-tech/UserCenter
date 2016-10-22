@@ -5,6 +5,10 @@
 from admin.controller.common_import import *
 
 from admin.model.Company import Company as Model
+from admin.model.App import App
+from admin.model.CreditConfig import CreditConfig
+from admin.model.CreditRule import CreditRule
+from admin.model.Contract import Contract
 
 '''
 迈豆积分列表
@@ -124,33 +128,32 @@ def stats(request):
         }
         try:
             model = Model.objects.filter(id__in=selection).update(**param)
-            if model:
-                # 操作成功添加log操作记录
-                for id in selection:
-                    # log记录参数
-                    logParam = {
-                        'table': 'company',
-                        'after': param,
-                        'tableId': id,
-                    }
-                    if statusType == 'enable':
-                        logParam.update(action=3)  # log记录参数,action=3为启用
-                    else:
-                        logParam.update(action=4)  # log记录参数,action=4为禁用
-                    if 'id' in logParam['after']:
-                        del logParam['after']['id']
-                    logsform(request, logParam)
-
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-                returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if model:
+            # 操作成功添加log操作记录
+            for id in selection:
+                # log记录参数
+                logParam = {
+                    'table': 'company',
+                    'after': param,
+                    'tableId': id,
+                }
+                if statusType == 'enable':
+                    logParam.update(action=3)  # log记录参数,action=3为启用
+                else:
+                    logParam.update(action=4)  # log记录参数,action=4为禁用
+                if 'id' in logParam['after']:
+                    del logParam['after']['id']
+                logsform(request, logParam)
 
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 @csrf_exempt
 @auth  # 引用登录权限验证
@@ -172,3 +175,37 @@ def companylist(request):
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         return returnData.get('data')
+
+# 删除操作
+@auth  # 引用登录权限验证
+def delete(request):
+    post = request.POST
+    if post:
+        selection = post.getlist('selection[]')
+        try:
+            model = Model.objects.filter(id__in=selection).delete()
+        except Exception:
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        finally:
+            App.objects.filter(companyId__in=selection).delete()
+            CreditConfig.objects.filter(companyId__in=selection).delete()
+            CreditRule.objects.filter(companyId__in=selection).delete()
+            Contract.objects.filter(cid__in=selection).delete()
+        if model:
+            # 操作成功添加log操作记录
+            for id in selection:
+                # log记录参数
+                logParam = {
+                    'table': 'company',
+                    'after': {},
+                    'tableId': id,
+                }
+                logParam.update(action=5)  # log记录参数,action=5为删除
+                logsform(request, logParam)
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+    else:
+        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+    return HttpResponse(json.dumps(returnData), content_type="application/json")

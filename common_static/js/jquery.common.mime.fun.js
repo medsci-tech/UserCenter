@@ -142,22 +142,45 @@ var disableDataMultiple = function (check, stats_url, index_url) {
 };
 
 /**
+ * 禁用操作
+ * @param check
+ * @param delete_url
+ * @param index_url
+ */
+var deleteDataMultiple = function (check, delete_url, index_url) {
+    swal({
+        title: "此操作不可恢复，您确定要删除选中的信息吗",
+        type: "error",
+        showCancelButton: true,
+        cancelButtonText: '取消',
+        confirmButtonColor: "#f27474",
+        confirmButtonText: "确定",
+        closeOnConfirm: false
+    }, function () {
+        var data = {};
+        data.selection = getDataListForMime(check);
+        console.log(data);
+        subActionAjaxForMime('post', delete_url, data, index_url);
+    });
+};
+
+/**
  * ajax根据appId变化获取扩展列表
  * @param url
  * @param data
  * @param element
  * @param type
  */
-var changeListDataByAjaxForMime = function (url, data, element, type) {
+var changeListDataByAjaxForMime = function (url, data, element, type, defaultVal) {
     $.ajax({
         type: 'post',
         url: url,
         data: data,
         success: function(res){
             if(res.code == 200){
-                // console.log(res.data);
+                console.log(res.data);
                 if('optionHtml' == type){
-                    selectOptionHtmlForMime(res.data, element);
+                    selectOptionHtmlForMime(res.data, element, defaultVal);
                 }else if('optionPrepend' == type){
                     selectOptionPrependForMime(res.data, element);
                 }else if('formHtml' == type){
@@ -173,10 +196,15 @@ var changeListDataByAjaxForMime = function (url, data, element, type) {
  * @param list
  * @param element
  */
-var selectOptionHtmlForMime = function (list, element) {
-    var html = '';
+var selectOptionHtmlForMime = function (list, element, defaultVal) {
+
+    var html = '<option value="">请选择</option>';
     for(var i in list){
-        html += '<option value="' + i + '">' + list[i] + '</option>';
+        html += '<option value="' + i + '"' ;
+        if(defaultVal == i){
+            html += 'selected ';
+        }
+        html +=  '>' + list[i] + '</option>';
     }
     $(element).html(html);
 };
