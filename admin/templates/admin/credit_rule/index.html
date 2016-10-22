@@ -9,9 +9,9 @@
     <div class="row">
         <form action="" method="get">
         <div class="col-xs-12 center">
-            <label>应用名称：
-                <select class="form-inline2" name="appId" id="form-searchAppId">
-                    {% for key, val in appList.items %}
+            <label>企业名称：
+                <select class="form-inline2" name="companyId" id="form-searchCompanyId">
+                    {% for key, val in companyList.items %}
                         <option value="{{ key }}">{{ val }}</option>
                     {% endfor %}
                 </select>
@@ -40,7 +40,8 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>策略名称</th>
+                                <th>所属应用</th>
+                                <th>备注名</th>
                                 <th>奖励周期</th>
                                 <th>次数</th>
                                 {% for key, val in c_ext_credit.items %}
@@ -52,12 +53,19 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for list in list.object_list  %}
+                            {% for list in data_list.object_list  %}
                             <tr>
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.name }}</td>
+                                <td>
+                                    {% for key, val in appList.items %}
+                                        {% if key == list.appId %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ list.remark }}</td>
                                 <td>
                                     {% for key, val in c_cycle.items %}
                                         {% if key == list.cycle %}
@@ -88,6 +96,7 @@
                                        data-id="{{ list.id }}"
                                        data-appId="{{ list.appId }}"
                                        data-name="{{ list.name }}"
+                                       data-remark="{{ list.remark }}"
                                        {% for key, val in list.extend.items %}
                                        data-{{ key }}="{{ val }}"
                                        {% endfor %}
@@ -131,6 +140,8 @@
 
 <script>
 $(function () {
+    var app_list_url = '{% url 'admin:app_applist' %}';
+    var creditConfig_list_url = '{% url 'admin:credit_config_creditconfiglist' %}';
     var stats_url = '{% url 'admin:credit_rule_stats' %}';
     var form_url = '{% url 'admin:credit_rule_form' %}';
     var index_url = window.location.href;
@@ -142,27 +153,27 @@ $(function () {
     {% for key, val in c_ext_credit.items %}
         credit_full_list['{{ key }}'] = '{{ val }}';
     {% endfor %}
-
-    console.log(credit_full_list);
     //选中应用
-    var searchAppId = '{{ ctrlList.appId }}';
-    if(searchAppId){
-        $('#form-searchAppId').val(searchAppId);
+    var searchCompanyId = '{{ ctrlList.companyId }}';
+    if(searchCompanyId){
+        $('#form-searchCompanyId').val(searchCompanyId);
     }
+    console.log(credit_full_list);
 
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
-        var appId = $('#form-appId');
         var cycle = $('#form-cycle');
-        var defaultAppId = $('#form-searchAppId').val();
         var defaultCycle = cycle.find('option:first').val();
-        appId.val(defaultAppId);
         cycle.val(defaultCycle);
+        selectOptionHtmlForMime({}, '#form-appId');
+        selectOptionHtmlForMime({}, '#form-creditConfigId');
+        $('#form-companyId').val(kong);
         $('#form-id').val(kong);
         $('#form-name').val(kong);
+        $('#form-remark').val(kong);
         $('#form-rewardNum').val(kong);
         $('#form-ratio').val(kong);
         $('#form-status').val(1);
@@ -175,15 +186,21 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
+        var companyId = $(this).attr('data-companyId');
         var appId = $(this).attr('data-appId');
+        var creditConfigId = $(this).attr('data-creditConfigId');
         var name = $(this).attr('data-name');
+        var remark = $(this).attr('data-remark');
         var cycle = $(this).attr('data-cycle');
         var rewardNum = $(this).attr('data-rewardNum');
         var ratio = $(this).attr('data-ratio');
         var status = $(this).attr('data-status');
+        changeListDataByAjaxForMime(app_list_url, {'companyId': companyId}, '#form-appId', 'optionHtml', appId);
+        changeListDataByAjaxForMime(creditConfig_list_url, {'appId': appId}, '#form-creditConfigId', 'optionHtml', creditConfigId);
         $('#form-id').val(id);
-        $('#form-appId').val(appId);
+        $('#form-companyId').val(companyId);
         $('#form-name').val(name);
+        $('#form-remark').val(remark);
         $('#form-cycle').val(cycle);
         $('#form-rewardNum').val(rewardNum);
         $('#form-ratio').val(ratio);
@@ -197,6 +214,9 @@ $(function () {
      */
     var rules = {
         name:{
+            required:true
+        },
+        remark:{
             required:true
         },
         rewardNum:{
@@ -238,6 +258,17 @@ $(function () {
         }
     });
 
+  /**
+   * 获取企业应用列表
+   */
+    $('#form-companyId').change(function () {
+      changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
+        console.log(this.value);
+    });
+   $('#form-appId').change(function () {
+      changeListDataByAjaxForMime(creditConfig_list_url, {'appId': this.value}, '#form-creditConfigId', 'optionHtml');
+        console.log(this.value);
+    });
 });
 </script>
 

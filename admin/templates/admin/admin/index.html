@@ -10,13 +10,13 @@
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>昵称：
-                <input type="text" name="nickname" value="{{ post.nickname }}">
+                <input type="text" name="nickname" value="{{ ctrlList.nickname }}">
             </label>
             <label>用户名：
-                <input type="text" name="username" value="{{ post.username }}">
+                <input type="text" name="username" value="{{ ctrlList.username }}">
             </label>
             <label>邮箱：
-                <input type="text" name="email" value="{{ post.email }}">
+                <input type="text" name="email" value="{{ ctrlList.email }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -52,8 +52,8 @@
                             </tr>
                         </thead>
                         <tbody>
-                        	{% if list %}
-                    			{% for data in list  %}
+                        	{% if data_list %}
+                    			{% for data in data_list  %}
                             <tr>
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ data.id }}"/>

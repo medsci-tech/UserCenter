@@ -7,15 +7,20 @@
         <h1>应用平台管理</h1>
     </div>
     <div class="row">
-        <form action="" method="post">
+        <form action="" method="get">
         <div class="col-xs-12 center">
-            <label>应用名称：
-                <input type="text" name="name" value="{{ ctrlList.name }}">
+            <label>企业名称：
+                <select class="form-inline2" name="companyId" id="form-searchCompanyId">
+                    {% for key, val in companyList.items %}
+                        <option value="{{ key }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
             <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
             <a href="javascript:;" class="btn btn-warning" data-form="disable">禁用</a>
+            <a href="javascript:;" class="btn btn-danger" data-form="delete">删除</a>
         </div>
         </form>
     </div>
@@ -44,12 +49,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for list in topics.object_list  %}
+                            {% for list in data_list.object_list  %}
                             <tr>
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.name }}</td>
+                                <td><a href="{% url 'admin:credit_config' %}?companyId={{ list.companyId }}" target="_blank">{{ list.name }}</a></td>
                                 <td>{{ list.description }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
@@ -62,6 +67,7 @@
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
+                                       data-companyId="{{ list.companyId }}"
                                        data-name="{{ list.name }}"
                                        data-description="{{ list.description }}"
                                        data-status="{{ list.status }}"
@@ -100,17 +106,25 @@
 
 <script>
 $(function () {
+    var delete_url = '{% url 'admin:app_delete' %}';
     var stats_url = '{% url 'admin:app_stats' %}';
     var form_url = '{% url 'admin:app_form' %}';
     var index_url = '{% url 'admin:app' %}';
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
     });
+    //选中应用
+    var searchCompanyId = '{{ ctrlList.companyId }}';
+    if(searchCompanyId){
+        $('#form-searchCompanyId').val(searchCompanyId);
+    }
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
+        var companyId = $('#form-companyId');
+        companyId.val(companyId.find('option:first').val());
         $('#form-id').val(kong);
         $('#form-name').val(kong);
         $('#form-description').val(kong);
@@ -121,10 +135,12 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
+        var companyId = $(this).attr('data-companyId');
         var name = $(this).attr('data-name');
         var description = $(this).attr('data-description');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
+        $('#form-companyId').val(companyId);
         $('#form-name').val(name);
         $('#form-description').val(description);
         $('#form-status').val(status);
@@ -166,6 +182,21 @@ $(function () {
             return false;
         }
     });
+
+    /**
+     * 删除
+     */
+    $('[data-form="delete"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(true == verifyChecked){
+            deleteDataMultiple(check, delete_url, index_url);
+        }else {
+            return false;
+        }
+    });
+
 });
 </script>
 

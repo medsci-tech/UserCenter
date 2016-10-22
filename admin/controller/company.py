@@ -5,6 +5,10 @@
 from admin.controller.common_import import *
 
 from admin.model.Company import Company as Model
+from admin.model.App import App
+from admin.model.CreditConfig import CreditConfig
+from admin.model.CreditRule import CreditRule
+from admin.model.Contract import Contract
 
 '''
 迈豆积分列表
@@ -21,19 +25,15 @@ def index(request):
         param.update(name={'$regex': searchName})
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
 
-    limit = cfg_param.get('c_page')  # 每页显示的记录数
-    paginator = Paginator(data, limit)  # 实例化一个分页对象
-    page = request.GET.get('page')  # 获取页码
-    try:
-        topics = paginator.page(page)  # 获取某页对应的记录
-    except PageNotAnInteger:  # 如果页码不是个整数
-        topics = paginator.page(1)  # 取第一页的记录
-    except EmptyPage:  # 如果页码太大，没有相应的记录
-        topics = paginator.page(paginator.num_pages)  # 取最后一页的记录
+    page = request.GET.get('page', 1)  # 获取页码
+    pageData = paginationForMime(page=page, data=data)
 
-    # return HttpResponse(credit_list)
     return render(request, 'admin/company/index.html', {
-        'topics': topics,
+        'data_list': pageData.get('data_list'),
+        'page_has_previous': pageData.get('pageLengthPrev'),
+        'page_has_next': pageData.get('pageLengthNext'),
+        'page_last': pageData.get('pageLast'),
+        'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
     })
 
@@ -128,33 +128,32 @@ def stats(request):
         }
         try:
             model = Model.objects.filter(id__in=selection).update(**param)
-            if model:
-                # 操作成功添加log操作记录
-                for id in selection:
-                    # log记录参数
-                    logParam = {
-                        'table': 'company',
-                        'after': param,
-                        'tableId': id,
-                    }
-                    if statusType == 'enable':
-                        logParam.update(action=3)  # log记录参数,action=3为启用
-                    else:
-                        logParam.update(action=4)  # log记录参数,action=4为禁用
-                    if 'id' in logParam['after']:
-                        del logParam['after']['id']
-                    logsform(request, logParam)
-
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-                returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if model:
+            # 操作成功添加log操作记录
+            for id in selection:
+                # log记录参数
+                logParam = {
+                    'table': 'company',
+                    'after': param,
+                    'tableId': id,
+                }
+                if statusType == 'enable':
+                    logParam.update(action=3)  # log记录参数,action=3为启用
+                else:
+                    logParam.update(action=4)  # log记录参数,action=4为禁用
+                if 'id' in logParam['after']:
+                    del logParam['after']['id']
+                logsform(request, logParam)
 
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 @csrf_exempt
 @auth  # 引用登录权限验证
@@ -176,3 +175,36 @@ def companylist(request):
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         return returnData.get('data')
+
+# 删除操作
+@auth  # 引用登录权限验证
+def delete(request):
+    post = request.POST
+    if post:
+        selection = post.getlist('selection[]')
+        try:
+            model = Model.objects.filter(id__in=selection).delete()
+        except Exception:
+            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if model:
+            App.objects.filter(companyId__in=selection).delete()
+            CreditConfig.objects.filter(companyId__in=selection).delete()
+            CreditRule.objects.filter(companyId__in=selection).delete()
+            Contract.objects.filter(cid__in=selection).delete()
+            # 操作成功添加log操作记录
+            for id in selection:
+                # log记录参数
+                logParam = {
+                    'table': 'company',
+                    'after': {},
+                    'tableId': id,
+                }
+                logParam.update(action=5)  # log记录参数,action=5为删除
+                logsform(request, logParam)
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+    else:
+        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+    return HttpResponse(json.dumps(returnData), content_type="application/json")

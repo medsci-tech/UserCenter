@@ -4,11 +4,19 @@
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">合作企业</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <select class="form-control" name="cid" id="cid" required>
+            <select class="form-control" name="cid" id="form-cid">
                 <option value="">请选择所属企业</option>
                 {% for data in comList reversed  %}
-                    <option value="{{ data.id }}" {% ifequal data.id data.cid %} selected {%endifequal%}>{{ data.name }}</option>
+                    <option value="{{ data.id }}">{{ data.name }}</option>
                 {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">应用平台</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="appId" id="form-appId">
+                <option value="">请选择</option>
             </select>
         </div>
     </div>
@@ -51,15 +59,18 @@
         </div>
     </div>
  	<div class="form-group">
-		<label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
-		<div class="col-sm-9 col-md-9 col-lg-10">
-			<label><input type="radio"  name="status" value="1"/> 启用</label>
-			<label><input type="radio"  name="status" value="0" /> 禁用</label>
-		</div>
+      <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
+      <div class="col-sm-9 col-md-9 col-lg-10">
+          <select class="form-control" name="status" id="form-status">
+              {% for key,value in c_status.items %}
+                  <option value="{{ key }}">{{ value }}</option>
+              {% endfor %}
+          </select>
+      </div>
 	</div>
     <div class="modal-footer">
         <input type="submit" value="确定" class="btn btn-primary" id="submit">
-        <button data-dismiss="modal" class="btn btn-default btn-small" id="ResetButton">重置</button>
+        <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
     </div>
     <input type="hidden" name="id" id="form-id">
     </form>
@@ -69,10 +80,7 @@
         $("#contract_validate").validate();
     });
     var stats_url = '{% url 'admin:company_stats' %}';
-	/* 表单重置 */
-	$("#ResetButton").click(function() {
-		$('#basic_validate').get(0).reset();//清空表单
-	});
+
     /**
      * 表单验证提交按钮触发的操作
      */
@@ -83,8 +91,8 @@
         },
         number:{
             required:true
-        },
+        }
 
     };
-    subActionAjaxValidateForMime('#contract_validate', rules, '/admin/contract/save', '');
+    subActionAjaxValidateForMime('#contract_validate', rules, '{% url 'admin:contract_save' %}', window.location.href);
 </script>

@@ -4,8 +4,9 @@
 # 公共引入文件
 from admin.controller.common_import import *
 
-from admin.model.CreditRule import CreditRule
+from admin.model.CreditRule import CreditRule as Model
 from admin.controller.app import applist
+from admin.controller.company import companylist
 
 '''
 迈豆积分列表
@@ -16,35 +17,35 @@ def index(request):
     get = request.GET
     param = {}
     # 获取所有启用应用列表
-    app_list = applist(request)
-    # 获取配置列表
-    cfg_param = configParam(request)
-    status_list = cfg_param.get('c_status')
-    cycle_list = cfg_param.get('c_cycle')
-    searchAppId = get.get('appId')
-    selectData = get
-    if searchAppId:
-        param.update(appId=searchAppId)
-    else:
-        dataOne = CreditRule.objects.filter(appId__in=app_list.keys()).order_by('id')[:1]  # 获取第一条数据
-        if dataOne:
-            param.update(appId=dataOne[0]['appId'])
-            selectData = dataOne[0]
-    data = CreditRule.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-    limit = cfg_param.get('c_page')  # 每页显示的记录数
-    paginator = Paginator(data, limit)  # 实例化一个分页对象
-    page = request.GET.get('page')  # 获取页码
-    try:
-        list = paginator.page(page)  # 获取某页对应的记录
-    except PageNotAnInteger:  # 如果页码不是个整数
-        list = paginator.page(1)  # 取第一页的记录
-    except EmptyPage:  # 如果页码太大，没有相应的记录
-        list = paginator.page(paginator.num_pages)  # 取最后一页的记录
+    company_list = companylist(request)
 
+    # 获取配置列表
+    searchCompanyId = get.get('companyId')
+    if searchCompanyId:
+        param.update(companyId=searchCompanyId)
+    else:
+        dataOne = Model.objects.filter().order_by('id')[:1]  # 获取第一条数据
+        if dataOne:
+            param.update(companyId=dataOne[0]['companyId'])
+    data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
+
+    if data:
+        selectData = data[0]
+    else:
+        selectData = get
+
+    page = request.GET.get('page', 1)  # 获取页码
+    pageData = paginationForMime(page=page, data=data)
+    app_list = applist(request, companyId=selectData['companyId'])
     # return HttpResponse(credit_list)
     return render(request, 'admin/credit_rule/index.html', {
-        'list': list,
+        'data_list': pageData.get('data_list'),
+        'page_has_previous': pageData.get('pageLengthPrev'),
+        'page_has_next': pageData.get('pageLengthNext'),
+        'page_last': pageData.get('pageLast'),
+        'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': selectData,
+        'companyList': company_list,
         'appList': app_list,
     })
 
@@ -53,7 +54,7 @@ def _add(**param):
     id = param.get('id')
     if not id:
         try:
-            model = CreditRule.objects.create(**param)
+            model = Model.objects.create(**param)
             if model:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
             else:
@@ -69,13 +70,13 @@ def _editById(**param):
     id = param.get('id')
     if id:
         try:
-            model = CreditRule.objects.get(id=id).update(**param)
-            if model == 1:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+            model = Model.objects.get(id=id).update(**param)
         except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            return {'code': '900', 'msg': '数据验证错误', 'data': Exception}
+        if model:
+            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+        else:
+            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
     else:
         returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
     return returnData
@@ -86,6 +87,16 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
+        name = post.get('name')
+        appId = post.get('appId')
+        try:
+            check_name = Model.objects.filter(name=name, appId=appId).order_by('id')
+        except Exception:
+            returnData = {'code': 808, 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if check_name:
+            returnData = {'code': 808, 'msg': '策略字段%s已存在' % name, 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
         # 获取配置列表
         cfg_param = configParam(request)
@@ -93,8 +104,11 @@ def form(request):
         for key in ext_credit_list:
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
-            'appId': post.get('appId'),
-            'name': post.get('name'),
+            'appId': appId,
+            'companyId': post.get('companyId'),
+            'creditConfigId': post.get('creditConfigId'),
+            'name': name,
+            'remark': post.get('remark'),
             'cycle': post.get('cycle'),
             'rewardNum': post.get('rewardNum'),
             'extend': extend_list,
@@ -144,7 +158,7 @@ def stats(request):
             'status': status,
         }
         try:
-            model = CreditRule.objects.filter(id__in=selection).update(**param)
+            model = Model.objects.filter(id__in=selection).update(**param)
             if model:
                 # 操作成功添加log操作记录
                 for id in selection:

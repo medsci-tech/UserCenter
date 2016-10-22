@@ -7,7 +7,8 @@ class Contract(Auth):
             'collection': settings.MONGODB_PREFIX+'contract',
             'indexes':['id'],
             }
-    cid = StringField()
+    cid = StringField()  # 企业id
+    appId = StringField()  # 应用id
     name = StringField()
     code = StringField()
     number = FloatField()

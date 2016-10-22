@@ -16,6 +16,7 @@
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
             <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
             <a href="javascript:;" class="btn btn-warning" data-form="disable">禁用</a>
+            <a href="javascript:;" class="btn btn-danger" data-form="delete">删除</a>
         </div>
         </form>
     </div>
@@ -43,12 +44,12 @@
                             </tr>
                         </thead>
                         <tbody>
-                            {% for list in topics.object_list  %}
+                            {% for list in data_list.object_list  %}
                             <tr>
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.name }}</td>
+                                <td><a href="{% url 'admin:app' %}?companyId={{ list.id }}" target="_blank">{{ list.name }}</a></td>
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == list.status %}
@@ -99,6 +100,7 @@
 <script>
 $(function () {
     var stats_url = '{% url 'admin:company_stats' %}';
+    var delete_url = '{% url 'admin:company_delete' %}';
     var form_url = '{% url 'admin:company_form' %}';
     var index_url = window.location.href;
     $.ajaxSetup({
@@ -164,6 +166,19 @@ $(function () {
         }
     });
 
+    /**
+     * 删除
+     */
+    $('[data-form="delete"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(true == verifyChecked){
+            deleteDataMultiple(check, delete_url, index_url);
+        }else {
+            return false;
+        }
+    });
 
 });
 </script>

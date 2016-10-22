@@ -15,14 +15,7 @@ from admin.model.Admin import Admin
 def index(request):
     post = request.POST
     param = {}
-    admin_all_list = {}
     adminId = []
-    # 获取所有状态列表
-    cfg_param = configParam(request)
-    logs_operate = cfg_param.get('c_logs_operate')
-    adminAllList = Admin.objects.all().order_by('id')
-    for ids in adminAllList:
-        admin_all_list[str(ids['id'])] = ids['username']
     table = post.get('table')
     action = post.get('action')
     adminName = post.get('adminName')
@@ -40,23 +33,18 @@ def index(request):
         else:
             param.update(id='00000000000000000000000a')  # 无效的24位id
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-    # 增强文字可读性
-    if data:
-        for val in data:
-            val.update(actionName=logs_operate.get(val['action']))
-            val.update(adminName=admin_all_list.get(val['adminId']))
-    limit = cfg_param.get('c_page')  # 每页显示的记录数
-    paginator = Paginator(data, limit)  # 实例化一个分页对象
-    page = request.GET.get('page')  # 获取页码
-    try:
-        list = paginator.page(page)  # 获取某页对应的记录
-    except PageNotAnInteger:  # 如果页码不是个整数
-        list = paginator.page(1)  # 取第一页的记录
-    except EmptyPage:  # 如果页码太大，没有相应的记录
-        list = paginator.page(paginator.num_pages)  # 取最后一页的记录
 
-    # return HttpResponse(dataOne['id'])
-    return render(request, 'admin/logs/index.html', {'list': list, 'ctrlList': post})
+    page = request.GET.get('page', 1)  # 获取页码
+    pageData = paginationForMime(page=page, data=data)
+
+    return render(request, 'admin/logs/index.html', {
+        'data_list': pageData.get('data_list'),
+        'page_has_previous': pageData.get('pageLengthPrev'),
+        'page_has_next': pageData.get('pageLengthNext'),
+        'page_last': pageData.get('pageLast'),
+        'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
+        'ctrlList': post,
+    })
 
 '''
 添加log记录--用于controller之间的调用，外部url不能直接访问
@@ -75,6 +63,7 @@ def logsform(request, param):
         ip = request.META.get('REMOTE_ADDR')
     param.update(ip=ip)
     param.update(adminId=request.session.get('uid'))
+    param.update(adminName=request.session.get('username'))
     try:
         model = Model.objects.create(**param)
         if model:

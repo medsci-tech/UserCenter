@@ -8,6 +8,7 @@ class App(Auth):
             'indexes': [],
             }
     name = StringField(required=True)
+    companyId = StringField(required=True)
     description = StringField()
     status = IntField(default=1)
     createTime = DateTimeField(default=datetime.now())

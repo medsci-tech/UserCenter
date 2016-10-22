@@ -16,7 +16,6 @@ def index(request):
     post = request.POST
     param = {}
     # 获取配置列表
-    cfg_param = configParam(request)
     searchRole = post.get('role')
     searchPhone = post.get('phone')
     if searchRole:
@@ -25,20 +24,15 @@ def index(request):
         param.update(phone=searchPhone)
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
 
-    limit = cfg_param.get('c_page')  # 每页显示的记录数
-    paginator = Paginator(data, limit)  # 实例化一个分页对象
-    page = request.GET.get('page')  # 获取页码
-    try:
-        object_list = paginator.page(page)  # 获取某页对应的记录
-    except PageNotAnInteger:  # 如果页码不是个整数
-        object_list = paginator.page(1)  # 取第一页的记录
-    except EmptyPage:  # 如果页码太大，没有相应的记录
-        object_list = paginator.page(paginator.num_pages)  # 取最后一页的记录
+    page = request.GET.get('page', 1)  # 获取页码
+    pageData = paginationForMime(page=page, data=data)
 
-
-    # return HttpResponse(credit_list)
     return render(request, 'admin/user/index.html', {
-        'list': object_list,
+        'data_list': pageData.get('data_list'),
+        'page_has_previous': pageData.get('pageLengthPrev'),
+        'page_has_next': pageData.get('pageLengthNext'),
+        'page_last': pageData.get('pageLast'),
+        'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
     })
 
@@ -104,6 +98,10 @@ def form(request):
             'phone': post.get('phone'),
             'password': post.get('password'),
             'role': post.get('role'),
+            'name': post.get('name'),
+            'province': post.get('province'),
+            'city': post.get('city'),
+            'district': post.get('district'),
             'extend': extend_list,
             'status': post.get('status'),
         }
