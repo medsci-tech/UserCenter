@@ -190,3 +190,37 @@ def stats(request):
     else:
         returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+'''
+前端访问接口
+'''
+@auth  # 引用登录权限验证
+def creditconfiglist(request, **kwargs):
+    if request.method == 'POST':
+        req = request.POST
+        appId = req.get('appId')
+    else:
+        appId = kwargs.get('appId')
+    returnFormat = kwargs.get('returnFormat')
+    if appId:
+        data = {}
+        try:
+            app = Model.objects.filter(status=1, appId=appId).order_by("id")
+        except Exception:
+            app = {}
+        if app:
+            for val in app:
+                data[str(val.id)] = val.remarkName
+        if data:
+            returnData = {'code': 200, 'msg': '操作成功', 'data': data}
+        else:
+            returnData = {'code': 200, 'msg': '暂无数据', 'data': None}
+    else:
+        returnData = {'code': 200, 'msg': '参数缺失', 'data': None}
+
+    if returnFormat:
+        return returnData.get('data')
+    elif request.method == 'POST':
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    else:
+        return returnData.get('data')

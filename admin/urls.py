@@ -58,6 +58,7 @@ urlpatterns = [
     url(r'^company/index', company.index, name='company'),
 
     # 迈豆池管理
+    url(r'^credit_config/creditconfiglist', credit_config.creditconfiglist, name='credit_config_creditconfiglist'),
     url(r'^credit_config/form', credit_config.form, name='credit_config_form'),
     url(r'^credit_config/stats', credit_config.stats, name='credit_config_stats'),
     url(r'^credit_config/index', credit_config.index, name='credit_config'),

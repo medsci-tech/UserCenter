@@ -106,6 +106,7 @@ def form(request):
         param = {
             'appId': appId,
             'companyId': post.get('companyId'),
+            'creditConfigId': post.get('creditConfigId'),
             'name': name,
             'remark': post.get('remark'),
             'cycle': post.get('cycle'),
