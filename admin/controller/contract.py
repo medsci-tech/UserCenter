@@ -4,7 +4,6 @@ __author__ = 'lxhui'
 from admin.controller.common_import import *  # 公共引入文件
 from admin.model.Contract import Contract as Model
 from admin.model.Company import Company
-from admin.model.App import App
 from admin.model.CreditConfig import CreditConfig
 from admin.model.CreditLog import CreditLog
 
@@ -22,7 +21,6 @@ def index(request):
 
     '''企业信息'''
     comList = Company.objects.filter(status=1).order_by("id")
-    appList = App.objects.filter(status=1).order_by("id")
 
     return render(request, 'admin/contract/index.html',{
         'data_list': pageData.get('data_list'),
@@ -32,7 +30,6 @@ def index(request):
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
         'comList': comList,
-        'appList': appList,
     })
 
 
@@ -46,6 +43,7 @@ def save(request, **param):
         param = {
             'id': post.get('id'),  # objectid
             'cid': post.get('cid'),  # 企业id
+            'appId': post.get('appId'),  # 企业id
             'name':post.get('name'), # 合同名
             'code': post.get('code'),  # 合同编号
             'amount': post.get('amount'),# 合同金额

@@ -11,7 +11,7 @@
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>
-               <select id="form-cid" name="cid" class="form-inline2">
+               <select id="form-searchCid" name="cid" class="form-inline2">
                     <option value="" selected>请选择所属企业</option>
                     {% for data in comList reversed  %}
                         <option value="{{ data.id }}">{{ data.name }}</option>
@@ -83,6 +83,7 @@
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
                                        data-cid="{{ data.cid }}"
+                                       data-appId="{{ data.appId }}"
                                        data-name="{{ data.name }}"
                                        data-status="{{ data.status }}"
                                        data-code="{{ data.code }}"
@@ -95,6 +96,7 @@
                                     <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
                                        data-cid="{{ data.cid }}"
+                                       data-appId="{{ data.appId }}"
                                        data-number="{{ data.number }}"
                                        data-amount="{{ data.amount }}"
                                        data-credit1="{{ data.credit1 }}"
@@ -156,6 +158,7 @@
 <script src="http://www.yyyweb.com/demo/lightbox/js/lightbox.js"></script>
 <script>
 $(function () {
+    var app_list_url = '{% url 'admin:app_applist' %}';
     var delete_url = '{% url 'admin:contract_delete' %}';
     var stats_url = '{% url 'admin:contract_updateStatus' %}';
     var form_url = '{% url 'admin:contract_save' %}';
@@ -166,26 +169,34 @@ $(function () {
 
     var cid = '{{ ctrlList.cid }}';
     if(cid){
-        $('#form-cid').val(cid);
+        $('#form-searchCid').val(cid);
     }
 
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
-        if($("#form-id")[0]){
-            $("#form-id").val('');
-        }
-        //重置表单
-        $('#contract_validate')[0].reset()
-        uploadDataReset('one');
+        var kong = '';
+        selectOptionHtmlForMime({}, '#form-appId');
+        $('#form-cid').val(kong);
+        $('#form-id').val(kong);
+        $('#form-name').val(kong);
+        $('#form-number').val(kong);
+        $('#form-code').val(kong);
+        $('#form-amount').val(kong);
+        $('[data-toggle="upload-progressInput-one"]').val(kong);
+        $('#form-startTime').val(kong);
+        $('#form-endTime').val(kong);
+        $('#form-status').val(1);
     });
     /**
      * 点击修改按钮触发的操作
      */
     $('[data-form="edit-model"]').click(function () {
+
         var id = $(this).attr('data-id');
         var cid = $(this).attr('data-cid');
+        var appId = $(this).attr('data-appId');
         var name = $(this).attr('data-name');
         var code = $(this).attr('data-code');
         var number = $(this).attr('data-number');
@@ -194,9 +205,9 @@ $(function () {
         var startTime = $(this).attr('data-startTime');
         var endTime = $(this).attr('data-endTime');
         var status = $(this).attr('data-status');
+        changeListDataByAjaxForMime(app_list_url, {'companyId': cid}, '#form-appId', 'optionHtml', appId);
         $('#form-id').val(id);
-        $('#cid').val(cid);
-        //$("#form-cid option[value=cid]").attr("selected", true);
+        $('#form-cid').val(cid);
         $('#form-name').val(name);
         $('#form-number').val(number);
         $('#form-code').val(code);
@@ -204,26 +215,8 @@ $(function () {
         $('[data-toggle="upload-progressInput-one"]').val(img);
         $('#form-startTime').val(startTime);
         $('#form-endTime').val(endTime);
-        $("input[type=radio][name=status][value="+status+"]").parent('div').addClass('checked');
-        $("input[type=radio][name=status][value="+status+"]").parent().parent().siblings().find('div').removeClass('checked')
-
+        $('#form-status').val(status);
         uploadDataReset('one');
-    });
-    /**
-     * 点击form提交按钮触发的操作
-     */
-    $('#form-submit-one').click(function () {
-        var data = {};
-        data.id = $('#form-id').val();
-        data.name = $('#form-name').val();
-        data.number = $('#form-number').val();
-        data.amount = $('#form-amount').val();
-        data.img = $('#form-img').val();
-        data.startTime = $('#form-startTime').val();
-        data.endTime = $('#form-endTime').val();
-        data.img = $('[data-toggle="upload-progressInput-one"]').val();
-        console.log(data);
-        subActionAjaxForMime('post', form_url, data, index_url);
     });
 
     /**
@@ -269,6 +262,13 @@ $(function () {
         }
     });
 
+  /**
+   * 获取企业应用列表
+   */
+    $('#form-cid').change(function () {
+      changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
+      console.log(this.value);
+    });
     /**
      * 日期插件
      */

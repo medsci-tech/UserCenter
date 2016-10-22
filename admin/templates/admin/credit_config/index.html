@@ -148,9 +148,8 @@ $(function () {
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
-        var companyId = $('#form-companyId');
-        var defaultCompany = companyId.find('option:first').val();
-        companyId.val(defaultCompany);
+        selectOptionHtmlForMime({}, '#form-appId');
+        $('#form-companyId').val(kong);
         $('#form-id').val(kong);
         $('#form-name').val(kong);
         $('#form-remarkName').val(kong);
@@ -169,8 +168,8 @@ $(function () {
         var name = $(this).attr('data-name');
         var remarkName = $(this).attr('data-remarkName');
         var status = $(this).attr('data-status');
+        changeListDataByAjaxForMime(app_list_url, {'companyId': companyId}, '#form-appId', 'optionHtml', appId);
         $('#form-id').val(id);
-        $('#form-appId').val(appId);
         $('#form-companyId').val(companyId);
         $('#form-name').val(name);
         $('#form-remarkName').val(remarkName);
