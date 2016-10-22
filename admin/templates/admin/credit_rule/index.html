@@ -141,6 +141,7 @@
 <script>
 $(function () {
     var app_list_url = '{% url 'admin:app_applist' %}';
+    var creditConfig_list_url = '{% url 'admin:credit_config_creditconfiglist' %}';
     var stats_url = '{% url 'admin:credit_rule_stats' %}';
     var form_url = '{% url 'admin:credit_rule_form' %}';
     var index_url = window.location.href;
@@ -154,23 +155,18 @@ $(function () {
     {% endfor %}
 
     console.log(credit_full_list);
-    //选中应用
-    var searchAppId = '{{ ctrlList.appId }}';
-    if(searchAppId){
-        $('#form-searchAppId').val(searchAppId);
-    }
 
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
-        var appId = $('#form-appId');
         var cycle = $('#form-cycle');
-        var defaultAppId = $('#form-searchAppId').val();
         var defaultCycle = cycle.find('option:first').val();
-        appId.val(defaultAppId);
         cycle.val(defaultCycle);
+        selectOptionHtmlForMime({}, '#form-appId');
+        selectOptionHtmlForMime({}, '#form-creditConfigId');
+        $('#form-companyId').val(kong);
         $('#form-id').val(kong);
         $('#form-name').val(kong);
         $('#form-remark').val(kong);
@@ -186,15 +182,19 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
+        var companyId = $(this).attr('data-companyId');
         var appId = $(this).attr('data-appId');
+        var creditConfigId = $(this).attr('data-creditConfigId');
         var name = $(this).attr('data-name');
         var remark = $(this).attr('data-remark');
         var cycle = $(this).attr('data-cycle');
         var rewardNum = $(this).attr('data-rewardNum');
         var ratio = $(this).attr('data-ratio');
         var status = $(this).attr('data-status');
+        changeListDataByAjaxForMime(app_list_url, {'companyId': companyId}, '#form-appId', 'optionHtml', appId);
+        changeListDataByAjaxForMime(creditConfig_list_url, {'appId': appId}, '#form-creditConfigId', 'optionHtml', creditConfigId);
         $('#form-id').val(id);
-        $('#form-appId').val(appId);
+        $('#form-companyId').val(companyId);
         $('#form-name').val(name);
         $('#form-remark').val(remark);
         $('#form-cycle').val(cycle);
@@ -260,7 +260,11 @@ $(function () {
     $('#form-companyId').change(function () {
       changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
         console.log(this.value);
-    })
+    });
+   $('#form-appId').change(function () {
+      changeListDataByAjaxForMime(creditConfig_list_url, {'appId': this.value}, '#form-creditConfigId', 'optionHtml');
+        console.log(this.value);
+    });
 });
 </script>
 
