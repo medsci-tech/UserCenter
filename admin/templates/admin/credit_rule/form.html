@@ -1,11 +1,13 @@
 <div class="form-horizontal">
     {% csrf_token %}
     <input type="hidden" name="id" id="form-id" value="">
-    <input type="hidden" name="contractId" value="{{ form_contractId }}">
+    <input type="hidden" name="companyId" value="{{ form_contractData.companyId }}">
+    <input type="hidden" name="appId" value="{{ form_contractData.appId }}">
+    <input type="hidden" name="contractId" value="{{ form_contractData.id }}">
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">迈豆池</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" disabled value="{{ form_contractName }}">
+            <input type="text" class="form-control input-sm" disabled value="{{ form_contractData.name }}">
         </div>
     </div>
     <div class="form-group">

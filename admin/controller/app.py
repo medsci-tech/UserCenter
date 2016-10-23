@@ -6,7 +6,6 @@ from admin.controller.common_import import *
 
 from admin.model.Company import Company
 from admin.model.App import App as Model
-from admin.model.CreditConfig import CreditConfig
 from admin.model.CreditRule import CreditRule
 from admin.model.Contract import Contract
 
@@ -24,10 +23,10 @@ def index(request):
         if searchName:
             param.update(name={'$regex': searchName})
         data = Model.objects.filter(**param).order_by("id")
-        companyName = Company.objects.filter(id=searchCompanyId).order_by("id")[:1][0]['name']
+        companyData = Company.objects.filter(id=searchCompanyId).order_by("id")[:1][0]
     else:
         data = {}
-        companyName = ''
+        companyData = {}
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
     return render(request, 'admin/app/index.html',{
@@ -37,7 +36,7 @@ def index(request):
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
-        'companyName': companyName,
+        'form_companyData': companyData,
     })
 
  
@@ -204,7 +203,6 @@ def delete(request):
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if model:
-            CreditConfig.objects.filter(appId__in=selection).delete()
             CreditRule.objects.filter(appId__in=selection).delete()
             Contract.objects.filter(appId__in=selection).delete()
             # 操作成功添加log操作记录

@@ -81,6 +81,16 @@
                                        {% endfor %}
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
+                                    <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"
+                                       data-id="{{ data.id }}"
+                                       data-companyId="{{ data.companyId }}"
+                                       data-appId="{{ data.appId }}"
+                                       data-number="{{ data.number }}"
+                                       data-amount="{{ data.amount }}"
+                                       data-credit1="{{ data.credit1 }}"
+                                       data-startTime="{{ data.startTime }}"
+                                       data-endTime="{{ data.endTime }}"
+                                    ><i class="fa fa-edit"></i> 迈豆分配</a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -112,6 +122,26 @@
     </div>
 </div>
 
+<div id="extendModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>迈豆分配</h3>
+                <span>可分配总额度：<label data-extend="credit" class="label label-danger">40</label></span>
+            </div>
+            <form id="credit_config_extend_validate" novalidate="novalidate">
+            <div class="modal-body">
+                {% include 'admin/credit_config/extend.html' %}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-small">确定</button>
+                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
 <script>
 $(function () {
     var app_list_url = '{% url 'admin:app_applist' %}';

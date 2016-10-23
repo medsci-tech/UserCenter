@@ -5,7 +5,6 @@
 from admin.controller.common_import import *
 
 from admin.model.CreditRule import CreditRule as Model
-from admin.controller.app import applist
 from admin.model.Contract import Contract
 
 '''
@@ -24,10 +23,10 @@ def index(request):
         if searchName:
             param.update(name={'$regex': searchName})
         data = Model.objects.filter(**param).order_by("id")
-        contractName = Contract.objects.filter(status=1, id=searchContractId).order_by("id")[:1][0]['name']
+        contractData = Contract.objects.filter(status=1, id=searchContractId).order_by("id")[:1][0]
     else:
         data = {}
-        contractName = ''
+        contractData = {}
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
@@ -39,8 +38,7 @@ def index(request):
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
-        'form_contractName': contractName,
-        'form_contractId': searchContractId,
+        'form_contractData': contractData,
     })
 
 # 添加操作--protected
@@ -99,6 +97,8 @@ def form(request):
         for key in ext_credit_list:
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
+            'appId': post.get('appId'),
+            'companyId': post.get('companyId'),
             'contractId': contractId,
             'apiName': apiName,
             'name': post.get('name'),

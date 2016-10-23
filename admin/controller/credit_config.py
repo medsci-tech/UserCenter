@@ -24,10 +24,10 @@ def index(request):
         if searchName:
             param.update(name={'$regex': searchName})
         data = Model.objects.filter(**param).order_by("id")
-        appName = App.objects.filter(status=1, id=searchAppId).order_by("id")[:1][0]['name']
+        appData = App.objects.filter(status=1, id=searchAppId).order_by("id")[:1][0]
     else:
         data = {}
-        appName = ''
+        appData = {}
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
@@ -38,7 +38,7 @@ def index(request):
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
-        'appName': appName,
+        'form_appData': appData,
     })
 
 # 修改操作--protected
@@ -81,7 +81,6 @@ def form(request):
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
             'appId': post.get('appId'),
-            # 'name': post.get('name'),
             'apiName': post.get('remarkName'),
             'extend': extend_list,
             'status': post.get('status'),
