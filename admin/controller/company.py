@@ -6,7 +6,6 @@ from admin.controller.common_import import *
 
 from admin.model.Company import Company as Model
 from admin.model.App import App
-from admin.model.CreditConfig import CreditConfig
 from admin.model.CreditRule import CreditRule
 from admin.model.Contract import Contract
 
@@ -189,7 +188,6 @@ def delete(request):
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if model:
             App.objects.filter(companyId__in=selection).delete()
-            CreditConfig.objects.filter(companyId__in=selection).delete()
             CreditRule.objects.filter(companyId__in=selection).delete()
             Contract.objects.filter(cid__in=selection).delete()
             # 操作成功添加log操作记录

@@ -5,8 +5,7 @@
 from admin.controller.common_import import *
 
 from admin.model.CreditRule import CreditRule as Model
-from admin.controller.app import applist
-from admin.controller.company import companylist
+from admin.model.Contract import Contract
 
 '''
 迈豆积分列表
@@ -15,28 +14,22 @@ from admin.controller.company import companylist
 @auth # 引用登录权限验证
 def index(request):
     get = request.GET
+    post = request.POST
     param = {}
-    # 获取所有启用应用列表
-    company_list = companylist(request)
-
-    # 获取配置列表
-    searchCompanyId = get.get('companyId')
-    if searchCompanyId:
-        param.update(companyId=searchCompanyId)
+    searchContractId = get.get('contractId')
+    searchName = post.get('name')
+    if searchContractId:
+        param.update(contractId=searchContractId)
+        if searchName:
+            param.update(name={'$regex': searchName})
+        data = Model.objects.filter(**param).order_by("id")
+        contractData = Contract.objects.filter(status=1, id=searchContractId).order_by("id")[:1][0]
     else:
-        dataOne = Model.objects.filter().order_by('id')[:1]  # 获取第一条数据
-        if dataOne:
-            param.update(companyId=dataOne[0]['companyId'])
-    data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-
-    if data:
-        selectData = data[0]
-    else:
-        selectData = get
+        data = {}
+        contractData = {}
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
-    app_list = applist(request, companyId=selectData['companyId'])
     # return HttpResponse(credit_list)
     return render(request, 'admin/credit_rule/index.html', {
         'data_list': pageData.get('data_list'),
@@ -44,9 +37,8 @@ def index(request):
         'page_has_next': pageData.get('pageLengthNext'),
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
-        'ctrlList': selectData,
-        'companyList': company_list,
-        'appList': app_list,
+        'ctrlList': post,
+        'form_contractData': contractData,
     })
 
 # 添加操作--protected
@@ -87,16 +79,17 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
-        name = post.get('name')
-        appId = post.get('appId')
+        apiName = post.get('apiName')
+        contractId = post.get('contractId')
         try:
-            check_name = Model.objects.filter(name=name, appId=appId).order_by('id')
+            check_name = Model.objects.filter(apiName=apiName, contractId=contractId).order_by('id')[:1][0]
         except Exception:
-            returnData = {'code': 808, 'msg': '数据验证错误', 'data': ''}
+            returnData = {'code': 802, 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if check_name:
-            returnData = {'code': 808, 'msg': '策略字段%s已存在' % name, 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            if str(check_name['id']) != id:
+                returnData = {'code': 801, 'msg': '策略字段%s已存在' % apiName, 'data': None}
+                return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
         # 获取配置列表
         cfg_param = configParam(request)
@@ -104,11 +97,11 @@ def form(request):
         for key in ext_credit_list:
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
-            'appId': appId,
+            'appId': post.get('appId'),
             'companyId': post.get('companyId'),
-            'creditConfigId': post.get('creditConfigId'),
-            'name': name,
-            'remark': post.get('remark'),
+            'contractId': contractId,
+            'apiName': apiName,
+            'name': post.get('name'),
             'cycle': post.get('cycle'),
             'rewardNum': post.get('rewardNum'),
             'extend': extend_list,

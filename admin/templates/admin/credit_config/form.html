@@ -1,43 +1,23 @@
 <div class="form-horizontal">
     {% csrf_token %}
     <input type="hidden" name="id" id="form-id" value="">
-    <div class="form-group">
-        <label class="col-sm-3 col-md-3 col-lg-2 control-label">企业</label>
-        <div class="col-sm-9 col-md-9 col-lg-10">
-            <select class="form-control" name="companyId" id="form-companyId">
-                <option value="">请选择</option>
-                {% for key, val in companyList.items %}
-                    <option value="{{ key }}">{{ val }}</option>
-                {% endfor %}
-            </select>
-        </div>
-    </div>
+
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">应用平台</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <select class="form-control" name="appId" id="form-appId">
-                <option value="">请选择</option>
-            </select>
+            <input type="text" class="form-control input-sm" disabled value="{{ form_appData.name }}">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 col-md-3 col-lg-2 control-label">对应合同</label>
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">合同名称</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <select class="form-control" name="contractId" id="form-contractId">
-                <option value="">请选择</option>
-            </select>
+            <input type="text" class="form-control input-sm" id="form-name"  placeholder="英文和下划线，不可为空">
         </div>
     </div>
     <div class="form-group">
-        <label class="col-sm-3 col-md-3 col-lg-2 control-label">名称</label>
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">规则名</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="name" id="form-name"  placeholder="英文和下划线，不可为空">
-        </div>
-    </div>
-    <div class="form-group">
-        <label class="col-sm-3 col-md-3 col-lg-2 control-label">备注名</label>
-        <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="remarkName" id="form-remarkName"  placeholder="英文和下划线，不可为空">
+            <input type="text" class="form-control input-sm" name="apiName" id="form-apiName"  placeholder="英文和下划线，不可为空">
         </div>
     </div>
     {% for key, val in c_ext_credit.items %}

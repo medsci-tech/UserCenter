@@ -7,14 +7,10 @@
         <h1>应用平台管理</h1>
     </div>
     <div class="row">
-        <form action="" method="get">
+        <form action="" method="post">
         <div class="col-xs-12 center">
-            <label>企业名称：
-                <select class="form-inline2" name="companyId" id="form-searchCompanyId">
-                    {% for key, val in companyList.items %}
-                        <option value="{{ key }}">{{ val }}</option>
-                    {% endfor %}
-                </select>
+            <label>名称：
+                <input type="text" name="name" value="{{ ctrlList.name }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -54,7 +50,7 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td><a href="{% url 'admin:credit_config' %}?companyId={{ list.companyId }}" target="_blank">{{ list.name }}</a></td>
+                                <td><a href="{% url 'admin:credit_config' %}?appId={{ list.id }}" target="_blank">{{ list.name }}</a></td>
                                 <td>{{ list.description }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
@@ -113,18 +109,12 @@ $(function () {
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
     });
-    //选中应用
-    var searchCompanyId = '{{ ctrlList.companyId }}';
-    if(searchCompanyId){
-        $('#form-searchCompanyId').val(searchCompanyId);
-    }
+
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
-        var companyId = $('#form-companyId');
-        companyId.val(companyId.find('option:first').val());
         $('#form-id').val(kong);
         $('#form-name').val(kong);
         $('#form-description').val(kong);
@@ -135,12 +125,10 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
-        var companyId = $(this).attr('data-companyId');
         var name = $(this).attr('data-name');
         var description = $(this).attr('data-description');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
-        $('#form-companyId').val(companyId);
         $('#form-name').val(name);
         $('#form-description').val(description);
         $('#form-status').val(status);

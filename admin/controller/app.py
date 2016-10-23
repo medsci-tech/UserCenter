@@ -4,44 +4,39 @@
 # 公共引入文件
 from admin.controller.common_import import *
 
+from admin.model.Company import Company
 from admin.model.App import App as Model
-from admin.model.CreditConfig import CreditConfig
 from admin.model.CreditRule import CreditRule
 from admin.model.Contract import Contract
-from admin.controller.company import companylist
 
 @csrf_exempt
 @auth  # 引用登录权限验证
 def index(request):
-    req = request.GET
+    get = request.GET
+    post = request.POST
     param = {}
     # 获取所有状态列表
-    company_list = companylist(request)
-    searchCompanyId = req.get('companyId')
+    searchCompanyId = get.get('companyId')
+    searchName = post.get('name')
     if searchCompanyId:
         param.update(companyId=searchCompanyId)
+        if searchName:
+            param.update(name={'$regex': searchName})
+        data = Model.objects.filter(**param).order_by("id")
+        companyData = Company.objects.filter(id=searchCompanyId).order_by("id")[:1][0]
     else:
-        dataOne = Model.objects.filter(companyId__in=company_list.keys()).order_by('id')[:1]  # 获取第一条数据
-        if dataOne:
-            param.update(companyId=dataOne[0]['companyId'])
-    data = Model.objects.filter(**param).order_by("id")
-
-    if data:
-        selectData = data[0]
-    else:
-        selectData = req
-
+        data = {}
+        companyData = {}
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
-
     return render(request, 'admin/app/index.html',{
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),
         'page_has_next': pageData.get('pageLengthNext'),
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
-        'ctrlList': selectData,
-        'companyList': company_list,
+        'ctrlList': post,
+        'form_companyData': companyData,
     })
 
  
@@ -208,7 +203,6 @@ def delete(request):
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if model:
-            CreditConfig.objects.filter(appId__in=selection).delete()
             CreditRule.objects.filter(appId__in=selection).delete()
             Contract.objects.filter(appId__in=selection).delete()
             # 操作成功添加log操作记录
