@@ -139,7 +139,7 @@ $(function () {
     var delete_url = '{% url 'admin:contract_delete' %}';
     var stats_url = '{% url 'admin:contract_updateStatus' %}';
     var form_url = '{% url 'admin:contract_save' %}';
-    var index_url = '{% url 'admin:contract' %}';
+    var index_url = window.location.href;
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });
