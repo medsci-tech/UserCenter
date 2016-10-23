@@ -13,24 +13,20 @@ from admin.controller.company import companylist
 @csrf_exempt
 @auth  # 引用登录权限验证
 def index(request):
-    req = request.GET
+    get = request.GET
+    post = request.POST
     param = {}
     # 获取所有状态列表
     company_list = companylist(request)
-    searchCompanyId = req.get('companyId')
+    searchCompanyId = get.get('companyId')
+    searchName = post.get('name')
     if searchCompanyId:
         param.update(companyId=searchCompanyId)
+        if searchName:
+            param.update(name={'$regex': searchName})
+        data = Model.objects.filter(**param).order_by("id")
     else:
-        dataOne = Model.objects.filter(companyId__in=company_list.keys()).order_by('id')[:1]  # 获取第一条数据
-        if dataOne:
-            param.update(companyId=dataOne[0]['companyId'])
-    data = Model.objects.filter(**param).order_by("id")
-
-    if data:
-        selectData = data[0]
-    else:
-        selectData = req
-
+        data = {}
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
 
@@ -40,7 +36,7 @@ def index(request):
         'page_has_next': pageData.get('pageLengthNext'),
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
-        'ctrlList': selectData,
+        'ctrlList': post,
         'companyList': company_list,
     })
 
