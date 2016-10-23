@@ -105,7 +105,7 @@ $(function () {
     var delete_url = '{% url 'admin:app_delete' %}';
     var stats_url = '{% url 'admin:app_stats' %}';
     var form_url = '{% url 'admin:app_form' %}';
-    var index_url = '{% url 'admin:app' %}';
+    var index_url = window.location.href;
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
     });
