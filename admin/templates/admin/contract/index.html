@@ -257,13 +257,13 @@ $(function () {
      * 日期插件
      */
     $('#form-startTime').datepicker({
-        dateFormat: "yy/mm/dd",
+        dateFormat: "yy-mm-dd",
 		onClose: function( selectedDate ) {
 			$( "#form-endTime" ).datepicker( "option", "minDate", selectedDate );
 		}
 	});
 	$('#form-endTime').datepicker({
-        dateFormat: "yy/mm/dd",
+        dateFormat: "yy-mm-dd",
 		onClose: function( selectedDate ) {
 			$( "#form-startTime" ).datepicker( "option", "maxDate", selectedDate );
 		}

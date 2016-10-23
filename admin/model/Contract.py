@@ -14,7 +14,7 @@ class Contract(Auth):
     code = StringField()
     number = FloatField()
     extend = DictField()  # 扩展
-    credit1 = FloatField(default=0)  # 已分配迈豆列表
+    credit1 = IntField(default=0)  # 已分配迈豆列表
     amount = FloatField()
     img = StringField()
     startTime = StringField()
