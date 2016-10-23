@@ -82,12 +82,12 @@ def form(request):
         apiName = post.get('apiName')
         contractId = post.get('contractId')
         try:
-            check_name = Model.objects.filter(apiName=apiName, contractId=contractId).order_by('id')[:1][0]
+            check_name = Model.objects.filter(apiName=apiName).order_by('id')[:1]
         except Exception:
             returnData = {'code': 802, 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if check_name:
-            if str(check_name['id']) != id:
+            if str(check_name[0]['id']) != id:
                 returnData = {'code': 801, 'msg': '策略字段%s已存在' % apiName, 'data': None}
                 return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
