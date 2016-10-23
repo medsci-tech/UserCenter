@@ -7,7 +7,6 @@ from api.controller.common_import import *  # 公共引入文件
 
 from admin.model.User import User
 from admin.model.CreditRule import CreditRule
-from admin.model.CreditConfig import CreditConfig
 
 # ============================
 # 用户积分

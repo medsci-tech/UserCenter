@@ -9,12 +9,12 @@ class CreditRule(Auth):
             }
     appId = StringField()
     companyId = StringField()
-    creditConfigId = StringField()
+    contractId = StringField()
     createTime = DateTimeField(default=datetime.now())
     status = IntField(default=1)
 
     name = StringField()  # 策略字段
-    remark = StringField()  # 策略名称
+    apiName = StringField()  # 策略名称
     cycle = IntField(default=0)  # 周期
     rewardNum = IntField(default=0)  # 周期内最多奖励次数
     extend = DictField()

@@ -4,7 +4,7 @@ __author__ = 'lxhui'
 from admin.controller.common_import import *  # 公共引入文件
 from admin.model.Contract import Contract as Model
 from admin.model.Company import Company
-from admin.model.CreditConfig import CreditConfig
+from admin.model.App import App
 from admin.model.CreditLog import CreditLog
 from admin.model.CreditRule import CreditRule
 
@@ -12,17 +12,30 @@ from admin.model.CreditRule import CreditRule
 @auth # 引用登录权限验证
 def index(request):
     post = request.POST
-    cid = post.get('cid','')
-    name = post.get('name','').strip()
-    code = post.get('code','').strip()
-    data = Model.objects.filter(cid__icontains=cid,name__icontains=name,code__icontains=code).order_by('id')
+    param = {}
+    searchCompanyId = post.get('companyId')
+    searchAppId = post.get('appId')
+    searchName = post.get('name')
+    searchCode = post.get('code')
+    if searchCompanyId:
+        param.update(companyId=searchCompanyId)
+    if searchAppId:
+        param.update(appId=searchAppId)
+    if searchName:
+        param.update(name={'$regex': searchName})
+    if searchCode:
+        param.update(code={'$regex': searchCode})
+    data = Model.objects.filter(**param).order_by("id")
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
 
     '''企业信息'''
     comList = Company.objects.filter(status=1).order_by("id")
-
+    if searchCompanyId:
+        appList = App.objects.filter(status=1, companyId=searchCompanyId).order_by("id")
+    else:
+        appList ={}
     return render(request, 'admin/contract/index.html',{
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),
@@ -31,6 +44,7 @@ def index(request):
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
         'comList': comList,
+        'appList': appList,
     })
 
 
@@ -43,7 +57,7 @@ def save(request, **param):
     if request.method == 'POST':
         param = {
             'id': post.get('id'),  # objectid
-            'cid': post.get('cid'),  # 企业id
+            'companyId': post.get('companyId'),  # 企业id
             'appId': post.get('appId'),  # 企业id
             'name':post.get('name'), # 合同名
             'code': post.get('code'),  # 合同编号
@@ -108,40 +122,33 @@ def credit(request):
     if id:
         try:
             contractGet = Model.objects.get(id=id)
-            credit_poor = contractGet['number'] * contractGet['amount'] - contractGet['credit1']
+            credit_poor = contractGet['number'] * contractGet['amount'] - contractGet['credit1']  # 可分配总迈豆数
         except Exception:
             returnData = {'code': '910', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         # return HttpResponse(credit_poor)
-        if credit_poor > post_credit:
-            try:
-                modelCreditConfig = CreditConfig.objects.get(contractId=id)
-            except Exception:
-                returnData = {'code': '912', 'msg': '找不到对应的迈豆池信息', 'data': ''}
-                return HttpResponse(json.dumps(returnData), content_type="application/json")
-        else:
+        if credit_poor < post_credit:
             returnData = {'code': '911', 'msg': '分配迈豆超出额度', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
-        extend_list = modelCreditConfig['extend']
+        extend_list = contractGet['extend']
         # 获取配置列表
-        model_credit = modelCreditConfig['extend']['credit1']
-        if model_credit:
-            model_credit_int = int(model_credit)
-        else:
+        try:
+            model_credit_int = int(contractGet['extend']['credit1'])
+        except:
             model_credit_int = 0
         if post_credit > 0:
             post_credit_int = post_credit
         else:
             post_credit_int = 0
         extend_list['credit1'] = model_credit_int + post_credit_int
+        contractCredit1 = int(contractGet['credit1']) + post_credit_int
         param = {
             'extend': extend_list,
+            'credit1': contractCredit1,  # 实时迈豆数
         }
-        contractCredit1 = int(contractGet['credit1']) + post_credit_int
         try:
-            modelContract = Model.objects.get(id=contractGet['id']).update(credit1=contractCredit1)
-            modelCreditConfigSave = CreditConfig.objects.get(id=modelCreditConfig['id']).update(**param)
-            if modelCreditConfigSave == 1:
+            modelContract = Model.objects.get(id=id).update(**param)
+            if modelContract == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
             else:
                 returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
@@ -176,7 +183,6 @@ def delete(request):
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if model:
-            CreditConfig.objects.filter(contractId__in=selection).delete()
             # 操作成功添加log操作记录
             for id in selection:
                 # log记录参数
