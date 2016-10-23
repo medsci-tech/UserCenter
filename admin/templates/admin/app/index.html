@@ -116,7 +116,6 @@ $(function () {
     $('[data-form="add-model"]').click(function () {
         var kong = '';
         $('#form-id').val(kong);
-        $('#form-companyId').val(kong);
         $('#form-name').val(kong);
         $('#form-description').val(kong);
         $('#form-status').val(1);
@@ -126,12 +125,10 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
-        var companyId = $(this).attr('data-companyId');
         var name = $(this).attr('data-name');
         var description = $(this).attr('data-description');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
-        $('#form-companyId').val(companyId);
         $('#form-name').val(name);
         $('#form-description').val(description);
         $('#form-status').val(status);

@@ -4,9 +4,7 @@
 # 公共引入文件
 from admin.controller.common_import import *
 
-from admin.model.CreditConfig import CreditConfig as Model
-from admin.controller.company import companylist
-from admin.controller.app import applist
+from admin.model.Contract import Contract as Model
 from admin.model.App import App
 
 '''
@@ -16,53 +14,32 @@ from admin.model.App import App
 @auth  # 引用登录权限验证
 def index(request):
     get = request.GET
+    post = request.POST
     param = {}
-    # 获取所有启用企业列表
-    company_list = companylist(request)
     # 获取所有状态列表
-    searchCompanyId = get.get('companyId')
-    if searchCompanyId:
-        param.update(companyId=searchCompanyId)
+    searchAppId = get.get('appId')
+    searchName = post.get('name')
+    if searchAppId:
+        param.update(appId=searchAppId)
+        if searchName:
+            param.update(name={'$regex': searchName})
+        data = Model.objects.filter(**param).order_by("id")
+        appName = App.objects.filter(status=1, id=searchAppId).order_by("id")[:1][0]['name']
     else:
-        dataOne = Model.objects.filter(companyId__in=company_list.keys()).order_by('id')[:1]  # 获取第一条数据
-        if dataOne:
-            param.update(companyId=dataOne[0]['companyId'])
-    data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
-
-    if data:
-        selectData = data[0]
-    else:
-        selectData = get
+        data = {}
+        appName = ''
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
-    app_list = applist(request, companyId=selectData['companyId'])
     return render(request, 'admin/credit_config/index.html', {
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),
         'page_has_next': pageData.get('pageLengthNext'),
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
-        'ctrlList': selectData,
-        'companyList': company_list,
-        'appList': app_list,
+        'ctrlList': post,
+        'appName': appName,
     })
-
-# 添加操作--protected
-def _add(**param):
-    id = param.get('id')
-    if not id:
-        try:
-            model = Model.objects.create(**param)
-            if model:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-        except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-    else:
-        returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
-    return returnData
 
 # 修改操作--protected
 def _editById(**param):
@@ -104,10 +81,8 @@ def form(request):
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
             'appId': post.get('appId'),
-            'companyId': post.get('companyId'),
-            'contractId': contractId,
-            'name': post.get('name'),
-            'remarkName': post.get('remarkName'),
+            # 'name': post.get('name'),
+            'apiName': post.get('remarkName'),
             'extend': extend_list,
             'status': post.get('status'),
         }
@@ -116,15 +91,8 @@ def form(request):
             param.update(id=id)
             returnData = _editById(**param)
         else:
-            # 添加
-            extend_list = {}
-            # 获取配置列表
-            cfg_param = configParam(request)
-            ext_credit_list = cfg_param.get('c_ext_credit')
-            for key in ext_credit_list:
-                extend_list[str(key)] = post.get('extend[' + key + ']', 0)
-            param.update(extend=extend_list)
-            returnData = _add(**param)
+            returnData = {'code': 805, 'msg': '数据验证错误', 'data': ''}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
 
         # 操作成功添加log操作记录
         if returnData.get('code') == '200':

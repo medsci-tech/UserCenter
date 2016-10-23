@@ -4,11 +4,11 @@
 # 公共引入文件
 from admin.controller.common_import import *
 
+from admin.model.Company import Company
 from admin.model.App import App as Model
 from admin.model.CreditConfig import CreditConfig
 from admin.model.CreditRule import CreditRule
 from admin.model.Contract import Contract
-from admin.controller.company import companylist
 
 @csrf_exempt
 @auth  # 引用登录权限验证
@@ -17,7 +17,6 @@ def index(request):
     post = request.POST
     param = {}
     # 获取所有状态列表
-    company_list = companylist(request)
     searchCompanyId = get.get('companyId')
     searchName = post.get('name')
     if searchCompanyId:
@@ -25,11 +24,12 @@ def index(request):
         if searchName:
             param.update(name={'$regex': searchName})
         data = Model.objects.filter(**param).order_by("id")
+        companyName = Company.objects.filter(id=searchCompanyId).order_by("id")[:1][0]['name']
     else:
         data = {}
+        companyName = ''
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
-
     return render(request, 'admin/app/index.html',{
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),
@@ -37,7 +37,7 @@ def index(request):
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
-        'companyList': company_list,
+        'companyName': companyName,
     })
 
  

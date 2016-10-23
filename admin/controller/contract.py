@@ -4,6 +4,7 @@ __author__ = 'lxhui'
 from admin.controller.common_import import *  # 公共引入文件
 from admin.model.Contract import Contract as Model
 from admin.model.Company import Company
+from admin.model.App import App
 from admin.model.CreditConfig import CreditConfig
 from admin.model.CreditLog import CreditLog
 from admin.model.CreditRule import CreditRule
@@ -12,17 +13,30 @@ from admin.model.CreditRule import CreditRule
 @auth # 引用登录权限验证
 def index(request):
     post = request.POST
-    cid = post.get('cid','')
-    name = post.get('name','').strip()
-    code = post.get('code','').strip()
-    data = Model.objects.filter(cid__icontains=cid,name__icontains=name,code__icontains=code).order_by('id')
+    param = {}
+    searchCompanyId = post.get('companyId')
+    searchAppId = post.get('appId')
+    searchName = post.get('name')
+    searchCode = post.get('code')
+    if searchCompanyId:
+        param.update(companyId=searchCompanyId)
+    if searchAppId:
+        param.update(appId=searchAppId)
+    if searchName:
+        param.update(name={'$regex': searchName})
+    if searchCode:
+        param.update(code={'$regex': searchCode})
+    data = Model.objects.filter(**param).order_by("id")
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
 
     '''企业信息'''
     comList = Company.objects.filter(status=1).order_by("id")
-
+    if searchCompanyId:
+        appList = App.objects.filter(status=1, companyId=searchCompanyId).order_by("id")
+    else:
+        appList ={}
     return render(request, 'admin/contract/index.html',{
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),
@@ -31,6 +45,7 @@ def index(request):
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
         'comList': comList,
+        'appList': appList,
     })
 
 
@@ -43,7 +58,7 @@ def save(request, **param):
     if request.method == 'POST':
         param = {
             'id': post.get('id'),  # objectid
-            'cid': post.get('cid'),  # 企业id
+            'companyId': post.get('companyId'),  # 企业id
             'appId': post.get('appId'),  # 企业id
             'name':post.get('name'), # 合同名
             'code': post.get('code'),  # 合同编号

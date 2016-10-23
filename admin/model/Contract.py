@@ -7,11 +7,13 @@ class Contract(Auth):
             'collection': settings.MONGODB_PREFIX+'contract',
             'indexes':['id'],
             }
-    cid = StringField()  # 企业id
+    companyId = StringField()  # 企业id
     appId = StringField()  # 应用id
     name = StringField()
+    apiName = StringField()  #英文
     code = StringField()
     number = FloatField()
+    extend = DictField()  # 扩展
     credit1 = FloatField(default=0)  # 已分配迈豆列表
     amount = FloatField()
     img = StringField()

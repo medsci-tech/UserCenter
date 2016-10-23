@@ -10,10 +10,18 @@
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
-            <label>
-               <select id="form-searchCid" name="cid" class="form-inline2">
-                    <option value="" selected>请选择所属企业</option>
+            <label>企业
+               <select id="form-searchCompanyId" name="companyId" class="form-inline2">
+                    <option value="" selected>请选择</option>
                     {% for data in comList reversed  %}
+                        <option value="{{ data.id }}">{{ data.name }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>应用
+               <select id="form-searchAppId" name="appId" class="form-inline2">
+                    <option value="" selected>请选择</option>
+                    {% for data in appList reversed  %}
                         <option value="{{ data.id }}">{{ data.name }}</option>
                     {% endfor %}
                 </select>
@@ -82,7 +90,7 @@
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
-                                       data-cid="{{ data.cid }}"
+                                       data-companyId="{{ data.companyId }}"
                                        data-appId="{{ data.appId }}"
                                        data-name="{{ data.name }}"
                                        data-status="{{ data.status }}"
@@ -95,7 +103,7 @@
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                     <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
-                                       data-cid="{{ data.cid }}"
+                                       data-companyId="{{ data.companyId }}"
                                        data-appId="{{ data.appId }}"
                                        data-number="{{ data.number }}"
                                        data-amount="{{ data.amount }}"
@@ -167,18 +175,21 @@ $(function () {
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });
 
-    var cid = '{{ ctrlList.cid }}';
-    if(cid){
-        $('#form-searchCid').val(cid);
+    var companyId = '{{ ctrlList.companyId }}';
+    if(companyId){
+        $('#form-searchCompanyId').val(companyId);
     }
-
+    var appId = '{{ ctrlList.appId }}';
+    if(appId){
+        $('#form-searchAppId').val(appId);
+    }
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
         selectOptionHtmlForMime({}, '#form-appId');
-        $('#form-cid').val(kong);
+        $('#form-companyId').val(kong);
         $('#form-id').val(kong);
         $('#form-name').val(kong);
         $('#form-number').val(kong);
@@ -195,7 +206,7 @@ $(function () {
     $('[data-form="edit-model"]').click(function () {
 
         var id = $(this).attr('data-id');
-        var cid = $(this).attr('data-cid');
+        var companyId = $(this).attr('data-companyId');
         var appId = $(this).attr('data-appId');
         var name = $(this).attr('data-name');
         var code = $(this).attr('data-code');
@@ -205,9 +216,9 @@ $(function () {
         var startTime = $(this).attr('data-startTime');
         var endTime = $(this).attr('data-endTime');
         var status = $(this).attr('data-status');
-        changeListDataByAjaxForMime(app_list_url, {'companyId': cid}, '#form-appId', 'optionHtml', appId);
+        changeListDataByAjaxForMime(app_list_url, {'companyId': companyId}, '#form-appId', 'optionHtml', appId);
         $('#form-id').val(id);
-        $('#form-cid').val(cid);
+        $('#form-companyId').val(companyId);
         $('#form-name').val(name);
         $('#form-number').val(number);
         $('#form-code').val(code);
@@ -265,8 +276,12 @@ $(function () {
   /**
    * 获取企业应用列表
    */
-    $('#form-cid').change(function () {
+    $('#form-companyId').change(function () {
       changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
+      console.log(this.value);
+    });
+    $('#form-searchCompanyId').change(function () {
+      changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-searchAppId', 'optionHtml');
       console.log(this.value);
     });
     /**
