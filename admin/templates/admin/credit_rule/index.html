@@ -96,6 +96,7 @@
                                        data-contractId="{{ list.contractId }}"
                                        data-name="{{ list.name }}"
                                        data-apiName="{{ list.apiName }}"
+                                       data-integralType="{{ list.integralType }}"
                                        {% for key, val in list.extend.items %}
                                        data-{{ key }}="{{ val }}"
                                        {% endfor %}
@@ -165,6 +166,7 @@ $(function () {
         $('#form-id').val(kong);
         $('#form-name').val(kong);
         $('#form-apiName').val(kong);
+        $('#form-integralType').val(kong);
         $('#form-rewardNum').val(kong);
         $('#form-status').val(1);
         for(var i in credit_full_list){
@@ -178,6 +180,7 @@ $(function () {
         var id = $(this).attr('data-id');
         var name = $(this).attr('data-name');
         var apiName = $(this).attr('data-apiName');
+        var integralType = $(this).attr('data-integralType');
         var cycle = $(this).attr('data-cycle');
         var rewardNum = $(this).attr('data-rewardNum');
         var status = $(this).attr('data-status');
@@ -186,6 +189,7 @@ $(function () {
         $('#form-id').val(id);
         $('#form-name').val(name);
         $('#form-apiName').val(apiName);
+        $('#form-integralType').val(integralType);
         $('#form-cycle').val(cycle);
         $('#form-rewardNum').val(rewardNum);
         $('#form-status').val(status);
