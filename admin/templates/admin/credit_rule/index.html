@@ -37,7 +37,8 @@
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
                                 <th>名称</th>
-                                <th>规则名</th>
+                                <th>api规则名</th>
+                                <th>规则类型</th>
                                 <th>奖励周期</th>
                                 <th>次数</th>
                                 {% for key, val in c_ext_credit.items %}
@@ -56,6 +57,7 @@
                                 </td>
                                 <td>{{ list.name }}</td>
                                 <td>{{ list.apiName }}</td>
+                                <td>{{ list.integralType }}</td>
                                 <td>
                                     {% for key, val in c_cycle.items %}
                                         {% if key == list.cycle %}

@@ -5,6 +5,7 @@
 from admin.controller.common_import import *
 
 from admin.model.CreditRule import CreditRule as Model
+from admin.model.IntegralType import IntegralType
 from admin.model.Contract import Contract
 
 '''
@@ -30,6 +31,7 @@ def index(request):
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
+    integralType = IntegralType.objects.filter(status=1).order_by('id')
     # return HttpResponse(credit_list)
     return render(request, 'admin/credit_rule/index.html', {
         'data_list': pageData.get('data_list'),
@@ -39,6 +41,7 @@ def index(request):
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
         'form_contractData': contractData,
+        'list_integralType': integralType,
     })
 
 # 添加操作--protected
@@ -101,6 +104,7 @@ def form(request):
             'companyId': post.get('companyId'),
             'contractId': contractId,
             'apiName': apiName,
+            'integralType': post.get('integralType'),
             'name': post.get('name'),
             'cycle': post.get('cycle'),
             'rewardNum': post.get('rewardNum'),
