@@ -6,6 +6,12 @@
     <div id="content-header" class="mini">
         <h1>迈豆池管理</h1>
     </div>
+    <div id="breadcrumb">
+        <a href="{% url 'admin:index' %}" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
+        <a href="{% url 'admin:company' %}">企业</a>
+        <a href="{% url 'admin:app' %}?companyId={{ form_companyData.id }}">应用平台</a>
+        <a href="#" class="current">迈豆池</a>
+    </div>
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
@@ -50,7 +56,7 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td><a href="{% url 'admin:credit_rule' %}?contractId={{ list.id }}" target="_blank">{{ list.name }}</a></td>
+                                <td><a href="{% url 'admin:credit_rule' %}?contractId={{ list.id }}">{{ list.name }}</a></td>
                                 <td>{{ list.credit1 }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
