@@ -90,6 +90,7 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
+        appId = post.get('appId')
         apiName = post.get('apiName')
         contractId = post.get('contractId')
         try:
@@ -98,7 +99,7 @@ def form(request):
             returnData = {'code': 802, 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if check_name:
-            if str(check_name[0]['id']) != id:
+            if str(check_name[0]['appId']) == appId:
                 returnData = {'code': 801, 'msg': '策略字段%s已存在' % apiName, 'data': None}
                 return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
@@ -108,7 +109,7 @@ def form(request):
         for key in ext_credit_list:
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
-            'appId': post.get('appId'),
+            'appId': appId,
             'companyId': post.get('companyId'),
             'contractId': contractId,
             'apiName': apiName,
