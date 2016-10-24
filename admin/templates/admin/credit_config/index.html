@@ -36,7 +36,6 @@
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
                                 <th>合同名称</th>
-                                <th>规则名</th>
                                 {% for key, val in c_ext_credit.items %}
                                     <th>{{ val }}</th>
                                 {% endfor %}
@@ -52,16 +51,7 @@
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
                                 <td><a href="{% url 'admin:credit_rule' %}?contractId={{ list.id }}" target="_blank">{{ list.name }}</a></td>
-                                <td>{{ apiName }}</td>
-                                {% for key, val in c_ext_credit.items %}
-                                    <td>
-                                    {% for k, v in list.extend.items %}
-                                        {% if key == k %}
-                                            {{ v }}
-                                        {% endif %}
-                                    {% endfor %}
-                                    </td>
-                                {% endfor %}
+                                <td>{{ list.credit1 }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == list.status %}
@@ -71,24 +61,24 @@
                                 </td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
                                 <td>
-                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
-                                       data-id="{{ list.id }}"
-                                       data-appId="{{ list.appId }}"
-                                       data-name="{{ list.name }}"
-                                       data-apiName="{{ list.apiName }}"
-                                       {% for key, val in list.extend.items %}
-                                       data-{{ key }}="{{ val }}"
-                                       {% endfor %}
-                                       data-status="{{ list.status }}"
-                                    ><i class="fa fa-edit"></i> 编辑</a>
-                                    <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"
-                                       data-id="{{ list.id }}"
-                                       data-number="{{ list.number }}"
-                                       data-amount="{{ list.amount }}"
-                                       data-credit1="{{ list.credit1 }}"
-                                       data-startTime="{{ list.startTime }}"
-                                       data-endTime="{{ list.endTime }}"
-                                    ><i class="fa fa-edit"></i> 迈豆分配</a>
+{#                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"#}
+{#                                       data-id="{{ list.id }}"#}
+{#                                       data-appId="{{ list.appId }}"#}
+{#                                       data-name="{{ list.name }}"#}
+{#                                       data-apiName="{{ list.apiName }}"#}
+{#                                       {% for key, val in list.extend.items %}#}
+{#                                       data-{{ key }}="{{ val }}"#}
+{#                                       {% endfor %}#}
+{#                                       data-status="{{ list.status }}"#}
+{#                                    ><i class="fa fa-edit"></i> 编辑</a>#}
+{#                                    <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"#}
+{#                                       data-id="{{ list.id }}"#}
+{#                                       data-number="{{ list.number }}"#}
+{#                                       data-amount="{{ list.amount }}"#}
+{#                                       data-credit1="{{ list.credit1 }}"#}
+{#                                       data-startTime="{{ list.startTime }}"#}
+{#                                       data-endTime="{{ list.endTime }}"#}
+{#                                    ><i class="fa fa-edit"></i> 迈豆分配</a>#}
                                 </td>
                             </tr>
                             {% endfor %}

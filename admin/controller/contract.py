@@ -7,6 +7,7 @@ from admin.model.Company import Company
 from admin.model.App import App
 from admin.model.CreditLog import CreditLog
 from admin.model.CreditRule import CreditRule
+import math
 
 @csrf_exempt
 @auth # 引用登录权限验证
@@ -55,6 +56,9 @@ def index(request):
 def save(request, **param):
     post = request.POST
     if request.method == 'POST':
+        amount = post.get('amount').strip()
+        number = post.get('number').strip()
+        credit1 = math.ceil(float(amount) * float(number))
         param = {
             'id': post.get('id'),  # objectid
             'companyId': post.get('companyId'),  # 企业id
@@ -63,6 +67,7 @@ def save(request, **param):
             'code': post.get('code'),  # 合同编号
             'amount': post.get('amount'),# 合同金额
             'number': post.get('number'),  # 合同比例
+            'credit1': credit1,  # 迈豆
             'img': post.get('img'),# 合同照片
             'startTime': post.get('startTime'),# 合同有效期
             'endTime': post.get('endTime'),# 合同截止日期
@@ -113,7 +118,7 @@ def updateStatus(request, **param):
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
-# 迈豆分配
+# 迈豆分配  没有用
 @auth  # 引用登录权限验证
 def credit(request):
     post = request.POST
@@ -183,6 +188,7 @@ def delete(request):
             returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if model:
+            CreditRule.objects.filter(contractId__in=selection).delete()
             # 操作成功添加log操作记录
             for id in selection:
                 # log记录参数
