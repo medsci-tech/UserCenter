@@ -7,6 +7,8 @@ class Contract(Auth):
             'collection': settings.MONGODB_PREFIX+'contract',
             'indexes':['id'],
             }
+    createTime = DateTimeField(default=datetime.now())
+
     companyId = StringField()  # 企业id
     appId = StringField()  # 应用id
     name = StringField()

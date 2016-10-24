@@ -4,13 +4,13 @@
 
 <div id="content">
     <div id="content-header" class="mini">
-        <h1>迈豆池管理</h1>
+        <h1>项目管理</h1>
     </div>
     <div id="breadcrumb">
         <a href="{% url 'admin:index' %}" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
         <a href="{% url 'admin:company' %}">企业</a>
         <a href="{% url 'admin:app' %}?companyId={{ form_companyData.id }}">应用平台</a>
-        <a href="#" class="current">迈豆池</a>
+        <a href="#" class="current">项目</a>
     </div>
     <div class="row">
         <form action="" method="post">
@@ -31,7 +31,7 @@
                     <span class="icon">
                         <i class="fa fa-th"></i>
                     </span>
-                    <h5>迈豆池列表</h5>
+                    <h5>项目列表</h5>
                 </div>
                 <div class="widget-content">
                     <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
@@ -41,13 +41,12 @@
                                     <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
-                                <th>合同名称</th>
+                                <th>项目名称</th>
                                 {% for key, val in c_ext_credit.items %}
                                     <th>{{ val }}</th>
                                 {% endfor %}
                                 <th>状态</th>
                                 <th>创建时间</th>
-                                <th>操作</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -66,26 +65,7 @@
                                     {% endfor %}
                                 </td>
                                 <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
-                                <td>
-{#                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"#}
-{#                                       data-id="{{ list.id }}"#}
-{#                                       data-appId="{{ list.appId }}"#}
-{#                                       data-name="{{ list.name }}"#}
-{#                                       data-apiName="{{ list.apiName }}"#}
-{#                                       {% for key, val in list.extend.items %}#}
-{#                                       data-{{ key }}="{{ val }}"#}
-{#                                       {% endfor %}#}
-{#                                       data-status="{{ list.status }}"#}
-{#                                    ><i class="fa fa-edit"></i> 编辑</a>#}
-{#                                    <a href="#extendModal" data-toggle="modal" data-form="edit-extend-model" class="btn btn-default btn-xs"#}
-{#                                       data-id="{{ list.id }}"#}
-{#                                       data-number="{{ list.number }}"#}
-{#                                       data-amount="{{ list.amount }}"#}
-{#                                       data-credit1="{{ list.credit1 }}"#}
-{#                                       data-startTime="{{ list.startTime }}"#}
-{#                                       data-endTime="{{ list.endTime }}"#}
-{#                                    ><i class="fa fa-edit"></i> 迈豆分配</a>#}
-                                </td>
+
                             </tr>
                             {% endfor %}
                         </tbody>
@@ -101,7 +81,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>迈豆池</h3>
+                <h3>项目</h3>
             </div>
             <form id="credit_config_form_validate" novalidate="novalidate">
             <div class="modal-body">
@@ -116,26 +96,6 @@
     </div>
 </div>
 
-<div id="extendModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>迈豆分配</h3>
-                <span>可分配总额度：<label data-extend="credit" class="label label-danger">40</label></span>
-            </div>
-            <form id="credit_config_extend_validate" novalidate="novalidate">
-            <div class="modal-body">
-                {% include 'admin/credit_config/extend.html' %}
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary btn-small">确定</button>
-                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
 <script>
 $(function () {
     var app_list_url = '{% url 'admin:app_applist' %}';
