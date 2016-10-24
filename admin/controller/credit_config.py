@@ -6,6 +6,7 @@ from admin.controller.common_import import *
 
 from admin.model.Contract import Contract as Model
 from admin.model.App import App
+from admin.model.Company import Company
 
 '''
 迈豆积分列表
@@ -25,9 +26,11 @@ def index(request):
             param.update(name={'$regex': searchName})
         data = Model.objects.filter(**param).order_by("id")
         appData = App.objects.filter(status=1, id=searchAppId).order_by("id")[:1][0]
+        companyData = Company.objects.filter(status=1, id=appData['companyId']).order_by("id")[:1][0]
     else:
         data = {}
         appData = {}
+        companyData = {}
 
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
@@ -39,6 +42,7 @@ def index(request):
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
         'form_appData': appData,
+        'form_companyData': companyData,
     })
 
 # 修改操作--protected

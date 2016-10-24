@@ -6,6 +6,10 @@
     <div id="content-header" class="mini">
         <h1>企业管理</h1>
     </div>
+    <div id="breadcrumb">
+        <a href="{% url 'admin:index' %}" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
+        <a href="#" class="current">企业管理</a>
+    </div>
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
@@ -49,7 +53,7 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td><a href="{% url 'admin:app' %}?companyId={{ list.id }}" target="_blank">{{ list.name }}</a></td>
+                                <td><a href="{% url 'admin:app' %}?companyId={{ list.id }}">{{ list.name }}</a></td>
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == list.status %}

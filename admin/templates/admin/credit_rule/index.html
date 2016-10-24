@@ -6,6 +6,13 @@
     <div id="content-header" class="mini">
         <h1>积分策略配置</h1>
     </div>
+    <div id="breadcrumb">
+        <a href="{% url 'admin:index' %}" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
+        <a href="{% url 'admin:company' %}">企业</a>
+        <a href="{% url 'admin:app' %}?companyId={{ form_companyData.id }}">应用平台</a>
+        <a href="{% url 'admin:credit_config' %}?appId={{ form_appData.id }}">迈豆池</a>
+        <a href="#" class="current">积分策略</a>
+    </div>
     <div class="row">
         <form action="" method="get">
         <div class="col-xs-12 center">
@@ -37,7 +44,8 @@
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
                                 <th>名称</th>
-                                <th>规则名</th>
+                                <th>api规则名</th>
+                                <th>规则类型</th>
                                 <th>奖励周期</th>
                                 <th>次数</th>
                                 {% for key, val in c_ext_credit.items %}
@@ -56,6 +64,7 @@
                                 </td>
                                 <td>{{ list.name }}</td>
                                 <td>{{ list.apiName }}</td>
+                                <td>{{ list.integralType }}</td>
                                 <td>
                                     {% for key, val in c_cycle.items %}
                                         {% if key == list.cycle %}
