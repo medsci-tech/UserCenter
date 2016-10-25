@@ -42,9 +42,8 @@
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
                                 <th>项目名称</th>
-                                {% for key, val in c_ext_credit.items %}
-                                    <th>{{ val }}</th>
-                                {% endfor %}
+                                <th>总迈豆</th>
+                                <th>已使用迈豆</th>
                                 <th>状态</th>
                                 <th>创建时间</th>
                             </tr>
@@ -56,7 +55,8 @@
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
                                 <td><a href="{% url 'admin:credit_rule' %}?contractId={{ list.id }}">{{ list.name }}</a></td>
-                                <td>{{ list.credit1 }}</td>
+                                <td>{{ list.totalBeans }}</td>
+                                <td>{{ list.useBeans }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == list.status %}

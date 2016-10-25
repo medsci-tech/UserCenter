@@ -8,7 +8,10 @@ import datetime
 class QXToken(object):
     def __init__(self, name):
         self.name = name
-        self.token_key = configParam().get('c_token_key')
+        c_token = configParam().get('c_token')
+        self.token_key = c_token['key']
+        self.token_expire = c_token['expire']
+
 
     def generate_auth_token(self, expiration = 3600):
         ticks = int(time.time())  # 当前时间戳
@@ -18,7 +21,6 @@ class QXToken(object):
         timeArray = time.strptime(endTime, "%Y-%m-%d %H:%M:%S")
         timeStamp = int(time.mktime(timeArray))  # 转换为时间戳
         expiration = timeStamp - ticks # 设置当天有效期
-
         s = Serializer(self.token_key, expires_in=expiration)
         return str(s.dumps({'name': self.name}), encoding="utf-8")
 

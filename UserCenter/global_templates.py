@@ -35,9 +35,9 @@ def configParam(request=None):
         },
 
         # 积分策略扩展
-        'c_ext_credit': {
-            'credit1': '迈豆',
-        },
+        # 'c_ext_credit': {
+        #     'credit1': '迈豆',  # 迈豆为第一个扩展
+        # },
 
         # 系统记录操作
         'c_logs_operate': {
@@ -55,8 +55,11 @@ def configParam(request=None):
             3: '医药代表',
         },
 
-        # 安全令牌密钥
-        'c_token_key': '123abc',
+        # 安全令牌
+        'c_token': {
+            'key': '123abc',  # token密钥
+            'expire': None,  # 有效期
+        },
 
         # appId 对应数据库objectId
         'c_api_appId': {

@@ -18,7 +18,7 @@ class User(Auth):
     phone = StringField()  # 手机号
 
     role = IntField(default=0)  # 角色
-    extend = DictField()  # 扩展
+    beansList = DictField()  # 迈豆记录
 
 # 用户表
 

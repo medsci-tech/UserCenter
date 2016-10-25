@@ -99,15 +99,9 @@ def form(request):
             returnData = {'code': 802, 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if check_name:
-            if str(check_name[0]['appId']) == appId:
+            if str(check_name[0]['appId']) == appId and str(check_name[0]['id']) != id:
                 returnData = {'code': 801, 'msg': '策略字段%s已存在' % apiName, 'data': None}
                 return HttpResponse(json.dumps(returnData), content_type="application/json")
-        extend_list = {}
-        # 获取配置列表
-        cfg_param = configParam(request)
-        ext_credit_list = cfg_param.get('c_ext_credit')
-        for key in ext_credit_list:
-            extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
             'appId': appId,
             'companyId': post.get('companyId'),
@@ -117,7 +111,7 @@ def form(request):
             'name': post.get('name'),
             'cycle': post.get('cycle'),
             'rewardNum': post.get('rewardNum'),
-            'extend': extend_list,
+            'ratio': post.get('ratio'),
             'status': post.get('status'),
         }
         if id:

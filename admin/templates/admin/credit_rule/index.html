@@ -48,9 +48,7 @@
                                 <th>规则类型</th>
                                 <th>奖励周期</th>
                                 <th>次数</th>
-                                {% for key, val in c_ext_credit.items %}
-                                    <th>{{ val }}</th>
-                                {% endfor %}
+                                <th>迈豆系数</th>
                                 <th>状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
@@ -64,7 +62,13 @@
                                 </td>
                                 <td>{{ list.name }}</td>
                                 <td>{{ list.apiName }}</td>
-                                <td>{{ list.integralType }}</td>
+                                <td>
+                                    {% for val in list_integralType %}
+                                        {% if val.id|iriencode == list.integralType %}
+                                            {{ val.name }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>
                                     {% for key, val in c_cycle.items %}
                                         {% if key == list.cycle %}
@@ -73,15 +77,7 @@
                                     {% endfor %}
                                 </td>
                                 <td>{{ list.rewardNum }}</td>
-                                {% for key, val in c_ext_credit.items %}
-                                    <td>
-                                    {% for k, v in list.extend.items %}
-                                        {% if key == k %}
-                                            {{ v }}
-                                        {% endif %}
-                                    {% endfor %}
-                                    </td>
-                                {% endfor %}
+                                <td>{{ list.ratio }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == list.status %}
@@ -97,10 +93,8 @@
                                        data-name="{{ list.name }}"
                                        data-apiName="{{ list.apiName }}"
                                        data-integralType="{{ list.integralType }}"
-                                       {% for key, val in list.extend.items %}
-                                       data-{{ key }}="{{ val }}"
-                                       {% endfor %}
                                        data-cycle="{{ list.cycle }}"
+                                       data-radio="{{ list.radio }}"
                                        data-rewardNum="{{ list.rewardNum }}"
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
@@ -148,11 +142,6 @@ $(function () {
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
     });
 
-    var credit_full_list = [];
-    {% for key, val in c_ext_credit.items %}
-        credit_full_list['{{ key }}'] = '{{ val }}';
-    {% endfor %}
-
     /**
      * 点击添加按钮触发的操作
      */
@@ -161,17 +150,13 @@ $(function () {
         var cycle = $('#form-cycle');
         var defaultCycle = cycle.find('option:first').val();
         cycle.val(defaultCycle);
-{#        selectOptionHtmlForMime({}, '#form-appId');#}
-{#        selectOptionHtmlForMime({}, '#form-creditConfigId');#}
         $('#form-id').val(kong);
         $('#form-name').val(kong);
         $('#form-apiName').val(kong);
+        $('#form-radio').val(kong);
         $('#form-integralType').val(kong);
         $('#form-rewardNum').val(kong);
         $('#form-status').val(1);
-        for(var i in credit_full_list){
-            $('#form-' + i).val(kong);
-        }
     });
     /**
      * 点击修改按钮触发的操作
@@ -182,20 +167,17 @@ $(function () {
         var apiName = $(this).attr('data-apiName');
         var integralType = $(this).attr('data-integralType');
         var cycle = $(this).attr('data-cycle');
+        var radio = $(this).attr('data-radio');
         var rewardNum = $(this).attr('data-rewardNum');
         var status = $(this).attr('data-status');
-{#        changeListDataByAjaxForMime(app_list_url, {'companyId': companyId}, '#form-appId', 'optionHtml', appId);#}
-{#        changeListDataByAjaxForMime(creditConfig_list_url, {'appId': appId}, '#form-creditConfigId', 'optionHtml', creditConfigId);#}
         $('#form-id').val(id);
         $('#form-name').val(name);
         $('#form-apiName').val(apiName);
         $('#form-integralType').val(integralType);
         $('#form-cycle').val(cycle);
+        $('#form-radio').val(radio);
         $('#form-rewardNum').val(rewardNum);
         $('#form-status').val(status);
-        for(var i in credit_full_list){
-            $('#form-' + i).val($(this).attr('data-' + i));
-        }
     });
     /**
      * 表单验证提交按钮触发的操作
@@ -209,12 +191,10 @@ $(function () {
         },
         rewardNum:{
             number:true
+        },
+        ratio:{
+            number:true
         }
-        {% for key in c_ext_credit %}
-            ,'extend[{{ key }}]':{
-                number:true
-            }
-        {% endfor %}
     };
     subActionAjaxValidateForMime('#credit_rule_form_validate', rules, form_url, index_url);
 

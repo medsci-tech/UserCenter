@@ -51,9 +51,6 @@
                                 <th>角色</th>
                                 <th>用户名</th>
                                 <th>手机号</th>
-                                {% for key, val in c_ext_credit.items %}
-                                    <th>{{ val }}</th>
-                                {% endfor %}
                                 <th>状态</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
@@ -74,15 +71,6 @@
                                 </td>
                                 <td>{{ list.username }}</td>
                                 <td>{{ list.phone }}</td>
-                                {% for key, val in c_ext_credit.items %}
-                                    <td>
-                                    {% for k, v in list.extend.items %}
-                                        {% if key == k %}
-                                            {{ v }}
-                                        {% endif %}
-                                    {% endfor %}
-                                    </td>
-                                {% endfor %}
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == list.status %}
@@ -97,9 +85,6 @@
                                        data-role="{{ list.role }}"
                                        data-username="{{ list.username }}"
                                        data-phone="{{ list.phone }}"
-                                       {% for key, val in list.extend.items %}
-                                       data-{{ key }}="{{ val }}"
-                                       {% endfor %}
                                        data-province="{{ list.province }}"
                                        data-city="{{ list.city }}"
                                        data-district="{{ list.district }}"
@@ -153,11 +138,6 @@ $(function () {
         $('#form-searchRole').val(searchRole);
     }
 
-    var credit_full_list = [];
-    {% for key, val in c_ext_credit.items %}
-        credit_full_list['{{ key }}'] = '{{ val }}';
-    {% endfor %}
-
     /**
      * 点击添加按钮触发的操作
      */
@@ -169,9 +149,6 @@ $(function () {
         $('#form-username').val(kong);
         $('#form-phone').val(kong);
         $('#form-status').val(1);
-        for(var i in credit_full_list){
-            $('#form-' + i).val(kong);
-        }
         getRegionInit();
     });
     /**
@@ -188,9 +165,6 @@ $(function () {
         $('#form-username').val(username);
         $('#form-phone').val(phone);
         $('#form-status').val(status);
-        for(var i in credit_full_list){
-            $('#form-' + i).val($(this).attr('data-' + i));
-        }
         /*地区联动*/
         getRegionInit();
         var regionValue = {};
@@ -210,12 +184,6 @@ $(function () {
             required:true,
             phone:true
         }
-        {% for key in c_ext_credit %}
-            ,'extend[{{ key }}]':{
-                required:true,
-                number:true
-            }
-        {% endfor %}
     };
     subActionAjaxValidateForMime('#user_form_validate', rules, form_url, index_url);
 
