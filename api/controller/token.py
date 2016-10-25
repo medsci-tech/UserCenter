@@ -6,9 +6,11 @@ from itsdangerous import TimedJSONWebSignatureSerializer as Serializer, BadSigna
 class QXToken(object):
     def __init__(self, name):
         self.name = name
-        self.token_key = configParam().get('c_token_key')
+        c_token = configParam().get('c_token')
+        self.token_key = c_token['key']
+        self.token_expire = c_token['expire']
 
-    def generate_auth_token(self, expiration = 3600):
+    def generate_auth_token(self, expiration=None):
         s = Serializer(self.token_key, expires_in=expiration)
         return str(s.dumps({'name': self.name}), encoding="utf-8")
 
