@@ -64,7 +64,13 @@
                                 </td>
                                 <td>{{ list.name }}</td>
                                 <td>{{ list.apiName }}</td>
-                                <td>{{ list.integralType }}</td>
+                                <td>
+                                    {% for val in list_integralType %}
+                                        {% if val.id|iriencode == list.integralType %}
+                                            {{ val.name }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
                                 <td>
                                     {% for key, val in c_cycle.items %}
                                         {% if key == list.cycle %}
