@@ -66,7 +66,8 @@
                                 <th>合同编号</th>
                                 <th>合同金额</th>
                                 <th>兑换比例</th>
-                                <th>迈豆等值</th>
+                                <th>总迈豆</th>
+                                <th>已使用迈豆</th>
                                 <th>合同时间</th>
                                 <th>状态</th>
                                 <th>操作</th>
@@ -82,7 +83,8 @@
                                 <td>{{ data.code }}</td>
                                 <td>{{ data.amount }}</td>
                                 <td>{{ data.number }}</td>
-                                <td align="center"><button disabled="" class="btn btn-dark-green btn-xs">{% widthratio data.amount 1 data.number %}</button></td>
+                                <td align="center"><button disabled="" class="btn btn-dark-green btn-xs">{{ data.totalBeans }}</button></td>
+                                <td align="center"><button disabled="" class="btn btn-dark-red btn-xs">{{ data.useBeans }}</button></td>
                                 <td>{{ data.startTime }}-{{ data.endTime }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}

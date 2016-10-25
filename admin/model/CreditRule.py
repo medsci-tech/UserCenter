@@ -18,4 +18,4 @@ class CreditRule(Auth):
     integralType = StringField()  # 策略名称
     cycle = IntField(default=0)  # 周期
     rewardNum = IntField(default=0)  # 周期内最多奖励次数
-    extend = DictField()
+    ratio = FloatField()
