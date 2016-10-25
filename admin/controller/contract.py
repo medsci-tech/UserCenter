@@ -58,19 +58,19 @@ def save(request, **param):
     if request.method == 'POST':
         amount = post.get('amount').strip()
         number = post.get('number').strip()
-        credit1 = math.ceil(float(amount) * float(number))
+        totalBeans = math.ceil(float(amount) * float(number))
         param = {
             'id': post.get('id'),  # objectid
             'companyId': post.get('companyId'),  # 企业id
             'appId': post.get('appId'),  # 企业id
-            'name':post.get('name'), # 合同名
+            'name':post.get('name'),  # 合同名
             'code': post.get('code'),  # 合同编号
-            'amount': post.get('amount'),# 合同金额
-            'number': post.get('number'),  # 合同比例
-            'credit1': credit1,  # 迈豆
-            'img': post.get('img'),# 合同照片
-            'startTime': post.get('startTime'),# 合同有效期
-            'endTime': post.get('endTime'),# 合同截止日期
+            'amount': amount,  # 合同金额
+            'number': number,  # 合同比例
+            'totalBeans': totalBeans,  # 总迈豆
+            'img': post.get('img'),  # 合同照片
+            'startTime': post.get('startTime'),  # 合同有效期
+            'endTime': post.get('endTime'),  # 合同截止日期
             'status': post.get('status')  # 状态
         }
         id = param.get('id',0)

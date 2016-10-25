@@ -35,9 +35,9 @@ def configParam(request=None):
         },
 
         # 积分策略扩展
-        'c_ext_credit': {
-            'credit1': '迈豆',
-        },
+        # 'c_ext_credit': {
+        #     'credit1': '迈豆',  # 迈豆为第一个扩展
+        # },
 
         # 系统记录操作
         'c_logs_operate': {

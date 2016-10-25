@@ -16,5 +16,5 @@ urlpatterns = [
     url(r'^user/edit', user.edit, name='user_edit'),
 
     # 迈豆积分接口
-    url(r'^credit/edit', credit.user, name='credit_user'),
+    url(r'^credit/index', credit.index, name='credit_index'),
 ]
