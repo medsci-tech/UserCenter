@@ -13,7 +13,7 @@ class QXToken(object):
         self.token_expire = c_token['expire']
 
 
-    def generate_auth_token(self, expiration = 3600):
+    def generate_auth_token(self):
         ticks = int(time.time())  # 当前时间戳
         now = datetime.datetime.now()  # 获得当前时间
         otherStyleTime = now.strftime("%Y-%m-%d")  # 转换为指定的格式:

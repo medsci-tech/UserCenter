@@ -18,7 +18,7 @@ def get_token(request):
     post = request.POST
     if not post:
         returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
-        return HttpResponse(json.dumps(returnData))
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
 
     appId = int(post.get('appId',0))
     cfg_param = configParam(request)
@@ -27,14 +27,14 @@ def get_token(request):
         res = App.objects.get(id=appId)
         if not res :
             returnData = {'code': -1, 'msg': '该应用id不存在', 'data': None}
-            return HttpResponse(json.dumps(returnData))
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
     except (ValueError, KeyError, TypeError):
-        return HttpResponse(json.dumps({'code': -1, 'msg': '该应用id不存在!', 'data': None}))
+        return HttpResponse(json.dumps({'code': -1, 'msg': '该应用id不存在!', 'data': None}), content_type="application/json")
 
     token = QXToken(appId).generate_auth_token()
     res = QXToken(appId).verify_auth_token(token)
     returnData = {'code': 200, 'msg': '成功', 'data': token}
-    return HttpResponse(json.dumps(returnData))
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # ============================
 # 查询单条数据私有方法
