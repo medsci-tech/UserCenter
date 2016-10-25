@@ -4,10 +4,12 @@
 
 '''
 from api.controller.common_import import *  # 公共引入文件
-
 from admin.model.User import User as Model
+from admin.model.App import App
 from django.contrib.auth.hashers import check_password, make_password
-
+# configParam
+from UserCenter.global_templates import configParam
+from api.controller.common import checkAccess
 # ============================
 # 获取token
 # ============================
@@ -15,12 +17,24 @@ from django.contrib.auth.hashers import check_password, make_password
 def get_token(request):
     post = request.POST
     if not post:
-        returnData = {'code': 811, 'msg': '非法请求', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
-    id = post.get('uc_uid')
-    token = QXToken(id).generate_auth_token()
+        returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
+        return HttpResponse(json.dumps(returnData))
+
+    appId = int(post.get('appId',0))
+    cfg_param = configParam(request)
+    try:
+        appId = cfg_param.get('c_api_appId')[appId]
+        res = App.objects.get(id=appId)
+        if not res :
+            returnData = {'code': -1, 'msg': '该应用id不存在', 'data': None}
+            return HttpResponse(json.dumps(returnData))
+    except (ValueError, KeyError, TypeError):
+        return HttpResponse(json.dumps({'code': -1, 'msg': '该应用id不存在!', 'data': None}))
+
+    token = QXToken(appId).generate_auth_token()
+    res = QXToken(appId).verify_auth_token(token)
     returnData = {'code': 200, 'msg': '成功', 'data': token}
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+    return HttpResponse(json.dumps(returnData))
 
 # ============================
 # 查询单条数据私有方法
@@ -29,15 +43,11 @@ def _getUser(param, data_param):
     try:
         model = Model.objects.get(**param)
     except Exception:
-        return {'code': 800, 'msg': '非法请求', 'data': None}
+        return {'code': 200, 'msg': '可以注册!!', 'data': None}
     if model:
-        data = {
-            '%s' % data_param: model[data_param],
-            'uc_uid': str(model['_id']),
-        }
-        returnData = {'code': 200, 'msg': '成功', 'data': data}
+        returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
     else:
-        returnData = {'code': 700, 'msg': '失败', 'data': None}
+        returnData = {'code': 200, 'msg': '可以注册!', 'data': None}
     return returnData
 
 # ============================
@@ -94,30 +104,23 @@ def login(request):
 # ============================
 def _addUser(param):
     username = param.get('username')
-    unionid = param.get('unionid')
-    if unionid:
-        check_param = {
-            'unionid': unionid,
-        }
-        data_param = 'unionid'
-    elif username:
-        check_param = {
-            'username': username,
-        }
-        data_param = 'username'
-    else:
-        return {'code': 902, 'msg': '非法操作', 'data': None}
+    check_param = {
+        'username': username,
+    }
+    data_param = 'username'
+    return {'code': 200, 'msg': '用户已存在', 'data': None}
+
     check_exist = _getUser(check_param, data_param)
-    if check_exist.get('code') == 200:
-        return {'code': 901, 'msg': '用户已存在', 'data': None}
+    if check_exist.get('code') == -1:
+        return {'code': 200, 'msg': '用户已存在', 'data': None}
     try:
         model = Model.objects.create(**param)
     except Exception:
-        return {'code': 900, 'msg': '数据验证错误', 'data': None}
+        return {'code': -1, 'msg': '数据验证错误!', 'data': param}
     if model:
-        returnData = {'code': 200, 'msg': '操作成功', 'data': str(model['id'])}
+        returnData = {'code': 200, 'msg': '注册成功!', 'data':None}
     else:
-        returnData = {'code': 800, 'msg': '操作失败', 'data': None}
+        returnData = {'code': 800, 'msg': '注册失败', 'data': None}
     return returnData
 
 # ============================
@@ -127,37 +130,43 @@ def _addUser(param):
 def register(request):
     post = request.POST
     if not post:
-        returnData = {'code': 811, 'msg': '非法请求', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
-    # 微信
-    unionid = post.get('unionid')
-    openid = post.get('openid')
-    # 账号
-    username = post.get('username')
-    password = post.get('password')
-    if unionid and openid:
-        # 微信参数
-        param = {
-            'unionid': unionid,
-            'openid': openid,
-            'nickname': post.get('nickname'),
-            'head_image_url': post.get('head_image_url'),
-        }
-    elif username and password:
-        # 账号参数
+        returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
+        return HttpResponse(json.dumps(returnData))
+
+    longitude = post.get('longitude',None) # 经度
+    latitude = post.get('latitude',None) # 纬度
+    username = post.get('username') # 用户名
+    password = post.get('password') # 密码
+
+    if not(username and password):
+        returnData = {'code': -1, 'msg': '用户或密码不能为空', 'data': None}
+        return HttpResponse(json.dumps(returnData))
+    else:
+        # 注册参数
         param = {
             'username': username,
             'password': make_password(password, None, 'pbkdf2_sha256'),
+            'longitude': longitude,
+            'latitude': latitude,
         }
-    else:
-        returnData = {'code': 810, 'msg': '非法请求', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
-    result = _addUser(param)
-    if result.get('code') == 200:
-        uc_uid = result.get('data')
-        token = QXToken(uc_uid).generate_auth_token()
-        returnData = {'code': 200, 'msg': '成功', 'data': {'uc_uid': uc_uid, 'token': token}}
-    else:
-        returnData = result
+    try:
+        model = Model.objects.filter(username=username)
+        if model:
+            returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
+            return HttpResponse(json.dumps(returnData))
+        else :
+            result = Model.objects.create(**param) # 注册用户
+            if result :
+                pass
+            '''获取积分接口'''
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+    except (ValueError, KeyError, TypeError):
+        return {'code': -1, 'msg': '服务器异常!', 'data': None}
+
+
+    #result = Model.objects.create(**param)
+    if result:
+        returnData = {'code': 200, 'msg': '注册成功!', 'data': None}
+    else:
+        returnData = {'code': -1, 'msg': '注册失败!', 'data': None}
+    return HttpResponse(json.dumps(11))

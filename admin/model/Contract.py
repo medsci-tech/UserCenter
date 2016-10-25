@@ -7,6 +7,8 @@ class Contract(Auth):
             'collection': settings.MONGODB_PREFIX+'contract',
             'indexes':['id'],
             }
+    createTime = DateTimeField(default=datetime.now())
+
     companyId = StringField()  # 企业id
     appId = StringField()  # 应用id
     name = StringField()
@@ -14,7 +16,8 @@ class Contract(Auth):
     code = StringField()
     number = FloatField()
     extend = DictField()  # 扩展
-    credit1 = IntField(default=0)  # 已分配迈豆列表
+    useBeans = IntField(default=0)  # 已使用迈豆
+    totalBeans = IntField(default=0)  # 已使用迈豆
     amount = FloatField()
     img = StringField()
     startTime = StringField()

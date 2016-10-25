@@ -11,11 +11,14 @@ class User(Auth):
     status = IntField(default=1)
 
     unionId = StringField()  # 微信唯一标识
-    username = StringField()  # 用户名
+    username = StringField(max_length=20)  # 用户名
+    password = StringField(max_length=100)  # 密码
+    longitude = StringField(required=False)  # 经度
+    latitude = StringField(required=False)  # 纬度
     phone = StringField()  # 手机号
-    password = StringField()  # 密码
+
     role = IntField(default=0)  # 角色
-    extend = DictField()  # 扩展
+    beansList = DictField()  # 迈豆记录
 
 # 用户表
 
