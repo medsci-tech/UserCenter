@@ -7,9 +7,8 @@ from api.controller.common_import import *  # 公共引入文件
 from admin.model.App import App
 from UserCenter.global_templates import configParam
 
-def checkAccess(request):
+def checkAccess():
     post = request.POST
-    return HttpResponse(json.dumps({'code': -1, 'msg': '121212!', 'data': 1}))
     if not post:
         returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
         return HttpResponse(json.dumps(returnData))
@@ -24,6 +23,16 @@ def checkAccess(request):
             return HttpResponse(json.dumps(returnData))
     except (ValueError, KeyError, TypeError):
         return HttpResponse(json.dumps({'code': -1, 'msg': '该应用id不存在!', 'data': None}))
-
+    '''验证token是否失效'''
+    code = -1
+    # token = QXToken(appId).generate_auth_token()
+    # res = QXToken(appId).verify_auth_token(token)
+    # if res != 200 :
+    #     returnData = {'code': -1, 'msg': 'tocken失效', 'data': token}
+    #     return HttpResponse(json.dumps(returnData))
+    # else:
+    #     return True
+    returnData = {'code': 200, 'msg': '', 'data': None}
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 

@@ -128,11 +128,11 @@ def _addUser(param):
 # ============================
 @csrf_exempt
 def register(request):
+
     post = request.POST
     if not post:
         returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
         return HttpResponse(json.dumps(returnData))
-
     longitude = post.get('longitude',None) # 经度
     latitude = post.get('latitude',None) # 纬度
     username = post.get('username') # 用户名
@@ -159,14 +159,11 @@ def register(request):
             if result :
                 pass
             '''获取积分接口'''
-
     except (ValueError, KeyError, TypeError):
         return {'code': -1, 'msg': '服务器异常!', 'data': None}
 
-
-    #result = Model.objects.create(**param)
     if result:
         returnData = {'code': 200, 'msg': '注册成功!', 'data': None}
     else:
         returnData = {'code': -1, 'msg': '注册失败!', 'data': None}
-    return HttpResponse(json.dumps(11))
+    return HttpResponse(json.dumps(returnData))
