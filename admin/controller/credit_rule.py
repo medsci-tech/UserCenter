@@ -99,7 +99,7 @@ def form(request):
             returnData = {'code': 802, 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if check_name:
-            if str(check_name[0]['appId']) == appId:
+            if str(check_name[0]['appId']) == appId and str(check_name[0]['id']) != id:
                 returnData = {'code': 801, 'msg': '策略字段%s已存在' % apiName, 'data': None}
                 return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
