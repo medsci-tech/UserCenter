@@ -55,8 +55,11 @@ def configParam(request=None):
             3: '医药代表',
         },
 
-        # 安全令牌密钥
-        'c_token_key': '123abc',
+        # 安全令牌
+        'c_token': {
+            'key': '123abc',  # token密钥
+            'expire': None,  # 有效期
+        },
 
         # appId 对应数据库objectId
         'c_api_appId': {
