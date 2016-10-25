@@ -31,8 +31,7 @@ def configParam(request=None):
             0: '不限',
             1: '一次',
             2: '每天',
-            3: '整点',
-            4: '间隔分钟',
+            3: '每月',
         },
 
         # 积分策略扩展
@@ -58,4 +57,11 @@ def configParam(request=None):
 
         # 安全令牌密钥
         'c_token_key': '123abc',
+
+        # appId 对应数据库objectId
+        'c_api_appId': {
+            1: '580c05ae4eaa7653f70d82a3',  # 药械通微信端
+            2: '580c215c4eaa7657001f2365',  # mime web平台
+            3: '580dbd462514971c74d2903f',  # 易康伴侣微信端
+        }
     }
