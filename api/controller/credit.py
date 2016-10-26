@@ -126,7 +126,7 @@ def index(request):
             '''
             returnData = {'code': -1, 'msg': '操作失败', 'data': None}
     else:
-        returnData = {'code': -2, 'msg': '参数缺失', 'data': request_phone}
+        returnData = {'code': -2, 'msg': '参数缺失', 'data': None}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
