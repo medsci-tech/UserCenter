@@ -10,6 +10,7 @@ from admin.controller import (
     company,
     credit_config,
     user,
+    charts,
 )
 
 urlpatterns = [
@@ -67,4 +68,8 @@ urlpatterns = [
     url(r'^user/form', user.form, name='user_form'),
     url(r'^user/stats', user.stats, name='user_stats'),
     url(r'^user/index', user.index, name='user'),
+
+    # 图表
+    url(r'^charts/index', charts.index, name='charts'),
+
 ]
