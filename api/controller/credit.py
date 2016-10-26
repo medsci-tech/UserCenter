@@ -100,7 +100,10 @@ def index(request):
             'beans': temp_beans,
         }
         save_beansList = dict(userBeansList, **temp_beansList)  # 合并子文档项目记录
-        save_beans_total = userData['beans_total'] + need_beans
+        if hasattr(userData, 'beans_total'):
+            save_beans_total = userData['beans_total'] + need_beans
+        else:
+            save_beans_total = + need_beans
         user_param ={
             'beansList': save_beansList,
             'beans_total': save_beans_total,
@@ -121,16 +124,9 @@ def index(request):
         if contract_model and user_model:
             returnData = {'code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
         else:
-            '''
-                回滚数据
-            '''
             returnData = {'code': -1, 'msg': '操作失败', 'data': None}
     else:
         returnData = {'code': -2, 'msg': '参数缺失', 'data': None}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
-
-# ============================
-# 用户
-# ============================
