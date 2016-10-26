@@ -10,6 +10,8 @@ from django.contrib.auth.hashers import check_password, make_password
 # configParam
 from UserCenter.global_templates import configParam
 from api.controller.common import checkAccess
+from api.controller.funForMime import imitate_post
+from django.http import HttpRequest
 # ============================
 # 获取token
 # ============================
@@ -130,15 +132,26 @@ def register(request):
     post = request.POST
     if not post:
         returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
-        return HttpResponse(json.dumps(returnData))
-    longitude = post.get('longitude',None) # 经度
-    latitude = post.get('latitude',None) # 纬度
-    phone = post.get('phone') # 用户名
-    password = post.get('password') # 密码
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    longitude = post.get('longitude', None)  # 经度
+    latitude = post.get('latitude', None)  # 纬度
+    phone = post.get('phone')  # 用户名
+    password = post.get('password')  # 密码
+
+    # post_url = 'http://' + HttpRequest.get_host(request) + '/api/credit/index'
+    # post_param = {
+    #     'phone': phone,
+    #     'action': 'register',
+    #     'appId': post.get('appId'),
+    #     'mdBeans': post.get('mdBeans'),
+    #     'token': post.get('token'),
+    # }
+    # returnData = imitate_post(url=post_url, param=post_param)
+    # return HttpResponse(json.dumps(post_url), content_type="application/json")
 
     if not(phone and password):
         returnData = {'code': -1, 'msg': '用户或密码不能为空', 'data': None}
-        return HttpResponse(json.dumps(returnData))
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         # 注册参数
         param = {
@@ -151,17 +164,23 @@ def register(request):
         model = Model.objects.filter(phone=phone)
         if model:
             returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
-            return HttpResponse(json.dumps(returnData))
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
         else :
             result = Model.objects.create(**param) # 注册用户
-            if result :
-                pass
-            '''获取积分接口'''
     except (ValueError, KeyError, TypeError):
         return {'code': -1, 'msg': '服务器异常!', 'data': None}
 
     if result:
-        returnData = {'code': 200, 'msg': '注册成功!', 'data': None}
+        # 积分
+        post_url = 'http://' + HttpRequest.get_host(request) + '/api/credit/index'
+        post_param = {
+            'phone': phone,
+            'action': 'register',
+            'appId': post.get('appId'),
+            'mdBeans': post.get('mdBeans'),
+            'token': post.get('token'),
+        }
+        returnData = imitate_post(url=post_url, param=post_param)
     else:
         returnData = {'code': -1, 'msg': '注册失败!', 'data': None}
-    return HttpResponse(json.dumps(returnData))
+    return HttpResponse(json.dumps(returnData), content_type="application/json")

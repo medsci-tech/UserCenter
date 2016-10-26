@@ -11,7 +11,6 @@ class User(Auth):
     status = IntField(default=1)
 
     unionId = StringField()  # 微信唯一标识
-    username = StringField(max_length=20)  # 用户名
     password = StringField(max_length=100)  # 密码
     longitude = StringField(required=False)  # 经度
     latitude = StringField(required=False)  # 纬度
@@ -19,6 +18,7 @@ class User(Auth):
 
     role = IntField(default=0)  # 角色
     beansList = DictField()  # 迈豆记录
+    beans_total = FloatField(default=0)
 
 # 用户表
 
@@ -34,7 +34,6 @@ class User(Auth):
     # phone = StringField(default=None)
     auth_code = StringField(default=None)
     auth_code_expired = StringField(default=None)
-    beans_total = FloatField(default=None)
     openid = StringField(default=None)
     unionid = StringField(default=None)
     nickname = StringField(default=None)
