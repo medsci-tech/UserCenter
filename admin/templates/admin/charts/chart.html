@@ -1,5 +1,7 @@
 <div class="row">  
-    <div id="chart" style="width: auto;height:400px;"></div>
+    <div class="col-xs-12">
+        <div id="chart" style="width: auto;height:800px;"></div>
+    </div>
 </div>
 <script type="text/javascript">
     // 基于准备好的dom，初始化echarts实例
@@ -8,23 +10,130 @@
     // 指定图表的配置项和数据
     var option = {
         title: {
-            text: 'ECharts 入门示例'
+            text: '迈豆池',
+            x: 'center'
         },
+        grid: [
+               {x: '7%', y: '7%', width: '38%', height: '38%'},
+               {x2: '7%', y: '7%', width: '38%', height: '30%'},
+               {x: '7%', y2: '8%', width: '38%', height: '38%'},
+               {x2: '7%', y2: '8%', width: '38%', height: '30%'}
+        ],
         tooltip: {},
-        legend: {
-            data:['销量']
-        },
-        xAxis: {
-            data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-        },
-        yAxis: {},
-        series: [{
-            name: '销量',
-            type: 'bar',
-            data: [5, 20, 36, 10, 10, 20]
-        }]
+        legend: [
+            {
+                data:['销量','销量2']
+            },{
+                data:['销量3','销量4']
+            }
+        ],
+        xAxis: [
+            {
+                gridIndex: 1,
+                boundaryGap: false,
+                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            },{
+                gridIndex: 3,
+                boundaryGap: false,
+                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
+            }
+        ],
+        yAxis: [
+            {
+                gridIndex: 1,
+            },{
+                gridIndex: 3,
+            }
+        ],
+        dataZoom: [
+            {
+                xAxisIndex: 0,
+                top: '48%',
+                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            },{
+                xAxisIndex: 1,
+                top: '95%',
+                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
+                handleSize: '80%',
+                handleStyle: {
+                    color: '#fff',
+                    shadowBlur: 3,
+                    shadowColor: 'rgba(0, 0, 0, 0.6)',
+                    shadowOffsetX: 2,
+                    shadowOffsetY: 2
+                }
+            },{
+                type: 'inside',
+                xAxisIndex: 0,
+            },{
+                type: 'inside',
+                xAxisIndex: 1,
+            }
+        ],
+        series: [
+            {
+                name: '销量',
+                type: 'line',
+                data: [5, 20, 36, 10, 10, 20]
+            },{
+                name: '销量2',
+                type: 'line',
+                data: [5, 20, 36, 10, 10, 20]
+            },{
+                name: '销量3',
+                type: 'line',
+                xAxisIndex: 1,
+                yAxisIndex: 1,
+                data: [5, 20, 36, 10, 10, 20]
+            },{
+                name: '销量4',
+                type: 'line',
+                xAxisIndex: 1,
+                yAxisIndex: 1,
+                data: [5, 20, 36, 10, 10, 20]
+            }
+        ]
     };
 
     // 使用刚指定的配置项和数据显示图表。
     myChart.setOption(option);
+</script>
+<script>
+myChart.on('click', function (params) {
+  if (params.seriesType === 'bar') {
+    console.log(params.seriesIndex);
+    if (params.seriesIndex === 0) {
+      myChart.setOption({
+        series: [
+          {
+            center: ['25%', '50%']
+          },
+          {
+            name: '课程点击量',
+            type: 'pie',
+            radius: '55%',
+            center: ['75%', '50%'],
+            data: [5, 20, 36, 10, 10, 20],
+            itemStyle: {
+              emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+              }
+            }
+          }
+        ]
+      })
+    }
+  }
+
+});
 </script>
