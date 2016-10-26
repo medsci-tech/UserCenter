@@ -114,7 +114,7 @@ def index(request):
             returnData = {'code': -1, 'msg': 'project操作失败', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if contract_model and user_model:
-            returnData = {'code': 200, 'msg': '操作成功', 'data': None}
+            returnData = {'code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
         else:
             '''
                 回滚数据

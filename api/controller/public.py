@@ -63,7 +63,7 @@ def login(request):
     unionid = post.get('unionid')
     openid = post.get('openid')
     # 账号
-    username = post.get('username')
+    phone = post.get('phone')
     password = post.get('password')
     if unionid and openid:
         # 微信参数
@@ -72,10 +72,10 @@ def login(request):
         }
         data_param = 'openid'
         check_value = openid
-    elif username and password:
+    elif phone and password:
         # 账号参数
         param = {
-            'username': username,
+            'phone': phone,
         }
         data_param = 'password'
         check_value = password
@@ -103,13 +103,11 @@ def login(request):
 # 插入数据私有方法
 # ============================
 def _addUser(param):
-    username = param.get('username')
+    phone = param.get('phone')
     check_param = {
-        'username': username,
+        'phone': phone,
     }
-    data_param = 'username'
-    return {'code': 200, 'msg': '用户已存在', 'data': None}
-
+    data_param = 'phone'
     check_exist = _getUser(check_param, data_param)
     if check_exist.get('code') == -1:
         return {'code': 200, 'msg': '用户已存在', 'data': None}
@@ -135,22 +133,22 @@ def register(request):
         return HttpResponse(json.dumps(returnData))
     longitude = post.get('longitude',None) # 经度
     latitude = post.get('latitude',None) # 纬度
-    username = post.get('username') # 用户名
+    phone = post.get('phone') # 用户名
     password = post.get('password') # 密码
 
-    if not(username and password):
+    if not(phone and password):
         returnData = {'code': -1, 'msg': '用户或密码不能为空', 'data': None}
         return HttpResponse(json.dumps(returnData))
     else:
         # 注册参数
         param = {
-            'username': username,
+            'phone': phone,
             'password': make_password(password, None, 'pbkdf2_sha256'),
             'longitude': longitude,
             'latitude': latitude,
         }
     try:
-        model = Model.objects.filter(username=username)
+        model = Model.objects.filter(phone=phone)
         if model:
             returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
             return HttpResponse(json.dumps(returnData))
