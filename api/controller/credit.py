@@ -28,8 +28,13 @@ def index(request):
     # 获取appid配置文件
     cfg_param = configParam(request)
     api_appId_list = cfg_param.get('c_api_appId')
-    request_appId = int(request_appId)
-    str_appId = api_appId_list[request_appId]
+    try:
+        request_appId = int(request_appId)
+        str_appId = api_appId_list[request_appId]
+    except:
+        returnData = {'code': -1, 'msg': '找不到配置的appId', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
     check_token = QXToken(str_appId).verify_auth_token(request_token)  # 解析token
     if check_token and request_action and str_appId:
         # CreditRule
@@ -38,7 +43,7 @@ def index(request):
             ruleData = CreditRule.objects.get(appId=str_appId, apiName=request_action)
             need_beans = math.ceil(ruleData['ratio'] * float(request_beans))  # 需要分配给用户的迈豆数
         except:
-            returnData = {'code': -1, 'msg': '操作失败', 'data': None}
+            returnData = {'code': -1, 'msg': 'rule操作失败', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if not ruleData:
             returnData = {'code': -1, 'msg': '找不到对应规则', 'data': None}
@@ -49,7 +54,7 @@ def index(request):
             # 查询Contract表，看是否有可用迈豆
             contractData = Contract.objects.get(id=ruleData['contractId'])
         except:
-            returnData = {'code': -1, 'msg': '操作失败', 'data': None}
+            returnData = {'code': -1, 'msg': 'contract操作失败', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if not contractData:
             returnData = {'code': -1, 'msg': '找不到对应项目', 'data': None}
@@ -75,7 +80,7 @@ def index(request):
         try:
             userData = User.objects.get(phone=request_phone)
         except:
-            returnData = {'code': -1, 'msg': '操作失败', 'data': None}
+            returnData = {'code': -1, 'msg': 'user操作失败', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if not userData:
             returnData = {'code': -1, 'msg': '找不到对应用户', 'data': None}
@@ -119,9 +124,9 @@ def index(request):
             '''
                 回滚数据
             '''
-            returnData = {'code': -2, 'msg': '操作失败', 'data': None}
+            returnData = {'code': -1, 'msg': '操作失败', 'data': None}
     else:
-        returnData = {'code': -2, 'msg': '参数缺失', 'data': check_token}
+        returnData = {'code': -2, 'msg': '参数缺失', 'data': request_phone}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
