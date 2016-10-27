@@ -12,6 +12,7 @@ from UserCenter.global_templates import configParam
 from api.controller.common import checkAccess
 from api.controller.funForMime import imitate_post
 from django.http import HttpRequest
+import re
 # ============================
 # 获取token
 # ============================
@@ -188,6 +189,52 @@ def register(request):
 # ============================
 # 设置/修改密码
 # ============================
+def checkContainUpper(pwd):
+    pattern = re.compile('[A-Z]+')
+    match = pattern.findall(pwd)
+
+    if match:
+        return True
+    else:
+        return False
+
+def checkContainNum(pwd):
+    pattern = re.compile('[0-9]+')
+    match = pattern.findall(pwd)
+    if match:
+        return True
+    else:
+        return False
+
+def checkContainLower(pwd):
+    pattern = re.compile('[a-z]+')
+    match = pattern.findall(pwd)
+
+    if match:
+        return True
+    else:
+       return False
+
+def checkSymbol(pwd):
+    pattern = re.compile('([^a-z0-9A-Z])+')
+    match = pattern.findall(pwd)
+
+    if match:
+        return True
+    else:
+        return False
+
+def checkPassword(pwd):
+    #判断是否包含大写字母
+    upperOK=checkContainUpper(pwd)
+    #判断是否包含小写字母
+    lowerOK=checkContainLower(pwd)
+    #判断是否包含数字
+    numOK=checkContainNum(pwd)
+    #判断是否包含符号
+    symbolOK=checkSymbol(pwd)
+    return (upperOK or lowerOK and numOK)
+
 @csrf_exempt
 def setPwd(request):
     post = request.POST
@@ -210,10 +257,14 @@ def setPwd(request):
     if password == '':
         returnData = {'code': -2, 'msg': '密码不能为空!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
-    if len(password)>12 :
-        returnData = {'code': -3, 'msg': '密码长度不能超过12个字符!', 'data': None}
+
+    if checkPassword(password)==False:
+        returnData = {'code': -1, 'msg': '密码必须包含字母和数字!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
-    if password != repassword:
+    elif len(password)>30 or len(password)<6:
+        returnData = {'code': -1, 'msg': '密码长度介于6-30个字符!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    elif password != repassword:
         returnData = {'code': -1, 'msg': '两次输入的密码不一致!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 

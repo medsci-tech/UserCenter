@@ -9,7 +9,7 @@ class User(Auth):
             }
     created_at = StringField(default=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
     updated_at = StringField(default=None)
-    password = StringField(max_length=100)  # 密码
+    password = StringField(min_length=6,max_length=100)  # 密码
     longitude = StringField(required=False)  # 经度
     latitude = StringField(required=False)  # 纬度
     phone = StringField()  # 手机号
