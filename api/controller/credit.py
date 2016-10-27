@@ -1,16 +1,21 @@
 # -*- coding: utf-8 -*-
-'''
-    积分接口
 
-'''
 from api.controller.common_import import *  # 公共引入文件
 
 from admin.model.User import User
 from admin.model.CreditRule import CreditRule
 from admin.model.Contract import Contract
+from admin.model.BeansLog import BeansLog
+from admin.model.Company import Company
+from admin.model.App import App
 # 时间模块
 from datetime import *
 import math
+'''
+    积分接口
+'''
+
+
 # ============================
 # 用户积分
 # ============================
@@ -122,11 +127,57 @@ def index(request):
             returnData = {'code': -1, 'msg': 'project操作失败', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if contract_model and user_model:
-            returnData = {'code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
+            # 记录log
+            log_param = {
+                'companyId': contractData['companyId'],
+                'appId': contractData['appId'],
+                'contractId': str(contractData['id']),
+                'contractName': contractData['name'],
+                'ruleId': str(ruleData['id']),
+                'ruleName': ruleData['name'],
+                'phone': request_phone,
+                'action': request_action,
+                'post_beans': request_beans,
+                'save_beans': need_beans,
+            }
+            # 查询companyName
+            try:
+                companyData = Company.objects.get(id=contractData['companyId'])
+            except:
+                companyData = None
+            if companyData:
+                companyDataName = companyData['name']
+            else:
+                companyDataName = ''
+            log_param.update(companyName=companyDataName)
+            # 查询appName
+            try:
+                appData = App.objects.get(id=contractData['appId'])
+            except:
+                appData = None
+            if appData:
+                appDataName = appData['name']
+            else:
+                appDataName = ''
+            log_param.update(appName=appDataName)
+            log_res = _log(log_param)
+            returnData = log_res
+            # returnData = {'code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
         else:
             returnData = {'code': -1, 'msg': '操作失败', 'data': None}
     else:
-        returnData = {'code': -2, 'msg': '参数缺失', 'data': None}
+        returnData = {'code': -2, 'msg': '参数错误', 'data': None}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
+
+# ============================
+# 用户积分
+# ============================
+def _log(param):
+    try:
+        model = BeansLog.objects.create(**param)
+        returnData = {'code': 200, 'msg': '操作成功', 'data': str(model['id'])}
+    except Exception:
+        returnData = {'code': -1, 'msg': 'log记录失败', 'data': None}
+    return returnData
