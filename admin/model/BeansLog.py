@@ -17,6 +17,8 @@ class BeansLog(Auth):
     contractName = StringField()
     ruleId = StringField()
     ruleName = StringField()
+    ruleTypeId = StringField()
+    ruleTypeName = StringField()
 
     phone = StringField()  # 手机号
     action = StringField()
