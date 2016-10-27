@@ -8,6 +8,7 @@ from admin.model.Contract import Contract
 from admin.model.BeansLog import BeansLog
 from admin.model.Company import Company
 from admin.model.App import App
+from admin.model.IntegralType import IntegralType
 # 时间模块
 from datetime import *
 import math
@@ -103,6 +104,7 @@ def index(request):
             temp_beans = need_beans
         temp_beansList[contractDataId] = {
             'beans': temp_beans,
+            'projectName': contractData['name'],
         }
         save_beansList = dict(userBeansList, **temp_beansList)  # 合并子文档项目记录
         if hasattr(userData, 'beans_total'):
@@ -135,6 +137,7 @@ def index(request):
                 'contractName': contractData['name'],
                 'ruleId': str(ruleData['id']),
                 'ruleName': ruleData['name'],
+                'ruleTypeId': ruleData['integralType'],
                 'phone': request_phone,
                 'action': request_action,
                 'post_beans': request_beans,
@@ -149,7 +152,6 @@ def index(request):
                 companyDataName = companyData['name']
             else:
                 companyDataName = ''
-            log_param.update(companyName=companyDataName)
             # 查询appName
             try:
                 appData = App.objects.get(id=contractData['appId'])
@@ -159,10 +161,23 @@ def index(request):
                 appDataName = appData['name']
             else:
                 appDataName = ''
+            # 查询规则类型
+            try:
+                ruleTypeData = IntegralType.objects.get(id=ruleData['integralType'])
+            except:
+                ruleTypeData = None
+            if ruleTypeData:
+                ruleTypeDataName = ruleTypeData['name']
+            else:
+                ruleTypeDataName = ''
+            log_param.update(companyName=companyDataName)
             log_param.update(appName=appDataName)
+            log_param.update(ruleTypeName=ruleTypeDataName)
             log_res = _log(log_param)
-            returnData = log_res
-            # returnData = {'code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
+            if log_res['code'] == 200:
+                returnData = {'code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
+            else:
+                returnData = {'code': 200, 'msg': '操作成功,log记录失败', 'data': {'user_beans': save_beans_total}}
         else:
             returnData = {'code': -1, 'msg': '操作失败', 'data': None}
     else:
@@ -176,8 +191,8 @@ def index(request):
 # ============================
 def _log(param):
     try:
-        model = BeansLog.objects.create(**param)
-        returnData = {'code': 200, 'msg': '操作成功', 'data': str(model['id'])}
+        BeansLog.objects.create(**param)
+        returnData = {'code': 200, 'msg': '操作成功', 'data': None}
     except Exception:
         returnData = {'code': -1, 'msg': 'log记录失败', 'data': None}
     return returnData
