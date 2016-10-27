@@ -87,23 +87,34 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
+        phone = post.get('phone')
         param = {
-            'username': post.get('username'),
-            'phone': post.get('phone'),
+            'nickname': post.get('nickname'),
+            'phone': phone,
             'password': post.get('password'),
             'role': post.get('role'),
-            'name': post.get('name'),
             'province': post.get('province'),
             'city': post.get('city'),
             'district': post.get('district'),
             'status': post.get('status'),
         }
+        try:
+            model = Model.objects.get(phone=phone)
+        except:
+            model = None
         if id:
             # 修改
+            if model:
+                if str(model['id']) != id:
+                    returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
+                    return HttpResponse(json.dumps(returnData), content_type="application/json")
             param.update(id=id)
             returnData = _editById(**param)
         else:
             # 添加
+            if model:
+                returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
+                return HttpResponse(json.dumps(returnData), content_type="application/json")
             returnData = _add(**param)
 
         # 操作成功添加log操作记录
