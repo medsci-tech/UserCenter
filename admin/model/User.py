@@ -10,22 +10,23 @@ class User(Auth):
     createTime = DateTimeField(default=datetime.now())
     status = IntField(default=1)
 
-    unionId = StringField()  # 微信唯一标识
+    openid = StringField(default=None)
+    unionid = StringField(default=None)
     password = StringField(max_length=100)  # 密码
     longitude = StringField(required=False)  # 经度
     latitude = StringField(required=False)  # 纬度
     phone = StringField()  # 手机号
 
-    role = IntField(default=0)  # 角色
+    role = StringField(default=None)  # 角色
     beansList = DictField()  # 迈豆记录
     beans_total = FloatField(default=0)
+    province = StringField(default=None)
+    city = StringField(default=None)
+    district = StringField(default=None)
 
 # 用户表
 
-    _id = ObjectIdField(default=None)
-    id = IntField(default=None)
     old_id = IntField(default=None)
-    type_id = IntField(default=None)
     level_id = IntField(default=None)
     referrer_id = IntField(default=None)
     cooperator_id = IntField(default=None)
@@ -34,8 +35,6 @@ class User(Auth):
     # phone = StringField(default=None)
     auth_code = StringField(default=None)
     auth_code_expired = StringField(default=None)
-    openid = StringField(default=None)
-    unionid = StringField(default=None)
     nickname = StringField(default=None)
     head_image_url = StringField(default=None)
     qr_code = StringField(default=None)
@@ -51,9 +50,6 @@ class User(Auth):
     region = StringField(default=None)
     region_level = StringField(default=None)
     responsible = StringField(default=None)
-    province = StringField(default=None)
-    city = StringField(default=None)
-    district = StringField(default=None)
     hospital = StringField(default=None)
     hospital_level = StringField(default=None)
     department = StringField(default=None)

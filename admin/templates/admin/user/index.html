@@ -49,7 +49,7 @@
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
                                 <th>角色</th>
-                                <th>用户名</th>
+                                <th>昵称</th>
                                 <th>手机号</th>
                                 <th>状态</th>
                                 <th>创建时间</th>
@@ -69,7 +69,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ list.username }}</td>
+                                <td>{{ list.nickname }}</td>
                                 <td>{{ list.phone }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
@@ -83,7 +83,7 @@
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
                                        data-role="{{ list.role }}"
-                                       data-username="{{ list.username }}"
+                                       data-nickname="{{ list.nickname }}"
                                        data-phone="{{ list.phone }}"
                                        data-province="{{ list.province }}"
                                        data-city="{{ list.city }}"
@@ -146,7 +146,7 @@ $(function () {
         var role = $('#form-role');
         role.val(role.find('option:first').val());
         $('#form-id').val(kong);
-        $('#form-username').val(kong);
+        $('#form-nickname').val(kong);
         $('#form-phone').val(kong);
         $('#form-status').val(1);
         getRegionInit();
@@ -157,12 +157,12 @@ $(function () {
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
         var role = $(this).attr('data-role');
-        var username = $(this).attr('data-username');
+        var nickname = $(this).attr('data-nickname');
         var phone = $(this).attr('data-phone');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
         $('#form-role').val(role);
-        $('#form-username').val(username);
+        $('#form-nickname').val(nickname);
         $('#form-phone').val(phone);
         $('#form-status').val(status);
         /*地区联动*/
@@ -177,9 +177,6 @@ $(function () {
      * 表单验证提交按钮触发的操作
      */
     var rules = {
-        username:{
-            required:true
-        },
         phone:{
             required:true,
             phone:true

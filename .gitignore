@@ -21,3 +21,4 @@
 /uploads
 /api/controller/__pycache__
 /UserCenter/settings.py
+/api/migrations/__pycache__
