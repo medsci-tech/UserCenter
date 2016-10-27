@@ -21,4 +21,5 @@ urlpatterns = [
 
     # 迈豆积分接口
     url(r'^credit/index', credit.index, name='credit_index'),
+    url(r'^credit/query', credit.query, name='credit_query'),
 ]
