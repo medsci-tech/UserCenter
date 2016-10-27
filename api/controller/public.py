@@ -184,3 +184,57 @@ def register(request):
     else:
         returnData = {'code': -1, 'msg': '注册失败!', 'data': None}
     return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+# ============================
+# 设置/修改密码
+# ============================
+@csrf_exempt
+def setPwd(request):
+    post = request.POST
+    if not post:
+        returnData = {'code': 403, 'msg': '非法请求', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    phone = post.get('phone')
+    if phone:
+        phone.strip()
+    password = post.get('password')
+    if password:
+        password.strip()
+    repassword = post.get('repassword')
+    if repassword:
+        repassword.strip()
+
+    if phone == '':
+        returnData = {'code': -2, 'msg': '用户名不能为空!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if password == '':
+        returnData = {'code': -2, 'msg': '密码不能为空!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if len(password)>12 :
+        returnData = {'code': -3, 'msg': '密码长度不能超过12个字符!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if password != repassword:
+        returnData = {'code': -1, 'msg': '两次输入的密码不一致!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+    '''验证用户名是否存在'''
+    try:
+        model = Model.objects.filter(phone=phone)
+        if model:
+            password = make_password(password, None, 'pbkdf2_sha256')
+            param = {
+                'password': password
+            }
+            Model.objects.filter(phone=phone).update(**param)
+            returnData = {'code': 200, 'msg': '密码设置成功!', 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        else:
+            returnData = {'code': -4, 'msg': '该用户不存在!', 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+    except (ValueError, KeyError, TypeError):
+        return {'code': 500, 'msg': '服务器操作异常!', 'data': None}
+
+
+
+
+
