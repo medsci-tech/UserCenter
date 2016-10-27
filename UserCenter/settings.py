@@ -104,9 +104,9 @@ DATABASES = {
 }
 # https://docs.djangoproject.com/en/1.10/ref/settings/#databases
 # MongoDB settings
-MONGODB_USER = 'med_dev'
-MONGODB_PASSWD = 'md_dev_2016'
-MONGODB_HOST = 'dds-2zedefa8064299841.mongodb.rds.aliyuncs.com:3717'
+MONGODB_USER = 'mongo'
+MONGODB_PASSWD = 'md#root$2016'
+MONGODB_HOST = '115.28.93.36:27017'
 MONGODB_NAME = 'md_usercenter'
 MONGODB_PREFIX = 'md_' #集合前缀
 MONGODB_DATABASE_HOST = \
