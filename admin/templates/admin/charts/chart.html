@@ -1,127 +1,151 @@
-<div class="row">  
-    <div class="col-xs-12">
-        <div id="chart" style="width: auto;height:800px;"></div>
-    </div>
+<div class="row">
+  <div class="col-xs-12">
+    <div id="chart1" style="width: auto;height:400px;"></div>
+  </div>
 </div>
-<script type="text/javascript">
-    // 基于准备好的dom，初始化echarts实例
-    var myChart = echarts.init(document.getElementById('chart'));
-
-    // 指定图表的配置项和数据
-    var option = {
-        title: {
-            text: '迈豆池',
-            x: 'center'
-        },
-        grid: [
-               {x: '7%', y: '7%', width: '38%', height: '38%'},
-               {x2: '7%', y: '7%', width: '38%', height: '30%'},
-               {x: '7%', y2: '8%', width: '38%', height: '38%'},
-               {x2: '7%', y2: '8%', width: '38%', height: '30%'}
-        ],
-        tooltip: {},
-        legend: [
-            {
-                data:['销量','销量2']
-            },{
-                data:['销量3','销量4']
-            }
-        ],
-        xAxis: [
-            {
-                gridIndex: 1,
-                boundaryGap: false,
-                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-            },{
-                gridIndex: 3,
-                boundaryGap: false,
-                data: ["衬衫","羊毛衫","雪纺衫","裤子","高跟鞋","袜子"]
-            }
-        ],
-        yAxis: [
-            {
-                gridIndex: 1,
-            },{
-                gridIndex: 3,
-            }
-        ],
-        dataZoom: [
-            {
-                xAxisIndex: 0,
-                top: '48%',
-                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-                handleSize: '80%',
-                handleStyle: {
-                    color: '#fff',
-                    shadowBlur: 3,
-                    shadowColor: 'rgba(0, 0, 0, 0.6)',
-                    shadowOffsetX: 2,
-                    shadowOffsetY: 2
-                }
-            },{
-                xAxisIndex: 1,
-                top: '95%',
-                handleIcon: 'M10.7,11.9v-1.3H9.3v1.3c-4.9,0.3-8.8,4.4-8.8,9.4c0,5,3.9,9.1,8.8,9.4v1.3h1.3v-1.3c4.9-0.3,8.8-4.4,8.8-9.4C19.5,16.3,15.6,12.2,10.7,11.9z M13.3,24.4H6.7V23h6.6V24.4z M13.3,19.6H6.7v-1.4h6.6V19.6z',
-                handleSize: '80%',
-                handleStyle: {
-                    color: '#fff',
-                    shadowBlur: 3,
-                    shadowColor: 'rgba(0, 0, 0, 0.6)',
-                    shadowOffsetX: 2,
-                    shadowOffsetY: 2
-                }
-            },{
-                type: 'inside',
-                xAxisIndex: 0,
-            },{
-                type: 'inside',
-                xAxisIndex: 1,
-            }
-        ],
-        series: [
-            {
-                name: '销量',
-                type: 'line',
-                data: [5, 20, 36, 10, 10, 20]
-            },{
-                name: '销量2',
-                type: 'line',
-                data: [5, 20, 36, 10, 10, 20]
-            },{
-                name: '销量3',
-                type: 'line',
-                xAxisIndex: 1,
-                yAxisIndex: 1,
-                data: [5, 20, 36, 10, 10, 20]
-            },{
-                name: '销量4',
-                type: 'line',
-                xAxisIndex: 1,
-                yAxisIndex: 1,
-                data: [5, 20, 36, 10, 10, 20]
-            }
-        ]
-    };
-
-    // 使用刚指定的配置项和数据显示图表。
-    myChart.setOption(option);
-</script>
+<hr>
+<div class="row" id="chart_hide">
+<div class="col-xs-6">
+  <div id="chart2" style="width: auto;height:400px;"></div>
+</div>
+<div class="col-xs-6">
+  <div id="chart3" style="width: auto;height:400px;"></div>
+</div>
+</div>
+<!-- chart1 -->
 <script>
-myChart.on('click', function (params) {
-  if (params.seriesType === 'bar') {
-    console.log(params.seriesIndex);
-    if (params.seriesIndex === 0) {
-      myChart.setOption({
-        series: [
+
+  var color = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+
+  var data = {};
+
+  var myChart1 = echarts.init(document.getElementById('chart1'));
+  var option1 = {
+    title: {
+      text: '迈豆池',
+    },
+    grid: [
+      {x: '6%', width: '38%', height: '68%'},
+      {x2: '6%', width: '38%', height: '68%'},
+    ],
+    xAxis: [
+      {
+        gridIndex: 1,
+        data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+      }
+    ],
+    yAxis: [
+      {
+        gridIndex: 1,
+      }
+    ],
+    series: [
+      {
+        name: '访问来源',
+        type: 'pie',
+        radius: '50%',
+        center: ['24%', '50%'],
+        data: [
+          {value: 335, name: '直接访问'},
+          {value: 310, name: '邮件营销'},
+          {value: 234, name: '联盟广告'},
+          {value: 135, name: '视频广告'},
+          {value: 1548, name: '搜索引擎'}
+        ],
+        itemStyle: {
+          emphasis: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: 'rgba(0, 0, 0, 0.5)'
+          }
+        }
+      }, {
+        name: '访问来源',
+        type: 'bar',
+        xAxisIndex: 0,
+        yAxisIndex: 0,
+        data: [
           {
-            center: ['25%', '50%']
+            value: 335,
+            name: '直接访问',
+            itemStyle: {
+              normal: {
+                color: color[0]
+              }
+            }
           },
           {
-            name: '课程点击量',
+            value: 310,
+            name: '邮件营销',
+            itemStyle: {
+              normal: {
+                color: color[1]
+              }
+            }
+          },
+          {
+            value: 234,
+            name: '联盟广告',
+            itemStyle: {
+              normal: {
+                color: color[2]
+              }
+            }
+          },
+          {
+            value: 135,
+            name: '视频广告',
+            itemStyle: {
+              normal: {
+                color: color[3]
+              }
+            }
+          }, {
+            value: 1548,
+            name: '搜索引擎',
+            itemStyle: {
+              normal: {
+                color: color[4]
+              }
+            }
+          }
+        ],
+        label: {
+          normal: {
+            show: true,
+            position: 'top',
+          }
+        }
+      }
+    ]
+  };
+  myChart1.setOption(option1);
+
+  var myChart2 = echarts.init(document.getElementById('chart2'));
+  var myChart3 = echarts.init(document.getElementById('chart3'));
+  $('#chart_hide').addClass('hidden');
+</script>
+<script>
+  myChart1.on('click', function (params) {
+    if (params.seriesType === 'bar') {
+      $('#chart_hide').removeClass('hidden');
+      var option2 = {
+        title: {
+          text: '迈豆池',
+        },
+        series: [
+          {
+            name: '访问来源',
             type: 'pie',
-            radius: '55%',
-            center: ['75%', '50%'],
-            data: [5, 20, 36, 10, 10, 20],
+            radius: '50%',
+            center: ['50%', '50%'],
+            data: [
+              {value: 335, name: '直接访问'},
+              {value: 310, name: '邮件营销'},
+              {value: 234, name: '联盟广告'},
+              {value: 135, name: '视频广告'},
+              {value: 1548, name: '搜索引擎'}
+            ],
             itemStyle: {
               emphasis: {
                 shadowBlur: 10,
@@ -131,9 +155,86 @@ myChart.on('click', function (params) {
             }
           }
         ]
-      })
-    }
-  }
+      };
+      myChart2.setOption(option2);
+      var option3 = {
+        legend: [
+          {
+            data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"],
+            // left: '55%',
+          }
+        ],
+        xAxis: [
+          {
+            name: '1月',
+            gridIndex: 0,
+            boundaryGap: false,
+            data: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+          }
+        ],
+        yAxis: [
+          {
+            gridIndex: 0,
+          }
+        ],
+        dataZoom: [
+          {
+            xAxisIndex: 0,
+            filterMode: 'empty',
+          }, {
+            type: 'inside',
+            xAxisIndex: 0,
+          }
+        ],
+        series: [
+          {
+            name: '直接访问',
+            type: 'line',
+            stack: 'all',
+            areaStyle: {normal: {}},
+            data: [5, 20, 36, 16, 36, 16, 16, 10, 10, 20],
+            smooth: true,
+            symbol: 'none',
+          }, {
+            name: '邮件营销',
+            type: 'line',
+            stack: 'all',
+            areaStyle: {normal: {}},
+            data: [5, 36, 16, 16, 10, 10, 20, 36, 16, 20],
+            smooth: true,
+            symbol: 'none',
+          }, {
+            name: '联盟广告',
+            type: 'line',
+            stack: 'all',
+            areaStyle: {normal: {}},
+            data: [16, 10, 10, 20, 5, 20, 36, 16, 36, 16],
+            smooth: true,
+            symbol: 'none',
+          }, {
+            name: '视频广告',
+            type: 'line',
+            stack: 'all',
+            areaStyle: {normal: {}},
+            data: [5, 36, 16, 36, 20, 16, 10, 10, 20, 16],
+            smooth: true,
+            symbol: 'none',
+          }, {
+            name: '搜索引擎',
+            type: 'line',
+            stack: 'all',
+            areaStyle: {normal: {}},
+            data: [36, 16, 10, 5, 16, 10, 20, 36, 16, 20],
+            smooth: true,
+            symbol: 'none',
+          }
+        ]
+      };
+      myChart3.setOption(option3);
 
-});
+      if (params.seriesIndex === 0) {
+        myChart.setOption({})
+      }
+    }
+  });
 </script>
