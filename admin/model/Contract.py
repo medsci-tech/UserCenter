@@ -13,12 +13,12 @@ class Contract(Auth):
     appId = StringField()  # 应用id
     name = StringField()
     apiName = StringField()  #英文
-    code = StringField()
-    number = FloatField()
+    code = StringField()  # 合同编号
+    number = FloatField()  # 比率
     extend = DictField()  # 扩展
     useBeans = IntField(default=0)  # 已使用迈豆
     totalBeans = IntField(default=0)  # 已使用迈豆
-    amount = FloatField()
+    amount = FloatField()  # 合同金额
     img = StringField()
     startTime = StringField()
     endTime = StringField()
