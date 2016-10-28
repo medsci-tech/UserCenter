@@ -37,12 +37,12 @@
         </select>
     </div>
     <div class="col-xs-1">
-       <button class="form-control btn btn-primary" style="margin: 0;">查看</button>
+       <button type="button" class="form-control btn btn-primary" style="margin: 0;">查看</button>
     </div>
 </div>
 <!-- chart1 -->
 <script>
-    var color = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+  var color = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
 
   var data_name = ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"];
 
@@ -183,11 +183,11 @@
           radius: '50%',
           center: ['50%', '50%'],
           data: [
-            {value: 135, name: '直接访问'},
-            {value: 210, name: '邮件营销'},
-            {value: 734, name: '联盟广告'},
-            {value: 1135, name: '视频广告'},
-            {value: 548, name: '搜索引擎'}
+            {value: Math.random()*2000, name: '直接访问'},
+            {value: Math.random()*2000, name: '邮件营销'},
+            {value: Math.random()*2000, name: '联盟广告'},
+            {value: Math.random()*2000, name: '视频广告'},
+            {value: Math.random()*2000, name: '搜索引擎'}
           ],
           itemStyle: {
             emphasis: {
@@ -235,7 +235,7 @@
           type: 'line',
           stack: 'all',
           areaStyle: {normal: {}},
-          data: [5, 20, 36, 16, 36, 16, 16, 10, 10, 20],
+          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
           smooth: true,
           symbol: 'none',
         }, {
@@ -243,7 +243,7 @@
           type: 'line',
           stack: 'all',
           areaStyle: {normal: {}},
-          data: [5, 36, 16, 16, 10, 10, 20, 36, 16, 20],
+          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
           smooth: true,
           symbol: 'none',
         }, {
@@ -251,7 +251,7 @@
           type: 'line',
           stack: 'all',
           areaStyle: {normal: {}},
-          data: [16, 10, 10, 20, 5, 20, 36, 16, 36, 16],
+          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
           smooth: true,
           symbol: 'none',
         }, {
@@ -259,7 +259,7 @@
           type: 'line',
           stack: 'all',
           areaStyle: {normal: {}},
-          data: [5, 36, 16, 36, 20, 16, 10, 10, 20, 16],
+          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
           smooth: true,
           symbol: 'none',
         }, {
@@ -267,7 +267,7 @@
           type: 'line',
           stack: 'all',
           areaStyle: {normal: {}},
-          data: [36, 16, 10, 5, 16, 10, 20, 36, 16, 20],
+          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
           smooth: true,
           symbol: 'none',
         }
