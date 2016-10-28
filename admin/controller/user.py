@@ -6,7 +6,8 @@ from admin.controller.common_import import *
 
 from django.contrib.auth.hashers import make_password
 from admin.model.User import User as Model
-
+from admin.model.Contract import Contract
+import datetime
 '''
 迈豆积分列表
 '''
@@ -27,6 +28,10 @@ def index(request):
     page = request.GET.get('page', 1)  # 获取页码
     pageData = paginationForMime(page=page, data=data)
 
+    try:
+        contratcData = Contract.objects.filter(status=1).order_by("id")
+    except:
+        contratcData = {}
     return render(request, 'admin/user/index.html', {
         'data_list': pageData.get('data_list'),
         'page_has_previous': pageData.get('pageLengthPrev'),
@@ -34,6 +39,7 @@ def index(request):
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
+        'list_contratcData': contratcData,
     })
 
 # 添加操作--protected
@@ -70,6 +76,7 @@ def _editById(**param):
                 # 如果留空则移除password属性，不修改密码
                 param.pop('password')
         try:
+            param.update(updated_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             model = Model.objects.get(id=id).update(**param)
             if model == 1:
                 returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
@@ -87,23 +94,32 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
+        phone = post.get('phone')
         param = {
-            'username': post.get('username'),
-            'phone': post.get('phone'),
+            'phone': phone,
             'password': post.get('password'),
             'role': post.get('role'),
-            'name': post.get('name'),
             'province': post.get('province'),
             'city': post.get('city'),
             'district': post.get('district'),
-            'status': post.get('status'),
         }
+        try:
+            model = Model.objects.get(phone=phone)
+        except:
+            model = None
         if id:
             # 修改
+            if model:
+                if str(model['id']) != id:
+                    returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
+                    return HttpResponse(json.dumps(returnData), content_type="application/json")
             param.update(id=id)
             returnData = _editById(**param)
         else:
             # 添加
+            if model:
+                returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
+                return HttpResponse(json.dumps(returnData), content_type="application/json")
             returnData = _add(**param)
 
         # 操作成功添加log操作记录

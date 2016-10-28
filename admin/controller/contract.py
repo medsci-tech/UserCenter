@@ -5,7 +5,6 @@ from admin.controller.common_import import *  # 公共引入文件
 from admin.model.Contract import Contract as Model
 from admin.model.Company import Company
 from admin.model.App import App
-from admin.model.CreditLog import CreditLog
 from admin.model.CreditRule import CreditRule
 import math
 
@@ -115,64 +114,6 @@ def updateStatus(request, **param):
             returnData = {'code': '0', 'msg': '操作失败!'}
     except Exception:
             returnData = {'code': '-1', 'msg': '非法请求!'}
-
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
-
-# 迈豆分配  没有用
-@auth  # 引用登录权限验证
-def credit(request):
-    post = request.POST
-    id = post.get('id')
-    post_credit = int(post.get('credit1'))
-    if id:
-        try:
-            contractGet = Model.objects.get(id=id)
-            credit_poor = contractGet['number'] * contractGet['amount'] - contractGet['credit1']  # 可分配总迈豆数
-        except Exception:
-            returnData = {'code': '910', 'msg': '数据验证错误', 'data': ''}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
-        # return HttpResponse(credit_poor)
-        if credit_poor < post_credit:
-            returnData = {'code': '911', 'msg': '分配迈豆超出额度', 'data': ''}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
-        extend_list = contractGet['extend']
-        # 获取配置列表
-        try:
-            model_credit_int = int(contractGet['extend']['credit1'])
-        except:
-            model_credit_int = 0
-        if post_credit > 0:
-            post_credit_int = post_credit
-        else:
-            post_credit_int = 0
-        extend_list['credit1'] = model_credit_int + post_credit_int
-        contractCredit1 = int(contractGet['credit1']) + post_credit_int
-        param = {
-            'extend': extend_list,
-            'credit1': contractCredit1,  # 实时迈豆数
-        }
-        try:
-            modelContract = Model.objects.get(id=id).update(**param)
-            if modelContract == 1:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
-        except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-
-        # 操作成功添加log操作记录
-        if returnData.get('code') == '200':
-            # log记录参数
-            logParam = {
-                'contractId': str(contractGet['id']),
-                'credit1': post_credit_int,
-            }
-            try:
-                CreditLog.objects.create(**logParam)
-            except Exception:
-                pass
-    else:
-        returnData = {'code': '1000', 'msg': '参数缺失', 'data': None}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 

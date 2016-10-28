@@ -1,18 +1,24 @@
 # -*- coding: utf-8 -*-
-'''
-    积分接口
 
-'''
 from api.controller.common_import import *  # 公共引入文件
 
 from admin.model.User import User
 from admin.model.CreditRule import CreditRule
 from admin.model.Contract import Contract
+from admin.model.BeansLog import BeansLog
+from admin.model.Company import Company
+from admin.model.App import App
+from admin.model.IntegralType import IntegralType
 # 时间模块
-from datetime import *
+import datetime
 import math
+'''
+    积分接口
+'''
+
+
 # ============================
-# 用户积分
+# 用户积分操作api
 # ============================
 @csrf_exempt
 def index(request):
@@ -61,10 +67,10 @@ def index(request):
             return HttpResponse(json.dumps(returnData), content_type="application/json")
 
         # 根据项目起止时间判断迈豆是否可用
-        now_time = datetime.now().timestamp()
+        now_time = datetime.datetime.now().timestamp()
         try:
-            start_time = datetime.strptime(contractData['startTime'], "%Y-%m-%d").timestamp()  # 开始时间默认为0点
-            end_time = datetime.strptime(contractData['endTime'], "%Y-%m-%d").timestamp() + 86400  # 截止时间默认为次日0点
+            start_time = datetime.datetime.strptime(contractData['startTime'], '%Y-%m-%d').timestamp()  # 开始时间默认为0点
+            end_time = datetime.datetime.strptime(contractData['endTime'], '%Y-%m-%d').timestamp() + 86400  # 截止时间默认为次日0点
             has_beans = contractData['totalBeans'] - contractData['useBeans']  # 可用的迈豆数
         except:
             returnData = {'code': -1, 'msg': '合同时间错误或无可用迈豆', 'data': None}
@@ -98,9 +104,13 @@ def index(request):
             temp_beans = need_beans
         temp_beansList[contractDataId] = {
             'beans': temp_beans,
+            'projectName': contractData['name'],
         }
         save_beansList = dict(userBeansList, **temp_beansList)  # 合并子文档项目记录
-        save_beans_total = userData['beans_total'] + need_beans
+        if hasattr(userData, 'beans_total'):
+            save_beans_total = userData['beans_total'] + need_beans
+        else:
+            save_beans_total = + need_beans
         user_param ={
             'beansList': save_beansList,
             'beans_total': save_beans_total,
@@ -119,18 +129,117 @@ def index(request):
             returnData = {'code': -1, 'msg': 'project操作失败', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if contract_model and user_model:
-            returnData = {'code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
+            # 记录log
+            log_param = {
+                'companyId': contractData['companyId'],
+                'appId': contractData['appId'],
+                'contractId': str(contractData['id']),
+                'contractName': contractData['name'],
+                'ruleId': str(ruleData['id']),
+                'ruleName': ruleData['name'],
+                'ruleTypeId': ruleData['integralType'],
+                'phone': request_phone,
+                'action': request_action,
+                'post_beans': request_beans,
+                'save_beans': need_beans,
+            }
+            # 查询companyName
+            try:
+                companyData = Company.objects.get(id=contractData['companyId'])
+            except:
+                companyData = None
+            if companyData:
+                companyDataName = companyData['name']
+            else:
+                companyDataName = ''
+            # 查询appName
+            try:
+                appData = App.objects.get(id=contractData['appId'])
+            except:
+                appData = None
+            if appData:
+                appDataName = appData['name']
+            else:
+                appDataName = ''
+            # 查询规则类型
+            try:
+                ruleTypeData = IntegralType.objects.get(id=ruleData['integralType'])
+            except:
+                ruleTypeData = None
+            if ruleTypeData:
+                ruleTypeDataName = ruleTypeData['name']
+            else:
+                ruleTypeDataName = ''
+            log_param.update(companyName=companyDataName)
+            log_param.update(appName=appDataName)
+            log_param.update(ruleTypeName=ruleTypeDataName)
+            log_res = _add_log(log_param)
+            if log_res['code'] == 200:
+                returnData = {'code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
+            else:
+                returnData = {'code': 200, 'msg': '操作成功,log记录失败', 'data': {'user_beans': save_beans_total}}
         else:
-            '''
-                回滚数据
-            '''
             returnData = {'code': -1, 'msg': '操作失败', 'data': None}
     else:
-        returnData = {'code': -2, 'msg': '参数缺失', 'data': request_phone}
+        returnData = {'code': -2, 'msg': '参数错误', 'data': None}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 
 # ============================
-# 用户
+# 用户积分log记录添加--private
 # ============================
+def _add_log(param):
+    try:
+        BeansLog.objects.create(**param)
+        returnData = {'code': 200, 'msg': '操作成功', 'data': None}
+    except Exception:
+        returnData = {'code': -1, 'msg': 'log记录失败', 'data': None}
+    return returnData
+
+
+# ============================
+# 用户积分log记录查询api
+# ============================
+@csrf_exempt
+def query(request):
+    post = request.POST
+    if not post:
+        returnData = {'code': 403, 'msg': '不可访问', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    request_phone = post.get('phone')
+    if not request_phone:
+        returnData = {'code': -3, 'msg': '参数错误', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    request_startTime = post.get('startTime')
+    request_endTime = post.get('endTime')
+    param = {
+        'phone': request_phone
+    }
+    if request_startTime:
+        start_time = datetime.datetime.strptime(request_startTime, '%Y-%m-%d')  # 开始时间默认为0点
+        param.update(createTime__gte=start_time)
+    if request_endTime:
+        end_time = datetime.datetime.strptime(request_endTime, '%Y-%m-%d') + datetime.timedelta(days=1)  # 截止时间默认为次日0点
+        param.update(createTime__lte=end_time)
+    try:
+        beansLogData = BeansLog.objects.filter(**param).order_by('id')
+    except:
+        returnData = {'code': 200, 'msg': 'no data', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if beansLogData:
+        data = []
+        for val in beansLogData:
+            createTime = val['createTime'].strftime('%Y-%m-%d %H:%M:%S')
+            temp_data = {
+                'companyName': val['companyName'],
+                'appName': val['appName'],
+                'ruleName': val['ruleName'],
+                'saveBeans': val['save_beans'],
+                'createTime': createTime,
+            }
+            data.append(temp_data)
+        returnData = {'code': 200, 'msg': 'success', 'data': data}
+    else:
+        returnData = {'code': 200, 'msg': 'no data', 'data': None}
+    return HttpResponse(json.dumps(returnData), content_type="application/json")

@@ -10,6 +10,9 @@ from django.contrib.auth.hashers import check_password, make_password
 # configParam
 from UserCenter.global_templates import configParam
 from api.controller.common import checkAccess
+from api.controller.funForMime import imitate_post
+from django.http import HttpRequest
+import re
 # ============================
 # 获取token
 # ============================
@@ -130,15 +133,26 @@ def register(request):
     post = request.POST
     if not post:
         returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
-        return HttpResponse(json.dumps(returnData))
-    longitude = post.get('longitude',None) # 经度
-    latitude = post.get('latitude',None) # 纬度
-    phone = post.get('phone') # 用户名
-    password = post.get('password') # 密码
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    longitude = post.get('longitude', None)  # 经度
+    latitude = post.get('latitude', None)  # 纬度
+    phone = post.get('phone')  # 用户名
+    password = post.get('password')  # 密码
+
+    # post_url = 'http://' + HttpRequest.get_host(request) + '/api/credit/index'
+    # post_param = {
+    #     'phone': phone,
+    #     'action': 'register',
+    #     'appId': post.get('appId'),
+    #     'mdBeans': post.get('mdBeans'),
+    #     'token': post.get('token'),
+    # }
+    # returnData = imitate_post(url=post_url, param=post_param)
+    # return HttpResponse(json.dumps(post_url), content_type="application/json")
 
     if not(phone and password):
         returnData = {'code': -1, 'msg': '用户或密码不能为空', 'data': None}
-        return HttpResponse(json.dumps(returnData))
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         # 注册参数
         param = {
@@ -151,17 +165,82 @@ def register(request):
         model = Model.objects.filter(phone=phone)
         if model:
             returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
-            return HttpResponse(json.dumps(returnData))
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
         else :
             result = Model.objects.create(**param) # 注册用户
-            if result :
-                pass
-            '''获取积分接口'''
     except (ValueError, KeyError, TypeError):
         return {'code': -1, 'msg': '服务器异常!', 'data': None}
 
     if result:
-        returnData = {'code': 200, 'msg': '注册成功!', 'data': None}
+        # 积分
+        post_url = 'http://' + HttpRequest.get_host(request) + '/api/credit/index'
+        post_param = {
+            'phone': phone,
+            'action': 'register',
+            'appId': post.get('appId'),
+            'mdBeans': post.get('mdBeans'),
+            'token': post.get('token'),
+        }
+        returnData = imitate_post(url=post_url, param=post_param)
     else:
         returnData = {'code': -1, 'msg': '注册失败!', 'data': None}
-    return HttpResponse(json.dumps(returnData))
+    return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+@csrf_exempt
+def setPwd(request):
+    post = request.POST
+    if not post:
+        returnData = {'code': 403, 'msg': '非法请求', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    phone = post.get('phone')
+    if phone:
+        phone.strip()
+    password = post.get('password')
+    if password:
+        password.strip()
+    repassword = post.get('repassword')
+    if repassword:
+        repassword.strip()
+
+    if phone == '':
+        returnData = {'code': -2, 'msg': '用户名不能为空!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if password == '':
+        returnData = {'code': -2, 'msg': '密码不能为空!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+    if password.isalpha() or password.isnumeric():
+        returnData = {'code': -1, 'msg': '密码必须包含字母和数字!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if len(password)>30 or len(password)<6:
+        returnData = {'code': -1, 'msg': '密码长度介于6-30个字符!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if password != repassword:
+        returnData = {'code': -1, 'msg': '两次输入的密码不一致!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+    '''验证用户名是否存在'''
+    try:
+        model = Model.objects.filter(phone=phone)
+        if model:
+            password = make_password(password, None, 'pbkdf2_sha256')
+            param = {
+                'password': password
+            }
+            Model.objects.filter(phone=phone).update(**param)
+            returnData = {'code': 200, 'msg': '密码设置成功!', 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        else:
+            returnData = {'code': -4, 'msg': '该用户不存在!', 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+    except (ValueError, KeyError, TypeError):
+        returnData = {'code': 500, 'msg': '服务器操作异常!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+
+
+
+
+
+
+

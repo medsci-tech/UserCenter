@@ -48,11 +48,13 @@ def configParam(request=None):
             5: '删除',
         },
 
-        # 用户角色
+        # 用户角色 doctor->医生, user->患者,volunteer->代表，agency->代理商 ,company->企业
         'c_user_role': {
-            1: '普通用户',
-            2: '医生',
-            3: '医药代表',
+            'doctor': '医生',
+            'user': '患者',
+            'volunteer': '代表',
+            'agency': '代理商',
+            'company': '企业',
         },
 
         # 安全令牌
