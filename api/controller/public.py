@@ -209,8 +209,9 @@ def setPwd(request):
         returnData = {'code': -2, 'msg': '密码不能为空!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
-    if password.isalpha() or password.isnumeric():
-        returnData = {'code': -1, 'msg': '密码必须包含字母和数字!', 'data': None}
+    patten = re.findall(r'\d+', password)
+    if password.isalpha() or password.isnumeric() or not patten:
+        returnData = {'code': -1, 'msg': '密码必须包含字母和数字!允许有特殊符号!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     if len(password)>30 or len(password)<6:
         returnData = {'code': -1, 'msg': '密码长度介于6-30个字符!', 'data': None}
