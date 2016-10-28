@@ -139,6 +139,7 @@ def index(request):
                 'ruleName': ruleData['name'],
                 'ruleTypeId': ruleData['integralType'],
                 'phone': request_phone,
+                'userId': str(userData['id']),
                 'action': request_action,
                 'post_beans': request_beans,
                 'save_beans': need_beans,
