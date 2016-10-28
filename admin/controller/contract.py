@@ -52,7 +52,7 @@ def index(request):
 保存合同信息
 '''
 @auth # 引用登录权限验证
-def save(request, **param):
+def save(request):
     post = request.POST
     if request.method == 'POST':
         amount = post.get('amount').strip()
@@ -93,6 +93,45 @@ def save(request, **param):
             return HttpResponse(json.dumps({'code': 200, 'msg': '操作成功!'}), content_type="application/json")
         except (ValueError, KeyError, TypeError):
             return HttpResponse(json.dumps({'code': 0,'msg':'json格式错误!'}), content_type="application/json")
+
+
+'''
+充值
+'''
+@auth # 引用登录权限验证
+def recharge(request):
+    post = request.POST
+    if request.method == 'POST':
+        id = post.get('id')
+        request_amount = post.get('amount').strip()
+        try:
+            contractData = Model.objects.get(id=id)
+        except:
+            return HttpResponse(json.dumps({'code': -1 ,'msg': '参数错误'}), content_type="application/json")
+        if not contractData:
+            return HttpResponse(json.dumps({'code': -1 ,'msg': '参数错误'}), content_type="application/json")
+        save_amount = float(request_amount) + float(contractData['amount'])
+        totalBeans = math.ceil(save_amount * float(contractData['number']))
+        param = {
+            'amount': save_amount,  # 合同金额
+            'totalBeans': totalBeans,  # 总迈豆
+        }
+        # log记录参数
+        logParam = {
+            'table': 'contract',
+            'before': param,
+            'after': param,
+        }
+        try:
+            Model.objects.filter(id=id).update(**param)
+            logParam.update(tableId=id)  # log记录参数
+            logParam.update(action=6)  # log记录参数,action=2为修改
+
+            logsform(request, logParam)
+            return HttpResponse(json.dumps({'code': 200, 'msg': '操作成功!'}), content_type="application/json")
+        except (ValueError, KeyError, TypeError):
+            return HttpResponse(json.dumps({'code': 0,'msg':'json格式错误!'}), content_type="application/json")
+
 
 '''
 更新状态
