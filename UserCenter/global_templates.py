@@ -46,6 +46,7 @@ def configParam(request=None):
             3: '启用',
             4: '禁用',
             5: '删除',
+            6: '充值',
         },
 
         # 用户角色 doctor->医生, user->患者,volunteer->代表，agency->代理商 ,company->企业
