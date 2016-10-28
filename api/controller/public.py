@@ -186,55 +186,6 @@ def register(request):
         returnData = {'code': -1, 'msg': '注册失败!', 'data': None}
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
-# ============================
-# 设置/修改密码
-# ============================
-def checkContainUpper(pwd):
-    pattern = re.compile('[A-Z]+')
-    match = pattern.findall(pwd)
-
-    if match:
-        return True
-    else:
-        return False
-
-def checkContainNum(pwd):
-    pattern = re.compile('[0-9]+')
-    match = pattern.findall(pwd)
-    if match:
-        return True
-    else:
-        return False
-
-def checkContainLower(pwd):
-    pattern = re.compile('[a-z]+')
-    match = pattern.findall(pwd)
-
-    if match:
-        return True
-    else:
-       return False
-
-def checkSymbol(pwd):
-    pattern = re.compile('([^a-z0-9A-Z])+')
-    match = pattern.findall(pwd)
-
-    if match:
-        return True
-    else:
-        return False
-
-def checkPassword(pwd):
-    #判断是否包含大写字母
-    upperOK=checkContainUpper(pwd)
-    #判断是否包含小写字母
-    lowerOK=checkContainLower(pwd)
-    #判断是否包含数字
-    numOK=checkContainNum(pwd)
-    #判断是否包含符号
-    symbolOK=checkSymbol(pwd)
-    return (upperOK or lowerOK and numOK)
-
 @csrf_exempt
 def setPwd(request):
     post = request.POST
@@ -258,13 +209,13 @@ def setPwd(request):
         returnData = {'code': -2, 'msg': '密码不能为空!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
-    if checkPassword(password)==False:
+    if password.isalpha() or password.isnumeric():
         returnData = {'code': -1, 'msg': '密码必须包含字母和数字!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
-    elif len(password)>30 or len(password)<6:
+    if len(password)>30 or len(password)<6:
         returnData = {'code': -1, 'msg': '密码长度介于6-30个字符!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
-    elif password != repassword:
+    if password != repassword:
         returnData = {'code': -1, 'msg': '两次输入的密码不一致!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
@@ -283,7 +234,11 @@ def setPwd(request):
             returnData = {'code': -4, 'msg': '该用户不存在!', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
     except (ValueError, KeyError, TypeError):
-        return {'code': 500, 'msg': '服务器操作异常!', 'data': None}
+        returnData = {'code': 500, 'msg': '服务器操作异常!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+
+
 
 
 
