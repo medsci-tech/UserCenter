@@ -1,23 +1,25 @@
 <div class="row">
-  <div class="col-xs-12">
-    <div id="chart1" style="width: auto;height:400px;"></div>
-  </div>
+    <div class="col-xs-12">
+        <div id="chart1" style="width: auto;height:400px;">
+        </div>
+    </div>
 </div>
 <hr>
-<div class="row" id="chart_hide">
-<div class="col-xs-6">
-  <div id="chart2" style="width: auto;height:400px;"></div>
-</div>
-<div class="col-xs-6">
-  <div id="chart3" style="width: auto;height:400px;"></div>
-</div>
-</div>
-<!-- chart1 -->
-<script>
+    <div class="row" id="chart_hide">
+        <div class="col-xs-6">
+            <div id="chart2" style="width: auto;height:400px;">
+            </div>
+        </div>
+        <div class="col-xs-6">
+            <div id="chart3" style="width: auto;height:400px;">
+            </div>
+        </div>
+    </div>
+    <!-- chart1 -->
+    <script>
+        var color = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
 
-  var color = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
-
-  var data = {};
+  var data_name = ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"];
 
   var myChart1 = echarts.init(document.getElementById('chart1'));
   var option1 = {
@@ -31,7 +33,7 @@
     xAxis: [
       {
         gridIndex: 1,
-        data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"]
+        data: data_name
       }
     ],
     yAxis: [
@@ -124,117 +126,134 @@
   var myChart2 = echarts.init(document.getElementById('chart2'));
   var myChart3 = echarts.init(document.getElementById('chart3'));
   $('#chart_hide').addClass('hidden');
-</script>
-<script>
-  myChart1.on('click', function (params) {
-    if (params.seriesType === 'bar') {
-      $('#chart_hide').removeClass('hidden');
-      var option2 = {
-        title: {
-          text: '迈豆池',
-        },
-        series: [
-          {
-            name: '访问来源',
-            type: 'pie',
-            radius: '50%',
-            center: ['50%', '50%'],
-            data: [
-              {value: 335, name: '直接访问'},
-              {value: 310, name: '邮件营销'},
-              {value: 234, name: '联盟广告'},
-              {value: 135, name: '视频广告'},
-              {value: 1548, name: '搜索引擎'}
-            ],
-            itemStyle: {
-              emphasis: {
-                shadowBlur: 10,
-                shadowOffsetX: 0,
-                shadowColor: 'rgba(0, 0, 0, 0.5)'
-              }
+    </script>
+    <script>
+        myChart1.on('click', function (params) {
+
+    $('#chart_hide').removeClass('hidden');
+    var option2 = {
+      title: {
+        text: '迈豆池',
+      },
+      series: [
+        {
+          name: '访问来源',
+          type: 'pie',
+          radius: '50%',
+          center: ['50%', '50%'],
+          data: [
+            {value: 335, name: '直接访问'},
+            {value: 310, name: '邮件营销'},
+            {value: 234, name: '联盟广告'},
+            {value: 135, name: '视频广告'},
+            {value: 1548, name: '搜索引擎'}
+          ],
+          itemStyle: {
+            emphasis: {
+              shadowBlur: 10,
+              shadowOffsetX: 0,
+              shadowColor: 'rgba(0, 0, 0, 0.5)'
             }
           }
-        ]
-      };
-      myChart2.setOption(option2);
-      var option3 = {
-        legend: [
-          {
-            data: ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"],
-            // left: '55%',
-          }
-        ],
-        xAxis: [
-          {
-            name: '1月',
-            gridIndex: 0,
-            boundaryGap: false,
-            data: [1, 2, 3, 4, 5, 7, 8, 9, 10]
-          }
-        ],
-        yAxis: [
-          {
-            gridIndex: 0,
-          }
-        ],
-        dataZoom: [
-          {
-            xAxisIndex: 0,
-            filterMode: 'empty',
-          }, {
-            type: 'inside',
-            xAxisIndex: 0,
-          }
-        ],
-        series: [
-          {
-            name: '直接访问',
-            type: 'line',
-            stack: 'all',
-            areaStyle: {normal: {}},
-            data: [5, 20, 36, 16, 36, 16, 16, 10, 10, 20],
-            smooth: true,
-            symbol: 'none',
-          }, {
-            name: '邮件营销',
-            type: 'line',
-            stack: 'all',
-            areaStyle: {normal: {}},
-            data: [5, 36, 16, 16, 10, 10, 20, 36, 16, 20],
-            smooth: true,
-            symbol: 'none',
-          }, {
-            name: '联盟广告',
-            type: 'line',
-            stack: 'all',
-            areaStyle: {normal: {}},
-            data: [16, 10, 10, 20, 5, 20, 36, 16, 36, 16],
-            smooth: true,
-            symbol: 'none',
-          }, {
-            name: '视频广告',
-            type: 'line',
-            stack: 'all',
-            areaStyle: {normal: {}},
-            data: [5, 36, 16, 36, 20, 16, 10, 10, 20, 16],
-            smooth: true,
-            symbol: 'none',
-          }, {
-            name: '搜索引擎',
-            type: 'line',
-            stack: 'all',
-            areaStyle: {normal: {}},
-            data: [36, 16, 10, 5, 16, 10, 20, 36, 16, 20],
-            smooth: true,
-            symbol: 'none',
-          }
-        ]
-      };
-      myChart3.setOption(option3);
+        }
+      ]
+    };
+    myChart2.setOption(option2);
+    var option3 = {
+      legend: [
+        {
+          data: data_name,
+          // left: '55%',
+        }
+      ],
+      xAxis: [
+        {
+          name: '1月',
+          gridIndex: 0,
+          boundaryGap: false,
+          data: [1, 2, 3, 4, 5, 7, 8, 9, 10]
+        }
+      ],
+      yAxis: [
+        {
+          gridIndex: 0,
+        }
+      ],
+      dataZoom: [
+        {
+          xAxisIndex: 0,
+          filterMode: 'empty',
+        }, {
+          type: 'inside',
+          xAxisIndex: 0,
+        }
+      ],
+      series: [
+        {
+          name: '直接访问',
+          type: 'line',
+          stack: 'all',
+          areaStyle: {normal: {}},
+          data: [5, 20, 36, 16, 36, 16, 16, 10, 10, 20],
+          smooth: true,
+          symbol: 'none',
+        }, {
+          name: '邮件营销',
+          type: 'line',
+          stack: 'all',
+          areaStyle: {normal: {}},
+          data: [5, 36, 16, 16, 10, 10, 20, 36, 16, 20],
+          smooth: true,
+          symbol: 'none',
+        }, {
+          name: '联盟广告',
+          type: 'line',
+          stack: 'all',
+          areaStyle: {normal: {}},
+          data: [16, 10, 10, 20, 5, 20, 36, 16, 36, 16],
+          smooth: true,
+          symbol: 'none',
+        }, {
+          name: '视频广告',
+          type: 'line',
+          stack: 'all',
+          areaStyle: {normal: {}},
+          data: [5, 36, 16, 36, 20, 16, 10, 10, 20, 16],
+          smooth: true,
+          symbol: 'none',
+        }, {
+          name: '搜索引擎',
+          type: 'line',
+          stack: 'all',
+          areaStyle: {normal: {}},
+          data: [36, 16, 10, 5, 16, 10, 20, 36, 16, 20],
+          smooth: true,
+          symbol: 'none',
+        }
+      ]
+    };
 
-      if (params.seriesIndex === 0) {
-        myChart.setOption({})
-      }
-    }
+
+    myChart3.setOption(option3);
+    myChart2.on('click', function (params) {
+      console.log(params.name);
+      for( item in data_name ) {
+        console.log( data_name[item] );
+        if ( data_name[item] == params.name){
+          myChart3.dispatchAction({
+            type: 'legendSelect',
+            // 图例名称
+            name: data_name[item]
+          });
+        } else {
+          myChart3.dispatchAction({
+            type: 'legendUnSelect',
+            // 图例名称
+            name: data_name[item]
+          });
+        }
+      };
+    });
   });
 </script>
+</hr>
