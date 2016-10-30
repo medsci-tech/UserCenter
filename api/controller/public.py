@@ -13,6 +13,9 @@ from api.controller.common import checkAccess
 from api.controller.funForMime import imitate_post
 from django.http import HttpRequest
 import re
+import base64
+import hashlib
+import time
 # ============================
 # 获取token
 # ============================
@@ -123,13 +126,47 @@ def _addUser(param):
     else:
         returnData = {'code': 800, 'msg': '注册失败', 'data': None}
     return returnData
+# ============================
+# 文件解密
+# ============================
+
+def tcodes(strs, isEncrypt=1, key='mime.org.cn'):
+    strs.encode('utf-8')
+    now_time = time.time()
+    dynKey = hashlib.new("sha1", str(now_time)).hexdigest() if isEncrypt == 1 else strs[0:40]
+    dykey1 = dynKey[0:20].encode('utf-8')
+    dykey2 = dynKey[20:].encode('utf-8')
+
+    fixKey = hashlib.new("sha1", key.encode('utf-8')).hexdigest()
+    fixkey1 = fixKey[0:20].encode('utf-8')
+    fixkey2 = fixKey[20:].encode('utf-8')
+    newkey = hashlib.new("sha1", dykey1 + fixkey1 + dykey2 + fixkey2).hexdigest()
+
+    if (isEncrypt == 1):
+        newstring = fixkey1 + strs + dykey2
+    else:
+        newstring = base64.b64decode(strs[40:].replace('_', '='))
+
+    re = ''
+    strlen = len(newstring)
+
+    for i in range(0, strlen):
+        j = i % 40
+        re += chr(ord(chr(newstring[i])) ^ ord(newkey[j]))
+
+    return dynKey + base64.b64encode(re).replace('=', '_') if isEncrypt == 1 else re[20:-20]
+
+# ============================
+# 检查密码合法性
+# ============================
+def checkPassword(pwd):
+    pass
 
 # ============================
 # 用户注册
 # ============================
 @csrf_exempt
 def register(request):
-
     post = request.POST
     if not post:
         returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
@@ -154,6 +191,28 @@ def register(request):
         returnData = {'code': -1, 'msg': '用户或密码不能为空', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
+        '''验证密码合法性'''
+        if len(password) < 80:
+            returnData = {'code': -3, 'msg': '密码不能明文传输!', 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        try:
+            password = tcodes(password, isEncrypt=0, key='mime.org.cn')  # 解密
+        except:
+            returnData = {'code': -3, 'msg': '参数解析失败!', 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if phone:
+            phone.strip()
+        if password:
+            password.strip()
+
+        patten = re.findall(r'\d+', password)
+        if password.isalpha() or password.isnumeric() or not patten:
+            returnData = {'code': -3, 'msg': '密码必须包含字母和数字!允许有特殊符号!', 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        if len(password) > 30 or len(password) < 6:
+            returnData = {'code': -3, 'msg': '密码长度介于6-30个字符!', 'data': None}
+            return HttpResponse(json.dumps(returnData), content_type="application/json")
+
         # 注册参数
         param = {
             'phone': phone,
@@ -178,7 +237,7 @@ def register(request):
             'phone': phone,
             'action': 'register',
             'appId': post.get('appId'),
-            'mdBeans': post.get('mdBeans'),
+            'mdBeans': post.get('mdBeans',1),
             'token': post.get('token'),
         }
         returnData = imitate_post(url=post_url, param=post_param)
@@ -193,31 +252,42 @@ def setPwd(request):
         returnData = {'code': 403, 'msg': '非法请求', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     phone = post.get('phone')
-    if phone:
-        phone.strip()
     password = post.get('password')
-    if password:
-        password.strip()
     repassword = post.get('repassword')
-    if repassword:
-        repassword.strip()
-
     if phone == '':
         returnData = {'code': -2, 'msg': '用户名不能为空!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
+
     if password == '':
         returnData = {'code': -2, 'msg': '密码不能为空!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
+    '''验证密码合法性'''
+    if len(password)<80:
+        returnData = {'code': -3, 'msg': '密码不能明文传输!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    try:
+        password = tcodes(password, isEncrypt=0, key='mime.org.cn') #解密
+        repassword = tcodes(repassword, isEncrypt=0, key='mime.org.cn')  # 解密
+    except:
+        returnData = {'code': -3, 'msg': '参数解析失败!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    if phone:
+        phone.strip()
+    if password:
+        password.strip()
+    if repassword:
+        repassword.strip()
+
     patten = re.findall(r'\d+', password)
     if password.isalpha() or password.isnumeric() or not patten:
-        returnData = {'code': -1, 'msg': '密码必须包含字母和数字!允许有特殊符号!', 'data': None}
+        returnData = {'code': -3, 'msg': '密码必须包含字母和数字!允许有特殊符号!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     if len(password)>30 or len(password)<6:
-        returnData = {'code': -1, 'msg': '密码长度介于6-30个字符!', 'data': None}
+        returnData = {'code': -3, 'msg': '密码长度介于6-30个字符!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     if password != repassword:
-        returnData = {'code': -1, 'msg': '两次输入的密码不一致!', 'data': None}
+        returnData = {'code': -3, 'msg': '两次输入的密码不一致!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
     '''验证用户名是否存在'''
