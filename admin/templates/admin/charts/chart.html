@@ -17,7 +17,7 @@
 </div>
 <div class="row chart_hide">
     <div class="col-xs-1" style="width: auto; margin-left: 60%">
-        <select class="form-control" id="select_year">
+        <select class="form-control" v-model='date.year'>
             <option value="2015">
                 2015年
             </option>
@@ -27,7 +27,7 @@
         </select>
     </div>
     <div class="col-xs-1" style="width: auto;">
-        <select class="form-control" id="select_month">
+        <select class="form-control" v-model='data.mounth'>
             <option value="1">
                 一月
             </option>
@@ -37,265 +37,361 @@
         </select>
     </div>
     <div class="col-xs-1">
-       <button type="button" class="form-control btn btn-primary" style="margin: 0;">查看</button>
+        <button type="button" @click='changeData' class="form-control btn btn-primary" style="margin: 0;">查看</button>
     </div>
 </div>
 <!-- chart1 -->
 <script>
-  var color = ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'];
+var vm = new Vue({
+    el: 'body',
+    data: {
+        color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
+        date: {
+            year: '',
+            mounth: ''
+        },
+        class_data: [
 
-  var data_name = ["直接访问", "邮件营销", "联盟广告", "视频广告", "搜索引擎"];
+            {
+                value: Math.random() * 2000,
+                name: '直接访问'
+            }, {
+                value: Math.random() * 2000,
+                name: '邮件营销'
+            }, {
+                value: Math.random() * 2000,
+                name: '联盟广告'
+            }, {
+                value: Math.random() * 2000,
+                name: '视频广告'
+            }, {
+                value: Math.random() * 2000,
+                name: '搜索引擎'
+            }
+        ],
+        strategy_data: [
 
-  var myChart1 = echarts.init(document.getElementById('chart1'));
-  var option1 = {
+            {
+                value: Math.random() * 2000,
+                name: '直接访问'
+            }, {
+                value: Math.random() * 2000,
+                name: '邮件营销'
+            }, {
+                value: Math.random() * 2000,
+                name: '联盟广告'
+            }, {
+                value: Math.random() * 2000,
+                name: '视频广告'
+            }, {
+                value: Math.random() * 2000,
+                name: '搜索引擎'
+            }
+        ],
+        mounth_data: [
+
+            {
+                name: '直接访问',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            }, {
+                name: '邮件营销',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            }, {
+                name: '联盟广告',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            }, {
+                name: '视频广告',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            }, {
+                name: '搜索引擎',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            },
+        ],
+    },
+    methods: {
+        change_data: function() {
+
+        },
+        data_head: function(e) {
+            var result = [];
+            var l = e.length;
+            for (var i = 0; i < l; i++) {
+                result.push(e[i].name);
+            };
+            return result;
+        },
+        data_change_to_bar: function(e) {
+            var result = [];
+            var l = e.length;
+            for (var i = 0; i < l; i++) {
+                result.push({
+                    name: e[i].name,
+                    value: e[i].value,
+                    itemStyle: {
+                        normal: {
+                            color: vm.color[i]
+                        }
+                    }
+                });
+            };
+            return result;
+        },
+        series_change_to_line: function(e) {
+            var result = [];
+            var l = e.length;
+            for (var i = 0; i < l; i++) {
+                result.push({
+                    type: 'line',
+                    stack: 'all',
+                    areaStyle: {
+                        normal: {}
+                    },
+                    smooth: true,
+                    symbol: 'none',
+                    name: e[i].name,
+                    data: e[i].value,
+                });
+            };
+            return result;
+        }
+    },
+});
+
+var myChart1 = echarts.init(document.getElementById('chart1'));
+var myChart2 = echarts.init(document.getElementById('chart2'));
+var myChart3 = echarts.init(document.getElementById('chart3'));
+$('.chart_hide').addClass('hidden');
+
+var option1 = {
     title: {
-      text: '迈豆池',
+        text: '迈豆池',
     },
     grid: [
-      {x: '6%', width: '38%', height: '68%'},
-      {x2: '6%', width: '38%', height: '68%'},
+
+        {
+            x: '6%',
+            width: '38%',
+            height: '68%'
+        }, {
+            x2: '6%',
+            width: '38%',
+            height: '68%'
+        },
     ],
-    xAxis: [
-      {
+    xAxis: [{
         gridIndex: 1,
-        data: data_name
-      }
-    ],
-    yAxis: [
-      {
+        data: vm.data_head(vm.class_data),
+    }],
+    yAxis: [{
         gridIndex: 1,
-      }
-    ],
+    }],
     tooltip: {
-      trigger: 'item',
-      formatter: function (params) {
-        if(params.seriesType == 'pie'){
-          return params.name+'<br>'+params.value+'('+params.percent+'%)'
-        }
-      },
+        trigger: 'item',
+        formatter: function(params) {
+            if (params.seriesType == 'pie') {
+                return params.name + '<br>' + params.value + '(' + params.percent + '%)'
+            }
+        },
     },
-    series: [
-      {
-        name: '访问来源',
+    series: [{
         type: 'pie',
         radius: '50%',
         center: ['24%', '50%'],
-        data: [
-          {value: 335, name: '直接访问'},
-          {value: 310, name: '邮件营销'},
-          {value: 234, name: '联盟广告'},
-          {value: 135, name: '视频广告'},
-          {value: 1548, name: '搜索引擎'}
-        ],
+        data: vm.class_data,
         itemStyle: {
-          emphasis: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: 'rgba(0, 0, 0, 0.5)'
-          }
+            emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
         }
-      }, {
-        name: '访问来源',
+    }, {
         type: 'bar',
         xAxisIndex: 0,
         yAxisIndex: 0,
-        data: [
-          {
-            value: 335,
-            name: '直接访问',
-            itemStyle: {
-              normal: {
-                color: color[0]
-              }
-            }
-          },
-          {
-            value: 310,
-            name: '邮件营销',
-            itemStyle: {
-              normal: {
-                color: color[1]
-              }
-            }
-          },
-          {
-            value: 234,
-            name: '联盟广告',
-            itemStyle: {
-              normal: {
-                color: color[2]
-              }
-            }
-          },
-          {
-            value: 135,
-            name: '视频广告',
-            itemStyle: {
-              normal: {
-                color: color[3]
-              }
-            }
-          }, {
-            value: 1548,
-            name: '搜索引擎',
-            itemStyle: {
-              normal: {
-                color: color[4]
-              }
-            }
-          }
-        ],
+        data: vm.data_change_to_bar(vm.class_data),
         label: {
-          normal: {
-            show: true,
-            position: 'top',
-          }
+            normal: {
+                show: true,
+                position: 'top',
+            }
         }
-      }
-    ]
-  };
-  myChart1.setOption(option1);
+    }]
+};
+myChart1.setOption(option1);
 
-  var myChart2 = echarts.init(document.getElementById('chart2'));
-  var myChart3 = echarts.init(document.getElementById('chart3'));
-  $('.chart_hide').addClass('hidden');
-</script>
-<script>
-    myChart1.on('click', function (params) {
+
+myChart1.on('click', function(params) {
+
+    console.log(params.name);
 
     $('.chart_hide').removeClass('hidden');
+
     var option2 = {
-      title: {
-        text: '迈豆池',
-      },
-      tooltip: {
-        trigger: 'item',
-        formatter: function (params) {
-          if(params.seriesType == 'pie'){
-            return params.name+'<br>'+params.value+'('+params.percent+'%)'
-          }
+        title: {
+            text: '迈豆池',
         },
-      },
-      series: [
-        {
-          name: '访问来源',
-          type: 'pie',
-          radius: '50%',
-          center: ['50%', '50%'],
-          data: [
-            {value: Math.random()*2000, name: '直接访问'},
-            {value: Math.random()*2000, name: '邮件营销'},
-            {value: Math.random()*2000, name: '联盟广告'},
-            {value: Math.random()*2000, name: '视频广告'},
-            {value: Math.random()*2000, name: '搜索引擎'}
-          ],
-          itemStyle: {
-            emphasis: {
-              shadowBlur: 10,
-              shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)'
+        tooltip: {
+            trigger: 'item',
+            formatter: function(params) {
+                if (params.seriesType == 'pie') {
+                    return params.name + '<br>' + params.value + '(' + params.percent + '%)'
+                }
+            },
+        },
+        series: [{
+            type: 'pie',
+            radius: '50%',
+            center: ['50%', '50%'],
+            data: vm.strategy_data,
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
             }
-          }
-        }
-      ]
+        }]
     };
     myChart2.setOption(option2);
+
+
     var option3 = {
-      legend: [
-        {
-          data: data_name,
-          // left: '55%',
-        }
-      ],
-      xAxis: [
-        {
-          name: '1月',
-          gridIndex: 0,
-          boundaryGap: false,
-          data: [1, 2, 3, 4, 5, 7, 8, 9, 10, 11]
-        }
-      ],
-      yAxis: [
-        {
-          gridIndex: 0,
-        }
-      ],
-      dataZoom: [
-        {
-          xAxisIndex: 0,
-          filterMode: 'empty',
+        legend: [{
+            data: vm.data_head(vm.strategy_data),
+            // left: '55%',
+        }],
+        xAxis: [{
+            name: vm.date.mounth,
+            gridIndex: 0,
+            boundaryGap: false,
+            data: vm.data_head(vm.mounth_data[0].value),
+        }],
+        yAxis: [{
+            gridIndex: 0,
+        }],
+        dataZoom: [{
+            xAxisIndex: 0,
+            filterMode: 'empty',
         }, {
-          type: 'inside',
-          xAxisIndex: 0,
-        }
-      ],
-      series: [
-        {
-          name: '直接访问',
-          type: 'line',
-          stack: 'all',
-          areaStyle: {normal: {}},
-          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
-          smooth: true,
-          symbol: 'none',
-        }, {
-          name: '邮件营销',
-          type: 'line',
-          stack: 'all',
-          areaStyle: {normal: {}},
-          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
-          smooth: true,
-          symbol: 'none',
-        }, {
-          name: '联盟广告',
-          type: 'line',
-          stack: 'all',
-          areaStyle: {normal: {}},
-          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
-          smooth: true,
-          symbol: 'none',
-        }, {
-          name: '视频广告',
-          type: 'line',
-          stack: 'all',
-          areaStyle: {normal: {}},
-          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
-          smooth: true,
-          symbol: 'none',
-        }, {
-          name: '搜索引擎',
-          type: 'line',
-          stack: 'all',
-          areaStyle: {normal: {}},
-          data: [Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100, Math.random()*100],
-          smooth: true,
-          symbol: 'none',
-        }
-      ],
-      tooltip: {
-          trigger: 'axis'
+            type: 'inside',
+            xAxisIndex: 0,
+        }],
+        series: vm.series_change_to_line(vm.mounth_data),
+        tooltip: {
+            trigger: 'axis'
         },
     };
 
 
     myChart3.setOption(option3);
-    myChart2.on('click', function (params) {
-      for( item in data_name ) {
-        if ( data_name[item] == params.name){
-          myChart3.dispatchAction({
-            type: 'legendSelect',
-            // 图例名称
-            name: data_name[item]
-          });
-        } else {
-          myChart3.dispatchAction({
-            type: 'legendUnSelect',
-            // 图例名称
-            name: data_name[item]
-          });
-        }
-      };
+    myChart2.on('click', function(params) {
+        for (item in vm.strategy_data) {
+            if (vm.strategy_data[item].name == params.name) {
+                myChart3.dispatchAction({
+                    type: 'legendSelect',
+                    // 图例名称
+                    name: vm.strategy_data[item].name
+                });
+            } else {
+                myChart3.dispatchAction({
+                    type: 'legendUnSelect',
+                    // 图例名称
+                    name: vm.strategy_data[item].name
+                });
+            }
+        };
     });
-  });
+});
 </script>
 <hr/>
