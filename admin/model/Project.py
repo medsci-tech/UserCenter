@@ -21,7 +21,7 @@ class Project(Auth):
     contract_img    = StringField()
 
     used_beans  = IntField(default = 0)  # 已使用迈豆
-    total_beans = IntField(default = 0)  # 已使用迈豆
+    total_beans = IntField(default = 0)  # 总迈豆
 
     start_time  = StringField()
     end_time    = StringField()

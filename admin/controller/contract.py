@@ -18,13 +18,13 @@ def index(request):
     searchName = post.get('name_ch')
     searchCode = post.get('contract_code')
     if searchCompanyId:
-        param.update(companyId=searchCompanyId)
+        param.update(company_id=searchCompanyId)
     if searchAppId:
-        param.update(appId=searchAppId)
+        param.update(app_id=searchAppId)
     if searchName:
-        param.update(name={'$regex': searchName})
+        param.update(name_ch={'$regex': searchName})
     if searchCode:
-        param.update(code={'$regex': searchCode})
+        param.update(contract_code={'$regex': searchCode})
     data = Model.objects.filter(**param).order_by("id")
 
     page = request.GET.get('page', 1)  # 获取页码
@@ -33,7 +33,7 @@ def index(request):
     '''企业信息'''
     comList = Company.objects.filter(status=1).order_by("id")
     if searchCompanyId:
-        appList = Application.objects.filter(status=1, companyId=searchCompanyId).order_by("id")
+        appList = Application.objects.filter(status=1, company_id=searchCompanyId).order_by("id")
     else:
         appList ={}
     return render(request, 'admin/contract/index.html',{
@@ -82,17 +82,17 @@ def save(request):
         try:
             if(not id): # 添加操作
                 obj = Model.objects.create(**param)
-                logParam.update(tableId=obj.id)  # log记录参数
+                logParam.update(table_id=obj.id)  # log记录参数
                 logParam.update(action=1)  # log记录参数,rule_name_en=1为添加
             else: # 更新
                 Model.objects.filter(id=id).update(**param)
-                logParam.update(tableId=id)  # log记录参数
+                logParam.update(table_id=id)  # log记录参数
                 logParam.update(action=2)  # log记录参数,rule_name_en=2为修改
 
             logsform(request, logParam)
-            return HttpResponse(json.dumps({'contract_code': 200, 'msg': '操作成功!'}), content_type="application/json")
+            return ApiResponse(200, '操作成功').json_response()
         except (ValueError, KeyError, TypeError):
-            return HttpResponse(json.dumps({'contract_code': 0,'msg':'json格式错误!'}), content_type="application/json")
+            return ApiResponse(-1, 'json格式错误').json_response()
 
 
 '''
@@ -107,9 +107,9 @@ def recharge(request):
         try:
             contractData = Model.objects.get(id=id)
         except:
-            return HttpResponse(json.dumps({'contract_code': -1 ,'msg': '参数错误'}), content_type="application/json")
+            return ApiResponse(-1, '参数错误').json_response()
         if not contractData:
-            return HttpResponse(json.dumps({'contract_code': -1 ,'msg': '参数错误'}), content_type="application/json")
+            return ApiResponse(-1, '参数错误').json_response()
         save_amount = float(request_amount) + float(contractData['contract_amount'])
         totalBeans = math.ceil(save_amount * float(contractData['contract_rate']))
         param = {
@@ -124,13 +124,13 @@ def recharge(request):
         }
         try:
             Model.objects.filter(id=id).update(**param)
-            logParam.update(tableId=id)  # log记录参数
+            logParam.update(table_id=id)  # log记录参数
             logParam.update(action=6)  # log记录参数,rule_name_en=2为修改
 
             logsform(request, logParam)
-            return HttpResponse(json.dumps({'contract_code': 200, 'msg': '操作成功!'}), content_type="application/json")
+            return ApiResponse(200, '操作成功').json_response()
         except (ValueError, KeyError, TypeError):
-            return HttpResponse(json.dumps({'contract_code': 0,'msg':'json格式错误!'}), content_type="application/json")
+            return ApiResponse(-1, 'json格式错误').json_response()
 
 
 '''
@@ -148,13 +148,11 @@ def updateStatus(request, **param):
         #model = Model.objects.filter(pk__in=selection).delete() # 删除
         model = Model.objects.filter(pk__in=selection).update(**param)
         if model:
-            returnData = {'contract_code':'200', 'msg': '操作成功!'}
+            return ApiResponse(200, '操作成功').json_response()
         else:
-            returnData = {'contract_code': '0', 'msg': '操作失败!'}
+            return ApiResponse(-1, '操作失败').json_response()
     except Exception:
-            returnData = {'contract_code': '-1', 'msg': '非法请求!'}
-
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-2, '非法请求').json_response()
 
 # 删除操作
 @auth  # 引用登录权限验证
@@ -165,8 +163,7 @@ def delete(request):
         try:
             model = Model.objects.filter(id__in=selection).delete()
         except Exception:
-            returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-2, '数据验证错误').json_response()
         if model:
             BeanRule.objects.filter(contractId__in=selection).delete()
             # 操作成功添加log操作记录
@@ -179,12 +176,11 @@ def delete(request):
                 }
                 logParam.update(action=5)  # log记录参数,rule_name_en=5为删除
                 logsform(request, logParam)
-            returnData = {'contract_code': '200', 'msg': '操作成功', 'data': ''}
+            return ApiResponse(200, '操作成功').json_response()
         else:
-            returnData = {'contract_code': '801', 'msg': '操作失败', 'data': ''}
+            return ApiResponse(-1, '操作失败').json_response()
     else:
-        returnData = {'contract_code': '1000', 'msg': '不允许直接访问', 'data': None}
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(403, '不允许直接访问').json_response()
 
 '''
 前端访问接口
@@ -197,8 +193,8 @@ def contractlist(request, **kwargs):
     else:
         appId = kwargs.get('app_id')
     returnFormat = kwargs.get('returnFormat')
+    data = {}
     if appId:
-        data = {}
         try:
             modelData = Model.objects.filter(status=1, appId=appId).order_by("id")
         except Exception:
@@ -207,15 +203,15 @@ def contractlist(request, **kwargs):
             for val in modelData:
                 data[str(val.id)] = val.name
         if data:
-            returnData = {'contract_code': 200, 'msg': '操作成功', 'data': data}
+            returnData = ApiResponse(200, '操作成功', data).json_return()
         else:
-            returnData = {'contract_code': 200, 'msg': '暂无数据', 'data': None}
+            returnData = ApiResponse(200, '暂无数据', data).json_return()
     else:
-        returnData = {'contract_code': 200, 'msg': '参数缺失', 'data': None}
+        returnData = ApiResponse(200, '参数缺失').json_return()
 
     if returnFormat:
-        return returnData.get('data')
+        return data
     elif request.method == 'POST':
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return HttpResponse(returnData, content_type="application/json")
     else:
-        return returnData.get('data')
+        return data

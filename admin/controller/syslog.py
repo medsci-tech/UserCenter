@@ -17,7 +17,7 @@ def index(request):
     param = {}
     adminId = []
     table = post.get('table')
-    action = post.get('rule_name_en')
+    action = post.get('action')
     adminName = post.get('admin_name')
     if table:
         param.update(table=table)
