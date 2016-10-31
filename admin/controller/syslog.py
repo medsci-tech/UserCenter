@@ -17,8 +17,8 @@ def index(request):
     param = {}
     adminId = []
     table = post.get('table')
-    action = post.get('action')
-    adminName = post.get('adminName')
+    action = post.get('rule_name_en')
+    adminName = post.get('admin_name')
     if table:
         param.update(table=table)
     if action:
@@ -50,8 +50,8 @@ def index(request):
 添加log记录--用于controller之间的调用，外部url不能直接访问
     param = {
         'table': 'table',
-        'tableId': 'tableId',
-        'action': 'action',
+        'table_id': 'table_id',
+        'rule_name_en': 'rule_name_en',
         'after': 'after',
     }
 '''
@@ -67,10 +67,10 @@ def logsform(request, param):
     try:
         model = Model.objects.create(**param)
         if model:
-            returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
+            returnData = {'contract_code': '200', 'msg': '操作成功', 'data': str(model['id'])}
         else:
-            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+            returnData = {'contract_code': '801', 'msg': '操作失败', 'data': ''}
     except Exception:
-        returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+        returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
 
     return returnData

@@ -4,8 +4,8 @@
 # 公共引入文件
 from admin.controller.common_import import *
 
-from admin.model.Contract import Contract as Model
-from admin.model.App import App
+from admin.model.Project import Project as Model
+from admin.model.Application import Application
 from admin.model.Company import Company
 
 '''
@@ -18,15 +18,15 @@ def index(request):
     post = request.POST
     param = {}
     # 获取所有状态列表
-    searchAppId = get.get('appId')
-    searchName = post.get('name')
+    searchAppId = get.get('app_id')
+    searchName = post.get('name_ch')
     if searchAppId:
         param.update(appId=searchAppId)
         if searchName:
             param.update(name={'$regex': searchName})
         data = Model.objects.filter(**param).order_by("id")
-        appData = App.objects.filter(status=1, id=searchAppId).order_by("id")[:1][0]
-        companyData = Company.objects.filter(status=1, id=appData['companyId']).order_by("id")[:1][0]
+        appData = Application.objects.filter(status=1, id=searchAppId).order_by("id")[:1][0]
+        companyData = Company.objects.filter(status=1, id=appData['company_id']).order_by("id")[:1][0]
     else:
         data = {}
         appData = {}
@@ -52,13 +52,13 @@ def _editById(**param):
         try:
             model = Model.objects.get(id=id).update(**param)
             if model == 1:
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+                returnData = {'contract_code': '200', 'msg': '操作成功', 'data': ''}
             else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+                returnData = {'contract_code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
     else:
-        returnData = {'code': '901', 'msg': '数据错误', 'data': ''}
+        returnData = {'contract_code': '901', 'msg': '数据错误', 'data': ''}
     return returnData
 
 # 修改操作
@@ -67,15 +67,15 @@ def form(request):
     post = request.POST
     if post:
         id = post.get('id')
-        contractId = post.get('contractId')
+        contractId = post.get('project_id')
         try:
             check_name = Model.objects.filter(contractId=contractId).order_by('id')
         except Exception:
-            returnData = {'code': 801, 'msg': '数据验证错误', 'data': ''}
+            returnData = {'contract_code': 801, 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if check_name:
             if str(check_name[0]['id']) != id:
-                returnData = {'code': 802, 'msg': '合同已有对应的迈豆池', 'data': None}
+                returnData = {'contract_code': 802, 'msg': '合同已有对应的迈豆池', 'data': None}
                 return HttpResponse(json.dumps(returnData), content_type="application/json")
         extend_list = {}
         # 获取配置列表
@@ -84,8 +84,8 @@ def form(request):
         for key in ext_credit_list:
             extend_list[str(key)] = post.get('extend[' + key + ']', 0)
         param = {
-            'appId': post.get('appId'),
-            'apiName': post.get('remarkName'),
+            'app_id': post.get('app_id'),
+            'name_en': post.get('remarkName'),
             'extend': extend_list,
             'status': post.get('status'),
         }
@@ -94,11 +94,11 @@ def form(request):
             param.update(id=id)
             returnData = _editById(**param)
         else:
-            returnData = {'code': 805, 'msg': '数据验证错误', 'data': ''}
+            returnData = {'contract_code': 805, 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
 
         # 操作成功添加log操作记录
-        if returnData.get('code') == '200':
+        if returnData.get('contract_code') == '200':
             # log记录参数
             logParam = {
                 'table': 'credit_config',
@@ -106,15 +106,15 @@ def form(request):
             }
             if id:
                 logParam.update(tableId=id)  # log记录参数
-                logParam.update(action=2)  # log记录参数,action=2为修改
+                logParam.update(action=2)  # log记录参数,rule_name_en=2为修改
             else:
                 logParam.update(tableId=returnData.get('data'))  # log记录参数
-                logParam.update(action=1)  # log记录参数,action=1为添加
+                logParam.update(action=1)  # log记录参数,rule_name_en=1为添加
             if 'id' in logParam['after']:
                 del logParam['after']['id']
             logsform(request, logParam)
     else:
-        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+        returnData = {'contract_code': '1000', 'msg': '不允许直接访问', 'data': None}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
@@ -141,25 +141,25 @@ def stats(request):
                     logParam = {
                         'table': 'credit_config',
                         'after': param,
-                        'tableId': id,
+                        'table_id': id,
                     }
                     if statusType == 'enable':
-                        logParam.update(action=3)  # log记录参数,action=3为启用
+                        logParam.update(action=3)  # log记录参数,rule_name_en=3为启用
                     else:
-                        logParam.update(action=4)  # log记录参数,action=4为禁用
+                        logParam.update(action=4)  # log记录参数,rule_name_en=4为禁用
                     if 'id' in logParam['after']:
                         del logParam['after']['id']
                     logsform(request, logParam)
 
-                returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+                returnData = {'contract_code': '200', 'msg': '操作成功', 'data': ''}
             else:
-                returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+                returnData = {'contract_code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-                returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+                returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
 
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
-        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+        returnData = {'contract_code': '1000', 'msg': '不允许直接访问', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 '''
@@ -169,9 +169,9 @@ def stats(request):
 def creditconfiglist(request, **kwargs):
     if request.method == 'POST':
         req = request.POST
-        appId = req.get('appId')
+        appId = req.get('app_id')
     else:
-        appId = kwargs.get('appId')
+        appId = kwargs.get('app_id')
     returnFormat = kwargs.get('returnFormat')
     if appId:
         data = {}
@@ -183,11 +183,11 @@ def creditconfiglist(request, **kwargs):
             for val in app:
                 data[str(val.id)] = val.remarkName
         if data:
-            returnData = {'code': 200, 'msg': '操作成功', 'data': data}
+            returnData = {'contract_code': 200, 'msg': '操作成功', 'data': data}
         else:
-            returnData = {'code': 200, 'msg': '暂无数据', 'data': None}
+            returnData = {'contract_code': 200, 'msg': '暂无数据', 'data': None}
     else:
-        returnData = {'code': 200, 'msg': '参数缺失', 'data': None}
+        returnData = {'contract_code': 200, 'msg': '参数缺失', 'data': None}
 
     if returnFormat:
         return returnData.get('data')

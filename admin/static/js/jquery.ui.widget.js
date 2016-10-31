@@ -83,7 +83,7 @@ $.widget = function( name, base, prototype ) {
 		}
 
 		// allow instantiation without initializing for simple inheritance
-		// must use "new" keyword (the code above always passes args)
+		// must use "new" keyword (the contract_code above always passes args)
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
@@ -135,7 +135,7 @@ $.widget = function( name, base, prototype ) {
 	});
 	constructor.prototype = $.widget.extend( basePrototype, {
 		// TODO: remove support for widgetEventPrefix
-		// always use the name + a colon as the prefix, e.g., draggable:start
+		// always use the name_ch + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
 		widgetEventPrefix: existingConstructor ? (basePrototype.widgetEventPrefix || name) : name
 	}, proxiedPrototype, {

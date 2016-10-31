@@ -51,7 +51,7 @@
     // Check if we should operate with some method
     if (/^(check|uncheck|toggle|indeterminate|determinate|disable|enable|update|destroy)$/i.test(options)) {
 
-      // Normalize method's name
+      // Normalize method's name_ch
       options = options.toLowerCase();
 
       // Find checkboxes and radio buttons
@@ -337,7 +337,7 @@
       // Toggle assigned radio buttons
       if (!keep && state == _checked && node[_type] == _radio && node.name) {
         var form = input.closest('form'),
-          inputs = 'input[name="' + node.name + '"]';
+          inputs = 'input[name_ch="' + node.name + '"]';
 
         inputs = form.length ? form.find(inputs) : $(inputs);
 

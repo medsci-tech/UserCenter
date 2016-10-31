@@ -100,7 +100,7 @@ def updateStatus(request, **param):
         else:
             returnData = {'status': '0', 'msg': '操作失败!'}
     except Exception:
-            returnData = {'code': '0', 'msg': '非法请求!'}
+            returnData = {'contract_code': '0', 'msg': '非法请求!'}
 
     return HttpResponse(json.dumps(returnData))
 

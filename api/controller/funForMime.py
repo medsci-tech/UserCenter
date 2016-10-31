@@ -14,8 +14,8 @@ def imitate_post(**kwargs):
     '''示例
     param = {
         'phone': '15623093771',
-        'action': 'follow_vendor',
-        'appId': '1',
+        'rule_name_en': 'follow_vendor',
+        'app_id': '1',
         'mdBeans': '1',
         'token': 'eyJpYXQiOjE0Nzc0NTQ0NjQsImV4cCI6MTQ3NzQ5NzU5OSwiYWxnIjoiSFMyNTYifQ.eyJuYW1lIjoiNTgwYzA1YWU0ZWFhNzY1M2Y3MGQ4MmEzIn0.iMlxBuNtjfGJ2LWvkKilPagFnQv7WwWHKwNVxgJ9Rj4'
     }
@@ -26,5 +26,5 @@ def imitate_post(**kwargs):
         res = request.urlopen(req)
         returnData = json.loads(res.read().decode())
     except:
-        returnData = {'code': 500, 'msg': 'post error', 'data': None}
+        returnData = {'contract_code': 500, 'msg': 'post error', 'data': None}
     return returnData
