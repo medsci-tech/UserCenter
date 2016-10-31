@@ -162,28 +162,28 @@ def applist(request, **kwargs):
     else:
         companyId = kwargs.get('company_id')
     returnFormat = kwargs.get('returnFormat')
+    data = {}
     if companyId:
-        data = {}
         try:
-            app = Model.objects.filter(status=1, companyId=companyId).order_by("id")
+            app = Model.objects.filter(status=1, company_id=companyId).order_by("id")
         except Exception:
             app = {}
         if app:
             for val in app:
                 data[str(val.id)] = val.name
         if data:
-            returnData = {'contract_code': 200, 'msg': '操作成功', 'data': data}
+            returnData = ApiResponse(200, '操作成功', data).json_return()
         else:
-            returnData = {'contract_code': 200, 'msg': '暂无数据', 'data': None}
+            returnData = ApiResponse(200, '暂无数据', data).json_return()
     else:
-        returnData = {'contract_code': 200, 'msg': '参数缺失', 'data': None}
+        returnData = ApiResponse(200, '参数缺失').json_return()
 
     if returnFormat:
-        return returnData.get('data')
+        return data
     elif request.method == 'POST':
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return HttpResponse(returnData, content_type="application/json")
     else:
-        return returnData.get('data')
+        return data
 
 # 删除操作
 @auth  # 引用登录权限验证

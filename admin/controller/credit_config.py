@@ -21,9 +21,9 @@ def index(request):
     searchAppId = get.get('app_id')
     searchName = post.get('name_ch')
     if searchAppId:
-        param.update(appId=searchAppId)
+        param.update(app_id=searchAppId)
         if searchName:
-            param.update(name={'$regex': searchName})
+            param.update(name_ch={'$regex': searchName})
         data = Model.objects.filter(**param).order_by("id")
         appData = Application.objects.filter(status=1, id=searchAppId).order_by("id")[:1][0]
         companyData = Company.objects.filter(status=1, id=appData['company_id']).order_by("id")[:1][0]
