@@ -53,7 +53,7 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td><a href="{% url 'admin:app' %}?companyId={{ list.id }}">{{ list.name }}</a></td>
+                                <td><a href="{% url 'admin:app' %}?company_id={{ list.id }}">{{ list.name }}</a></td>
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == list.status %}
