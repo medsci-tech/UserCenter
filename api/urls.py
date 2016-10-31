@@ -16,7 +16,7 @@ urlpatterns = [
     url(r'^public/login', public.login, name='public_login'),
     url(r'^public/register', public.register, name='public_register'),
     url(r'^public/setPwd', public.setPwd, name='public_setPwd'),
-
+    url(r'^public/test', public.test, name='public_test'),
     # 用户信息修改
     url(r'^user/edit', user.edit, name='user_edit'),
 

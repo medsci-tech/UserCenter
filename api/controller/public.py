@@ -10,12 +10,11 @@ from django.contrib.auth.hashers import check_password, make_password
 # configParam
 from UserCenter.global_templates import configParam
 from api.controller.common import checkAccess
-from api.controller.funForMime import imitate_post
+from api.controller.funForMime import imitate_post,tcodes
 from django.http import HttpRequest
+import simplejson
 import re
-import base64
-import hashlib
-import time
+
 # ============================
 # 获取token
 # ============================
@@ -126,35 +125,6 @@ def _addUser(param):
     else:
         returnData = {'code': 800, 'msg': '注册失败', 'data': None}
     return returnData
-# ============================
-# 文件解密
-# ============================
-
-def tcodes(strs, isEncrypt=1, key='mime.org.cn'):
-    strs.encode('utf-8')
-    now_time = time.time()
-    dynKey = hashlib.new("sha1", str(now_time)).hexdigest() if isEncrypt == 1 else strs[0:40]
-    dykey1 = dynKey[0:20].encode('utf-8')
-    dykey2 = dynKey[20:].encode('utf-8')
-
-    fixKey = hashlib.new("sha1", key.encode('utf-8')).hexdigest()
-    fixkey1 = fixKey[0:20].encode('utf-8')
-    fixkey2 = fixKey[20:].encode('utf-8')
-    newkey = hashlib.new("sha1", dykey1 + fixkey1 + dykey2 + fixkey2).hexdigest()
-
-    if (isEncrypt == 1):
-        newstring = fixkey1 + strs + dykey2
-    else:
-        newstring = base64.b64decode(strs[40:].replace('_', '='))
-
-    re = ''
-    strlen = len(newstring)
-
-    for i in range(0, strlen):
-        j = i % 40
-        re += chr(ord(chr(newstring[i])) ^ ord(newkey[j]))
-
-    return dynKey + base64.b64encode(re).replace('=', '_') if isEncrypt == 1 else re[20:-20]
 
 # ============================
 # 检查密码合法性
@@ -192,14 +162,14 @@ def register(request):
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         '''验证密码合法性'''
-        if len(password) < 80:
-            returnData = {'code': -3, 'msg': '密码不能明文传输!', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
-        try:
-            password = tcodes(password, isEncrypt=0, key='mime.org.cn')  # 解密
-        except:
-            returnData = {'code': -3, 'msg': '参数解析失败!', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+        # if len(password) < 80:
+        #     returnData = {'code': -3, 'msg': '密码不能明文传输!', 'data': None}
+        #     return HttpResponse(json.dumps(returnData), content_type="application/json")
+        # try:
+        #     password = tcodes(password, isEncrypt=0, key='mime.org.cn')  # 解密
+        # except:
+        #     returnData = {'code': -3, 'msg': '参数解析失败!', 'data': None}
+        #     return HttpResponse(json.dumps(returnData), content_type="application/json")
         if phone:
             phone.strip()
         if password:
@@ -263,15 +233,15 @@ def setPwd(request):
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
     '''验证密码合法性'''
-    if len(password)<80:
-        returnData = {'code': -3, 'msg': '密码不能明文传输!', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
-    try:
-        password = tcodes(password, isEncrypt=0, key='mime.org.cn') #解密
-        repassword = tcodes(repassword, isEncrypt=0, key='mime.org.cn')  # 解密
-    except:
-        returnData = {'code': -3, 'msg': '参数解析失败!', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+    # if len(password)<80:
+    #     returnData = {'code': -3, 'msg': '密码不能明文传输!', 'data': None}
+    #     return HttpResponse(json.dumps(returnData), content_type="application/json")
+    # try:
+    #     password = tcodes(password, isEncrypt=0, key='mime.org.cn') #解密
+    #     repassword = tcodes(repassword, isEncrypt=0, key='mime.org.cn')  # 解密
+    # except:
+    #     returnData = {'code': -3, 'msg': '参数解析失败!', 'data': None}
+    #     return HttpResponse(json.dumps(returnData), content_type="application/json")
     if phone:
         phone.strip()
     if password:
@@ -307,6 +277,28 @@ def setPwd(request):
     except (ValueError, KeyError, TypeError):
         returnData = {'code': 500, 'msg': '服务器操作异常!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+
+
+
+@csrf_exempt
+def test(request):
+    post = request.POST
+    if request.method != 'POST':
+        returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
+        return HttpResponse(json.dumps(returnData), content_type="application/json")
+
+    apiParams = post.get('apiParams')
+    apiParams = tcodes(apiParams, isEncrypt=0, key='mime.org.cn')  # 解密
+    req = simplejson.loads(apiParams)
+    # req = json.loads(req)d
+    #req = simplejson.loads(apiParams)
+    # req = simplejson.loads(request.body)
+    # req = tcodes(req, isEncrypt=0, key='mime.org.cn')  # 解密
+    #phone = req['phone']
+    password = req.get('password')
+    return HttpResponse(password, content_type="application/json")
+
 
 
 
