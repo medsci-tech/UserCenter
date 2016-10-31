@@ -3,6 +3,7 @@ from api.controller import (
     public,
     user,
     credit,
+    beans_chart,
 )
 # from api import tests
 
@@ -17,6 +18,10 @@ urlpatterns = [
     url(r'^public/register', public.register, name='public_register'),
     url(r'^public/setPwd', public.setPwd, name='public_setPwd'),
     url(r'^public/test', public.test, name='public_test'),
+
+    # 积分图表
+    url(r'^beans_chart/list', beans_chart.list, name='beans_chart_list'),
+
     # 用户信息修改
     url(r'^user/edit', user.edit, name='user_edit'),
 

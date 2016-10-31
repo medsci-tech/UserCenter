@@ -22,4 +22,8 @@ class ApiResponse():
         response    = HttpResponse(data, content_type = "application/json")
         return response
 
+    def json_return(self):
+        data        = self.json_message()
+        return data
+
 

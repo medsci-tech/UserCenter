@@ -24,8 +24,7 @@ import math
 def index(request):
     post = request.POST
     if not post:
-        returnData = {'contract_code': 403, 'msg': '不可访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(403, '不可访问').json_response()
     request_phone = post.get('phone')
     request_action = post.get('rule_name_en')
     request_appId = post.get('app_id')  # 应用平台
@@ -38,8 +37,7 @@ def index(request):
         request_appId = int(request_appId)
         str_appId = api_appId_list[request_appId]
     except:
-        returnData = {'contract_code': -1, 'msg': '找不到配置的appId', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(-1, '找不到配置的appId').json_response()
 
     check_token = QXToken(str_appId).verify_auth_token(request_token)  # 解析token
     if check_token and request_action and str_appId:
@@ -49,22 +47,18 @@ def index(request):
             ruleData = BeanRule.objects.get(appId=str_appId, apiName=request_action)
             need_beans = math.ceil(ruleData['ratio'] * float(request_beans))  # 需要分配给用户的迈豆数
         except:
-            returnData = {'contract_code': -1, 'msg': 'rule操作失败', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, 'rule操作失败').json_response()
         if not ruleData:
-            returnData = {'contract_code': -1, 'msg': '找不到对应规则', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, '找不到对应规则').json_response()
 
         # Project
         try:
             # 查询Contract表，看是否有可用迈豆
             contractData = Project.objects.get(id=ruleData['project_id'])
         except:
-            returnData = {'contract_code': -1, 'msg': 'contract操作失败', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, 'contract操作失败').json_response()
         if not contractData:
-            returnData = {'contract_code': -1, 'msg': '找不到对应项目', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, '找不到对应项目').json_response()
 
         # 根据项目起止时间判断迈豆是否可用
         now_time = datetime.datetime.now().timestamp()
@@ -73,24 +67,19 @@ def index(request):
             end_time = datetime.datetime.strptime(contractData['end_time'], '%Y-%m-%d').timestamp() + 86400  # 截止时间默认为次日0点
             has_beans = contractData['total_beans'] - contractData['used_beans']  # 可用的迈豆数
         except:
-            returnData = {'contract_code': -1, 'msg': '合同时间错误或无可用迈豆', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, '合同时间错误或无可用迈豆').json_response()
         if now_time < start_time or now_time > end_time:
-            returnData = {'contract_code': -1, 'msg': '合同不在有效期内', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, '合同不在有效期内').json_response()
         if has_beans < need_beans:
-            returnData = {'contract_code': -1, 'msg': '项目迈豆数不够', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, '项目迈豆数不够').json_response()
 
         # User
         try:
             userData = User.objects.get(phone=request_phone)
         except:
-            returnData = {'contract_code': -1, 'msg': 'user操作失败', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, 'user操作失败').json_response()
         if not userData:
-            returnData = {'contract_code': -1, 'msg': '找不到对应用户', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, '找不到对应用户').json_response()
         if hasattr(userData, 'beans_list'):
             userBeansList = userData['beans_list']
         else:
@@ -121,13 +110,11 @@ def index(request):
         try:
             user_model = User.objects.filter(phone=request_phone).update(**user_param)
         except Exception:
-            returnData = {'contract_code': -1, 'msg': 'user操作失败', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, 'user操作失败').json_response()
         try:
             contract_model = Project.objects.get(id=contractDataId).update(**contract_param)
         except:
-            returnData = {'contract_code': -1, 'msg': 'project操作失败', 'data': None}
-            return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-1, 'project操作失败').json_response()
         if contract_model and user_model:
             # 记录log
             log_param = {
@@ -175,16 +162,14 @@ def index(request):
             log_param.update(appName=appDataName)
             log_param.update(ruleTypeName=ruleTypeDataName)
             log_res = _add_log(log_param)
-            if log_res['contract_code'] == 200:
-                returnData = {'contract_code': 200, 'msg': '操作成功', 'data': {'user_beans': save_beans_total}}
+            if log_res['code'] == 200:
+                return ApiResponse(200, '操作成功', {'user_beans': save_beans_total}).json_response()
             else:
-                returnData = {'contract_code': 200, 'msg': '操作成功,log记录失败', 'data': {'user_beans': save_beans_total}}
+                return ApiResponse(200, '操作成功,log记录失败', {'user_beans': save_beans_total}).json_response()
         else:
-            returnData = {'contract_code': -1, 'msg': '操作失败', 'data': None}
+            return ApiResponse(-1, '操作失败').json_response()
     else:
-        returnData = {'contract_code': -2, 'msg': '参数错误', 'data': None}
-
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(-2, '参数错误').json_response()
 
 
 # ============================
@@ -193,10 +178,9 @@ def index(request):
 def _add_log(param):
     try:
         BeanLog.objects.create(**param)
-        returnData = {'contract_code': 200, 'msg': '操作成功', 'data': None}
+        return ApiResponse(200, '操作成功').json_return()
     except Exception:
-        returnData = {'contract_code': -1, 'msg': 'log记录失败', 'data': None}
-    return returnData
+        return ApiResponse(-1, 'log记录失败').json_return()
 
 
 # ============================
@@ -206,12 +190,10 @@ def _add_log(param):
 def query(request):
     post = request.POST
     if not post:
-        returnData = {'contract_code': 403, 'msg': '不可访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(403, '不可访问').json_response()
     request_phone = post.get('phone')
     if not request_phone:
-        returnData = {'contract_code': -3, 'msg': '参数错误', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(-2, '参数错误').json_response()
     request_startTime = post.get('start_time')
     request_endTime = post.get('end_time')
     param = {
@@ -226,8 +208,7 @@ def query(request):
     try:
         beansLogData = BeanLog.objects.filter(**param).order_by('id')
     except:
-        returnData = {'contract_code': 200, 'msg': 'no data', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(200, 'no data').json_response()
     if beansLogData:
         data = []
         for val in beansLogData:
@@ -240,7 +221,6 @@ def query(request):
                 'create_time': createTime,
             }
             data.append(temp_data)
-        returnData = {'contract_code': 200, 'msg': 'success', 'data': data}
+        return ApiResponse(200, 'success', data).json_response()
     else:
-        returnData = {'contract_code': 200, 'msg': 'no data', 'data': None}
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(200, 'no data').json_response()
