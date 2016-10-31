@@ -28,8 +28,7 @@ def imitate_post(**kwargs):
         res = request.urlopen(req)
         returnData = json.loads(res.read().decode())
     except:
-        returnData = {'code': 500, 'msg': 'post error', 'data': None}
-    return returnData
+        return [500, 'post error']
 
 
 
@@ -62,5 +61,4 @@ def tcodes(strs, isEncrypt=1, key='mime.org.cn'):
         re += chr(ord(chr(newstring[i])) ^ ord(newkey[j]))
 
     return dynKey + base64.b64encode(re).replace('=', '_') if isEncrypt == 1 else re[20:-20]
-    return returnData
 
