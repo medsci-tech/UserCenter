@@ -54,7 +54,7 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td><a href="{% url 'admin:credit_rule' %}?object_id={{ list.id }}">{{ list.name_ch }}</a></td>
+                                <td><a href="{% url 'admin:credit_rule' %}?project_id={{ list.id }}">{{ list.name_ch }}</a></td>
                                 <td>{{ list.total_beans }}</td>
                                 <td>{{ list.used_beans }}</td>
                                 <td>

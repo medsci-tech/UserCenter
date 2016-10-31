@@ -9,12 +9,12 @@ class Syslog(Auth):
         'indexes': [],
     }
 
-    admin_id    = StringField()  # 操作用户id
+    admin_id    = ObjectIdField()  # 操作用户id
     admin_name  = StringField()  # 操作用户
     admin_ip    = StringField()
 
     table       = StringField()  # 操作集合
-    table_id    = StringField()  # 操作集合主键对应的id
+    table_id    = ObjectIdField()  # 操作集合主键对应的id
 
     action  = IntField()    # 动作
     after   = DictField()   # 操作后记录

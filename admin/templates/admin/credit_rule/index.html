@@ -9,15 +9,15 @@
     <div id="breadcrumb">
         <a href="{% url 'admin:index' %}" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
         <a href="{% url 'admin:company' %}">企业</a>
-        <a href="{% url 'admin:app' %}?companyId={{ form_companyData.id }}">应用平台</a>
-        <a href="{% url 'admin:credit_config' %}?appId={{ form_appData.id }}">项目</a>
+        <a href="{% url 'admin:app' %}?company_id={{ form_companyData.id }}">应用平台</a>
+        <a href="{% url 'admin:credit_config' %}?app_id={{ form_appData.id }}">项目</a>
         <a href="#" class="current">积分策略</a>
     </div>
     <div class="row">
         <form action="" method="get">
         <div class="col-xs-12 center">
             <label>名称：
-                <input type="text" name="name" value="{{ ctrlList.name }}">
+                <input type="text" name="name_ch" value="{{ ctrlList.name_ch }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -60,12 +60,12 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td>{{ list.name }}</td>
-                                <td>{{ list.apiName }}</td>
+                                <td>{{ list.name_ch }}</td>
+                                <td>{{ list.name_en }}</td>
                                 <td>
                                     {% for val in list_integralType %}
-                                        {% if val.id|iriencode == list.integralType %}
-                                            {{ val.name }}
+                                        {% if val.id == list.bean_type_id %}
+                                            {{ val.name_ch }}
                                         {% endif %}
                                     {% endfor %}
                                 </td>
@@ -76,7 +76,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ list.rewardNum }}</td>
+                                <td>{{ list.limit }}</td>
                                 <td>{{ list.ratio }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
@@ -92,10 +92,10 @@
                                        data-contractId="{{ list.contractId }}"
                                        data-name="{{ list.name }}"
                                        data-apiName="{{ list.apiName }}"
-                                       data-integralType="{{ list.integralType }}"
+                                       data-bean_type_id="{{ list.bean_type_id }}"
                                        data-cycle="{{ list.cycle }}"
                                        data-ratio="{{ list.ratio }}"
-                                       data-rewardNum="{{ list.rewardNum }}"
+                                       data-limit="{{ list.limit }}"
                                        data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
@@ -154,8 +154,8 @@ $(function () {
         $('#form-name').val(kong);
         $('#form-apiName').val(kong);
         $('#form-ratio').val(kong);
-        $('#form-integralType').val(kong);
-        $('#form-rewardNum').val(kong);
+        $('#form-bean_type_id').val(kong);
+        $('#form-limit').val(kong);
         $('#form-status').val(1);
     });
     /**
@@ -165,18 +165,18 @@ $(function () {
         var id = $(this).attr('data-id');
         var name = $(this).attr('data-name');
         var apiName = $(this).attr('data-apiName');
-        var integralType = $(this).attr('data-integralType');
+        var bean_type_id = $(this).attr('data-bean_type_id');
         var cycle = $(this).attr('data-cycle');
         var ratio = $(this).attr('data-ratio');
-        var rewardNum = $(this).attr('data-rewardNum');
+        var limit = $(this).attr('data-limit');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
         $('#form-name').val(name);
         $('#form-apiName').val(apiName);
-        $('#form-integralType').val(integralType);
+        $('#form-bean_type_id').val(bean_type_id);
         $('#form-cycle').val(cycle);
         $('#form-ratio').val(ratio);
-        $('#form-rewardNum').val(rewardNum);
+        $('#form-limit').val(limit);
         $('#form-status').val(status);
     });
     /**
@@ -189,7 +189,7 @@ $(function () {
         apiName:{
             required:true
         },
-        rewardNum:{
+        limit:{
             number:true
         },
         ratio:{
