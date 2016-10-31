@@ -72,7 +72,7 @@
 								    	<button class="btn btn-warning btn-xs">禁用</button>
 									{% endifequal %}
                                 </td>
-                                <td>{{ data.createTime |date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ data.create_time |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
@@ -120,7 +120,7 @@ $(function () {
         //重置表单
         $('#basic_validate')[0].reset()
 
-    })
+    });
 
     var status_url = '{% url 'admin:admin_updateStatus' %}';
     var index_url = '{% url 'admin:admin' %}';
@@ -134,8 +134,6 @@ $(function () {
         var password = $(this).attr('data-password');
         var email = $(this).attr('data-email');
         var status = $(this).attr('data-status');
-        $("input[type=radio][name=status][value="+status+"]").parent('div').addClass('checked');
-        $("input[type=radio][name=status][value="+status+"]").parent().parent().siblings().find('div').removeClass('checked')
         $('#id').val(id);
         $('#nickname').val(nickname);
         $('#username').val(username);

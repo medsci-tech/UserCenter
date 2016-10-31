@@ -35,21 +35,17 @@
 	<div class="form-group">
 		<label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
 		<div class="col-sm-9 col-md-9 col-lg-10">
-			<label><input type="radio"  name="status" value="1"/> 启用</label>
-			<label><input type="radio"  name="status" value="0" /> 禁用</label>
+            <select class="form-control" name="status" id="status">
+                {% for key,value in c_status.items %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
 		</div>
 	</div>
 	<div class="form-actions">
 	    <input type="submit" value="确定" class="btn btn-primary" id="submit">
-        <button class="btn btn-default" data-dismiss="" id="ResetButton">重置</button>
+      <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
 	</div>
     <input type="hidden" name="id" id="id">
 	</form>
 </div>
-<script>
-	/* 表单重置 */
-	$("#ResetButton").click(function() {
-		$('#basic_validate').get(0).reset();//清空表单
-	});	
-	
-</script>

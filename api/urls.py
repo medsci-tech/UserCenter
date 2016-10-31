@@ -17,7 +17,6 @@ urlpatterns = [
     url(r'^public/login', public.login, name='public_login'),
     url(r'^public/register', public.register, name='public_register'),
     url(r'^public/setPwd', public.setPwd, name='public_setPwd'),
-    url(r'^public/test', public.test, name='public_test'),
 
     # 积分图表
     url(r'^beans_chart/list', beans_chart.list, name='beans_chart_list'),
