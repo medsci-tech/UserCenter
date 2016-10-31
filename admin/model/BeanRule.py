@@ -11,7 +11,7 @@ class BeanRule(Auth):
 
     name_ch     = StringField()  # 策略名称中文
     name_en     = StringField()  # 策略名称英文
-    bean_type   = StringField()  # 策略类型
+    bean_type_id   = ObjectIdField()  # 策略类型
     ratio       = FloatField()
 
     cycle   = IntField(default = 0)  # 周期

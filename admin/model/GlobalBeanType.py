@@ -11,5 +11,5 @@ class GlobalBeanType(Auth):
     name_ch = StringField()  # 中文名称
     name_en = StringField()  # 英文名称
     status  = IntField(default = 1)
-    createTime = DateTimeField(default = datetime.now())
+    create_time = DateTimeField(default = datetime.now())
 
