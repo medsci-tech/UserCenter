@@ -1269,7 +1269,7 @@ function EventManager(options, _sources) {
 	
 	function normalizeSource(source) {
 		if (source.className) {
-			// TODO: repeat code, same code for event classNames
+			// TODO: repeat contract_code, same contract_code for event classNames
 			if (typeof source.className == 'string') {
 				source.className = source.className.split(/\s+/);
 			}
@@ -1657,7 +1657,7 @@ fc.dateFormatters = dateFormatters;
  * 
  * Set as calculateWeek to determine the week of the year based on the ISO 8601 definition.
  * `date` - the date to get the week for
- * `number` - the number of the week within the year that contains this date
+ * `contract_rate` - the contract_rate of the week within the year that contains this date
  */
 function iso8601Week(date) {
 	var time;
@@ -2291,7 +2291,7 @@ function BasicView(element, calendar, viewName) {
 
 		if (showWeekNumbers) {
 			html +=
-				"<th class='fc-week-number " + headerClass + "'>" +
+				"<th class='fc-week-contract_rate " + headerClass + "'>" +
 				htmlEscape(weekNumberTitle) +
 				"</th>";
 		}
@@ -2326,7 +2326,7 @@ function BasicView(element, calendar, viewName) {
 			if (showWeekNumbers) {
 				date = cellToDate(row, 0);
 				html +=
-					"<td class='fc-week-number " + contentClass + "'>" +
+					"<td class='fc-week-contract_rate " + contentClass + "'>" +
 					"<div>" +
 					htmlEscape(formatDate(date, weekNumberFormat)) +
 					"</div>" +
@@ -2382,7 +2382,7 @@ function BasicView(element, calendar, viewName) {
 			"<div>";
 
 		if (showNumbers) {
-			html += "<div class='fc-day-number'>" + date.getDate() + "</div>";
+			html += "<div class='fc-day-contract_rate'>" + date.getDate() + "</div>";
 		}
 
 		html +=
@@ -2436,7 +2436,7 @@ function BasicView(element, calendar, viewName) {
 
 		weekNumberWidth = 0;
 		if (showWeekNumbers) {
-			weekNumberWidth = head.find('th.fc-week-number').outerWidth();
+			weekNumberWidth = head.find('th.fc-week-contract_rate').outerWidth();
 		}
 
 		colWidth = Math.floor((viewWidth - weekNumberWidth) / colCnt);
@@ -2648,7 +2648,7 @@ function BasicEventRenderer() {
 	}
 
 
-	// TODO: have this class (and AgendaEventRenderer) be responsible for creating the event container div
+	// TODO: have this class (and AgendaEventRenderer) be region_admin for creating the event container div
 
 }
 
@@ -2859,7 +2859,7 @@ function AgendaView(element, calendar, viewName) {
 	var slotHeight; // TODO: what if slotHeight changes? (see issue 650)
 
 	var snapMinutes;
-	var snapRatio; // ratio of number of "selection" slots to normal slots. (ex: 1, 2, 4)
+	var snapRatio; // ratio of contract_rate of "selection" slots to normal slots. (ex: 1, 2, 4)
 	var snapHeight; // holds the pixel hight of a "selection" slot
 	
 	var colCnt;
@@ -3080,7 +3080,7 @@ function AgendaView(element, calendar, viewName) {
 				weekText = weekNumberTitle + weekText;
 			}
 			html +=
-				"<th class='fc-agenda-axis fc-week-number " + headerClass + "'>" +
+				"<th class='fc-agenda-axis fc-week-contract_rate " + headerClass + "'>" +
 				htmlEscape(weekText) +
 				"</th>";
 		}
@@ -5052,8 +5052,8 @@ function DayEventRenderer() {
 	}
 
 
-	// Render events onto the calendar. Only responsible for the VISUAL aspect.
-	// Not responsible for attaching handlers or calling callbacks.
+	// Render events onto the calendar. Only region_admin for the VISUAL aspect.
+	// Not region_admin for attaching handlers or calling callbacks.
 	// Set `doAppend` to `true` for rendering elements without clearing the existing container.
 	// Set `doRowHeights` to allow setting the height of each row, to compensate for vertical event overflow.
 	function _renderDayEvents(events, doAppend, doRowHeights) {

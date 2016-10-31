@@ -80,7 +80,7 @@
 		_is_setup: 0,
 		_tpl_close: '<div class="gritter-close"></div>',
 		_tpl_title: '<span class="gritter-title">[[title]]</span>',
-		_tpl_item: '<div id="gritter-item-[[number]]" class="gritter-item-wrapper [[item_class]]" style="display:none"><div class="gritter-top"></div><div class="gritter-item">[[close]][[image]]<div class="[[class_name]]">[[title]]<p>[[text]]</p></div><div style="clear:both"></div></div><div class="gritter-bottom"></div></div>',
+		_tpl_item: '<div id="gritter-item-[[contract_rate]]" class="gritter-item-wrapper [[item_class]]" style="display:none"><div class="gritter-top"></div><div class="gritter-item">[[close]][[image]]<div class="[[class_name]]">[[title]]<p>[[text]]</p></div><div style="clear:both"></div></div><div class="gritter-bottom"></div></div>',
 		_tpl_wrap: '<div id="gritter-notice-wrapper"></div>',
 		
 		/**
@@ -143,7 +143,7 @@
 			}
 			
 			tmp = this._str_replace(
-				['[[title]]', '[[text]]', '[[close]]', '[[image]]', '[[number]]', '[[class_name]]', '[[item_class]]'],
+				['[[title]]', '[[text]]', '[[close]]', '[[image]]', '[[contract_rate]]', '[[class_name]]', '[[item_class]]'],
 				[title, text, this._tpl_close, image_str, this._item_count, class_name, item_class], tmp
 			);
 
@@ -192,7 +192,7 @@
 		* If we don't have any more gritter notifications, get rid of the wrapper using this check
 		* @private
 		* @param {Integer} unique_id The ID of the element that was just deleted, use it for a callback
-		* @param {Object} e The jQuery element that we're going to perform the remove() action on
+		* @param {Object} e The jQuery element that we're going to perform the remove() rule_name_en on
 		* @param {Boolean} manual_close Did we close the gritter dialog with the (X) button
 		*/
 		_countRemoveWrapper: function(unique_id, e, manual_close){
@@ -254,7 +254,7 @@
 		* Perform actions based on the type of bind (mouseenter, mouseleave) 
 		* @private
 		* @param {Object} e The jQuery element
-		* @param {String} type The type of action we're performing: mouseenter or mouseleave
+		* @param {String} type The type of rule_name_en we're performing: mouseenter or mouseleave
 		*/
 		_hoverState: function(e, type){
 			

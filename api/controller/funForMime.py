@@ -16,8 +16,8 @@ def imitate_post(**kwargs):
     '''示例
     param = {
         'phone': '15623093771',
-        'action': 'follow_vendor',
-        'appId': '1',
+        'rule_name_en': 'follow_vendor',
+        'app_id': '1',
         'mdBeans': '1',
         'token': 'eyJpYXQiOjE0Nzc0NTQ0NjQsImV4cCI6MTQ3NzQ5NzU5OSwiYWxnIjoiSFMyNTYifQ.eyJuYW1lIjoiNTgwYzA1YWU0ZWFhNzY1M2Y3MGQ4MmEzIn0.iMlxBuNtjfGJ2LWvkKilPagFnQv7WwWHKwNVxgJ9Rj4'
     }
@@ -62,3 +62,5 @@ def tcodes(strs, isEncrypt=1, key='mime.org.cn'):
         re += chr(ord(chr(newstring[i])) ^ ord(newkey[j]))
 
     return dynKey + base64.b64encode(re).replace('=', '_') if isEncrypt == 1 else re[20:-20]
+    return returnData
+

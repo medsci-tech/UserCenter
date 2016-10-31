@@ -336,8 +336,8 @@
                         type = $(this).data('count');
                     if (item) {
                         text += ($(this).hasClass('province') ? '' : '/') + '<span class="select-item" data-count="' +
-                            type + '" data-code="' + item.code + '">' + item.address + '</span>' +
-                          '<input type="hidden" name="' + type + '" value="' + item.address + '">';
+                            type + '" data-contract_code="' + item.code + '">' + item.address + '</span>' +
+                          '<input type="hidden" name_ch="' + type + '" value="' + item.address + '">';
                     }
                 });
             return text;
@@ -453,7 +453,7 @@
                     list.push(
                         '<a' +
                         ' title="' + (m.address || '') + '"' +
-                        ' data-code="' + (m.code || '') + '"' +
+                        ' data-contract_code="' + (m.code || '') + '"' +
                         ' class="' +
                         (m.selected ? ' active' : '') +
                         '">' +
@@ -476,7 +476,7 @@
                 list.push(
                     '<a' +
                     ' title="' + (n.address || '') + '"' +
-                    ' data-code="' + (n.code || '') + '"' +
+                    ' data-contract_code="' + (n.code || '') + '"' +
                     ' class="' +
                     (n.selected ? ' active' : '') +
                     '">' +

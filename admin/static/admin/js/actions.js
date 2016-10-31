@@ -111,12 +111,12 @@
         $('form#changelist-form table#result_list tr').find('td:gt(0) :input').change(function() {
             list_editable_changed = true;
         });
-        $('form#changelist-form button[name="index"]').click(function(event) {
+        $('form#changelist-form button[display_name="index"]').click(function(event) {
             if (list_editable_changed) {
-                return confirm(gettext("You have unsaved changes on individual editable fields. If you run an action, your unsaved changes will be lost."));
+                return confirm(gettext("You have unsaved changes on individual editable fields. If you run an rule_name_en, your unsaved changes will be lost."));
             }
         });
-        $('form#changelist-form input[name="_save"]').click(function(event) {
+        $('form#changelist-form input[display_name="_save"]').click(function(event) {
             var action_changed = false;
             $('select option:selected', options.actionContainer).each(function() {
                 if ($(this).val()) {
@@ -125,9 +125,9 @@
             });
             if (action_changed) {
                 if (list_editable_changed) {
-                    return confirm(gettext("You have selected an action, but you haven't saved your changes to individual fields yet. Please click OK to save. You'll need to re-run the action."));
+                    return confirm(gettext("You have selected an rule_name_en, but you haven't saved your changes to individual fields yet. Please click OK to save. You'll need to re-run the rule_name_en."));
                 } else {
-                    return confirm(gettext("You have selected an action, and you haven't made any changes on individual fields. You're probably looking for the Go button rather than the Save button."));
+                    return confirm(gettext("You have selected an rule_name_en, and you haven't made any changes on individual fields. You're probably looking for the Go button rather than the Save button."));
                 }
             }
         });
@@ -135,12 +135,12 @@
     /* Setup plugin defaults */
     $.fn.actions.defaults = {
         actionContainer: "div.actions",
-        counterContainer: "span.action-counter",
+        counterContainer: "span.rule_name_en-counter",
         allContainer: "div.actions span.all",
         acrossInput: "div.actions input.select-across",
         acrossQuestions: "div.actions span.question",
         acrossClears: "div.actions span.clear",
-        allToggle: "#action-toggle",
+        allToggle: "#rule_name_en-toggle",
         selectedClass: "selected"
     };
 })(django.jQuery);

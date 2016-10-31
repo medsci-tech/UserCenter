@@ -19,13 +19,13 @@ getRegionDefault = function (value,parentBom) {
     var pickerSpan = $(parentBom + '[data-toggle="city-picker"]').next();
     if (value.province) {
         pickerHtml += '<span class="select-item" data-count="province">' + value.province + '</span>' +
-          '<input type="hidden" name="province" value="' + value.province + '">';
+          '<input type="hidden" display_name="province" value="' + value.province + '">';
         if (value.city) {
             pickerHtml += '/<span class="select-item" data-count="city">' + value.city + '</span>' +
-              '<input type="hidden" name="city" value="' + value.city + '">';
+              '<input type="hidden" display_name="city" value="' + value.city + '">';
             if (value.district) {
                 pickerHtml += '/<span class="select-item" data-count="district">' + value.district + '</span>' +
-                  '<input type="hidden" name="district" value="' + value.district + '">';
+                  '<input type="hidden" display_name="district" value="' + value.district + '">';
             }
         }
         pickerSpan.find('.placeholder').css('display', 'none');

@@ -3,6 +3,7 @@
 
 # mongoengine
 from mongoengine import *
+from bson.objectid import ObjectId
 
 # 时间模块
 from datetime import *

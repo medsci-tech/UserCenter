@@ -5,7 +5,7 @@
 '''
 from api.controller.common_import import *  # 公共引入文件
 from admin.model.User import User as Model
-from admin.model.App import App
+from admin.model.Application import Application
 from django.contrib.auth.hashers import check_password, make_password
 # configParam
 from UserCenter.global_templates import configParam
@@ -22,23 +22,23 @@ import re
 def get_token(request):
     post = request.POST
     if not post:
-        returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
+        returnData = {'contract_code': 403, 'msg': '无效请求!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
-    appId = int(post.get('appId',0))
+    appId = int(post.get('app_id',0))
     cfg_param = configParam(request)
     try:
         appId = cfg_param.get('c_api_appId')[appId]
-        res = App.objects.get(id=appId)
+        res = Application.objects.get(id=appId)
         if not res :
-            returnData = {'code': -1, 'msg': '该应用id不存在', 'data': None}
+            returnData = {'contract_code': -1, 'msg': '该应用id不存在', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
     except (ValueError, KeyError, TypeError):
-        return HttpResponse(json.dumps({'code': -1, 'msg': '该应用id不存在!', 'data': None}), content_type="application/json")
+        return HttpResponse(json.dumps({'contract_code': -1, 'msg': '该应用id不存在!', 'data': None}), content_type="application/json")
 
     token = QXToken(appId).generate_auth_token()
     res = QXToken(appId).verify_auth_token(token)
-    returnData = {'code': 200, 'msg': '成功', 'data': token}
+    returnData = {'contract_code': 200, 'msg': '成功', 'data': token}
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # ============================
@@ -48,11 +48,11 @@ def _getUser(param, data_param):
     try:
         model = Model.objects.get(**param)
     except Exception:
-        return {'code': 200, 'msg': '可以注册!!', 'data': None}
+        return {'contract_code': 200, 'msg': '可以注册!!', 'data': None}
     if model:
-        returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
+        returnData = {'contract_code': -1, 'msg': '用户已经存在!', 'data': None}
     else:
-        returnData = {'code': 200, 'msg': '可以注册!', 'data': None}
+        returnData = {'contract_code': 200, 'msg': '可以注册!', 'data': None}
     return returnData
 
 # ============================
@@ -62,7 +62,7 @@ def _getUser(param, data_param):
 def login(request):
     post = request.POST
     if not post:
-        returnData = {'code': 811, 'msg': '非法请求', 'data': None}
+        returnData = {'contract_code': 811, 'msg': '非法请求', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     # 微信
     unionid = post.get('unionid')
@@ -85,10 +85,10 @@ def login(request):
         data_param = 'password'
         check_value = password
     else:
-        returnData = {'code': 811, 'msg': '非法请求', 'data': None}
+        returnData = {'contract_code': 811, 'msg': '非法请求', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     result = _getUser(param, data_param)
-    if result.get('code') == 200:
+    if result.get('contract_code') == 200:
         if data_param == 'password':
             check_code = check_password(password, result.get('data')[data_param])
         else:
@@ -96,9 +96,9 @@ def login(request):
         if check_code:
             uc_uid = result.get('data')['uc_uid']
             token = QXToken(uc_uid).generate_auth_token()
-            returnData = {'code': 200, 'msg': '成功', 'data': {'uc_uid': uc_uid, 'token': token}}
+            returnData = {'contract_code': 200, 'msg': '成功', 'data': {'uc_uid': uc_uid, 'token': token}}
         else:
-            returnData = {'code': 910, 'msg': '失败', 'data': None}
+            returnData = {'contract_code': 910, 'msg': '失败', 'data': None}
     else:
         returnData = result
 
@@ -114,16 +114,16 @@ def _addUser(param):
     }
     data_param = 'phone'
     check_exist = _getUser(check_param, data_param)
-    if check_exist.get('code') == -1:
-        return {'code': 200, 'msg': '用户已存在', 'data': None}
+    if check_exist.get('contract_code') == -1:
+        return {'contract_code': 200, 'msg': '用户已存在', 'data': None}
     try:
         model = Model.objects.create(**param)
     except Exception:
-        return {'code': -1, 'msg': '数据验证错误!', 'data': param}
+        return {'contract_code': -1, 'msg': '数据验证错误!', 'data': param}
     if model:
-        returnData = {'code': 200, 'msg': '注册成功!', 'data':None}
+        returnData = {'contract_code': 200, 'msg': '注册成功!', 'data':None}
     else:
-        returnData = {'code': 800, 'msg': '注册失败', 'data': None}
+        returnData = {'contract_code': 800, 'msg': '注册失败', 'data': None}
     return returnData
 
 # ============================
@@ -139,7 +139,7 @@ def checkPassword(pwd):
 def register(request):
     post = request.POST
     if not post:
-        returnData = {'code': 403, 'msg': '无效请求!', 'data': None}
+        returnData = {'contract_code': 403, 'msg': '无效请求!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     longitude = post.get('longitude', None)  # 经度
     latitude = post.get('latitude', None)  # 纬度
@@ -149,8 +149,8 @@ def register(request):
     # post_url = 'http://' + HttpRequest.get_host(request) + '/api/credit/index'
     # post_param = {
     #     'phone': phone,
-    #     'action': 'register',
-    #     'appId': post.get('appId'),
+    #     'rule_name_en': 'register',
+    #     'app_id': post.get('app_id'),
     #     'mdBeans': post.get('mdBeans'),
     #     'token': post.get('token'),
     # }
@@ -158,7 +158,7 @@ def register(request):
     # return HttpResponse(json.dumps(post_url), content_type="application/json")
 
     if not(phone and password):
-        returnData = {'code': -1, 'msg': '用户或密码不能为空', 'data': None}
+        returnData = {'contract_code': -1, 'msg': '用户或密码不能为空', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     else:
         '''验证密码合法性'''
@@ -170,6 +170,7 @@ def register(request):
         # except:
         #     returnData = {'code': -3, 'msg': '参数解析失败!', 'data': None}
         #     return HttpResponse(json.dumps(returnData), content_type="application/json")
+
         if phone:
             phone.strip()
         if password:
@@ -177,10 +178,10 @@ def register(request):
 
         patten = re.findall(r'\d+', password)
         if password.isalpha() or password.isnumeric() or not patten:
-            returnData = {'code': -3, 'msg': '密码必须包含字母和数字!允许有特殊符号!', 'data': None}
+            returnData = {'contract_code': -3, 'msg': '密码必须包含字母和数字!允许有特殊符号!', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if len(password) > 30 or len(password) < 6:
-            returnData = {'code': -3, 'msg': '密码长度介于6-30个字符!', 'data': None}
+            returnData = {'contract_code': -3, 'msg': '密码长度介于6-30个字符!', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
 
         # 注册参数
@@ -193,46 +194,47 @@ def register(request):
     try:
         model = Model.objects.filter(phone=phone)
         if model:
-            returnData = {'code': -1, 'msg': '用户已经存在!', 'data': None}
+            returnData = {'contract_code': -1, 'msg': '用户已经存在!', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         else :
             result = Model.objects.create(**param) # 注册用户
     except (ValueError, KeyError, TypeError):
-        return {'code': -1, 'msg': '服务器异常!', 'data': None}
+        return {'contract_code': -1, 'msg': '服务器异常!', 'data': None}
 
     if result:
         # 积分
         post_url = 'http://' + HttpRequest.get_host(request) + '/api/credit/index'
         post_param = {
             'phone': phone,
-            'action': 'register',
-            'appId': post.get('appId'),
+            'rule_name_en': 'register',
+            'app_id': post.get('app_id'),
             'mdBeans': post.get('mdBeans',1),
             'token': post.get('token'),
         }
         returnData = imitate_post(url=post_url, param=post_param)
     else:
-        returnData = {'code': -1, 'msg': '注册失败!', 'data': None}
+        returnData = {'contract_code': -1, 'msg': '注册失败!', 'data': None}
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 @csrf_exempt
 def setPwd(request):
     post = request.POST
     if not post:
-        returnData = {'code': 403, 'msg': '非法请求', 'data': None}
+        returnData = {'contract_code': 403, 'msg': '非法请求', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     phone = post.get('phone')
     password = post.get('password')
     repassword = post.get('repassword')
     if phone == '':
-        returnData = {'code': -2, 'msg': '用户名不能为空!', 'data': None}
+        returnData = {'contract_code': -2, 'msg': '用户名不能为空!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
     if password == '':
-        returnData = {'code': -2, 'msg': '密码不能为空!', 'data': None}
+        returnData = {'contract_code': -2, 'msg': '密码不能为空!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
     '''验证密码合法性'''
+
     # if len(password)<80:
     #     returnData = {'code': -3, 'msg': '密码不能明文传输!', 'data': None}
     #     return HttpResponse(json.dumps(returnData), content_type="application/json")
@@ -251,13 +253,13 @@ def setPwd(request):
 
     patten = re.findall(r'\d+', password)
     if password.isalpha() or password.isnumeric() or not patten:
-        returnData = {'code': -3, 'msg': '密码必须包含字母和数字!允许有特殊符号!', 'data': None}
+        returnData = {'contract_code': -3, 'msg': '密码必须包含字母和数字!允许有特殊符号!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     if len(password)>30 or len(password)<6:
-        returnData = {'code': -3, 'msg': '密码长度介于6-30个字符!', 'data': None}
+        returnData = {'contract_code': -3, 'msg': '密码长度介于6-30个字符!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
     if password != repassword:
-        returnData = {'code': -3, 'msg': '两次输入的密码不一致!', 'data': None}
+        returnData = {'contract_code': -3, 'msg': '两次输入的密码不一致!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
     '''验证用户名是否存在'''
@@ -269,13 +271,13 @@ def setPwd(request):
                 'password': password
             }
             Model.objects.filter(phone=phone).update(**param)
-            returnData = {'code': 200, 'msg': '密码设置成功!', 'data': None}
+            returnData = {'contract_code': 200, 'msg': '密码设置成功!', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         else:
-            returnData = {'code': -4, 'msg': '该用户不存在!', 'data': None}
+            returnData = {'contract_code': -4, 'msg': '该用户不存在!', 'data': None}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
     except (ValueError, KeyError, TypeError):
-        returnData = {'code': 500, 'msg': '服务器操作异常!', 'data': None}
+        returnData = {'contract_code': 500, 'msg': '服务器操作异常!', 'data': None}
         return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 

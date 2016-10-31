@@ -2,10 +2,10 @@
 # 管理员管理
 __author__ = 'lxhui'
 from admin.controller.common_import import *  # 公共引入文件
-from admin.model.Contract import Contract as Model
+from admin.model.Project import Project as Model
 from admin.model.Company import Company
-from admin.model.App import App
-from admin.model.CreditRule import CreditRule
+from admin.model.Application import Application
+from admin.model.BeanRule import BeanRule
 import math
 
 @csrf_exempt
@@ -13,10 +13,10 @@ import math
 def index(request):
     post = request.POST
     param = {}
-    searchCompanyId = post.get('companyId')
-    searchAppId = post.get('appId')
-    searchName = post.get('name')
-    searchCode = post.get('code')
+    searchCompanyId = post.get('company_id')
+    searchAppId = post.get('app_id')
+    searchName = post.get('name_ch')
+    searchCode = post.get('contract_code')
     if searchCompanyId:
         param.update(companyId=searchCompanyId)
     if searchAppId:
@@ -33,7 +33,7 @@ def index(request):
     '''企业信息'''
     comList = Company.objects.filter(status=1).order_by("id")
     if searchCompanyId:
-        appList = App.objects.filter(status=1, companyId=searchCompanyId).order_by("id")
+        appList = Application.objects.filter(status=1, companyId=searchCompanyId).order_by("id")
     else:
         appList ={}
     return render(request, 'admin/contract/index.html',{
@@ -55,21 +55,21 @@ def index(request):
 def save(request):
     post = request.POST
     if request.method == 'POST':
-        amount = post.get('amount').strip()
-        number = post.get('number').strip()
+        amount = post.get('contract_amount').strip()
+        number = post.get('contract_rate').strip()
         totalBeans = math.ceil(float(amount) * float(number))
         param = {
             'id': post.get('id'),  # objectid
-            'companyId': post.get('companyId'),  # 企业id
-            'appId': post.get('appId'),  # 企业id
-            'name':post.get('name'),  # 合同名
-            'code': post.get('code'),  # 合同编号
-            'amount': amount,  # 合同金额
-            'number': number,  # 合同比例
-            'totalBeans': totalBeans,  # 总迈豆
-            'img': post.get('img'),  # 合同照片
-            'startTime': post.get('startTime'),  # 合同有效期
-            'endTime': post.get('endTime'),  # 合同截止日期
+            'company_id': post.get('company_id'),  # 企业id
+            'app_id': post.get('app_id'),  # 企业id
+            'name_ch':post.get('name_ch'),  # 合同名
+            'contract_code': post.get('contract_code'),  # 合同编号
+            'contract_amount': amount,  # 合同金额
+            'contract_rate': number,  # 合同比例
+            'total_beans': totalBeans,  # 总迈豆
+            'contract_img': post.get('contract_img'),  # 合同照片
+            'start_time': post.get('start_time'),  # 合同有效期
+            'end_time': post.get('end_time'),  # 合同截止日期
             'status': post.get('status')  # 状态
         }
         id = param.get('id',0)
@@ -83,16 +83,16 @@ def save(request):
             if(not id): # 添加操作
                 obj = Model.objects.create(**param)
                 logParam.update(tableId=obj.id)  # log记录参数
-                logParam.update(action=1)  # log记录参数,action=1为添加
+                logParam.update(action=1)  # log记录参数,rule_name_en=1为添加
             else: # 更新
                 Model.objects.filter(id=id).update(**param)
                 logParam.update(tableId=id)  # log记录参数
-                logParam.update(action=2)  # log记录参数,action=2为修改
+                logParam.update(action=2)  # log记录参数,rule_name_en=2为修改
 
             logsform(request, logParam)
-            return HttpResponse(json.dumps({'code': 200, 'msg': '操作成功!'}), content_type="application/json")
+            return HttpResponse(json.dumps({'contract_code': 200, 'msg': '操作成功!'}), content_type="application/json")
         except (ValueError, KeyError, TypeError):
-            return HttpResponse(json.dumps({'code': 0,'msg':'json格式错误!'}), content_type="application/json")
+            return HttpResponse(json.dumps({'contract_code': 0,'msg':'json格式错误!'}), content_type="application/json")
 
 
 '''
@@ -103,18 +103,18 @@ def recharge(request):
     post = request.POST
     if request.method == 'POST':
         id = post.get('id')
-        request_amount = post.get('amount').strip()
+        request_amount = post.get('contract_amount').strip()
         try:
             contractData = Model.objects.get(id=id)
         except:
-            return HttpResponse(json.dumps({'code': -1 ,'msg': '参数错误'}), content_type="application/json")
+            return HttpResponse(json.dumps({'contract_code': -1 ,'msg': '参数错误'}), content_type="application/json")
         if not contractData:
-            return HttpResponse(json.dumps({'code': -1 ,'msg': '参数错误'}), content_type="application/json")
-        save_amount = float(request_amount) + float(contractData['amount'])
-        totalBeans = math.ceil(save_amount * float(contractData['number']))
+            return HttpResponse(json.dumps({'contract_code': -1 ,'msg': '参数错误'}), content_type="application/json")
+        save_amount = float(request_amount) + float(contractData['contract_amount'])
+        totalBeans = math.ceil(save_amount * float(contractData['contract_rate']))
         param = {
-            'amount': save_amount,  # 合同金额
-            'totalBeans': totalBeans,  # 总迈豆
+            'contract_amount': save_amount,  # 合同金额
+            'total_beans': totalBeans,  # 总迈豆
         }
         # log记录参数
         logParam = {
@@ -125,12 +125,12 @@ def recharge(request):
         try:
             Model.objects.filter(id=id).update(**param)
             logParam.update(tableId=id)  # log记录参数
-            logParam.update(action=6)  # log记录参数,action=2为修改
+            logParam.update(action=6)  # log记录参数,rule_name_en=2为修改
 
             logsform(request, logParam)
-            return HttpResponse(json.dumps({'code': 200, 'msg': '操作成功!'}), content_type="application/json")
+            return HttpResponse(json.dumps({'contract_code': 200, 'msg': '操作成功!'}), content_type="application/json")
         except (ValueError, KeyError, TypeError):
-            return HttpResponse(json.dumps({'code': 0,'msg':'json格式错误!'}), content_type="application/json")
+            return HttpResponse(json.dumps({'contract_code': 0,'msg':'json格式错误!'}), content_type="application/json")
 
 
 '''
@@ -148,11 +148,11 @@ def updateStatus(request, **param):
         #model = Model.objects.filter(pk__in=selection).delete() # 删除
         model = Model.objects.filter(pk__in=selection).update(**param)
         if model:
-            returnData = {'code':'200', 'msg': '操作成功!'}
+            returnData = {'contract_code':'200', 'msg': '操作成功!'}
         else:
-            returnData = {'code': '0', 'msg': '操作失败!'}
+            returnData = {'contract_code': '0', 'msg': '操作失败!'}
     except Exception:
-            returnData = {'code': '-1', 'msg': '非法请求!'}
+            returnData = {'contract_code': '-1', 'msg': '非法请求!'}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
@@ -165,25 +165,25 @@ def delete(request):
         try:
             model = Model.objects.filter(id__in=selection).delete()
         except Exception:
-            returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
+            returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if model:
-            CreditRule.objects.filter(contractId__in=selection).delete()
+            BeanRule.objects.filter(contractId__in=selection).delete()
             # 操作成功添加log操作记录
             for id in selection:
                 # log记录参数
                 logParam = {
                     'table': 'company',
                     'after': {},
-                    'tableId': id,
+                    'table_id': id,
                 }
-                logParam.update(action=5)  # log记录参数,action=5为删除
+                logParam.update(action=5)  # log记录参数,rule_name_en=5为删除
                 logsform(request, logParam)
-            returnData = {'code': '200', 'msg': '操作成功', 'data': ''}
+            returnData = {'contract_code': '200', 'msg': '操作成功', 'data': ''}
         else:
-            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+            returnData = {'contract_code': '801', 'msg': '操作失败', 'data': ''}
     else:
-        returnData = {'code': '1000', 'msg': '不允许直接访问', 'data': None}
+        returnData = {'contract_code': '1000', 'msg': '不允许直接访问', 'data': None}
     return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 '''
@@ -193,9 +193,9 @@ def delete(request):
 def contractlist(request, **kwargs):
     if request.method == 'POST':
         req = request.POST
-        appId = req.get('appId')
+        appId = req.get('app_id')
     else:
-        appId = kwargs.get('appId')
+        appId = kwargs.get('app_id')
     returnFormat = kwargs.get('returnFormat')
     if appId:
         data = {}
@@ -207,11 +207,11 @@ def contractlist(request, **kwargs):
             for val in modelData:
                 data[str(val.id)] = val.name
         if data:
-            returnData = {'code': 200, 'msg': '操作成功', 'data': data}
+            returnData = {'contract_code': 200, 'msg': '操作成功', 'data': data}
         else:
-            returnData = {'code': 200, 'msg': '暂无数据', 'data': None}
+            returnData = {'contract_code': 200, 'msg': '暂无数据', 'data': None}
     else:
-        returnData = {'code': 200, 'msg': '参数缺失', 'data': None}
+        returnData = {'contract_code': 200, 'msg': '参数缺失', 'data': None}
 
     if returnFormat:
         return returnData.get('data')

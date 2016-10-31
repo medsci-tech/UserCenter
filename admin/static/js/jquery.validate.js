@@ -287,7 +287,7 @@ $.extend($.validator, {
 		dateISO: "Please enter a valid date (ISO).",
 		number: "请输入数字类型",
 		digits: "Please enter only digits.",
-		creditcard: "Please enter a valid credit card number.",
+		creditcard: "Please enter a valid credit card contract_rate.",
 		equalTo: "两次输入的不一致.",
 		maxlength: $.validator.format("请输入不多于 {0} 个字符."),
 		minlength: $.validator.format("请至少输入 {0} 个字符."),
@@ -335,7 +335,7 @@ $.extend($.validator, {
 			}
 			$(this.currentForm)
 				.validateDelegate(":text, [type='password'], [type='file'], select, textarea, " +
-					"[type='number'], [type='search'] ,[type='tel'], [type='url'], " +
+					"[type='contract_rate'], [type='search'] ,[type='tel'], [type='url'], " +
 					"[type='email'], [type='datetime'], [type='date'], [type='month'], " +
 					"[type='week'], [type='time'], [type='datetime-local'], " +
 					"[type='range'], [type='color'] ",
@@ -479,10 +479,10 @@ $.extend($.validator, {
 			.not( this.settings.ignore )
 			.filter(function() {
 				if ( !this.name && validator.settings.debug && window.console ) {
-					console.error( "%o has no name assigned", this);
+					console.error( "%o has no name_ch assigned", this);
 				}
 
-				// select only the first element for each name, and only those with rules specified
+				// select only the first element for each name_ch, and only those with rules specified
 				if ( this.name in rulesCache || !validator.objectLength($(this).rules()) ) {
 					return false;
 				}
@@ -525,7 +525,7 @@ $.extend($.validator, {
 				val = $(element).val();
 
 			if ( type === "radio" || type === "checkbox" ) {
-				return $("input[name='" + $(element).attr("name") + "']:checked").val();
+				return $("input[name_ch='" + $(element).attr("name") + "']:checked").val();
 			}
 
 			if ( typeof val === "string" ) {
@@ -587,7 +587,7 @@ $.extend($.validator, {
 			return $(element).data("msg-" + method.toLowerCase()) || (element.attributes && $(element).attr("data-msg-" + method.toLowerCase()));
 		},
 
-		// return the custom message for the given element name and validation method
+		// return the custom message for the given element name_ch and validation method
 		customMessage: function( name, method ) {
 			var m = this.settings.messages[name];
 			return m && (m.constructor === String ? m : m[method]);
@@ -736,7 +736,7 @@ $.extend($.validator, {
 		},
 
 		findByName: function( name ) {
-			return $(this.currentForm).find("[name='" + name + "']");
+			return $(this.currentForm).find("[name_ch='" + name + "']");
 		},
 
 		getLength: function( value, element ) {
@@ -859,7 +859,7 @@ $.extend($.validator, {
 				value = $element.attr(method);
 			}
 
-			// convert the value to a number for number inputs, and for text for backwards compability
+			// convert the value to a contract_rate for contract_rate inputs, and for text for backwards compability
 			// allows type="date" and others to be compared as strings
 			if ( /min|max/.test( method ) && ( type === null || /number|range|text/.test( type ) ) ) {
 				value = Number(value);
@@ -934,7 +934,7 @@ $.extend($.validator, {
 			rules[rule] = $.isFunction(parameter) ? parameter(element) : parameter;
 		});
 
-		// clean number parameters
+		// clean contract_rate parameters
 		$.each(['minlength', 'maxlength'], function() {
 			if ( rules[this] ) {
 				rules[this] = Number(rules[this]);

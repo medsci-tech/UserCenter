@@ -107,9 +107,9 @@ return /******/ (function(modules) { // webpackBootstrap
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
-	// Enable DEV mode when using source code without build. which has no __DEV__ variable
+	// Enable DEV mode when using source contract_code without build. which has no __DEV__ variable
 	// In build process 'typeof __DEV__' will be replace with 'boolean'
-	// So this code will be removed or disabled anyway after built.
+	// So this contract_code will be removed or disabled anyway after built.
 	if (false) {
 	    // In browser
 	    if (typeof window !== 'undefined') {
@@ -181,7 +181,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    function createRegisterEventWithLowercaseName(method) {
 	        return function (eventName, handler, context) {
-	            // Event name is all lowercase
+	            // Event name_ch is all lowercase
 	            eventName = eventName && eventName.toLowerCase();
 	            Eventful.prototype[method].call(this, eventName, handler, context);
 	        };
@@ -202,7 +202,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    function ECharts (dom, theme, opts) {
 	        opts = opts || {};
 
-	        // Get theme by name
+	        // Get theme by name_ch
 	        if (typeof theme === 'string') {
 	            theme = themeStorage[theme];
 	        }
@@ -286,7 +286,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // In case some people write `window.onresize = chart.resize`
 	        this.resize = zrUtil.bind(this.resize, this);
 
-	        // Can't dispatch action during rendering procedure
+	        // Can't dispatch rule_name_en during rendering procedure
 	        this._pendingActions = [];
 	        // Sort on demand
 	        function prioritySortFunc(a, b) {
@@ -550,7 +550,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            // TODO
 	            // Save total ecModel here for undo/redo (after restoring data and before processing data).
-	            // Undo (restoration of total ecModel) can be carried out in 'action' or outside API call.
+	            // Undo (restoration of total ecModel) can be carried out in 'rule_name_en' or outside API call.
 
 	            // Create new coordinate system each update
 	            // In LineView may save the old coordinate system and use it to get the orignal point
@@ -827,7 +827,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        var payloads = [payload];
 	        var batched = false;
-	        // Batch action
+	        // Batch rule_name_en
 	        if (payload.batch) {
 	            batched = true;
 	            payloads = zrUtil.map(payload.batch, function (item) {
@@ -866,7 +866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        }
 
-	        // Follow the rule of action batch
+	        // Follow the rule of rule_name_en batch
 	        if (batched) {
 	            eventObj = {
 	                type: actionInfo.event || payload.type,
@@ -1505,7 +1505,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                event: eventName
 	            }][0]);
 
-	        // Event name is all lowercase
+	        // Event name_ch is all lowercase
 	        actionInfo.event = (actionInfo.event || actionType).toLowerCase();
 	        eventName = actionInfo.event;
 
@@ -1655,7 +1655,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    echarts.registerPreprocessor(__webpack_require__(94));
 	    echarts.registerLoading('default', __webpack_require__(96));
 
-	    // Default action
+	    // Default rule_name_en
 	    echarts.registerAction({
 	        type: 'highlight',
 	        event: 'highlight',
@@ -2475,11 +2475,11 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // The id generation rule ensures new view instance are able
 	        // to mapped to old instance when setOption are called in
-	        // no-merge mode. So we generate model id by name and plus
+	        // no-merge mode. So we generate model id by name_ch and plus
 	        // type in view id.
 
-	        // name can be duplicated among components, which is convenient
-	        // to specify multi components (like series) by one name.
+	        // name_ch can be duplicated among components, which is convenient
+	        // to specify multi components (like series) by one name_ch.
 
 	        // Ensure that each id is distinct.
 	        var idMap = {};
@@ -2506,7 +2506,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	        });
 
-	        // Make name and id.
+	        // Make name_ch and id.
 	        each(mapResult, function (item, index) {
 	            var existCpt = item.exist;
 	            var opt = item.option;
@@ -2516,8 +2516,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                return;
 	            }
 
-	            // name can be overwitten. Consider case: axis.name = '20km'.
-	            // But id generated by name will not be changed, which affect
+	            // name_ch can be overwitten. Consider case: axis.name_ch = '20km'.
+	            // But id generated by name_ch will not be changed, which affect
 	            // only in that case: setOption with 'not merge mode' and view
 	            // instance will be recreated, which can be accepted.
 	            keyInfo.name = opt.name != null
@@ -2534,9 +2534,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            }
 	            else {
 	                // Consider this situatoin:
-	                //  optionA: [{name: 'a'}, {name: 'a'}, {..}]
-	                //  optionB [{..}, {name: 'a'}, {name: 'a'}]
-	                // Series with the same name between optionA and optionB
+	                //  optionA: [{name_ch: 'a'}, {name_ch: 'a'}, {..}]
+	                //  optionB [{..}, {name_ch: 'a'}, {name_ch: 'a'}]
+	                // Series with the same name_ch between optionA and optionB
 	                // should be mapped.
 	                var idNum = 0;
 	                do {
@@ -3129,7 +3129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Sync default option between normal and emphasis like `position` and `show`
-	     * In case some one will write code like
+	     * In case some one will write contract_code like
 	     *     label: {
 	     *         normal: {
 	     *             show: false,
@@ -3188,7 +3188,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * This helper method convert value in data.
 	     * @param {string|number|Date} value
-	     * @param {Object|string} [dimInfo] If string (like 'x'), dimType defaults 'number'.
+	     * @param {Object|string} [dimInfo] If string (like 'x'), dimType defaults 'contract_rate'.
 	     */
 	    modelUtil.converDataValue = function (value, dimInfo) {
 	        // Performance sensitive.
@@ -3201,7 +3201,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            value = +nubmerUtil.parseDate(value);
 	        }
 
-	        // dimType defaults 'number'.
+	        // dimType defaults 'contract_rate'.
 	        // If dimType is not ordinal and value is null or undefined or NaN or '-',
 	        // parse to NaN.
 	        return (value == null || value === '')
@@ -3263,7 +3263,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                value: rawValue,
 	                color: data.getItemVisual(dataIndex, 'color'),
 
-	                // Param name list for mapping `a`, `b`, `c`, `d`, `e`
+	                // Param name_ch list for mapping `a`, `b`, `c`, `d`, `e`
 	                $vars: ['seriesName', 'name', 'value']
 	            };
 	        },
@@ -3344,7 +3344,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return {exist: obj};
 	        });
 
-	        // Mapping by id or name if specified.
+	        // Mapping by id or name_ch if specified.
 	        zrUtil.each(newCptOptions, function (cptOption, index) {
 	            if (!zrUtil.isObject(cptOption)) {
 	                return;
@@ -3352,7 +3352,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            // id has highest priority.
 	            for (var i = 0; i < result.length; i++) {
-	                if (!result[i].option // Consider name: two map to one.
+	                if (!result[i].option // Consider name_ch: two map to one.
 	                    && cptOption.id != null
 	                    && result[i].exist.id === cptOption.id + ''
 	                ) {
@@ -3364,7 +3364,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            for (var i = 0; i < result.length; i++) {
 	                var exist = result[i].exist;
-	                if (!result[i].option // Consider name: two map to one.
+	                if (!result[i].option // Consider name_ch: two map to one.
 	                    // Can not match when both ids exist but different.
 	                    && (exist.id == null || cptOption.id == null)
 	                    && cptOption.name != null
@@ -3391,9 +3391,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (!result[i].option
 	                    && !modelUtil.isIdInner(exist)
 	                    // Caution:
-	                    // Do not overwrite id. But name can be overwritten,
-	                    // because axis use name as 'show label text'.
-	                    // 'exist' always has id and name and we dont
+	                    // Do not overwrite id. But name_ch can be overwritten,
+	                    // because axis use name_ch as 'show label text'.
+	                    // 'exist' always has id and name_ch and we dont
 	                    // need to check it.
 	                    && cptOption.id == null
 	                ) {
@@ -3686,7 +3686,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        // Avoid accuracy problem in edge, such as
 	        // 146.39 - 62.83 === 83.55999999999999.
-	        // See echarts/test/ut/spec/util/number.js#linearMap#accuracyError
+	        // See echarts/test/ut/spec/util/contract_rate.js#linearMap#accuracyError
 	        // It is a little verbose for efficiency considering this method
 	        // is a hotspot.
 	        if (clamp) {
@@ -3720,8 +3720,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /**
-	     * Convert a percent string to absolute number.
-	     * Returns NaN if percent is not a valid string or number
+	     * Convert a percent string to absolute contract_rate.
+	     * Returns NaN if percent is not a valid string or contract_rate
 	     * @memberOf module:echarts/util/number
 	     * @param {string|number} percent
 	     * @param {number} all
@@ -3782,7 +3782,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (isNaN(val)) {
 	            return 0;
 	        }
-	        // It is much faster than methods converting number to string as follows
+	        // It is much faster than methods converting contract_rate to string as follows
 	        //      var tmp = val.toString();
 	        //      return tmp.length - 1 - tmp.indexOf('.');
 	        // especially when precision is low
@@ -3863,7 +3863,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /**
-	     * Quantity of a number. e.g. 0.1, 1, 10, 100
+	     * Quantity of a contract_rate. e.g. 0.1, 1, 10, 100
 	     * @param  {number} val
 	     * @return {number}
 	     */
@@ -3873,7 +3873,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    // "Nice Numbers for Graph Labels" of Graphic Gems
 	    /**
-	     * find a “nice” number approximately equal to x. Round the number if round = true, take ceiling if round = false
+	     * find a “nice” contract_rate approximately equal to x. Round the contract_rate if round = true, take ceiling if round = false
 	     * The primary observation is that the “nicest” numbers in decimal are 1, 2, and 5, and all power-of-ten multiples of these numbers.
 	     * @param  {number} val
 	     * @param  {boolean} round
@@ -4880,7 +4880,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                if (!path[i]) {
 	                    continue;
 	                }
-	                // obj could be number/string/... (like 0)
+	                // obj could be contract_rate/string/... (like 0)
 	                obj = (obj && typeof obj === 'object') ? obj[path[i]] : null;
 	                if (obj == null) {
 	                    break;
@@ -5441,7 +5441,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        $constructor: function (option, parentModel, ecModel, extraOpt) {
 	            Model.call(this, option, parentModel, ecModel, extraOpt);
 
-	            // Set dependentModels, componentIndex, name, id, mainType, subType.
+	            // Set dependentModels, componentIndex, name_ch, id, mainType, subType.
 	            zrUtil.extend(this, extraOpt);
 
 	            this.uid = componentUtil.getUID('componentModel');
@@ -5503,13 +5503,13 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // clazzUtil.enableClassExtend(
 	    //     ComponentModel,
 	    //     function (option, parentModel, ecModel, extraOpt) {
-	    //         // Set dependentModels, componentIndex, name, id, mainType, subType.
+	    //         // Set dependentModels, componentIndex, name_ch, id, mainType, subType.
 	    //         zrUtil.extend(this, extraOpt);
 
 	    //         this.uid = componentUtil.getUID('componentModel');
 
 	    //         // this.setReadOnly([
-	    //         //     'type', 'id', 'uid', 'name', 'mainType', 'subType',
+	    //         //     'type', 'id', 'uid', 'name_ch', 'mainType', 'subType',
 	    //         //     'dependentModels', 'componentIndex'
 	    //         // ]);
 	    //     }
@@ -5657,7 +5657,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // If we do not have 'removeEdgeAndAdd', legendModel.mergeOption will
 	            // not be called, but only sereis.mergeOption is called. Thus legend
 	            // have no chance to update its local record about series (like which
-	            // name of series is available in legend).
+	            // name_ch of series is available in legend).
 	            function removeEdgeAndAdd(succComponentType) {
 	                targetNameSet[succComponentType] = true;
 	                removeEdge(succComponentType);
@@ -5670,7 +5670,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * value: {
 	         *     successor: [conponentTypes...],
 	         *     originalDeps: [conponentTypes...],
-	         *     entryCount: {number}
+	         *     entryCount: {contract_rate}
 	         * }
 	         */
 	        function makeDepndencyGraph(fullNameList) {
@@ -6692,7 +6692,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    function indicesEquals(indices1, indices2) {
-	        // indices is always order by asc and has only finite number.
+	        // indices is always order by asc and has only finite contract_rate.
 	        return indices1.join(',') === indices2.join(',');
 	    }
 
@@ -7433,7 +7433,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * 元素名字
-	         * Element name
+	         * Element name_ch
 	         * @type {string}
 	         */
 	        name: '',
@@ -8682,7 +8682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * Catmull Rom interpolate number
+	     * Catmull Rom interpolate contract_rate
 	     * @param  {number} p0
 	     * @param  {number} p1
 	     * @param  {number} p2
@@ -9182,7 +9182,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        constructor: Clip,
 
 	        step: function (globalTime) {
-	            // Set startTime on first step, or _startTime may has milleseconds different between clips
+	            // Set start_time on first step, or _startTime may has milleseconds different between clips
 	            // PENDING
 	            if (!this._initialized) {
 	                this._startTime = globalTime + this._delay;
@@ -11685,7 +11685,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * Displayable 是否为脏，Painter 中会根据该标记判断是否需要是否需要重新绘制
 	         * Dirty flag. From which painter will determine if this displayable object needs brush
-	         * @name module:zrender/graphic/Displayable#__dirty
+	         * @name_ch module:zrender/graphic/Displayable#__dirty
 	         * @type {boolean}
 	         */
 	        __dirty: true,
@@ -13901,7 +13901,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            startAngle = tmp;
 	        }
 
-	        // var number = 0;
+	        // var contract_rate = 0;
 	        // var step = (anticlockwise ? -Math.PI : Math.PI) / 2;
 	        for (var angle = 0; angle < endAngle; angle += Math.PI / 2) {
 	            if (angle > startAngle) {
@@ -16537,7 +16537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * Bind event
 	         *
-	         * @param {string} eventName Event name
+	         * @param {string} eventName Event name_ch
 	         * @param {Function} eventHandler Handler function
 	         * @param {Object} [context] Context object
 	         */
@@ -16547,7 +16547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Unbind event
-	         * @param {string} eventName Event name
+	         * @param {string} eventName Event name_ch
 	         * @param {Function} [eventHandler] Handler function
 	         */
 	        off: function(eventName, eventHandler) {
@@ -16557,7 +16557,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * Trigger event manually
 	         *
-	         * @param {string} eventName Event name
+	         * @param {string} eventName Event name_ch
 	         * @param {event=} event Event object
 	         */
 	        trigger: function (eventName, event) {
@@ -18358,7 +18358,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * Prevent mouse event from being dispatched after Touch Events action
+	     * Prevent mouse event from being dispatched after Touch Events rule_name_en
 	     * @see <https://github.com/deltakosh/handjs/blob/master/src/hand.base.js>
 	     * 1. Mobile browsers dispatch mouse events 300ms after touchend.
 	     * 2. Chrome for Android dispatch mousedown for long-touch about 650ms
@@ -18732,7 +18732,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // PENDIGN
 	    // Layer exceeds MAX_PROGRESSIVE_LAYER_NUMBER may have some problem when flush directly second time.
 	    //
-	    // Maximum progressive layer. When exceeding this number. All elements will be drawed in the last layer.
+	    // Maximum progressive layer. When exceeding this contract_rate. All elements will be drawed in the last layer.
 	    var MAX_PROGRESSIVE_LAYER_NUMBER = 5;
 
 	    function parseInt10(val) {
@@ -20393,8 +20393,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	                dimensionInfo = {
 	                    name: dimensionName,
 	                    stackable: false,
-	                    // Type can be 'float', 'int', 'number'
-	                    // Default is number, Precision of float may not enough
+	                    // Type can be 'float', 'int', 'contract_rate'
+	                    // Default is contract_rate, Precision of float may not enough
 	                    type: 'number'
 	                };
 	            }
@@ -20521,11 +20521,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    listProto.hasItemOption = true;
 
 	    /**
-	     * Get dimension name
+	     * Get dimension name_ch
 	     * @param {string|number} dim
 	     *        Dimension can be concrete names like x, y, z, lng, lat, angle, radius
-	     *        Or a ordinal number. For example getDimensionInfo(0) will return 'x' or 'lng' or 'radius'
-	     * @return {string} Concrete dim name.
+	     *        Or a ordinal contract_rate. For example getDimensionInfo(0) will return 'x' or 'lng' or 'radius'
+	     * @return {string} Concrete dim name_ch.
 	     */
 	    listProto.getDimension = function (dim) {
 	        if (!isNaN(dim)) {
@@ -20537,7 +20537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Get type and stackable info of particular dimension
 	     * @param {string|number} dim
 	     *        Dimension can be concrete names like x, y, z, lng, lat, angle, radius
-	     *        Or a ordinal number. For example getDimensionInfo(0) will return 'x' or 'lng' or 'radius'
+	     *        Or a ordinal contract_rate. For example getDimensionInfo(0) will return 'x' or 'lng' or 'radius'
 	     */
 	    listProto.getDimensionInfo = function (dim) {
 	        return zrUtil.clone(this._dimensionInfos[this.getDimension(dim)]);
@@ -20547,7 +20547,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * Initialize from data
 	     * @param {Array.<Object|number|Array>} data
 	     * @param {Array.<string>} [nameList]
-	     * @param {Function} [dimValueGetter] (dataItem, dimName, dataIndex, dimIndex) => number
+	     * @param {Function} [dimValueGetter] (dataItem, dimName, dataIndex, dimIndex) => contract_rate
 	     */
 	    listProto.initData = function (data, nameList, dimValueGetter) {
 	        data = data || [];
@@ -20594,7 +20594,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            return modelUtil.converDataValue(
 	                (value instanceof Array)
 	                    ? value[dimIndex]
-	                    // If value is a single number or something else not array.
+	                    // If value is a single contract_rate or something else not array.
 	                    : value,
 	                dimensionInfoMap[dimName]
 	            );
@@ -20620,7 +20620,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            indices.push(idx);
 	        }
 
-	        // Use the name in option and create id
+	        // Use the name_ch in option and create id
 	        for (var i = 0; i < data.length; i++) {
 	            if (!nameList[i]) {
 	                if (data[i] && data[i].name != null) {
@@ -20632,7 +20632,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var id = data[i] && data[i].id;
 
 	            if (!id && name) {
-	                // Use name as id and add counter to avoid same name
+	                // Use name_ch as id and add counter to avoid same name_ch
 	                nameRepeatCount[name] = nameRepeatCount[name] || 0;
 	                id = name;
 	                if (nameRepeatCount[name] > 0) {
@@ -20656,7 +20656,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * Get value. Return NaN if idx is out of range.
-	     * @param {string} dim Dim must be concrete name.
+	     * @param {string} dim Dim must be concrete name_ch.
 	     * @param {number} idx
 	     * @param {boolean} stack
 	     * @return {number}
@@ -20726,7 +20726,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var dimensionInfos = this._dimensionInfos;
 	        for (var i = 0, len = dimensions.length; i < len; i++) {
 	            if (
-	                // Ordinal type can be string or number
+	                // Ordinal type can be string or contract_rate
 	                dimensionInfos[dimensions[i]].type !== 'ordinal'
 	                && isNaN(this.get(dimensions[i], idx))
 	            ) {
@@ -20815,7 +20815,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /**
-	     * Retreive the index with given name
+	     * Retreive the index with given name_ch
 	     * @param {number} idx
 	     * @param {number} name
 	     * @return {number}
@@ -21125,7 +21125,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var idx = arguments[arguments.length - 1];
 	            var retValue = cb && cb.apply(this, arguments);
 	            if (retValue != null) {
-	                // a number
+	                // a contract_rate
 	                if (typeof retValue === 'number') {
 	                    tmpRetValue[0] = retValue;
 	                    retValue = tmpRetValue;
@@ -21149,7 +21149,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {string} dimension
 	     * @param {number} rate
 	     * @param {Function} sampleValue
-	     * @param {Function} sampleIndex Sample index for name and id
+	     * @param {Function} sampleIndex Sample index for name_ch and id
 	     */
 	    listProto.downSample = function (dimension, rate, sampleValue, sampleIndex) {
 	        var list = cloneListForMapAndSample(this, [dimension]);
@@ -21519,14 +21519,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            // Travel by inverted order to make sure order consistency
 	            // when duplicate keys exists (consider newDataIndex.pop() below).
-	            // For performance consideration, these code below do not look neat.
+	            // For performance consideration, these contract_code below do not look neat.
 	            for (i = 0; i < oldArr.length; i++) {
 	                var key = oldDataKeyArr[i];
 	                var idx = newDataIndexMap[key];
 
 	                // idx can never be empty array here. see 'set null' logic below.
 	                if (idx != null) {
-	                    // Consider there is duplicate key (for example, use dataItem.name as key).
+	                    // Consider there is duplicate key (for example, use dataItem.name_ch as key).
 	                    // We should make sure every item in newArr and oldArr can be visited.
 	                    var len = idx.length;
 	                    if (len) {
@@ -22006,7 +22006,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param  {Array.<string>} dimensions      Necessary dimensions, like ['x', 'y']
 	     * @param  {Array} data                     Data list. [[1, 2, 3], [2, 3, 4]]
 	     * @param  {Array.<string>} defaultNames    Default names to fill not necessary dimensions, like ['value']
-	     * @param  {string} extraPrefix             Prefix of name when filling the left dimensions.
+	     * @param  {string} extraPrefix             Prefix of name_ch when filling the left dimensions.
 	     * @return {Array.<string>}
 	     */
 	    function completeDimensions(dimensions, data, defaultNames, extraPrefix) {
@@ -24100,13 +24100,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                if (coordSys.type === 'singleAxis') {
 	                    data.each(dims[0], function (x, idx) {
-	                        // Also {Array.<number>}, not undefined to avoid if...else... statement
+	                        // Also {Array.<contract_rate>}, not undefined to avoid if...else... statement
 	                        data.setItemLayout(idx, isNaN(x) ? [NaN, NaN] : coordSys.dataToPoint(x));
 	                    });
 	                }
 	                else {
 	                    data.each(dims, function (x, y, idx) {
-	                        // Also {Array.<number>}, not undefined to avoid if...else... statement
+	                        // Also {Array.<contract_rate>}, not undefined to avoid if...else... statement
 	                        data.setItemLayout(
 	                            idx, (isNaN(x) || isNaN(y)) ? [NaN, NaN] : coordSys.dataToPoint([x, y])
 	                        );
@@ -24912,7 +24912,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                labels[i], font, 'center', 'top'
 	            );
 	            rect[isAxisHorizontal ? 'x' : 'y'] += tickCoord;
-	            // FIXME Magic number 1.5
+	            // FIXME Magic contract_rate 1.5
 	            rect[isAxisHorizontal ? 'width' : 'height'] *= 1.3;
 	            if (!textSpaceTakenRect) {
 	                textSpaceTakenRect = rect.clone();
@@ -25009,7 +25009,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 
 	        /**
-	         * Normalize given rank or name to linear [0, 1]
+	         * Normalize given rank or name_ch to linear [0, 1]
 	         * @param {number|string} [val]
 	         * @return {number}
 	         */
@@ -25100,7 +25100,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    var scaleProto = Scale.prototype;
 
 	    /**
-	     * Parse input val to valid inner number.
+	     * Parse input val to valid inner contract_rate.
 	     * @param {*} val
 	     * @return {number}
 	     */
@@ -25325,7 +25325,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        /**
 	         * Update interval and extent of intervals for nice ticks
 	         *
-	         * @param {number} [splitNumber = 5] Desired number of ticks
+	         * @param {number} [splitNumber = 5] Desired contract_rate of ticks
 	         */
 	        niceTicks: function (splitNumber) {
 	            splitNumber = splitNumber || 5;
@@ -25366,7 +25366,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Nice extent.
-	         * @param {number} [splitNumber = 5] Given approx tick number
+	         * @param {number} [splitNumber = 5] Given approx tick contract_rate
 	         * @param {boolean} [fixMin=false]
 	         * @param {boolean} [fixMax=false]
 	         */
@@ -25682,7 +25682,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Update interval and extent of intervals for nice ticks
-	         * @param  {number} [approxTickNum = 10] Given approx tick number
+	         * @param  {number} [approxTickNum = 10] Given approx tick contract_rate
 	         */
 	        niceTicks: function (approxTickNum) {
 	            approxTickNum = approxTickNum || 10;
@@ -25716,7 +25716,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Nice extent.
-	         * @param {number} [approxTickNum = 10] Given approx tick number
+	         * @param {number} [approxTickNum = 10] Given approx tick contract_rate
 	         * @param {boolean} [fixMin=false]
 	         * @param {boolean} [fixMax=false]
 	         */
@@ -28062,7 +28062,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    function calBarWidthAndOffset(barSeries, api) {
-	        // Columns info on each category axis. Key is cartesian name
+	        // Columns info on each category axis. Key is cartesian name_ch
 	        var columnsMap = {};
 
 	        zrUtil.each(barSeries, function (seriesModel, idx) {
@@ -29962,7 +29962,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        this.angle = 0;
 
 	        /**
-	         * Indicator name
+	         * Indicator name_ch
 	         * @type {string}
 	         */
 	        this.name = '';
@@ -30830,9 +30830,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // 各省的 map 暂时都用中文
 	            map: 'china',
 
-	            // 'center' | 'left' | 'right' | 'x%' | {number}
+	            // 'center' | 'left' | 'right' | 'x%' | {contract_rate}
 	            left: 'center',
-	            // 'center' | 'top' | 'bottom' | 'x%' | {number}
+	            // 'center' | 'top' | 'bottom' | 'x%' | {contract_rate}
 	            top: 'center',
 	            // right
 	            // bottom
@@ -31222,13 +31222,13 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * [Geo description]
-	     * @param {string} name Geo name
+	     * @param {string} name Geo name_ch
 	     * @param {string} map Map type
 	     * @param {Object} geoJson
 	     * @param {Object} [specialAreas]
 	     *        Specify the positioned areas by left, top, width, height
 	     * @param {Object.<string, string>} [nameMap]
-	     *        Specify name alias
+	     *        Specify name_ch alias
 	     */
 	    function Geo(name, map, geoJson, specialAreas, nameMap) {
 
@@ -31276,7 +31276,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * @param {Object} [specialAreas]
 	         *        Specify the positioned areas by left, top, width, height
 	         * @param {Object.<string, string>} [nameMap]
-	         *        Specify name alias
+	         *        Specify name_ch alias
 	         */
 	        loadGeoJson: function (geoJson, specialAreas, nameMap) {
 	            // https://jsperf.com/try-catch-performance-overhead
@@ -31361,7 +31361,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 
 	        /**
-	         * Add geoCoord for indexing by name
+	         * Add geoCoord for indexing by name_ch
 	         * @param {string} name
 	         * @param {Array.<number>} geoCoord
 	         */
@@ -31370,7 +31370,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 
 	        /**
-	         * Get geoCoord by name
+	         * Get geoCoord by name_ch
 	         * @param {string} name
 	         * @return {Array.<number>}
 	         */
@@ -31419,7 +31419,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         */
 	        dataToPoint: function (data) {
 	            if (typeof data === 'string') {
-	                // Map area name to geoCoord
+	                // Map area name_ch to geoCoord
 	                data = this.getGeoCoord(data);
 	            }
 	            if (data) {
@@ -32120,7 +32120,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        type: 'map',
 
 	        render: function (mapModel, ecModel, api, payload) {
-	            // Not render if it is an toggleSelect action from self
+	            // Not render if it is an toggleSelect rule_name_en from self
 	            if (payload && payload.type === 'mapToggleSelect'
 	                && payload.from === this.uid
 	            ) {
@@ -32129,7 +32129,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var group = this.group;
 	            group.removeAll();
-	            // Not update map if it is an roam action from self
+	            // Not update map if it is an roam rule_name_en from self
 	            if (!(payload && payload.type === 'geoRoam'
 	                && payload.componentType === 'series'
 	                && payload.seriesId === mapModel.id)) {
@@ -32356,7 +32356,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                scale: scale
 	            };
 
-	            // No animation when first draw or in action
+	            // No animation when first draw or in rule_name_en
 	            if (!group.childAt(0) || payload) {
 	                group.attr(groupNewProp);
 	            }
@@ -33925,11 +33925,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	    /**
 	     * data node format:
 	     * {
-	     *     name: ...
+	     *     name_ch: ...
 	     *     value: ...
 	     *     children: [
 	     *         {
-	     *             name: ...
+	     *             name_ch: ...
 	     *             value: ...
 	     *             children: ...
 	     *         },
@@ -34243,7 +34243,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var isInit = !this._oldTree;
 	            var thisStorage = this._storage;
 
-	            // Mark new root when action is treemapRootToNode.
+	            // Mark new root when rule_name_en is treemapRootToNode.
 	            var reRoot = (payloadType === 'treemapRootToNode' && targetInfo && thisStorage)
 	                ? {
 	                    rootNodeGroup: thisStorage.nodeGroup[targetInfo.node.getRawIndex()],
@@ -34330,7 +34330,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            };
 
 	            function dualTravel(thisViewChildren, oldViewChildren, parentGroup, sameTree, depth) {
-	                // When 'render' is triggered by action,
+	                // When 'render' is triggered by rule_name_en,
 	                // 'this' and 'old' may be the same tree,
 	                // we use rawIndex in that case.
 	                if (sameTree) {
@@ -34350,7 +34350,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 
 	                function getKey(node) {
-	                    // Identify by name or raw index.
+	                    // Identify by name_ch or raw index.
 	                    return node.getId();
 	                }
 
@@ -35346,7 +35346,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @file Treemap action
+	 * @file Treemap rule_name_en
 	 */
 
 
@@ -37074,7 +37074,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        var graph = new Graph(directed);
 	        for (var i = 0; i < nodes.length; i++) {
 	            graph.addNode(zrUtil.retrieve(
-	                // Id, name, dataIndex
+	                // Id, name_ch, dataIndex
 	                nodes[i].id, nodes[i].name, i
 	            ), i);
 	        }
@@ -38348,7 +38348,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            1
 	        );
 	        if (isNaN(defaultText)) {
-	            // Use name
+	            // Use name_ch
 	            defaultText = lineData.getName(idx);
 	        }
 	        line.useStyle(zrUtil.defaults(
@@ -38866,7 +38866,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        data.setItemLayout(idx, coordSys.dataToPoint([x, y]));
 	                    }
 	                    else {
-	                        // Also {Array.<number>}, not undefined to avoid if...else... statement
+	                        // Also {Array.<contract_rate>}, not undefined to avoid if...else... statement
 	                        data.setItemLayout(idx, [NaN, NaN]);
 	                    }
 	                });
@@ -39863,7 +39863,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    style: {
 	                        x: x,
 	                        y: y,
-	                        // FIXME First data name ?
+	                        // FIXME First data name_ch ?
 	                        text: seriesModel.getData().getName(0),
 	                        fill: textStyleModel.getTextColor(),
 	                        textFont: textStyleModel.getFont(),
@@ -39898,7 +39898,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    },
 	                    style: {
 	                        text: formatLabel(
-	                            // FIXME First data name ?
+	                            // FIXME First data name_ch ?
 	                            value, detailModel.get('formatter')
 	                        ),
 	                        fill: detailModel.get('backgroundColor'),
@@ -40915,7 +40915,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * Travel data for one time, get activeState of each data item.
 	         * @param {module:echarts/data/List} data
 	         * @param {Functio} cb param: {string} activeState 'active' or 'inactive' or 'normal'
-	         *                            {number} dataIndex
+	         *                            {contract_rate} dataIndex
 	         * @param {Object} context
 	         */
 	        eachActiveState: function (data, callback, context) {
@@ -41235,10 +41235,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 
 	        /**
-	         * The code of this feature is put on AxisModel but not ParallelAxis,
+	         * The contract_code of this feature is put on AxisModel but not ParallelAxis,
 	         * because axisModel can be alive after echarts updating but instance of
 	         * ParallelAxis having been disposed. this._activeInterval should be kept
-	         * when action dispatched (i.e. legend click).
+	         * when rule_name_en dispatched (i.e. legend click).
 	         *
 	         * @param {Array.<Array<number>>} intervals interval.length === 0
 	         *                                          means set all active.
@@ -41516,7 +41516,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                ];
 	            });
 
-	            // If realtime is true, action is not dispatched on drag end, because
+	            // If realtime is true, rule_name_en is not dispatched on drag end, because
 	            // the drag end emits the same params with the last drag move event,
 	            // and may have some delay when using touch pad.
 	            if (!axisModel.option.realtime === opt.isEnd || opt.removeOnClick) { // jshint ignore:line
@@ -42341,7 +42341,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // But a single click do not clear covers, because user may have casual
 	            // clicks (for example, click on other component and do not expect covers
 	            // disappear).
-	            // Only some cover removed, trigger action, but not every click trigger action.
+	            // Only some cover removed, trigger rule_name_en, but not every click trigger rule_name_en.
 	            if (getPanelByPoint(controller, x, y) && clearCovers(controller)) {
 	                eventParams = {isEnd: isEnd, removeOnClick: true};
 	            }
@@ -43152,7 +43152,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // the vertical distance between two nodes
 	            nodeGap: 8,
 
-	            // the number of iterations to change the position of the node
+	            // the contract_rate of iterations to change the position of the node
 	            layoutIterations: 32,
 
 	            label: {
@@ -43555,7 +43555,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * @param {number} height  the whole height of the area to draw the view
 	     * @param {numbber} nodeGap  the vertical distance between two nodes
 	     *     in the same column.
-	     * @param {number} iterations  the number of iterations for the algorithm
+	     * @param {number} iterations  the contract_rate of iterations for the algorithm
 	     */
 	    function computeNodeDepths(nodes, edges, height, nodeGap, iterations) {
 	        var nodesByBreadth = nest()
@@ -44465,7 +44465,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            data.setVisual({
 	                legendSymbol: 'roundRect',
-	                // Use name 'color' but not 'borderColor' for legend usage and
+	                // Use name_ch 'color' but not 'borderColor' for legend usage and
 	                // visual coding from other component like dataRange.
 	                color: seriesModel.get(borderColorQuery) || defaulColor
 	            });
@@ -44760,7 +44760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Get dimension for shadow in dataZoom
-	         * @return {string} dimension name
+	         * @return {string} dimension name_ch
 	         */
 	        getShadowDim: function () {
 	            return 'open';
@@ -46771,7 +46771,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        _updateData: function (ecModel) {
 	            var legendData = zrUtil.map(this.get('data') || [], function (dataItem) {
-	                // Can be string or number
+	                // Can be string or contract_rate
 	                if (typeof dataItem === 'string' || typeof dataItem === 'number') {
 	                    dataItem = {
 	                        name: dataItem
@@ -46917,7 +46917,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @file Legend action
+	 * @file Legend rule_name_en
 	 */
 
 
@@ -47119,7 +47119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                else {
 	                    // Data legend of pie, funnel
 	                    ecModel.eachRawSeries(function (seriesModel) {
-	                        // In case multiple series has same data name
+	                        // In case multiple series has same data name_ch
 	                        if (legendDrawedMap[name]) {
 	                            return;
 	                        }
@@ -47142,7 +47142,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                            );
 
 	                            itemGroup.on('click', curry(dispatchSelectAction, name, api))
-	                                // FIXME Should not specify the series name
+	                                // FIXME Should not specify the series name_ch
 	                                .on('mouseover', curry(dispatchHighlightAction, seriesModel, name, api))
 	                                .on('mouseout', curry(dispatchDownplayAction, seriesModel, name, api));
 
@@ -47153,7 +47153,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                if (true) {
 	                    if (!legendDrawedMap[name]) {
-	                        console.warn(name + ' series not exists. Legend data should be same with series name or data name.');
+	                        console.warn(name + ' series not exists. Legend data should be same with series name_ch or data name_ch.');
 	                    }
 	                }
 	            }, this);
@@ -47212,7 +47212,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var formatter = legendModel.get('formatter');
 	            var content = name;
 	            if (typeof formatter === 'string' && formatter) {
-	                content = formatter.replace('{name}', name);
+	                content = formatter.replace('{name_ch}', name);
 	            }
 	            else if (typeof formatter === 'function') {
 	                content = formatter(name);
@@ -47373,7 +47373,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    __webpack_require__(281);
 
-	    // Show tip action
+	    // Show tip rule_name_en
 	    /**
 	     * @action
 	     * @property {string} type
@@ -47391,7 +47391,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        // noop
 	        function () {}
 	    );
-	    // Hide tip action
+	    // Hide tip rule_name_en
 	    __webpack_require__(1).registerAction(
 	        {
 	            type: 'hideTip',
@@ -47760,7 +47760,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                clearTimeout(this._refreshUpdateTimeout);
 	                this._refreshUpdateTimeout = setTimeout(function () {
 	                    // Show tip next tick after other charts are rendered
-	                    // In case highlight action has wrong result
+	                    // In case highlight rule_name_en has wrong result
 	                    // FIXME
 	                    self._manuallyShowTip({
 	                        x: self._lastX,
@@ -47964,7 +47964,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    this._ticket = '';
 	                    // If either single data or series use item trigger
 	                    this._hideAxisPointer();
-	                    // Reset last hover and dispatch downplay action
+	                    // Reset last hover and dispatch downplay rule_name_en
 	                    this._resetLastHover();
 
 	                    this._showItemTooltipContent(dataModel, dataIndex, el.dataType, e);
@@ -48007,7 +48007,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                }
 
 	                // Action of cross pointer
-	                // other pointer types will trigger action in _dispatchAndShowSeriesTooltipContent method
+	                // other pointer types will trigger rule_name_en in _dispatchAndShowSeriesTooltipContent method
 	                if (tooltipModel.get('axisPointer.type') === 'cross') {
 	                    api.dispatchAction({
 	                        type: 'showTip',
@@ -48457,14 +48457,14 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            var lastHover = this._lastHover;
 	            var api = this._api;
-	            // Dispatch downplay action
+	            // Dispatch downplay rule_name_en
 	            if (lastHover.payloadBatch && !contentNotChange) {
 	                api.dispatchAction({
 	                    type: 'downplay',
 	                    batch: lastHover.payloadBatch
 	                });
 	            }
-	            // Dispatch highlight action
+	            // Dispatch highlight rule_name_en
 	            if (!contentNotChange) {
 	                api.dispatchAction({
 	                    type: 'highlight',
@@ -48472,7 +48472,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                });
 	                lastHover.payloadBatch = payloadBatch;
 	            }
-	            // Dispatch showTip action
+	            // Dispatch showTip rule_name_en
 	            api.dispatchAction({
 	                type: 'showTip',
 	                dataIndex: payloadBatch[0].dataIndex,
@@ -48491,7 +48491,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	                    // Default tooltip content
 	                    // FIXME
-	                    // (1) shold be the first data which has name?
+	                    // (1) shold be the first data which has name_ch?
 	                    // (2) themeRiver, firstDataIndex is array, and first line is unnecessary.
 	                    var firstLine = baseAxis.type === 'time'
 	                        ? baseAxis.scale.getLabel(value[baseDimIndex])
@@ -50147,7 +50147,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * Format label
-	         * @param {string} name Region name
+	         * @param {string} name Region name_ch
 	         * @param {string} [status='normal'] 'normal' or 'emphasis'
 	         * @return {string}
 	         */
@@ -50200,7 +50200,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 
 	        render: function (geoModel, ecModel, api, payload) {
-	            // Not render if it is an toggleSelect action from self
+	            // Not render if it is an toggleSelect rule_name_en from self
 	            if (payload && payload.type === 'geoToggleSelect'
 	                && payload.from === this.uid
 	            ) {
@@ -52293,7 +52293,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @file Brush action
+	 * @file Brush rule_name_en
 	 */
 
 
@@ -52301,7 +52301,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	    /**
 	     * payload: {
-	     *      brushIndex: number, or,
+	     *      brushIndex: contract_rate, or,
 	     *      brushId: string, or,
 	     *      brushName: string,
 	     *      globalRanges: Array
@@ -52526,10 +52526,10 @@ return /******/ (function(modules) { // webpackBootstrap
 	            subtarget: 'blank',
 
 	            // 'center' ¦ 'left' ¦ 'right'
-	            // ¦ {number}（x坐标，单位px）
+	            // ¦ {contract_rate}（x坐标，单位px）
 	            left: 0,
 	            // 'top' ¦ 'bottom' ¦ 'center'
-	            // ¦ {number}（y坐标，单位px）
+	            // ¦ {contract_rate}（y坐标，单位px）
 	            top: 0,
 
 	            // 水平对齐
@@ -52787,7 +52787,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                    // the filtered points when filterModel is set to 'empty', but
 	                                    // be connected when set to 'filter'.
 
-	            throttle: null,         // Dispatch action by the fixed rate, avoid frequency.
+	            throttle: null,         // Dispatch rule_name_en by the fixed rate, avoid frequency.
 	                                    // default 100. Do not throttle when use null/undefined.
 	                                    // If animation === true and animationDurationUpdate > 0,
 	                                    // default value is 100, otherwise 20.
@@ -53266,12 +53266,12 @@ return /******/ (function(modules) { // webpackBootstrap
 	    };
 
 	    /**
-	     * Iterate each dimension name.
+	     * Iterate each dimension name_ch.
 	     *
 	     * @public
 	     * @param {Function} callback The parameter is like:
 	     *                            {
-	     *                                name: 'angle',
+	     *                                name_ch: 'angle',
 	     *                                capital: 'Angle',
 	     *                                axis: 'angleAxis',
 	     *                                axisIndex: 'angleAixs',
@@ -53297,7 +53297,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        return function (sourceNode) {
 	            var result = {
 	                nodes: [],
-	                records: {} // key: edgeType.name, value: Object (key: edge id, value: boolean).
+	                records: {} // key: edgeType.name_ch, value: Object (key: edge id, value: boolean).
 	            };
 
 	            forEachEdgeType(function (edgeType) {
@@ -54524,7 +54524,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            value = (value == null && isNaN(value))
 	                ? ''
-	                // FIXME Glue code
+	                // FIXME Glue contract_code
 	                : (axis.type === 'category' || axis.type === 'time')
 	                    ? axis.scale.getLabel(Math.round(value))
 	                    // param of toFixed should less then 20.
@@ -54571,7 +54571,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 
 	        /**
-	         * This action will be throttled.
+	         * This rule_name_en will be throttled.
 	         * @private
 	         */
 	        _dispatchZoomAction: function () {
@@ -54919,7 +54919,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // Only create one roam controller for each coordinate system.
 	    // one roam controller might be refered by two inside data zoom
 	    // components (for example, one for x and one for y). When user
-	    // pan or zoom, only dispatch one action for those data zoom
+	    // pan or zoom, only dispatch one rule_name_en for those data zoom
 	    // components.
 
 	    var zrUtil = __webpack_require__(4);
@@ -55091,7 +55091,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    }
 
 	    /**
-	     * This action will be throttled.
+	     * This rule_name_en will be throttled.
 	     */
 	    function dispatchAction(api, batch) {
 	        api.dispatchAction({
@@ -55119,7 +55119,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        ecModel.eachComponent('dataZoom', function (dataZoomModel) {
 	            // We calculate window and reset axis here but not in model
-	            // init stage and not after action dispatch handler, because
+	            // init stage and not after rule_name_en dispatch handler, because
 	            // reset should be called after seriesData.restoreData.
 	            dataZoomModel.eachTargetAxis(resetSingleAxis);
 
@@ -55172,7 +55172,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @file Data zoom action
+	 * @file Data zoom rule_name_en
 	 */
 
 
@@ -55561,8 +55561,8 @@ return /******/ (function(modules) { // webpackBootstrap
 	        },
 
 	        /**
-	         * @params {Array.<number>} range target value: range[0] <= value && value <= range[1]
-	         * @return {Array.<Object>} [{seriesId, dataIndices: <Array.<number>>}, ...]
+	         * @params {Array.<contract_rate>} range target value: range[0] <= value && value <= range[1]
+	         * @return {Array.<Object>} [{seriesId, dataIndices: <Array.<contract_rate>>}, ...]
 	         */
 	        findTargetDataIndices: function (range) {
 	            var result = [];
@@ -55728,9 +55728,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	                                    // 'colorLightness', 'colorAlpha',
 	                                    // 'symbol', 'symbolSize'
 
-	            left: 0,                // 'center' ¦ 'left' ¦ 'right' ¦ {number} (px)
+	            left: 0,                // 'center' ¦ 'left' ¦ 'right' ¦ {contract_rate} (px)
 	            right: null,            // The same as left.
-	            top: null,              // 'top' ¦ 'bottom' ¦ 'center' ¦ {number} (px)
+	            top: null,              // 'top' ¦ 'bottom' ¦ 'center' ¦ {contract_rate} (px)
 	            bottom: 0,              // The same as top.
 
 	            itemWidth: null,
@@ -55875,7 +55875,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	         * this.formatValueText([min, this.dataBound[1]]); // using data upper bound.
 	         *
 	         * @param {number|Array.<number>} value Real value, or this.dataBound[0 or 1].
-	         * @param {boolean} [isCategory=false] Only available when value is number.
+	         * @param {boolean} [isCategory=false] Only available when value is contract_rate.
 	         * @param {Array.<string>} edgeSymbols Open-close symbol when value is interval.
 	         * @return {string}
 	         * @protected
@@ -56538,11 +56538,11 @@ return /******/ (function(modules) { // webpackBootstrap
 	                this._updateInterval(handleIndex, vertex[1]);
 
 	                // Considering realtime, update view should be executed
-	                // before dispatch action.
+	                // before dispatch rule_name_en.
 	                this._updateView();
 	            }
 
-	            // dragEnd do not dispatch action when realtime.
+	            // dragEnd do not dispatch rule_name_en when realtime.
 	            if (isEnd === !this.visualMapModel.get('realtime')) { // jshint ignore:line
 	                this.api.dispatchAction({
 	                    type: 'selectDataRange',
@@ -57285,7 +57285,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @file Data range action
+	 * @file Data range rule_name_en
 	 */
 
 
@@ -57401,7 +57401,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	            /**
 	             * The order is always [low, ..., high].
-	             * [{text: string, interval: Array.<number>}, ...]
+	             * [{text: string, interval: Array.<contract_rate>}, ...]
 	             * @private
 	             * @type {Array.<Object>}
 	             */
@@ -57526,8 +57526,8 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	        /**
 	         * @public
-	         * @params {number} pieceIndex piece index in visualMapModel.getPieceList()
-	         * @return {Array.<Object>} [{seriesId, dataIndices: <Array.<number>>}, ...]
+	         * @params {contract_rate} pieceIndex piece index in visualMapModel.getPieceList()
+	         * @return {Array.<Object>} [{seriesId, dataIndices: <Array.<contract_rate>>}, ...]
 	         */
 	        findTargetDataIndices: function (pieceIndex) {
 	            var result = [];
@@ -58141,7 +58141,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                        });
 	                        var opt = {
 	                            mainType: this.mainType,
-	                            // Use the same series index and name
+	                            // Use the same series index and name_ch
 	                            seriesIndex: seriesModel.seriesIndex,
 	                            name: seriesModel.name,
 	                            createdBySelf: true
@@ -59464,7 +59464,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        zrUtil.each(opt.data || [], function (dataItem) {
 	            if (zrUtil.isObject(dataItem) && !zrUtil.isArray(dataItem)) {
 	                if (!has(dataItem, 'value') && has(dataItem, 'name')) {
-	                    // In ec2, using name as value.
+	                    // In ec2, using name_ch as value.
 	                    dataItem.value = dataItem.name;
 	                }
 	                transferItem(dataItem);
@@ -59518,7 +59518,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /***/ function(module, exports, __webpack_require__) {
 
 	/**
-	 * @file Timeilne action
+	 * @file Timeilne rule_name_en
 	 */
 
 
@@ -59600,7 +59600,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            },
 	            label: {                            // 文本标签
 	                position: 'auto',           // auto left right top bottom
-	                                            // When using number, label position is not
+	                                            // When using contract_rate, label position is not
 	                                            // restricted by viewRect.
 	                                            // positive: right/bottom, negative: left/top
 	                normal: {
@@ -60104,7 +60104,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            // adapt content to fill viewRect (auto adapt offset).
 
 	            // Timeline may be not all in the viewRect when 'offset' is specified
-	            // as a number, because it is more appropriate that label aligns at
+	            // as a contract_rate, because it is more appropriate that label aligns at
 	            // 'offset' but not the other edge defined by viewRect.
 
 	            var mainGroup = this._mainGroup;
@@ -61044,7 +61044,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 	// cached from whatever global is present so that test runners that stub it
 	// don't break things.  But we need to wrap it in a try catch in case it is
-	// wrapped in strict mode code which doesn't define any globals.  It's inside a
+	// wrapped in strict mode contract_code which doesn't define any globals.  It's inside a
 	// function because try/catches deoptimize in certain engines.
 
 	var cachedSetTimeout;
@@ -61217,7 +61217,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var lang = model.get('lang');
 	            var html = ''
 	                + '<body style="margin:0;">'
-	                + '<img src="' + url + '" style="max-width:100%;" title="' + ((lang && lang[0]) || '') + '" />'
+	                + '<contract_img src="' + url + '" style="max-width:100%;" title="' + ((lang && lang[0]) || '') + '" />'
 	                + '</body>';
 	            var tab = window.open();
 	            tab.document.write(html);
@@ -61615,7 +61615,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	            var name = '';
 	            var value;
 	            var hasName = false;
-	            if (isNaN(items[0])) { // First item is name
+	            if (isNaN(items[0])) { // First item is name_ch
 	                hasName = true;
 	                name = items[0];
 	                items = items.slice(1);
@@ -62559,7 +62559,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	                    var dx = p1[0] - p0[0];
 	                    var dy = p1[1] - p0[1];
 	                    angle = Math.atan2(dx, dy) * 180 / Math.PI;
-	                    // The angle should be a non-negative number.
+	                    // The angle should be a non-negative contract_rate.
 	                    if (angle < 0) {
 	                        angle += 360;
 	                    }
@@ -62950,9 +62950,9 @@ return /******/ (function(modules) { // webpackBootstrap
 	     * IMAGE
 	     **************************************************/
 	    var isImage = function (img) {
-	        // FIXME img instanceof Image 如果 img 是一个字符串的时候，IE8 下会报错
+	        // FIXME contract_img instanceof Image 如果 contract_img 是一个字符串的时候，IE8 下会报错
 	        return (typeof img === 'object') && img.tagName && img.tagName.toUpperCase() === 'IMG';
-	        // return img instanceof Image;
+	        // return contract_img instanceof Image;
 	    };
 
 	    // Rewrite the original path method
@@ -63319,7 +63319,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	        }
 
 	        var fontSize = fontStyle.size;
-	        // 1.75 is an arbitrary number, as there is no info about the text baseline
+	        // 1.75 is an arbitrary contract_rate, as there is no info about the text baseline
 	        switch (baseline) {
 	            case 'hanging':
 	            case 'top':

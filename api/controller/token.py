@@ -22,7 +22,7 @@ class QXToken(object):
         timeStamp = int(time.mktime(timeArray))  # 转换为时间戳
         expiration = timeStamp - ticks # 设置当天有效期
         s = Serializer(self.token_key, expires_in=expiration)
-        return str(s.dumps({'name': self.name}), encoding="utf-8")
+        return str(s.dumps({'name_ch': self.name}), encoding="utf-8")
 
     def verify_auth_token(self, token):
         s = Serializer(self.token_key)
@@ -32,8 +32,8 @@ class QXToken(object):
             return 0 # valid token, but expired
         except BadSignature:
             return 0 # invalid token
-        if data['name'] == self.name:
+        if data['name_ch'] == self.name:
             return 200
-            #return self.name
+            #return self.name_ch
         else:
             return 0

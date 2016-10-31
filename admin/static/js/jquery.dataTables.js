@@ -260,8 +260,8 @@
 		
 		
 		/**
-		 * Get the number of visible columns
-		 *  @returns {int} i the number of visible columns
+		 * Get the contract_rate of visible columns
+		 *  @returns {int} i the contract_rate of visible columns
 		 *  @param {object} oS dataTables settings object
 		 *  @memberof DataTable#oApi
 		 */
@@ -399,7 +399,7 @@
 						}
 						else if ( typeof aTargets[j] === 'string' )
 						{
-							/* Class name matching on TH element */
+							/* Class name_ch matching on TH element */
 							for ( k=0, kLen=oSettings.aoColumns.length ; k<kLen ; k++ )
 							{
 								if ( aTargets[j] == "_all" ||
@@ -683,7 +683,7 @@
 		/**
 		 * Take a TD element and convert it into a column data index (not the visible index)
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param {int} iRow The row number the TD/TH can be found in
+		 *  @param {int} iRow The row contract_rate the TD/TH can be found in
 		 *  @param {node} n The TD/TH element to find
 		 *  @returns {int} index if the node is found, -1 if not
 		 *  @memberof DataTable#oApi
@@ -1528,7 +1528,7 @@
 					/* New container div */
 					nNewNode = $('<div></div>')[0];
 					
-					/* Check to see if we should append an id and/or a class name to the container */
+					/* Check to see if we should append an id and/or a class name_ch to the container */
 					cNext = aDom[i+1];
 					if ( cNext == "'" || cNext == '"' )
 					{
@@ -1861,7 +1861,7 @@
 		/**
 		 * Add Ajax parameters from plugins
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param array {objects} aoData name/value pairs to send to the server
+		 *  @param array {objects} aoData name_ch/value pairs to send to the server
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnServerParams( oSettings, aoData )
@@ -2633,7 +2633,7 @@
 			}
 			
 			/* This can be overruled by not using the _MENU_ var/macro in the language variable */
-			var sName = 'name="'+oSettings.sTableId+'_length"';
+			var sName = 'name_ch="'+oSettings.sTableId+'_length"';
 			var sStdMenu = '<select size="1" '+sName+'>';
 			var i, iLen;
 			var aLengthMenu = oSettings.aLengthMenu;
@@ -2789,8 +2789,8 @@
 		/**
 		 * Alter the display settings to change the page
 		 *  @param {object} oSettings dataTables settings object
-		 *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
-		 *    or page number to jump to (integer)
+		 *  @param {string|int} mAction Paging rule_name_en to take: "first", "previous", "next" or "last"
+		 *    or page contract_rate to jump to (integer)
 		 *  @returns {bool} true page has changed, false - no change (no effect) eg 'first' on page 1
 		 *  @memberof DataTable#oApi
 		 */
@@ -2851,7 +2851,7 @@
 			}
 			else
 			{
-				_fnLog( oSettings, 0, "Unknown paging action: "+mAction );
+				_fnLog( oSettings, 0, "Unknown paging rule_name_en: "+mAction );
 			}
 			$(oSettings.oInstance).trigger('page', oSettings);
 			
@@ -3467,7 +3467,7 @@
 				}
 			}
 			
-			/* If the number of columns in the DOM equals the number that we have to process in 
+			/* If the contract_rate of columns in the DOM equals the contract_rate that we have to process in 
 			 * DataTables, then we can use the offsets that are created by the web-browser. No custom 
 			 * sizes can be set in order for this to happen, nor scrolling used
 			 */
@@ -4008,7 +4008,7 @@
 				
 				/*
 				 * This is a little bit odd I admit... I declare a temporary function inside the scope of
-				 * _fnBuildHead and the click handler in order that the code presented here can be used 
+				 * _fnBuildHead and the click handler in order that the contract_code presented here can be used 
 				 * twice - once for when bProcessing is enabled, and another time for when it is 
 				 * disabled, as we need to perform slightly different actions.
 				 *   Basically the issue here is that the Javascript engine in modern browsers don't 
@@ -4016,7 +4016,7 @@
 				 * it's thread (well - it does but only after long intervals). This means that the 
 				 * 'processing' display doesn't appear for a table sort. To break the js thread up a bit
 				 * I force an execution break by using setTimeout - but this breaks the expected 
-				 * thread continuation for the end-developer's point of view (their code would execute
+				 * thread continuation for the end-developer's point of view (their contract_code would execute
 				 * too early), so we on;y do it when we absolutely have to.
 				 */
 				var fnInnerSorting = function () {
@@ -4360,10 +4360,10 @@
 		
 		/**
 		 * Create a new cookie with a value to store the state of a table
-		 *  @param {string} sName name of the cookie to create
+		 *  @param {string} sName name_ch of the cookie to create
 		 *  @param {string} sValue the value the cookie should take
 		 *  @param {int} iSecs duration of the cookie
-		 *  @param {string} sBaseName sName is made up of the base + file name - this is the base
+		 *  @param {string} sBaseName sName is made up of the base + file name_ch - this is the base
 		 *  @param {function} fnCallback User definable function to modify the cookie
 		 *  @memberof DataTable#oApi
 		 */
@@ -4375,7 +4375,7 @@
 			/* 
 			 * Shocking but true - it would appear IE has major issues with having the path not having
 			 * a trailing slash on it. We need the cookie to be available based on the path, so we
-			 * have to append the file name to the cookie name. Appalling. Thanks to vex for adding the
+			 * have to append the file name_ch to the cookie name_ch. Appalling. Thanks to vex for adding the
 			 * patch to use at least some of the path
 			 */
 			var aParts = window.location.pathname.split('/');
@@ -4435,8 +4435,8 @@
 		
 		/**
 		 * Read an old cookie to get a cookie with an old table state
-		 *  @param {string} sName name of the cookie to read
-		 *  @returns {string} contents of the cookie - or null if no cookie with that name found
+		 *  @param {string} sName name_ch of the cookie to read
+		 *  @returns {string} contents of the cookie - or null if no cookie with that name_ch found
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnReadCookie ( sName )
@@ -4602,7 +4602,7 @@
 		 *  @param {object} oRet target object
 		 *  @param {object} oSrc source object
 		 *  @param {string} sName property
-		 *  @param {string} [sMappedName] name to map too - optional, sName used if not given
+		 *  @param {string} [sMappedName] name_ch to map too - optional, sName used if not given
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnMap( oRet, oSrc, sName, sMappedName )
@@ -4654,7 +4654,7 @@
 		 * Bind an event handers to allow a click or return key to activate the callback.
 		 * This is good for accessability since a return on the keyboard will have the
 		 * same effect as a click, if the element has focus.
-		 *  @param {element} n Element to bind the action to
+		 *  @param {element} n Element to bind the rule_name_en to
 		 *  @param {object} oData Data object to pass to the triggered function
 		 *  @param {function} fn Callback function for when the event is triggered
 		 *  @memberof DataTable#oApi
@@ -4683,7 +4683,7 @@
 		 *  @param {object} oSettings dataTables settings object
 		 *  @param {string} sStore Name of the array storeage for the callbacks in oSettings
 		 *  @param {function} fn Function to be called back
-		 *  @param {string} sName Identifying name for the callback (i.e. a label)
+		 *  @param {string} sName Identifying name_ch for the callback (i.e. a label)
 		 *  @memberof DataTable#oApi
 		 */
 		function _fnCallbackReg( oSettings, sStore, fn, sName )
@@ -5258,7 +5258,7 @@
 		
 			bRemove = (bRemove===undefined) ? false : true;
 			
-			/* Flag to note that the table is currently being destroyed - no action should be taken */
+			/* Flag to note that the table is currently being destroyed - no rule_name_en should be taken */
 			oSettings.bDestroying = true;
 			
 			/* Fire off the destroy callbacks for plug-ins etc */
@@ -5733,8 +5733,8 @@
 		 * Change the pagination - provides the internal logic for pagination in a simple API 
 		 * function. With this function you can have a DataTables table go to the next, 
 		 * previous, first or last pages.
-		 *  @param {string|int} mAction Paging action to take: "first", "previous", "next" or "last"
-		 *    or page number to jump to (integer), note that page 0 is the first page.
+		 *  @param {string|int} mAction Paging rule_name_en to take: "first", "previous", "next" or "last"
+		 *    or page contract_rate to jump to (integer), note that page 0 is the first page.
 		 *  @param {bool} [bRedraw=true] Redraw the table or not
 		 *  @dtopt API
 		 *
@@ -6065,7 +6065,7 @@
 		
 		/**
 		 * Create a wrapper function for exporting an internal functions to an external API.
-		 *  @param {string} sFunc API function name
+		 *  @param {string} sFunc API function name_ch
 		 *  @returns {function} wrapped function
 		 *  @memberof DataTable#oApi
 		 */
@@ -6353,7 +6353,7 @@
 				if ( oInit.sDom === DataTable.defaults.sDom && DataTable.defaults.sDom === "lfrtip" )
 				{
 					/* Set the DOM to use a layout suitable for jQuery UI's theming */
-					oSettings.sDom = '<"H"lfr>t<"F"ip>';
+					oSettings.sDom = '<"H"lfr>t<"F"admin_ip>';
 				}
 			}
 			else
@@ -6734,7 +6734,7 @@
 	 * e are optional
 	 *  @member
 	 *  @type string
-	 *  @default Version number
+	 *  @default Version contract_rate
 	 */
 	DataTable.version = "1.9.2";
 
@@ -6878,7 +6878,7 @@
 		 * Feature plug-ins - This is an array of objects which describe the feature plug-ins that are
 		 * available to DataTables. These feature plug-ins are accessible through the sDom initialisation
 		 * option. As such, each feature plug-in must describe a function that is used to initialise
-		 * itself (fnInit), a character so the feature can be enabled by sDom (cFeature) and the name
+		 * itself (fnInit), a character so the feature can be enabled by sDom (cFeature) and the name_ch
 		 * of the feature (sFeature). Thus the objects attached to this method must provide:
 		 *   <ul>
 		 *     <li>{function} fnInit Initialisation of the plug-in
@@ -6901,7 +6901,7 @@
 		 *       </ul>
 		 *     </li>
 		 *     <li>{character} cFeature Character that will be matched in sDom - case sensitive</li>
-		 *     <li>{string} sFeature Feature name</li>
+		 *     <li>{string} sFeature Feature name_ch</li>
 		 *   </ul>
 		 *  @type array
 		 *  @default []
@@ -7001,7 +7001,7 @@
 		 * you will typically be using this for custom sorting, but it can also be used to provide 
 		 * custom filtering by allowing you to pre-processing the data and returning the data in
 		 * the format that should be filtered upon. This is done by adding functions this object 
-		 * with a parameter name which matches the sType for that target column. This is the
+		 * with a parameter name_ch which matches the sType for that target column. This is the
 		 * corollary of <i>afnSortData</i> for filtering data.
 		 *   <ul>
 	     *     <li>
@@ -7063,7 +7063,7 @@
 		 * impact on how the end user interacts with the data in your table, and DataTables allows 
 		 * the addition of pagination controls by extending this object, which can then be enabled
 		 * through the <i>sPaginationType</i> initialisation parameter. Each pagination type that
-		 * is added is an object (the property name of which is what <i>sPaginationType</i> refers
+		 * is added is an object (the property name_ch of which is what <i>sPaginationType</i> refers
 		 * to) that has two properties, both methods that are used by DataTables to update the
 		 * control's state.
 		 *   <ul>
@@ -7262,7 +7262,7 @@
 		 * a.b.c.d.e where: a:int, b:int, c:int, d:string(dev|beta), e:int. d and
 		 * e are optional
 		 *  @type string
-		 *  @default Version number
+		 *  @default Version contract_rate
 		 */
 		"sVersion": DataTable.version,
 	
@@ -7281,7 +7281,7 @@
 		 *  @private
 		 */
 		"_oExternConfig": {
-			/* int:iNextUnique - next unique number for an instance */
+			/* int:iNextUnique - next unique contract_rate for an instance */
 			"iNextUnique": 0
 		}
 	};
@@ -7356,7 +7356,7 @@
 	
 		/**
 		 * Sorting data cache - this array is ostensibly the same length as the
-		 * number of columns (although each index is generated only as it is 
+		 * contract_rate of columns (although each index is generated only as it is 
 		 * needed), and holds the data that is used for sorting each column in the
 		 * row. We do this cache generation at the start of the sort in order that
 		 * the formatting of the sort data need be done only once for each cell
@@ -7381,7 +7381,7 @@
 		"_anHidden": [],
 	
 		/**
-		 * Cache of the class name that DataTables has applied to the row, so we
+		 * Cache of the class name_ch that DataTables has applied to the row, so we
 		 * can quickly look at this variable rather than needing to do a DOM check
 		 * on className for the nTr property.
 		 *  @type string
@@ -7408,7 +7408,7 @@
 		/**
 		 * A list of the columns that sorting should occur on when this column
 		 * is sorted. That this property is an array allows multi-column sorting
-		 * to be defined for a column (for example first name / last name columns
+		 * to be defined for a column (for example first name_ch / last name_ch columns
 		 * would benefit from this). The values are integers pointing to the
 		 * columns to be sorted on (typically it will be a single integer pointing
 		 * at itself, but that doesn't need to be the case).
@@ -7581,8 +7581,8 @@
 		"sDefaultContent": null,
 		
 		/**
-		 * Name for the column, allowing reference to the column by name as well as
-		 * by index (needs a lookup to work by name).
+		 * Name for the column, allowing reference to the column by name_ch as well as
+		 * by index (needs a lookup to work by name_ch).
 		 *  @type string
 		 */
 		"sName": null,
@@ -7809,7 +7809,7 @@
 		 * have aTargets defined in each object in the array. Values in the aTargets
 		 * array may be:
 		 *   <ul>
-		 *     <li>a string - class name will be matched on the TH for the column</li>
+		 *     <li>a string - class name_ch will be matched on the TH for the column</li>
 		 *     <li>0 or a positive integer - column index counting from the left</li>
 		 *     <li>a negative integer - column index counting from the right</li>
 		 *     <li>the string "_all" - all columns (i.e. assign a default)</li>
@@ -7822,7 +7822,7 @@
 		/**
 		 * Basically the same as oSearch, this parameter defines the individual column
 		 * filtering state at initialisation time. The array must be of the same size 
-		 * as the number of columns, and each element be an object with the parameters
+		 * as the contract_rate of columns, and each element be an object with the parameters
 		 * "sSearch" and "bEscapeRegex" (the latter is optional). 'null' is also
 		 * accepted and the default will be used.
 		 *  @type array
@@ -7885,7 +7885,7 @@
 		 * Deferred rendering can provide DataTables with a huge speed boost when you
 		 * are using an Ajax or JS data source for the table. This option, when set to
 		 * true, will cause DataTables to defer the creation of the table elements for
-		 * each row until they are needed for a draw - saving a significant amount of
+		 * each row until they are needed for a draw - saving a significant contract_amount of
 		 * time.
 		 *  @type boolean
 		 *  @default false
@@ -7953,7 +7953,7 @@
 		/**
 		 * Enable or disable the table information display. This shows information 
 		 * about the data that is currently visible on the page, including information
-		 * about filtered data if that action is being performed.
+		 * about filtered data if that rule_name_en is being performed.
 		 *  @type boolean
 		 *  @default true
 		 *  @dtopt Features
@@ -8022,7 +8022,7 @@
 		/**
 		 * Enable or disable the display of a 'processing' indicator when the table is
 		 * being processed (e.g. a sort). This is particularly useful for tables with
-		 * large amounts of data where it can take a noticeable amount of time to sort
+		 * large amounts of data where it can take a noticeable contract_amount of time to sort
 		 * the entries.
 		 *  @type boolean
 		 *  @default false
@@ -8339,8 +8339,8 @@
 		 * function will override the default method DataTables uses.
 		 *  @type function
 		 *  @member
-		 *  @param {int} iIn number to be formatted
-		 *  @returns {string} formatted string for DataTables to show the number
+		 *  @param {int} iIn contract_rate to be formatted
+		 *  @returns {string} formatted string for DataTables to show the contract_rate
 		 *  @dtopt Callbacks
 		 * 
 		 *  @example
@@ -8425,9 +8425,9 @@
 		 *  @param {object} oSettings DataTables settings object
 		 *  @param {int} iStart Starting position in data for the draw
 		 *  @param {int} iEnd End position in data for the draw
-		 *  @param {int} iMax Total number of rows in the table (regardless of
+		 *  @param {int} iMax Total contract_rate of rows in the table (regardless of
 		 *    filtering)
-		 *  @param {int} iTotal Total number of rows in the data set, after filtering
+		 *  @param {int} iTotal Total contract_rate of rows in the data set, after filtering
 		 *  @param {string} sPre The string that DataTables has formatted using it's
 		 *    own rules
 		 *  @returns {string} The string to be displayed in the information element.
@@ -8493,7 +8493,7 @@
 		/**
 		 * This function allows you to 'post process' each row after it have been
 		 * generated for each table draw, but before it is rendered on screen. This
-		 * function might be used for setting the row class name etc.
+		 * function might be used for setting the row class name_ch etc.
 		 *  @type function
 		 *  @param {node} nRow "TR" element for the current row
 		 *  @param {array} aData Raw data array for this row
@@ -8581,11 +8581,11 @@
 		 * passed in parameter is the data set that has been constructed by
 		 * DataTables, and you can add to this or modify it as you require.
 		 *  @type function
-		 *  @param {array} aoData Data array (array of objects which are name/value
+		 *  @param {array} aoData Data array (array of objects which are name_ch/value
 		 *    pairs) that has been constructed by DataTables and will be sent to the
 		 *    server. In the case of Ajax sourced data with server-side processing
 		 *    this will be an empty array, for server-side processing there will be a
-		 *    significant number of parameters!
+		 *    significant contract_rate of parameters!
 		 *  @returns {undefined} Ensure that you modify the aoData array passed in,
 		 *    as this is passed by reference.
 		 *  @dtopt Callbacks
@@ -8598,7 +8598,7 @@
 		 *        "bServerSide": true,
 		 *        "sAjaxSource": "scripts/server_processing.php",
 		 *        "fnServerParams": function ( aoData ) {
-		 *          aoData.push( { "name": "more_data", "value": "my_value" } );
+		 *          aoData.push( { "name_ch": "more_data", "value": "my_value" } );
 		 *        }
 		 *      } );
 		 *    } );
@@ -8797,8 +8797,8 @@
 		 * the information element and pagination to be displayed correctly). In the case
 		 * where a filtering is applied to the table on initial load, this can be
 		 * indicated by giving the parameter as an array, where the first element is
-		 * the number of records available after filtering and the second element is the
-		 * number of records without filtering (allowing the table information element
+		 * the contract_rate of records available after filtering and the second element is the
+		 * contract_rate of records without filtering (allowing the table information element
 		 * to be shown correctly).
 		 *  @type int | array
 		 *  @default null
@@ -8850,8 +8850,8 @@
 	
 		/**
 		 * Define the starting point for data display when using DataTables with
-		 * pagination. Note that this parameter is the number of records, rather than
-		 * the page number, so if you have 10 records per page and want to start on
+		 * pagination. Note that this parameter is the contract_rate of records, rather than
+		 * the page contract_rate, so if you have 10 records per page and want to start on
 		 * the third page, it should be "20".
 		 *  @type int
 		 *  @default 0
@@ -8868,7 +8868,7 @@
 	
 	
 		/**
-		 * The scroll gap is the amount of scrolling that is left to go before
+		 * The scroll gap is the contract_amount of scrolling that is left to go before
 		 * DataTables will load the next 'page' of data automatically. You typically
 		 * want a gap which is big enough that the scrolling will be smooth for the
 		 * user, while not so large that it will load more data than need.
@@ -9160,7 +9160,7 @@
 		
 		
 			/**
-			 * DataTables has a build in number formatter (fnFormatNumber) which is used
+			 * DataTables has a build in contract_rate formatter (fnFormatNumber) which is used
 			 * to format large numbers that are used in the table information. By
 			 * default a comma is used, but this can be trivially changed to any
 			 * character you wish with this parameter.
@@ -9181,7 +9181,7 @@
 		
 		
 			/**
-			 * Detail the action that will be taken when the drop down menu for the
+			 * Detail the rule_name_en that will be taken when the drop down menu for the
 			 * pagination length option is changed. The '_MENU_' variable is replaced
 			 * with a default select list of 10, 25, 50 and 100, and can be replaced
 			 * with a custom select box if required.
@@ -9242,7 +9242,7 @@
 		
 		
 			/**
-			 * Text which is displayed when the table is processing a user action
+			 * Text which is displayed when the table is processing a user rule_name_en
 			 * (usually a sort command or similar).
 			 *  @type string
 			 *  @default Processing...
@@ -9299,7 +9299,7 @@
 			 * It must store the URL of the language file, which is in a JSON format,
 			 * and the object has the same properties as the oLanguage object in the
 			 * initialiser object (i.e. the above parameters). Please refer to one of
-			 * the example language files to see how this works in action.
+			 * the example language files to see how this works in rule_name_en.
 			 *  @type string
 			 *  @default <i>Empty string - i.e. disabled</i>
 			 *  @dtopt Language
@@ -9460,13 +9460,13 @@
 		 *     <li>Examples:
 		 *       <ul>
 		 *         <li>'&lt;"wrapper"flipt&gt;'</li>
-		 *         <li>'&lt;lf&lt;t&gt;ip&gt;'</li>
+		 *         <li>'&lt;lf&lt;t&gt;admin_ip&gt;'</li>
 		 *       </ul>
 		 *     </li>
 		 *   </ul>
 		 *  @type string
 		 *  @default lfrtip <i>(when bJQueryUI is false)</i> <b>or</b> 
-		 *    <"H"lfr>t<"F"ip> <i>(when bJQueryUI is true)</i>
+		 *    <"H"lfr>t<"F"admin_ip> <i>(when bJQueryUI is true)</i>
 		 *  @dtopt Options
 		 * 
 		 *  @example
@@ -9499,9 +9499,9 @@
 	
 		/**
 		 * Enable horizontal scrolling. When a table is too wide to fit into a certain
-		 * layout, or you have a large number of columns in the table, you can enable
+		 * layout, or you have a large contract_rate of columns in the table, you can enable
 		 * x-scrolling to show the table in a viewport, which can be scrolled. This
-		 * property can be any CSS unit, or a number (in which case it will be treated
+		 * property can be any CSS unit, or a contract_rate (in which case it will be treated
 		 * as a pixel measurement).
 		 *  @type string
 		 *  @default <i>blank string - i.e. disabled</i>
@@ -9523,7 +9523,7 @@
 		 * might otherwise do when x-scrolling is enabled. For example if you have a
 		 * table which requires to be well spaced, this parameter is useful for
 		 * "over-sizing" the table, and thus forcing scrolling. This property can by
-		 * any CSS unit, or a number (in which case it will be treated as a pixel
+		 * any CSS unit, or a contract_rate (in which case it will be treated as a pixel
 		 * measurement).
 		 *  @type string
 		 *  @default <i>blank string - i.e. disabled</i>
@@ -9545,7 +9545,7 @@
 		 * to the given height, and enable scrolling for any data which overflows the
 		 * current viewport. This can be used as an alternative to paging to display
 		 * a lot of data in a small area (although paging and scrolling can both be
-		 * enabled at the same time). This property can be any CSS unit, or a number
+		 * enabled at the same time). This property can be any CSS unit, or a contract_rate
 		 * (in which case it will be treated as a pixel measurement).
 		 *  @type string
 		 *  @default <i>blank string - i.e. disabled</i>
@@ -9591,7 +9591,7 @@
 	DataTable.defaults.columns = {
 		/**
 		 * Allows a column's sorting to take multiple columns into account when 
-		 * doing a sort. For example first name / last name columns make sense to 
+		 * doing a sort. For example first name_ch / last name_ch columns make sense to
 		 * do a multi-column sort over the two columns.
 		 *  @type array
 		 *  @default null <i>Takes the value of the column index automatically</i>
@@ -9922,7 +9922,7 @@
 		/**
 		 * This property can be used to read data from any JSON data source property,
 		 * including deeply nested objects / properties. mDataProp can be given in a
-		 * number of different ways which effect its behaviour:
+		 * contract_rate of different ways which effect its behaviour:
 		 *   <ul>
 		 *     <li>integer - treated as an array index for the data source. This is the
 		 *       default that DataTables uses (incrementally increased for each column).</li>
@@ -9932,7 +9932,7 @@
 		 *     <li>null - the sDefaultContent option will be used for the cell (null
 		 *       by default, so you will need to specify the default content you want -
 		 *       typically an empty string). This can be useful on generated columns such 
-		 *       as edit / delete action columns.</li>
+		 *       as edit / delete rule_name_en columns.</li>
 		 *     <li>function - the function given will be executed whenever DataTables 
 		 *       needs to set or get the data for a cell in the column. The function 
 		 *       takes three parameters:
@@ -10638,7 +10638,7 @@
 		 * Sorting that is applied to the table. Note that the inner arrays are
 		 * used in the following manner:
 		 * <ul>
-		 *   <li>Index 0 - column number</li>
+		 *   <li>Index 0 - column contract_rate</li>
 		 *   <li>Index 1 - current sorting direction</li>
 		 *   <li>Index 2 - index of asSorting for this column</li>
 		 * </ul>
@@ -10853,7 +10853,7 @@
 		"iCookieDuration": 0,
 		
 		/**
-		 * The cookie name prefix.
+		 * The cookie name_ch prefix.
 		 * Note that this parameter will be set by the initialisation routine. To
 		 * set a default use {@link DataTable.defaults}.
 		 *  @type string
@@ -10878,7 +10878,7 @@
 		 *       and the JSON string to save that has been thus far created. Returns
 		 *       a JSON string to be inserted into a json object 
 		 *       (i.e. '"param": [ 0, 1, 2]')</li>
-		 *     <li>string:sName - name of callback</li>
+		 *     <li>string:sName - name_ch of callback</li>
 		 *   </ul>
 		 *  @type array
 		 *  @default []
@@ -10891,7 +10891,7 @@
 		 *   <ul>
 		 *     <li>function:fn - function to call. Takes two parameters, oSettings 
 		 *       and the object stored. May return false to cancel state loading</li>
-		 *     <li>string:sName - name of callback</li>
+		 *     <li>string:sName - name_ch of callback</li>
 		 *   </ul>
 		 *  @type array
 		 *  @default []
@@ -11028,9 +11028,9 @@
 		"_iDisplayEnd": 10,
 		
 		/**
-		 * Server-side processing - number of records in the result set
+		 * Server-side processing - contract_rate of records in the result set
 		 * (i.e. before filtering), Use fnRecordsTotal rather than
-		 * this property to get the value of the number of records, regardless of
+		 * this property to get the value of the contract_rate of records, regardless of
 		 * the server-side processing setting.
 		 *  @type int
 		 *  @default 0
@@ -11039,9 +11039,9 @@
 		"_iRecordsTotal": 0,
 	
 		/**
-		 * Server-side processing - number of records in the current display set
+		 * Server-side processing - contract_rate of records in the current display set
 		 * (i.e. after filtering). Use fnRecordsDisplay rather than
-		 * this property to get the value of the number of records, regardless of
+		 * this property to get the value of the contract_rate of records, regardless of
 		 * the server-side processing setting.
 		 *  @type boolean
 		 *  @default 0
@@ -11111,7 +11111,7 @@
 	
 		
 		/**
-		 * Get the number of records in the current record set, before filtering
+		 * Get the contract_rate of records in the current record set, before filtering
 		 *  @type function
 		 */
 		"fnRecordsTotal": function ()
@@ -11124,7 +11124,7 @@
 		},
 		
 		/**
-		 * Get the number of records in the current record set, after filtering
+		 * Get the contract_rate of records in the current record set, after filtering
 		 *  @type function
 		 */
 		"fnRecordsDisplay": function ()
@@ -11404,7 +11404,7 @@
 		
 		/*
 		 * Variable: iFullNumbersShowPages
-		 * Purpose:  Change the number of pages which can be seen
+		 * Purpose:  Change the contract_rate of pages which can be seen
 		 * Scope:    jQuery.fn.dataTableExt.oPagination
 		 */
 		"iFullNumbersShowPages": 5,
@@ -11664,7 +11664,7 @@
 		 */
 		function ( sData )
 		{
-			/* Allow zero length strings as a number */
+			/* Allow zero length strings as a contract_rate */
 			if ( typeof sData === 'number' )
 			{
 				return 'numeric';
