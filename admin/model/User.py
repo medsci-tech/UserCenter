@@ -9,6 +9,8 @@ class User(Auth):
             'indexes': [],
             }
 
+    mysql_id       = IntField(default=None)  # 没用的id
+
     phone       = StringField()  # 手机号
     password    = StringField()  # 密码
     role        = StringField(default=None)  # 角色
@@ -25,8 +27,8 @@ class User(Auth):
     # 推荐人
     upper_id = ObjectIdField(default = None)
     referrer_id = IntField(default = None)
-    referred_name = StringField(default = None)
-    referred_phone = StringField(default = None)
+    referrer_name = StringField(default = None)
+    referrer_phone = StringField(default = None)
 
     # doctors only
     region          = StringField(default = None)  # 医生大区

@@ -28,4 +28,4 @@ class BeanLog(Auth):
     post_beans = IntField(default = 0)  # 迈豆参数值
     save_beans = IntField(default = 0)  # 迈豆参数经规则计算后的值
 
-    createTime = DateTimeField(default = datetime.now())
+    create_time = DateTimeField(default = datetime.now())

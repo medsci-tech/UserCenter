@@ -35,7 +35,7 @@ urlpatterns = [
     url(r'^contract/index', contract.index, name='contract'), # 合同列表
 
     # 文件上传
-    url(r'^upload/contract_img', upload.img, name='upload_img'),
+    url(r'^upload/img', upload.img, name='upload_img'),
 
     # 应用平台
     url(r'^app/delete', app.delete, name='app_delete'),

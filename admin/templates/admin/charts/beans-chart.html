@@ -1,0 +1,430 @@
+<div id='beans-chart'>
+    <div class="row">
+        <div class="col-sm-6">
+            <div id="chart0" style="width: auto;height:400px;">
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div id="chart1" style="width: auto;height:400px;">
+            </div>
+        </div>
+    </div>
+    <div class="row chart_hide">
+        <div class="col-sm-6">
+            <div id="chart2" style="width: auto;height:400px;">
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div id="chart3" style="width: auto;height:400px;">
+            </div>
+        </div>
+    </div>
+    <div class="row chart_hide">
+        <div class="col-sm-6 text-center">
+            <button type="button" style="width: 15%;" @click='all_data' class="form-control btn btn-primary" style="margin: 0;">全部选中</button>
+        </div>
+        <div class="col-sm-1 col-sm-offset-1" style="width: auto; margin-left: 10%">
+            <select class="form-control" v-model='date.year'>
+                <option value="2015">
+                    2015年
+                </option>
+                <option value="2016">
+                    2016年
+                </option>
+            </select>
+        </div>
+        <div class="col-sm-1" style="width: auto;">
+            <select class="form-control" v-model='data.mounth'>
+                <option value="1">一月</option>
+                <option value="2">二月</option>
+                <option value="3">三月</option>
+                <option value="4">四月</option>
+                <option value="5">五月</option>
+                <option value="6">六月</option>
+                <option value="7">七月</option>
+                <option value="8">八月</option>
+                <option value="9">九月</option>
+                <option value="10">十月</option>
+                <option value="11">十一月</option>
+                <option value="12">十二月</option>
+            </select>
+        </div>
+        <div class="col-sm-1">
+            <button type="button" @click='change_data' class="form-control btn btn-primary" style="margin: 0;">查看</button>
+        </div>
+    </div>
+</div>
+<!-- chart1 -->
+<script>
+var vm = new Vue({
+    el: '#beans-chart',
+    data: {
+        color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
+        date: {
+            year: '',
+            mounth: ''
+        },
+        class_data: [
+
+            {
+                value: Math.random() * 2000,
+                name: '直接访问'
+            }, {
+                value: Math.random() * 2000,
+                name: '邮件营销'
+            }, {
+                value: Math.random() * 2000,
+                name: '联盟广告'
+            }, {
+                value: Math.random() * 2000,
+                name: '视频广告'
+            }, {
+                value: Math.random() * 2000,
+                name: '搜索引擎'
+            }
+        ],
+        strategy_data: [
+
+            {
+                value: Math.random() * 2000,
+                name: '直接访问'
+            }, {
+                value: Math.random() * 2000,
+                name: '邮件营销'
+            }, {
+                value: Math.random() * 2000,
+                name: '联盟广告'
+            }, {
+                value: Math.random() * 2000,
+                name: '视频广告'
+            }, {
+                value: Math.random() * 2000,
+                name: '搜索引擎'
+            }
+        ],
+        mounth_data: [
+
+            {
+                name: '直接访问',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            }, {
+                name: '邮件营销',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            }, {
+                name: '联盟广告',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            }, {
+                name: '视频广告',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            }, {
+                name: '搜索引擎',
+                value: [
+
+                    {
+                        value: Math.random() * 2000,
+                        name: '1'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '2'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '3'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '4'
+                    }, {
+                        value: Math.random() * 2000,
+                        name: '5'
+                    }
+                ]
+            },
+        ],
+    },
+    methods: {
+        change_data: function() {
+
+        },
+        all_data: function() {
+            for (item in vm.strategy_data) {
+                myChart3.dispatchAction({
+                    type: 'legendSelect',
+                    // 图例名称
+                    name: vm.strategy_data[item].name
+                });
+            };
+            myChart3.dispatchAction({
+                type: 'legendSelect',
+                // 图例名称
+                name: vm.strategy_data[0].name
+            });
+        },
+        data_head: function(e) {
+            var result = [];
+            var l = e.length;
+            for (var i = 0; i < l; i++) {
+                result.push(e[i].name);
+            };
+            return result;
+        },
+        data_change_to_bar: function(e) {
+            var result = [];
+            var l = e.length;
+            for (var i = 0; i < l; i++) {
+                result.push({
+                    name: e[i].name,
+                    value: e[i].value,
+                    itemStyle: {
+                        normal: {
+                            color: vm.color[i]
+                        }
+                    }
+                });
+            };
+            return result;
+        },
+        series_change_to_line: function(e) {
+            var result = [];
+            var l = e.length;
+            for (var i = 0; i < l; i++) {
+                result.push({
+                    type: 'line',
+                    stack: 'all',
+                    areaStyle: {
+                        normal: {}
+                    },
+                    smooth: true,
+                    symbol: 'none',
+                    name: e[i].name,
+                    data: e[i].value,
+                });
+            };
+            return result;
+        }
+    },
+});
+
+var myChart0 = echarts.init(document.getElementById('chart0'));
+var myChart1 = echarts.init(document.getElementById('chart1'));
+var myChart2 = echarts.init(document.getElementById('chart2'));
+var myChart3 = echarts.init(document.getElementById('chart3'));
+$('.chart_hide').addClass('hidden');
+
+var option0 = {
+    title: {
+        text: '迈豆池',
+    },
+    tooltip: {
+        trigger: 'item',
+        formatter: '{b}<br>{c} : {d}% '
+    },
+    series: [{
+        type: 'pie',
+        radius: '50%',
+        center: ['50%', '50%'],
+        data: vm.class_data,
+        itemStyle: {
+            emphasis: {
+                shadowBlur: 10,
+                shadowOffsetX: 0,
+                shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        }
+    }],
+};
+
+
+var option1 = {
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    yAxis: [{
+        type: 'value'
+    }],
+    xAxis: [{
+        type: 'category',
+        data: vm.data_head(vm.class_data),
+    }],
+    tooltip: {
+        trigger: 'item',
+        formatter: '{b}<br>{c} '
+    },
+    series: [{
+        type: 'bar',
+        data: vm.data_change_to_bar(vm.class_data),
+        label: {
+            normal: {
+                show: true,
+                position: 'top',
+            }
+        }
+    }],
+};
+myChart0.setOption(option0);
+myChart1.setOption(option1);
+
+var chart_click = function(params) {
+    console.log(params.name);
+
+    $('.chart_hide').removeClass('hidden');
+
+    var option2 = {
+        title: {
+            text: '迈豆池',
+        },
+        tooltip: {
+            trigger: 'item',
+            formatter: function(params) {
+                if (params.seriesType == 'pie') {
+                    return params.name + '<br>' + params.value + '(' + params.percent + '%)'
+                }
+            },
+        },
+        series: [{
+            type: 'pie',
+            radius: '50%',
+            center: ['50%', '50%'],
+            data: vm.strategy_data,
+            itemStyle: {
+                emphasis: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+    myChart2.setOption(option2);
+
+
+    var option3 = {
+        legend: [{
+            data: vm.data_head(vm.strategy_data),
+            // left: '55%',
+        }],
+        xAxis: [{
+            name: vm.date.mounth,
+            gridIndex: 0,
+            boundaryGap: false,
+            data: vm.data_head(vm.mounth_data[0].value),
+        }],
+        yAxis: [{
+            gridIndex: 0,
+        }],
+        dataZoom: [{
+            xAxisIndex: 0,
+            filterMode: 'empty',
+        }, {
+            type: 'inside',
+            xAxisIndex: 0,
+        }],
+        series: vm.series_change_to_line(vm.mounth_data),
+        tooltip: {
+            trigger: 'axis'
+        },
+    };
+
+
+    myChart3.setOption(option3);
+    myChart2.on('click', function(params) {
+        for (item in vm.strategy_data) {
+            if (vm.strategy_data[item].name == params.name) {
+                myChart3.dispatchAction({
+                    type: 'legendSelect',
+                    // 图例名称
+                    name: vm.strategy_data[item].name
+                });
+            } else {
+                myChart3.dispatchAction({
+                    type: 'legendUnSelect',
+                    // 图例名称
+                    name: vm.strategy_data[item].name
+                });
+            }
+        };
+    });
+};
+
+myChart1.on('click', function(params) {
+    chart_click(params);
+});
+
+myChart0.on('click', function(params) {
+    chart_click(params);
+});
+</script>
+<hr>

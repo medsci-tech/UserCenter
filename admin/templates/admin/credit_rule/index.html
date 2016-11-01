@@ -62,13 +62,7 @@
                                 </td>
                                 <td>{{ list.name_ch }}</td>
                                 <td>{{ list.name_en }}</td>
-                                <td>
-                                    {% for val in list_integralType %}
-                                        {% if val.id == list.bean_type_id %}
-                                            {{ val.name_ch }}
-                                        {% endif %}
-                                    {% endfor %}
-                                </td>
+                                <td>{{ list.bean_type_name }}</td>
                                 <td>
                                     {% for key, val in c_cycle.items %}
                                         {% if key == list.cycle %}
@@ -85,13 +79,13 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ list.create_time |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
-                                       data-contractId="{{ list.contractId }}"
-                                       data-name="{{ list.name }}"
-                                       data-apiName="{{ list.apiName }}"
+                                       data-project_id="{{ list.project_id }}"
+                                       data-name_ch="{{ list.name_ch }}"
+                                       data-name_en="{{ list.name_en }}"
                                        data-bean_type_id="{{ list.bean_type_id }}"
                                        data-cycle="{{ list.cycle }}"
                                        data-ratio="{{ list.ratio }}"
@@ -151,8 +145,8 @@ $(function () {
         var defaultCycle = cycle.find('option:first').val();
         cycle.val(defaultCycle);
         $('#form-id').val(kong);
-        $('#form-name').val(kong);
-        $('#form-apiName').val(kong);
+        $('#form-name_ch').val(kong);
+        $('#form-name_en').val(kong);
         $('#form-ratio').val(kong);
         $('#form-bean_type_id').val(kong);
         $('#form-limit').val(kong);
@@ -163,16 +157,16 @@ $(function () {
      */
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
-        var name = $(this).attr('data-name');
-        var apiName = $(this).attr('data-apiName');
+        var name_ch = $(this).attr('data-name_ch');
+        var name_en = $(this).attr('data-name_en');
         var bean_type_id = $(this).attr('data-bean_type_id');
         var cycle = $(this).attr('data-cycle');
         var ratio = $(this).attr('data-ratio');
         var limit = $(this).attr('data-limit');
         var status = $(this).attr('data-status');
         $('#form-id').val(id);
-        $('#form-name').val(name);
-        $('#form-apiName').val(apiName);
+        $('#form-name_ch').val(name_ch);
+        $('#form-name_en').val(name_en);
         $('#form-bean_type_id').val(bean_type_id);
         $('#form-cycle').val(cycle);
         $('#form-ratio').val(ratio);
