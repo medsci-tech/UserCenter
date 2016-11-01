@@ -66,7 +66,6 @@ def logsform(request, param):
     param.update(admin_name=request.session.get('username'))
     try:
         Model.objects.create(**param)
-        # return ApiResponse(200, '操作成功').json_return()
+        return 200
     except Exception:
-        pass
-        # return ApiResponse(200, '操作成功，log记录失败').json_return()
+        return -1

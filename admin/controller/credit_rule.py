@@ -91,19 +91,28 @@ def form(request):
         appId = post.get('app_id')
         name_en = post.get('name_en')
         contractId = post.get('project_id')
+        bean_type_id = post.get('bean_type_id')
         try:
-            check_name = Model.objects.filter(name_en=name_en).order_by('id')[:1]
-        except Exception:
+            check_name = Model.objects.filter(name_en=name_en).order_by('id')[:1][0]
+        except:
             return ApiResponse(-2, '数据验证错误').json_response()
         if check_name:
-            if str(check_name[0]['app_id']) == appId and str(check_name[0]['id']) != id:
+            if str(check_name['app_id']) == appId and str(check_name['id']) != id:
                 return ApiResponse(-2, '策略字段%s已存在' % name_en).json_response()
+        try:
+            bean_type_data = GlobalBeanType.objects.get(id=bean_type_id)
+        except:
+            return ApiResponse(-2, '数据验证错误').json_response()
+        if not bean_type_data:
+            return ApiResponse(-2, '找不到规则类型', bean_type_id).json_response()
+        # return ApiResponse(0, 'test', bean_type_id).json_response()
         param = {
             'app_id': appId,
             'company_id': post.get('company_id'),
             'project_id': contractId,
             'name_en': name_en,
-            'bean_type_id': post.get('bean_type_id'),
+            'bean_type_id': bean_type_id,
+            'bean_type_name': bean_type_data['name_ch'],
             'name_ch': post.get('name_ch'),
             'cycle': post.get('cycle'),
             'limit': post.get('limit'),

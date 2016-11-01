@@ -66,7 +66,7 @@ def configParam(request=None):
 
         # app_id 对应数据库objectId
         'c_api_appId': {
-            1: '580c05ae4eaa7653f70d82a3',  # 药械通微信端
+            1: '58170085bc8e6e21c05de989',  # 药械通微信端
             2: '580c215c4eaa7657001f2365',  # mime web平台
             3: '580dbd462514971c74d2903f',  # 易康伴侣微信端
         }

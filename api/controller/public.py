@@ -26,19 +26,18 @@ def get_token(request):
     if not post:
         return ApiResponse(403, '无效请求').json_response()
 
-    appId = int(post.get('app_id',0))
+    appId = int(post.get('app_id'))
     cfg_param = configParam(request)
     try:
         appId = cfg_param.get('c_api_appId')[appId]
         res = Application.objects.get(id=appId)
-        if not res :
-            return ApiResponse(-1, '该应用id不存在').json_response()
-    except (ValueError, KeyError, TypeError):
+    except:
         return ApiResponse(-1, '该应用id不存在').json_response()
-
-    token = QXToken(appId).generate_auth_token()
-    res = QXToken(appId).verify_auth_token(token)
-    return ApiResponse(200, '成功').json_response()
+    if res:
+        token = QXToken(appId).generate_auth_token()
+        return ApiResponse(200, '成功', token).json_response()
+    else:
+        return ApiResponse(-1, '该应用id不存在').json_response()
 
 # ============================
 # 查询单条数据私有方法
@@ -47,11 +46,16 @@ def _getUser(param, data_param):
     try:
         model = Model.objects.get(**param)
     except Exception:
-        return ApiResponse(200, '成功').json_return()
+        return ApiResponse(-1, '参数错误').json_return()
     if model:
-        return ApiResponse(-1, '用户已经存在').json_return()
+         # data =
+        return ApiResponse(200, '成功',  {
+             '%s' % data_param: model[data_param],
+             'uc_uid': str(model['id']),
+         }).json_return()
     else:
-        return ApiResponse(200, '成功').json_return()
+        return ApiResponse(-4, '不存在').json_return()
+
 
 # ============================
 # 用户登录
@@ -84,19 +88,22 @@ def login(request):
     else:
         return ApiResponse(403, '非法请求').json_response()
     result = _getUser(param, data_param)
-    if result.get('code') == 200:
+    json_result = json.loads(result)
+    if json_result.get('code') == -4:
+        return ApiResponse(-1, '用户不存在').json_response()
+    if json_result.get('code') == 200:
         if data_param == 'password':
-            check_code = check_password(password, result.get('data')[data_param])
+            check_code = check_password(password, json_result.get('data')[data_param])
         else:
-            check_code = (result.get('data')[data_param] == check_value)
+            check_code = (json_result.get('data')[data_param] == check_value)
         if check_code:
-            uc_uid = result.get('data')['uc_uid']
+            uc_uid = json_result.get('data')['uc_uid']
             token = QXToken(uc_uid).generate_auth_token()
             return ApiResponse(200, '成功', {'uc_uid': uc_uid, 'token': token}).json_response()
         else:
             return ApiResponse(-1, '失败').json_response()
     else:
-        return ApiResponse(result).json_response()
+        return HttpResponse(result, content_type="application/json")
 
 # ============================
 # 插入数据私有方法
@@ -108,7 +115,7 @@ def _addUser(param):
     }
     data_param = 'phone'
     check_exist = _getUser(check_param, data_param)
-    if check_exist.get('code') == -1:
+    if json.loads(check_exist.get('code')) == 200:
         return ApiResponse(-1, '用户已存在').json_return()
     try:
         model = Model.objects.create(**param)
@@ -183,7 +190,7 @@ def register(request):
             'phone': phone,
             'rule_name_en': 'register',
             'app_id': post.get('app_id'),
-            'mdBeans': post.get('mdBeans',1),
+            'md_beans': post.get('md_beans',1),
             'token': post.get('token'),
         }
         returnData = imitate_post(url=post_url, param=post_param)
