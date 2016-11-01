@@ -5,7 +5,7 @@
     <div class="form-group">
         <label class="col-sm-3 col-md-3 col-lg-2 control-label">充值金额</label>
         <div class="col-sm-9 col-md-9 col-lg-10">
-            <input type="text" class="form-control input-sm" name="amount" id="recharge-amount" placeholder="数字类型">
+            <input type="text" class="form-control input-sm" name="contract_amount" id="recharge-contract_amount" placeholder="数字类型">
         </div>
     </div>
 </div>
@@ -25,7 +25,7 @@ $(function () {
      * 表单验证提交按钮触发的操作
      */
     var rules = {
-        'amount':{
+        'contract_amount':{
             required:true,
             number:true
         }

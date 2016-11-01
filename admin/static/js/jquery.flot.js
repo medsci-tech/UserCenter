@@ -30,7 +30,7 @@
  */ 
 (function(B){B.color={};B.color.make=function(F,E,C,D){var G={};G.r=F||0;G.g=E||0;G.b=C||0;G.a=D!=null?D:1;G.add=function(J,I){for(var H=0;H<J.length;++H){G[J.charAt(H)]+=I}return G.normalize()};G.scale=function(J,I){for(var H=0;H<J.length;++H){G[J.charAt(H)]*=I}return G.normalize()};G.toString=function(){if(G.a>=1){return"rgb("+[G.r,G.g,G.b].join(",")+")"}else{return"rgba("+[G.r,G.g,G.b,G.a].join(",")+")"}};G.normalize=function(){function H(J,K,I){return K<J?J:(K>I?I:K)}G.r=H(0,parseInt(G.r),255);G.g=H(0,parseInt(G.g),255);G.b=H(0,parseInt(G.b),255);G.a=H(0,G.a,1);return G};G.clone=function(){return B.color.make(G.r,G.b,G.g,G.a)};return G.normalize()};B.color.extract=function(D,C){var E;do{E=D.css(C).toLowerCase();if(E!=""&&E!="transparent"){break}D=D.parent()}while(!B.nodeName(D.get(0),"body"));if(E=="rgba(0, 0, 0, 0)"){E="transparent"}return B.color.parse(E)};B.color.parse=function(F){var E,C=B.color.make;if(E=/rgb\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*\)/.exec(F)){return C(parseInt(E[1],10),parseInt(E[2],10),parseInt(E[3],10))}if(E=/rgba\(\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]{1,3})\s*,\s*([0-9]+(?:\.[0-9]+)?)\s*\)/.exec(F)){return C(parseInt(E[1],10),parseInt(E[2],10),parseInt(E[3],10),parseFloat(E[4]))}if(E=/rgb\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*\)/.exec(F)){return C(parseFloat(E[1])*2.55,parseFloat(E[2])*2.55,parseFloat(E[3])*2.55)}if(E=/rgba\(\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\%\s*,\s*([0-9]+(?:\.[0-9]+)?)\s*\)/.exec(F)){return C(parseFloat(E[1])*2.55,parseFloat(E[2])*2.55,parseFloat(E[3])*2.55,parseFloat(E[4]))}if(E=/#([a-fA-F0-9]{2})([a-fA-F0-9]{2})([a-fA-F0-9]{2})/.exec(F)){return C(parseInt(E[1],16),parseInt(E[2],16),parseInt(E[3],16))}if(E=/#([a-fA-F0-9])([a-fA-F0-9])([a-fA-F0-9])/.exec(F)){return C(parseInt(E[1]+E[1],16),parseInt(E[2]+E[2],16),parseInt(E[3]+E[3],16))}var D=B.trim(F).toLowerCase();if(D=="transparent"){return C(255,255,255,0)}else{E=A[D]||[0,0,0];return C(E[0],E[1],E[2])}};var A={aqua:[0,255,255],azure:[240,255,255],beige:[245,245,220],black:[0,0,0],blue:[0,0,255],brown:[165,42,42],cyan:[0,255,255],darkblue:[0,0,139],darkcyan:[0,139,139],darkgrey:[169,169,169],darkgreen:[0,100,0],darkkhaki:[189,183,107],darkmagenta:[139,0,139],darkolivegreen:[85,107,47],darkorange:[255,140,0],darkorchid:[153,50,204],darkred:[139,0,0],darksalmon:[233,150,122],darkviolet:[148,0,211],fuchsia:[255,0,255],gold:[255,215,0],green:[0,128,0],indigo:[75,0,130],khaki:[240,230,140],lightblue:[173,216,230],lightcyan:[224,255,255],lightgreen:[144,238,144],lightgrey:[211,211,211],lightpink:[255,182,193],lightyellow:[255,255,224],lime:[0,255,0],magenta:[255,0,255],maroon:[128,0,0],navy:[0,0,128],olive:[128,128,0],orange:[255,165,0],pink:[255,192,203],purple:[128,0,128],violet:[128,0,128],red:[255,0,0],silver:[192,192,192],white:[255,255,255],yellow:[255,255,0]}})(jQuery);
 
-// the actual Flot code
+// the actual Flot contract_code
 (function($) {
     function Plot(placeholder, data_, options_, plugins) {
         // data is on the form:
@@ -44,7 +44,7 @@
                 colors: ["#edc240", "#afd8f8", "#cb4b4b", "#4da74d", "#9440ed"],
                 legend: {
                     show: true,
-                    noColumns: 1, // number of colums in legend table
+                    noColumns: 1, // contract_rate of colums in legend table
                     labelFormatter: null, // fn: string -> string
                     labelBoxBorderColor: "#ccc", // border color for the little label boxes
                     container: null, // container (as jQuery object) to put legend in, null means default on top of graph
@@ -59,23 +59,23 @@
                     mode: null, // null or "time"
                     color: null, // base color, labels, ticks
                     tickColor: null, // possibly different color of ticks, e.g. "rgba(0,0,0,0.15)"
-                    transform: null, // null or f: number -> number to transform axis
+                    transform: null, // null or f: contract_rate -> contract_rate to transform axis
                     inverseTransform: null, // if transform is set, this should be the inverse function
                     min: null, // min. value to show, null means set automatically
                     max: null, // max. value to show, null means set automatically
                     autoscaleMargin: null, // margin in % to add if auto-setting min/max
-                    ticks: null, // either [1, 3] or [[1, "a"], 3] or (fn: axis info -> ticks) or app. number of ticks for auto-ticks
-                    tickFormatter: null, // fn: number -> string
+                    ticks: null, // either [1, 3] or [[1, "a"], 3] or (fn: axis info -> ticks) or app. contract_rate of ticks for auto-ticks
+                    tickFormatter: null, // fn: contract_rate -> string
                     labelWidth: null, // size of tick labels in pixels
                     labelHeight: null,
                     reserveSpace: null, // whether to reserve space even if axis isn't shown
                     tickLength: null, // size in pixels of ticks, or "full" for whole line
-                    alignTicksWithAxis: null, // axis number or null for no sync
+                    alignTicksWithAxis: null, // axis contract_rate or null for no sync
                     
                     // mode specific options
                     tickDecimals: null, // no. of decimals, null means auto
-                    tickSize: null, // number or [number, "unit"]
-                    minTickSize: null, // number or [number, "unit"]
+                    tickSize: null, // contract_rate or [contract_rate, "unit"]
+                    minTickSize: null, // contract_rate or [contract_rate, "unit"]
                     monthNames: null, // list of names of months
                     timeformat: null, // format string to use
                     twelveHourClock: false // 12 or 24 time in time mode
@@ -250,7 +250,7 @@
                 options.grid.tickColor = $.color.parse(options.grid.color).scale('a', 0.22).toString();
             
             // fill in defaults in axes, copy at least always the
-            // first as the rest of the code assumes it'll be there
+            // first as the rest of the contract_code assumes it'll be there
             for (i = 0; i < Math.max(1, options.xaxes.length); ++i)
                 options.xaxes[i] = $.extend(true, {}, options.xaxis, options.xaxes[i]);
             for (i = 0; i < Math.max(1, options.yaxes.length); ++i)
@@ -325,7 +325,7 @@
         
         function axisNumber(obj, coord) {
             var a = obj[coord + "axis"];
-            if (typeof a == "object") // if we got a real axis, extract number
+            if (typeof a == "object") // if we got a real axis, extract contract_rate
                 a = a.n;
             if (typeof a != "number")
                 a = 1; // default to first axis
@@ -398,7 +398,7 @@
         function getOrCreateAxis(axes, number) {
             if (!axes[number - 1])
                 axes[number - 1] = {
-                    n: number, // save the number for future reference
+                    n: number, // save the contract_rate for future reference
                     direction: axes == xaxes ? "x" : "y",
                     options: $.extend(true, {}, axes == xaxes ? options.xaxis : options.yaxis)
                 };
@@ -559,7 +559,7 @@
 
                             if (f) {
                                 if (f.number && val != null) {
-                                    val = +val; // convert to number
+                                    val = +val; // convert to contract_rate
                                     if (isNaN(val))
                                         val = null;
                                     else if (val == Infinity)
@@ -1099,7 +1099,7 @@
         function setupTickGeneration(axis) {
             var opts = axis.options;
                 
-            // estimate number of ticks
+            // estimate contract_rate of ticks
             var noTicks;
             if (typeof opts.ticks == "number" && opts.ticks > 0)
                 noTicks = opts.ticks;
@@ -2353,7 +2353,7 @@
         }
 
         // trigger click or hover event (they send the same parameters
-        // so we share their code)
+        // so we share their contract_code)
         function triggerClickHoverEvent(eventname, event, seriesFilter) {
             var offset = eventHolder.offset(),
                 canvasX = event.pageX - offset.left - plotOffset.left,

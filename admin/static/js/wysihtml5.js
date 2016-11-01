@@ -860,7 +860,7 @@ rangy.createModule("DomUtil", function(api, module) {
 
     /*----------------------------------------------------------------------------------------------------------------*/
 
-    // RangeIterator code partially borrows from IERange by Tim Ryan (http://github.com/timcameronryan/IERange)
+    // RangeIterator contract_code partially borrows from IERange by Tim Ryan (http://github.com/timcameronryan/IERange)
 
     /**
      * @constructor
@@ -1139,7 +1139,7 @@ rangy.createModule("DomUtil", function(api, module) {
     var createContextualFragment = htmlParsingConforms ?
 
         // Implementation as per HTML parsing spec, trusting in the browser's implementation of innerHTML. See
-        // discussion and base code for this implementation at issue 67.
+        // discussion and base contract_code for this implementation at issue 67.
         // Spec: http://html5.org/specs/dom-parsing.html#extensions-to-the-range-interface
         // Thanks to Aleks Williams.
         function(fragmentStr) {
@@ -1167,7 +1167,7 @@ rangy.createModule("DomUtil", function(api, module) {
             }
 
             // "If either element is null or element's ownerDocument is an HTML document
-            // and element's local name is "html" and element's namespace is the HTML
+            // and element's local name_ch is "html" and element's namespace is the HTML
             // namespace"
             if (el === null || (
                 el.nodeName == "HTML"
@@ -1175,7 +1175,7 @@ rangy.createModule("DomUtil", function(api, module) {
                 && dom.isHtmlNamespace(el)
             )) {
 
-            // "let element be a new Element with "body" as its local name and the HTML
+            // "let element be a new Element with "body" as its local name_ch and the HTML
             // namespace as its namespace.""
                 el = doc.createElement("body");
             } else {
@@ -1935,7 +1935,7 @@ rangy.createModule("DomUtil", function(api, module) {
     }
 
     // Gets the boundary of a TextRange expressed as a node and an offset within that node. This function started out as
-    // an improved version of code found in Tim Cameron Ryan's IERange (http://code.google.com/p/ierange/) but has
+    // an improved version of contract_code found in Tim Cameron Ryan's IERange (http://code.google.com/p/ierange/) but has
     // grown, fixing problems with line breaks in preformatted text, adding workaround for IE TextRange bugs, handling
     // for inputs and images, plus optimizations.
     function getTextRangeBoundaryPosition(textRange, wholeRangeContainerElement, isStart, isCollapsed) {
@@ -1995,8 +1995,8 @@ rangy.createModule("DomUtil", function(api, module) {
                 - The 'text' property of the TextRange does not contain trailing line breaks
 
                 To get round the problem presented by the final fact above, we can use the fact that TextRange's
-                moveStart() and moveEnd() methods return the actual number of characters moved, which is not necessarily
-                the same as the number of characters it was instructed to move. The simplest approach is to use this to
+                moveStart() and moveEnd() methods return the actual contract_rate of characters moved, which is not necessarily
+                the same as the contract_rate of characters it was instructed to move. The simplest approach is to use this to
                 store the characters moved when moving both the start and end of the range to the start of the document
                 body and subtracting the start offset from the end offset (the "move-negative-gazillion" method).
                 However, this is extremely slow when the document is large and the range is near the end of it. Clearly
@@ -2053,7 +2053,7 @@ rangy.createModule("DomUtil", function(api, module) {
     }
 
     // Returns a TextRange representing the boundary of a TextRange expressed as a node and an offset within that node.
-    // This function started out as an optimized version of code found in Tim Cameron Ryan's IERange
+    // This function started out as an optimized version of contract_code found in Tim Cameron Ryan's IERange
     // (http://code.google.com/p/ierange/)
     function createBoundaryTextRange(boundaryPosition, isStart) {
         var boundaryNode, boundaryParent, boundaryOffset = boundaryPosition.offset;
@@ -3299,7 +3299,7 @@ Base.extend = function(_instance, _static) { // subclass
 
 Base.prototype = {	
 	extend: function(source, value) {
-		if (arguments.length > 1) { // extending with a name/value pair
+		if (arguments.length > 1) { // extending with a name_ch/value pair
 			var ancestor = this[source];
 			if (ancestor && (typeof value == "function") && // overriding a method?
 				// the valueOf() comparison is to avoid circular references
@@ -3515,7 +3515,7 @@ wysihtml5.browser = (function() {
      */
     supportsDataTransfer: function() {
       try {
-        // Firefox doesn't support dataTransfer in a safe way, it doesn't strip script code in the html payload (like Chrome does)
+        // Firefox doesn't support dataTransfer in a safe way, it doesn't strip script contract_code in the html payload (like Chrome does)
         return isWebKit && (window.Clipboard || window.DataTransfer).prototype.getData;
       } catch(e) {
         return false;
@@ -3667,7 +3667,7 @@ wysihtml5.browser = (function() {
      * Whether the browser supports the native document.getElementsByClassName which returns live NodeLists
      */
     supportsNativeGetElementsByClassName: function() {
-      return String(document.getElementsByClassName).indexOf("[native code]") !== -1;
+      return String(document.getElementsByClassName).indexOf("[native contract_code]") !== -1;
     },
 
     /**
@@ -3725,7 +3725,7 @@ wysihtml5.browser = (function() {
     },
     
     /**
-     * In IE it's impssible for the user and for the selection library to set the caret after an <img> when it's the lastChild in the document
+     * In IE it's impssible for the user and for the selection library to set the caret after an <contract_img> when it's the lastChild in the document
      */
     hasProblemsSettingCaretAfterImg: function() {
       return isIE;
@@ -3893,7 +3893,7 @@ wysihtml5.browser = (function() {
       
       /**
        * @example
-       *    wysihtml5.lang.string("Hello #{name}").interpolate({ name: "Christopher" });
+       *    wysihtml5.lang.string("Hello #{name_ch}").interpolate({ name_ch: "Christopher" });
        *    // => "Hello Christopher"
        */
       interpolate: function(vars) {
@@ -4544,12 +4544,12 @@ wysihtml5.dom.getStyle = (function() {
     };
   };
 })();/**
- * High performant way to check whether an element with a specific tag name is in the given document
+ * High performant way to check whether an element with a specific tag name_ch is in the given document
  * Optimized for being heavily executed
  * Unleashes the power of live node lists
  *
  * @param {Object} doc The document object of the context where to check
- * @param {String} tagName Upper cased tag name
+ * @param {String} tagName Upper cased tag name_ch
  * @example
  *    wysihtml5.dom.hasElementWithTagName(document, "IMG");
  */
@@ -4571,12 +4571,12 @@ wysihtml5.dom.hasElementWithTagName = (function() {
     return cacheEntry.length > 0;
   };
 })();/**
- * High performant way to check whether an element with a specific class name is in the given document
+ * High performant way to check whether an element with a specific class name_ch is in the given document
  * Optimized for being heavily executed
  * Unleashes the power of live node lists
  *
  * @param {Object} doc The document object of the context where to check
- * @param {String} tagName Upper cased tag name
+ * @param {String} tagName Upper cased tag name_ch
  * @example
  *    wysihtml5.dom.hasElementWithClassName(document, "foobar");
  */
@@ -4590,7 +4590,7 @@ wysihtml5.dom.hasElementWithTagName = (function() {
   
   wysihtml5.dom.hasElementWithClassName = function(doc, className) {
     // getElementsByClassName is not supported by IE<9
-    // but is sometimes mocked via library code (which then doesn't return live node lists)
+    // but is sometimes mocked via library contract_code (which then doesn't return live node lists)
     if (!wysihtml5.browser.supportsNativeGetElementsByClassName()) {
       return !!doc.querySelector("." + className);
     }
@@ -4745,7 +4745,7 @@ wysihtml5.dom.parse = (function() {
   
   /**
    * It's not possible to use a XMLParser/DOMParser as HTML5 is not always well-formed XML
-   * new DOMParser().parseFromString('<img src="foo.gif">') will cause a parseError since the
+   * new DOMParser().parseFromString('<contract_img src="foo.gif">') will cause a parseError since the
    * node isn't closed
    *
    * Therefore we've to use the browser's ordinary HTML parser invoked by setting innerHTML.
@@ -4981,7 +4981,7 @@ wysihtml5.dom.parse = (function() {
     // set attributes on newNode
     for (attributeName in attributes) {
       // Setting attributes can cause a js error in IE under certain circumstances
-      // eg. on a <img> under https when it's new attribute value is non-https
+      // eg. on a <contract_img> under https when it's new attribute value is non-https
       // TODO: Investigate this further and check for smarter handling
       try {
         newNode.setAttribute(attributeName, attributes[attributeName]);
@@ -5081,7 +5081,7 @@ wysihtml5.dom.parse = (function() {
     })()
   };
   
-  // ------------ class converter (converts an html attribute to a class name) ------------ \\
+  // ------------ class converter (converts an html attribute to a class name_ch) ------------ \\
   var addClassMethods = {
     align_img: (function() {
       var mapping = {
@@ -5159,7 +5159,7 @@ wysihtml5.dom.removeEmptyTextNodes = function(node) {
  * Renames an element (eg. a <div> to a <p>) and keeps its childs
  *
  * @param {Element} element The list element which should be renamed
- * @param {Element} newNodeName The desired tag name
+ * @param {Element} newNodeName The desired tag name_ch
  *
  * @example
  *    <!-- Assume the following dom: -->
@@ -5310,7 +5310,7 @@ wysihtml5.dom.replaceWithChildNodes = function(node) {
  *
  * @example
  *    new wysihtml5.dom.Sandbox(function(sandbox) {
- *      sandbox.getWindow().document.body.innerHTML = '<img src=foo.gif onerror="alert(document.cookie)">';
+ *      sandbox.getWindow().document.body.innerHTML = '<contract_img src=foo.gif onerror="alert(document.cookie)">';
  *    });
  */
 (function(wysihtml5) {
@@ -6890,10 +6890,10 @@ wysihtml5.Commands = Base.extend(
       codeElement = dom.getParentElement(anchor, { nodeName: "code" });
       textContent = dom.getTextContent(anchor);
 
-      // if <a> contains url-like text content, rename it to <code> to prevent re-autolinking
+      // if <a> contains url-like text content, rename it to <contract_code> to prevent re-autolinking
       // else replace <a> with its childNodes
       if (textContent.match(dom.autoLink.URL_REG_EXP) && !codeElement) {
-        // <code> element is used to prevent later auto-linking of the content
+        // <contract_code> element is used to prevent later auto-linking of the content
         codeElement = dom.renameElement(anchor, "code");
       } else {
         dom.replaceWithChildNodes(anchor);
@@ -6947,8 +6947,8 @@ wysihtml5.Commands = Base.extend(
      * TODO: Use HTMLApplier or formatInline here
      *
      * Turns selection into a link
-     * If selection is already a link, it removes the link and wraps it with a <code> element
-     * The <code> element is needed to avoid auto linking
+     * If selection is already a link, it removes the link and wraps it with a <contract_code> element
+     * The <contract_code> element is needed to avoid auto linking
      * 
      * @example
      *    // either ...
@@ -7034,7 +7034,7 @@ wysihtml5.Commands = Base.extend(
   
   /**
    * Remove similiar classes (based on classRegExp)
-   * and add the desired class name
+   * and add the desired class name_ch
    */
   function _addClass(element, className, classRegExp) {
     if (element.className) {
@@ -7194,7 +7194,7 @@ wysihtml5.Commands = Base.extend(
             _addLineBreakBeforeAndAfter(blockElement);
             dom.replaceWithChildNodes(blockElement);
           } else if (hasClasses) {
-            // Make sure that styling is kept by renaming the element to <div> and copying over the class name
+            // Make sure that styling is kept by renaming the element to <div> and copying over the class name_ch
             dom.renameElement(blockElement, DEFAULT_NODE_NAME);
           }
         });
@@ -7368,7 +7368,7 @@ wysihtml5.Commands = Base.extend(
   
   wysihtml5.commands.insertImage = {
     /**
-     * Inserts an <img>
+     * Inserts an <contract_img>
      * If selection is already an image link, it removes it
      * 
      * @example
@@ -8018,7 +8018,7 @@ wysihtml5.views.View = Base.extend(
 
     isEmpty: function() {
       var innerHTML               = this.element.innerHTML,
-          elementsWithVisualValue = "blockquote, ul, ol, img, embed, object, table, iframe, svg, video, audio, button, input, select, textarea";
+          elementsWithVisualValue = "blockquote, ul, ol, contract_img, embed, object, table, iframe, svg, video, audio, button, input, select, textarea";
       return innerHTML === ""              || 
              innerHTML === this.CARET_HACK ||
              this.hasPlaceholderSet()      ||
@@ -8287,7 +8287,7 @@ wysihtml5.views.View = Base.extend(
           "body.placeholder { color: #a9a9a9 !important; }",
         "body[disabled]   { background-color: #eee !important; color: #999 !important; cursor: default !important; }",
         // Ensure that user see's broken images and can delete them
-        "img:-moz-broken  { -moz-force-broken-image-icon: 1; height: 24px; width: 24px; }"
+        "contract_img:-moz-broken  { -moz-force-broken-image-icon: 1; height: 24px; width: 24px; }"
       ];
   
   /**
@@ -8572,7 +8572,7 @@ wysihtml5.views.View = Base.extend(
           parent;
       if (target && target.nodeName === "IMG" && (keyCode === wysihtml5.BACKSPACE_KEY || keyCode === wysihtml5.DELETE_KEY)) { // 8 => backspace, 46 => delete
         parent = target.parentNode;
-        // delete the <img>
+        // delete the <contract_img>
         parent.removeChild(target);
         // and it's parent <a> too if it hasn't got any other child nodes
         if (parent.nodeName === "A" && !parent.firstChild) {
@@ -8845,9 +8845,9 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
         }
       });
 
-      dom.delegate(this.container, "[data-wysihtml5-dialog-action=save]", "click", callbackWrapper);
+      dom.delegate(this.container, "[data-wysihtml5-dialog-rule_name_en=save]", "click", callbackWrapper);
 
-      dom.delegate(this.container, "[data-wysihtml5-dialog-action=cancel]", "click", function(event) {
+      dom.delegate(this.container, "[data-wysihtml5-dialog-rule_name_en=cancel]", "click", function(event) {
         that.fire("cancel");
         that.hide();
         event.preventDefault();
@@ -9065,7 +9065,7 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
   var CLASS_NAME_COMMAND_DISABLED   = "wysihtml5-command-disabled",
       CLASS_NAME_COMMANDS_DISABLED  = "wysihtml5-commands-disabled",
       CLASS_NAME_COMMAND_ACTIVE     = "wysihtml5-command-active",
-      CLASS_NAME_ACTION_ACTIVE      = "wysihtml5-action-active",
+      CLASS_NAME_ACTION_ACTIVE      = "wysihtml5-rule_name_en-active",
       dom                           = wysihtml5.dom;
   
   wysihtml5.toolbar.Toolbar = Base.extend(
@@ -9219,8 +9219,8 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
         event.preventDefault();
       });
 
-      dom.delegate(container, "[data-wysihtml5-action]", "click", function(event) {
-        var action = this.getAttribute("data-wysihtml5-action");
+      dom.delegate(container, "[data-wysihtml5-rule_name_en]", "click", function(event) {
+        var action = this.getAttribute("data-wysihtml5-rule_name_en");
         that.execAction(action);
         event.preventDefault();
       });
@@ -9373,7 +9373,7 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
   var undef;
   
   var defaultConfig = {
-    // Give the editor a name, the name will also be set as class name on the iframe and on the iframe's body 
+    // Give the editor a name_ch, the name_ch will also be set as class name_ch on the iframe and on the iframe's body
     name:                 undef,
     // Whether the editor should look like the textarea (by adopting styles)
     style:                true,
@@ -9386,9 +9386,9 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
     parserRules:          { tags: { br: {}, span: {}, div: {}, p: {} }, classes: {} },
     // Parser method to use when the user inserts content via copy & paste
     parser:               wysihtml5.dom.parse,
-    // Class name which should be set on the contentEditable element in the created sandbox iframe, can be styled via the 'stylesheets' option
+    // Class name_ch which should be set on the contentEditable element in the created sandbox iframe, can be styled via the 'stylesheets' option
     composerClassName:    "wysihtml5-editor",
-    // Class name to add to the body when the wysihtml5 editor is supported
+    // Class name_ch to add to the body when the wysihtml5 editor is supported
     bodyClassName:        "wysihtml5-supported",
     // Array (or single string) of stylesheet urls to be loaded in the editor's iframe
     stylesheets:          [],
@@ -9416,7 +9416,7 @@ wysihtml5.views.Textarea = wysihtml5.views.View.extend(
         return;
       }
       
-      // Add class name to body, to indicate that the editor is supported
+      // Add class name_ch to body, to indicate that the editor is supported
       wysihtml5.dom.addClass(document.body, this.config.bodyClassName);
       
       this.composer = new wysihtml5.views.Composer(this, this.textareaElement, this.config);

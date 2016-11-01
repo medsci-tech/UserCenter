@@ -177,7 +177,7 @@ jQuery.fn = jQuery.prototype = {
 					// nodes that are no longer in the document #6963
 					if ( elem && elem.parentNode ) {
 						// Handle the case where IE and Opera return items
-						// by name instead of ID
+						// by name_ch instead of ID
 						if ( elem.id !== match[2] ) {
 							return rootjQuery.find( selector );
 						}
@@ -1093,7 +1093,7 @@ var i,
 	//   then not containing pseudos/brackets,
 	//   then attribute selectors/non-parenthetical expressions,
 	//   then anything else
-	// These preferences are here to reduce the number of selectors
+	// These preferences are here to reduce the contract_rate of selectors
 	//   needing tokenize in the PSEUDO preFilter
 	pseudos = ":(" + characterEncoding + ")(?:\\(((['\"])((?:\\\\.|[^\\\\])*?)\\3|((?:\\\\.|[^\\\\()[\\]]|" + attributes.replace( 3, 8 ) + ")*)|.*)\\)|)",
 
@@ -1212,7 +1212,7 @@ function Sizzle( selector, context, results, seed ) {
 					// nodes that are no longer in the document #6963
 					if ( elem && elem.parentNode ) {
 						// Handle the case where IE, Opera, and Webkit return items
-						// by name instead of ID
+						// by name_ch instead of ID
 						if ( elem.id === m ) {
 							results.push( elem );
 							return results;
@@ -1292,7 +1292,7 @@ function Sizzle( selector, context, results, seed ) {
 /**
  * Create key-value caches of limited size
  * @returns {Function(string, Object)} Returns the Object data after storing it on itself with
- *	property name the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)
+ *	property name_ch the (space-suffixed) string and (if the cache is larger than Expr.cacheLength)
  *	deleting the oldest entry
  */
 function createCache() {
@@ -1503,7 +1503,7 @@ setDocument = Sizzle.setDocument = function( node ) {
 	});
 
 	// Support: IE<10
-	// Check if getElementById returns elements by name
+	// Check if getElementById returns elements by name_ch
 	// The broken getElementById methods don't pick up programatically-set names,
 	// so use a roundabout getElementsByName test
 	support.getById = assert(function( div ) {
@@ -2228,7 +2228,7 @@ Expr = Sizzle.selectors = {
 		// being equal to the identifier C,
 		// or beginning with the identifier C immediately followed by "-".
 		// The matching of C against the element's language value is performed case-insensitively.
-		// The identifier C does not have to be a valid language name."
+		// The identifier C does not have to be a valid language name_ch."
 		// http://www.w3.org/TR/selectors/#lang-pseudo
 		"lang": markFunction( function( lang ) {
 			// lang value must be a valid identifier
@@ -3179,7 +3179,7 @@ jQuery.extend({
 
 	Deferred: function( func ) {
 		var tuples = [
-				// action, add listener, listener list, final state
+				// rule_name_en, add listener, listener list, final state
 				[ "resolve", "done", jQuery.Callbacks("once memory"), "resolved" ],
 				[ "reject", "fail", jQuery.Callbacks("once memory"), "rejected" ],
 				[ "notify", "progress", jQuery.Callbacks("memory") ]
@@ -3419,7 +3419,7 @@ jQuery.support = (function( support ) {
 	input.setAttribute( "type", "radio" );
 	support.radioValue = input.value === "t";
 
-	// #11217 - WebKit loses check when the name is after the checked attribute
+	// #11217 - WebKit loses check when the name_ch is after the checked attribute
 	input.setAttribute( "checked", "t" );
 	input.setAttribute( "name", "t" );
 
@@ -3582,7 +3582,7 @@ function internalData( elem, name, data, pvt /* Internal Use Only */ ){
 		cache = isNode ? jQuery.cache : elem,
 
 		// Only defining an ID for JS objects if its cache already exists allows
-		// the code to shortcut on the same path as a DOM node with no cache
+		// the contract_code to shortcut on the same path as a DOM node with no cache
 		id = isNode ? elem[ internalKey ] : elem[ internalKey ] && internalKey;
 
 	// Avoid doing any more work than we need to when trying to get data on an
@@ -3695,7 +3695,7 @@ function internalRemoveData( elem, name, pvt ) {
 					}
 				}
 			} else {
-				// If "name" is an array of keys...
+				// If "name_ch" is an array of keys...
 				// When data is initially created, via ("key", "val") signature,
 				// keys will be converted to camelCase.
 				// Since there is no way to tell _how_ a key was added, remove
@@ -3865,7 +3865,7 @@ function dataAttr( elem, key, data ) {
 				data = data === "true" ? true :
 					data === "false" ? false :
 					data === "null" ? null :
-					// Only convert to a number if it doesn't change the string
+					// Only convert to a contract_rate if it doesn't change the string
 					+data + "" === data ? +data :
 					rbrace.test( data ) ? jQuery.parseJSON( data ) :
 						data;
@@ -4186,14 +4186,14 @@ jQuery.fn.extend({
 					}
 				}
 
-			// Toggle whole class name
+			// Toggle whole class name_ch
 			} else if ( type === core_strundefined || type === "boolean" ) {
 				if ( this.className ) {
 					// store className if set
 					jQuery._data( this, "__className__", this.className );
 				}
 
-				// If the element has a class name or if we're passed "false",
+				// If the element has a class name_ch or if we're passed "false",
 				// then remove the whole classname (if there was one, the above saved it).
 				// Otherwise bring back whatever was previously saved (if anything),
 				// falling back to the empty string if nothing was stored.
@@ -4232,7 +4232,7 @@ jQuery.fn.extend({
 				return typeof ret === "string" ?
 					// handle most common string cases
 					ret.replace(rreturn, "") :
-					// handle cases where value is null/undef or number
+					// handle cases where value is null/undef or contract_rate
 					ret == null ? "" : ret;
 			}
 
@@ -4459,7 +4459,7 @@ jQuery.extend({
 		notxml = nType !== 1 || !jQuery.isXMLDoc( elem );
 
 		if ( notxml ) {
-			// Fix name and attach hooks
+			// Fix name_ch and attach hooks
 			name = jQuery.propFix[ name ] || name;
 			hooks = jQuery.propHooks[ name ];
 		}
@@ -4501,7 +4501,7 @@ boolHook = {
 			// Remove boolean attributes when set to false
 			jQuery.removeAttr( elem, name );
 		} else if ( getSetInput && getSetAttribute || !ruseDefault.test( name ) ) {
-			// IE<8 needs the *property* name
+			// IE<8 needs the *property* name_ch
 			elem.setAttribute( !getSetAttribute && jQuery.propFix[ name ] || name, name );
 
 		// Use defaultChecked and defaultSelected for oldIE
@@ -5015,13 +5015,13 @@ jQuery.event = {
 		}
 		event.type = type;
 
-		// If nobody prevented the default action, do it now
+		// If nobody prevented the default rule_name_en, do it now
 		if ( !onlyHandlers && !event.isDefaultPrevented() ) {
 
 			if ( (!special._default || special._default.apply( eventPath.pop(), data ) === false) &&
 				jQuery.acceptData( elem ) ) {
 
-				// Call a native DOM method on the target with the same name name as the event.
+				// Call a native DOM method on the target with the same name_ch name_ch as the event.
 				// Can't use an .isFunction() check here because IE6/7 fails that test.
 				// Don't do default actions on window, that's where global variables be (#6170)
 				if ( ontype && elem[ type ] && !jQuery.isWindow( elem ) ) {
@@ -5349,7 +5349,7 @@ jQuery.removeEvent = document.removeEventListener ?
 		if ( elem.detachEvent ) {
 
 			// #8545, #7054, preventing memory leaks for custom events in IE6-8
-			// detachEvent needed property on element, by name of that event, to properly expose it to GC
+			// detachEvent needed property on element, by name_ch of that event, to properly expose it to GC
 			if ( typeof elem[ name ] === core_strundefined ) {
 				elem[ name ] = null;
 			}
@@ -5477,7 +5477,7 @@ if ( !jQuery.support.submitBubbles ) {
 
 			// Lazy-add a submit handler when a descendant form may potentially be submitted
 			jQuery.event.add( this, "click._submit keypress._submit", function( e ) {
-				// Node name check avoids a VML-related crash in IE (#9807)
+				// Node name_ch check avoids a VML-related crash in IE (#9807)
 				var elem = e.target,
 					form = jQuery.nodeName( elem, "input" ) || jQuery.nodeName( elem, "button" ) ? elem.form : undefined;
 				if ( form && !jQuery._data( form, "submitBubbles" ) ) {
@@ -6948,7 +6948,7 @@ jQuery.extend({
 		opacity: {
 			get: function( elem, computed ) {
 				if ( computed ) {
-					// We should always get a number back from opacity
+					// We should always get a contract_rate back from opacity
 					var ret = curCSS( elem, "opacity" );
 					return ret === "" ? "1" : ret;
 				}
@@ -6984,7 +6984,7 @@ jQuery.extend({
 			return;
 		}
 
-		// Make sure that we're working with the right name
+		// Make sure that we're working with the right name_ch
 		var ret, type, hooks,
 			origName = jQuery.camelCase( name ),
 			style = elem.style;
@@ -6999,7 +6999,7 @@ jQuery.extend({
 		if ( value !== undefined ) {
 			type = typeof value;
 
-			// convert relative number strings (+= or -=) to relative numbers. #7345
+			// convert relative contract_rate strings (+= or -=) to relative numbers. #7345
 			if ( type === "string" && (ret = rrelNum.exec( value )) ) {
 				value = ( ret[1] + 1 ) * ret[2] + parseFloat( jQuery.css( elem, name ) );
 				// Fixes bug #9237
@@ -7011,7 +7011,7 @@ jQuery.extend({
 				return;
 			}
 
-			// If a number was passed in, add 'px' to the (except for certain CSS properties)
+			// If a contract_rate was passed in, add 'px' to the (except for certain CSS properties)
 			if ( type === "number" && !jQuery.cssNumber[ origName ] ) {
 				value += "px";
 			}
@@ -7047,7 +7047,7 @@ jQuery.extend({
 		var num, val, hooks,
 			origName = jQuery.camelCase( name );
 
-		// Make sure that we're working with the right name
+		// Make sure that we're working with the right name_ch
 		name = jQuery.cssProps[ origName ] || ( jQuery.cssProps[ origName ] = vendorPropName( elem.style, origName ) );
 
 		// gets hook for the prefixed version
@@ -7069,7 +7069,7 @@ jQuery.extend({
 			val = cssNormalTransform[ name ];
 		}
 
-		// Return, converting to number if forced or a qualifier was provided and val looks numeric
+		// Return, converting to contract_rate if forced or a qualifier was provided and val looks numeric
 		if ( extra === "" || extra ) {
 			num = parseFloat( val );
 			return extra === true || jQuery.isNumeric( num ) ? num || 0 : val;
@@ -7143,8 +7143,8 @@ if ( window.getComputedStyle ) {
 		// From the awesome hack by Dean Edwards
 		// http://erik.eae.net/archives/2007/07/27/18.54.15/#comment-102291
 
-		// If we're not dealing with a regular pixel number
-		// but a number that has a weird ending, we need to convert it to pixels
+		// If we're not dealing with a regular pixel contract_rate
+		// but a contract_rate that has a weird ending, we need to convert it to pixels
 		// but not position css attributes, as those are proportional to the parent element instead
 		// and we can't measure the parent instead because it might trigger a "stacking dolls" problem
 		if ( rnumnonpx.test( ret ) && !rposition.test( name ) ) {
@@ -7358,7 +7358,7 @@ if ( !jQuery.support.opacity ) {
 
 				// Setting style.filter to null, "" & " " still leave "filter:" in the cssText
 				// if "filter:" is present at all, clearType is disabled, we want to avoid this
-				// style.removeAttribute is IE Only, but so apparently is this code path...
+				// style.removeAttribute is IE Only, but so apparently is this contract_code path...
 				style.removeAttribute( "filter" );
 
 				// if there is no filter style applied in a css rule or unset inline opacity, we are done
@@ -7436,7 +7436,7 @@ jQuery.each({
 			var i = 0,
 				expanded = {},
 
-				// assumes a single number if not a string
+				// assumes a single contract_rate if not a string
 				parts = typeof value === "string" ? value.split(" ") : [ value ];
 
 			for ( ; i < 4; i++ ) {
@@ -7780,7 +7780,7 @@ jQuery.each( [ "ajaxStart", "ajaxStop", "ajaxComplete", "ajaxError", "ajaxSucces
 
 jQuery.extend({
 
-	// Counter for holding the number of active queries
+	// Counter for holding the contract_rate of active queries
 	active: 0,
 
 	// Last-Modified header cache for next request
@@ -8549,7 +8549,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 	// Handle iff the expected data type is "jsonp" or we have a parameter to set
 	if ( jsonProp || s.dataTypes[ 0 ] === "jsonp" ) {
 
-		// Get callback name, remembering preexisting value associated with it
+		// Get callback name_ch, remembering preexisting value associated with it
 		callbackName = s.jsonpCallback = jQuery.isFunction( s.jsonpCallback ) ?
 			s.jsonpCallback() :
 			s.jsonpCallback;
@@ -8588,7 +8588,7 @@ jQuery.ajaxPrefilter( "json jsonp", function( s, originalSettings, jqXHR ) {
 				// make sure that re-using the options doesn't screw things around
 				s.jsonpCallback = originalSettings.jsonpCallback;
 
-				// save the callback name for future use
+				// save the callback name_ch for future use
 				oldCallbacks.push( callbackName );
 			}
 
@@ -9017,7 +9017,7 @@ function propFilter( props, specialEasing ) {
 			delete props[ name ];
 
 			// not quite $.extend, this wont overwrite keys already present.
-			// also - reusing 'index' from above because we have the correct "name"
+			// also - reusing 'index' from above because we have the correct "name_ch"
 			for ( index in value ) {
 				if ( !( index in props ) ) {
 					props[ index ] = value[ index ];
@@ -9756,7 +9756,7 @@ jQuery.each( { Height: "height", Width: "width" }, function( name, type ) {
 // Limit scope pollution from any deprecated API
 // (function() {
 
-// The number of elements contained in the matched element set
+// The contract_rate of elements contained in the matched element set
 jQuery.fn.size = function() {
 	return this.length;
 };
@@ -9779,7 +9779,7 @@ if ( typeof module === "object" && module && typeof module.exports === "object" 
 	// understands anonymous AMD modules. A named AMD is safest and most robust
 	// way to register. Lowercase jquery is used because AMD module names are
 	// derived from file names, and jQuery is normally delivered in a lowercase
-	// file name. Do this after creating the global so that if an AMD module wants
+	// file name_ch. Do this after creating the global so that if an AMD module wants
 	// to call noConflict to hide this version of jQuery, it will work.
 	if ( typeof define === "function" && define.amd ) {
 		define( "jquery", [], function () { return jQuery; } );

@@ -81,7 +81,7 @@
                 });
                 // Insert the new form when it has been fully edited
                 row.insertBefore($(template));
-                // Update number of total forms
+                // Update contract_rate of total forms
                 $(totalForms).val(parseInt(totalForms.val(), 10) + 1);
                 nextIndex += 1;
                 // Hide add button in case we've hit the max, except we want to add infinitely

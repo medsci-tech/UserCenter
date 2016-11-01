@@ -64,7 +64,7 @@ def configParam(request=None):
             'expire': None,  # 有效期
         },
 
-        # appId 对应数据库objectId
+        # app_id 对应数据库objectId
         'c_api_appId': {
             1: '580c05ae4eaa7653f70d82a3',  # 药械通微信端
             2: '580c215c4eaa7657001f2365',  # mime web平台

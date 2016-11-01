@@ -1,17 +1,22 @@
 # -*- coding: utf-8 -*-
 # 公共引入文件
-from admin.model.Common_import import *
+from admin.model.CommonImport import *
+
 
 class Syslog(Auth):
     meta = Document.meta = {
         'collection': settings.MONGODB_PREFIX + 'syslog',
         'indexes': [],
     }
-    createTime = DateTimeField(default=datetime.now())
-    table = StringField()  # 操作集合
-    tableId = StringField()  # 操作集合主键对应的id
-    action = IntField()  # 动作
-    after = DictField()  # 操作后记录
-    adminId = StringField()  # 操作用户id
-    adminName = StringField()  # 操作用户
-    ip = StringField()
+
+    admin_id    = ObjectIdField()  # 操作用户id
+    admin_name  = StringField()  # 操作用户
+    admin_ip    = StringField()
+
+    table       = StringField()  # 操作集合
+    table_id    = ObjectIdField()  # 操作集合主键对应的id
+
+    action  = IntField()    # 动作
+    after   = DictField()   # 操作后记录
+
+    create_time = DateTimeField(default=datetime.now())

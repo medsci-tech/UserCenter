@@ -16,7 +16,7 @@ $(document).ready(function(){
 	$('.chat-message button').click(function(){
 		var input = $(this).parent().siblings('input[type=text]');		
 		if(input.val() != ''){
-			add_message('You','img/demo/av1.jpg',input.val(),true);
+			add_message('You','contract_img/demo/av1.jpg',input.val(),true);
 		} else {
 			$('.input-box').addClass('has-error');
 		}
@@ -30,7 +30,7 @@ $(document).ready(function(){
 		if($(this).val() != '') $('.input-box').removeClass('has-error');
 		if(e.which == 13) {	
 			if($(this).val() != ''){
-				add_message('You','img/demo/av1.jpg',$(this).val(),true);
+				add_message('You','contract_img/demo/av1.jpg',$(this).val(),true);
 			} else {
 				$('.input-box').addClass('has-error');
 			}		
@@ -38,10 +38,10 @@ $(document).ready(function(){
 	});
 	
 	setTimeout(function(){
-		add_message('Neytiri','img/demo/av2.jpg','I have a problem. My computer not work!')
+		add_message('Neytiri','contract_img/demo/av2.jpg','I have a problem. My computer not work!')
 	},'1000');
 	setTimeout(function(){
-		add_message('Cartoon Man','img/demo/av3.jpg','Turn off and turn on your computer then see result.')
+		add_message('Cartoon Man','contract_img/demo/av3.jpg','Turn off and turn on your computer then see result.')
 	},'5000');
 	setTimeout(function(){
         remove_user('neytiri','Neytiri')
@@ -58,7 +58,7 @@ $(document).ready(function(){
 		if(minutes < 10) minutes = '0' + minutes;
 		var id = 'msg-'+i;
         var idname = name.replace(' ','-').toLowerCase();
-		messages_inner.append('<p id="'+id+'" class="user-'+idname+'"><img src="'+img+'" alt="" />'
+		messages_inner.append('<p id="'+id+'" class="user-'+idname+'"><contract_img src="'+img+'" alt="" />'
 										+'<span class="msg-block"><strong>'+name+'</strong> <span class="time">- '+hours+':'+minutes+'</span>'
 										+'<span class="msg">'+msg+'</span></span></p>');
 		$('#'+id).fadeOut(0).addClass('show');

@@ -15,7 +15,7 @@
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>企业
-               <select id="form-searchCompanyId" name="companyId" class="form-inline2">
+               <select id="form-searchCompanyId" name="company_id" class="form-inline2">
                     <option value="" selected>请选择</option>
                     {% for data in comList reversed  %}
                         <option value="{{ data.id }}">{{ data.name }}</option>
@@ -23,7 +23,7 @@
                 </select>
             </label>
             <label>应用
-               <select id="form-searchAppId" name="appId" class="form-inline2">
+               <select id="form-searchAppId" name="app_id" class="form-inline2">
                     <option value="" selected>请选择</option>
                     {% for data in appList reversed  %}
                         <option value="{{ data.id }}">{{ data.name }}</option>
@@ -31,10 +31,10 @@
                 </select>
             </label>
             <label>合同名称：
-                <input type="text" name="name" value="{{ ctrlList.name }}">
+                <input type="text" name="name_ch" value="{{ ctrlList.name_ch }}">
             </label>
             <label>合同编号：
-                <input type="text" name="number" value="{{ ctrlList.code }}">
+                <input type="text" name="contract_code" value="{{ ctrlList.contract_code }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
@@ -79,13 +79,13 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ data.id }}"/>
                                 </td>
-                                <td>{{ data.name }}</td>
-                                <td>{{ data.code }}</td>
-                                <td>{{ data.amount }}</td>
-                                <td>{{ data.number }}</td>
-                                <td align="center"><button disabled="" class="btn btn-dark-green btn-xs">{{ data.totalBeans }}</button></td>
-                                <td align="center"><button disabled="" class="btn btn-dark-red btn-xs">{{ data.useBeans }}</button></td>
-                                <td>{{ data.startTime }}-{{ data.endTime }}</td>
+                                <td>{{ data.name_ch }}</td>
+                                <td>{{ data.contract_code }}</td>
+                                <td>{{ data.contract_amount }}</td>
+                                <td>{{ data.contract_rate }}</td>
+                                <td align="center"><button disabled="" class="btn btn-dark-green btn-xs">{{ data.total_beans }}</button></td>
+                                <td align="center"><button disabled="" class="btn btn-dark-red btn-xs">{{ data.used_beans }}</button></td>
+                                <td>{{ data.start_time }} / {{ data.end_time }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == data.status %}
@@ -96,24 +96,24 @@
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
-                                       data-companyId="{{ data.companyId }}"
-                                       data-appId="{{ data.appId }}"
-                                       data-name="{{ data.name }}"
+                                       data-company_id="{{ data.company_id }}"
+                                       data-app_id="{{ data.app_id }}"
+                                       data-name_ch="{{ data.name_ch }}"
                                        data-status="{{ data.status }}"
-                                       data-code="{{ data.code }}"
-                                       data-number="{{ data.number }}"
-                                       data-amount="{{ data.amount }}"
-                                       data-img="{{ data.img }}"
-                                       data-startTime="{{ data.startTime }}"
-                                       data-endTime="{{ data.endTime }}"
+                                       data-contract_code="{{ data.contract_code }}"
+                                       data-contract_rate="{{ data.contract_rate }}"
+                                       data-contract_amount="{{ data.contract_amount }}"
+                                       data-contract_img="{{ data.contract_img }}"
+                                       data-start_time="{{ data.start_time }}"
+                                       data-end_time="{{ data.end_time }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                     <a href="#rechargeModal" data-toggle="modal" data-form="recharge-model" class="btn btn-default btn-xs"
                                        data-id="{{ data.id }}"
                                     ><i class="fa fa-edit"></i> 充值</a>
 
-                                    {%if data.img %}
+                                    {%if data.contract_img %}
                                     <span class="image-row">
-				                        <a class="example-image-link example-image-link btn btn-default btn-xs" href="{{ data.img }}" data-lightbox="example-1"><i class="fa fa-eye "></i> 查看合同</a>
+				                        <a class="example-image-link example-image-link btn btn-default btn-xs" href="{{ data.contract_img }}" data-lightbox="example-1"><i class="fa fa-eye "></i> 查看合同</a>
 			                        </span>
                                     {% endif %}
                                 </td>
@@ -172,29 +172,29 @@ $(function () {
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
     });
 
-    var companyId = '{{ ctrlList.companyId }}';
-    if(companyId){
-        $('#form-searchCompanyId').val(companyId);
+    var company_id = '{{ ctrlList.company_id }}';
+    if(company_id){
+        $('#form-searchCompanyId').val(company_id);
     }
-    var appId = '{{ ctrlList.appId }}';
-    if(appId){
-        $('#form-searchAppId').val(appId);
+    var app_id = '{{ ctrlList.app_id }}';
+    if(app_id){
+        $('#form-searchAppId').val(app_id);
     }
     /**
      * 点击添加按钮触发的操作
      */
     $('[data-form="add-model"]').click(function () {
         var kong = '';
-        selectOptionHtmlForMime({}, '#form-appId');
-        $('#form-companyId').val(kong);
+        selectOptionHtmlForMime({}, '#form-app_id');
+        $('#form-company_id').val(kong);
         $('#form-id').val(kong);
-        $('#form-name').val(kong);
-        $('#form-number').val(kong);
-        $('#form-code').val(kong);
-        $('#form-amount').val(kong);
+        $('#form-name_ch').val(kong);
+        $('#form-contract_rate').val(kong);
+        $('#form-contract_code').val(kong);
+        $('#form-contract_amount').val(kong);
         $('[data-toggle="upload-progressInput-one"]').val(kong);
-        $('#form-startTime').val(kong);
-        $('#form-endTime').val(kong);
+        $('#form-start_time').val(kong);
+        $('#form-end_time').val(kong);
         $('#form-status').val(1);
     });
     /**
@@ -203,26 +203,26 @@ $(function () {
     $('[data-form="edit-model"]').click(function () {
 
         var id = $(this).attr('data-id');
-        var companyId = $(this).attr('data-companyId');
-        var appId = $(this).attr('data-appId');
-        var name = $(this).attr('data-name');
-        var code = $(this).attr('data-code');
-        var number = $(this).attr('data-number');
-        var amount = $(this).attr('data-amount');
-        var img = $(this).attr('data-img');
-        var startTime = $(this).attr('data-startTime');
-        var endTime = $(this).attr('data-endTime');
+        var company_id = $(this).attr('data-company_id');
+        var app_id = $(this).attr('data-app_id');
+        var name_ch = $(this).attr('data-name_ch');
+        var contract_code = $(this).attr('data-contract_code');
+        var contract_rate = $(this).attr('data-contract_rate');
+        var contract_amount = $(this).attr('data-contract_amount');
+        var contract_img = $(this).attr('data-contract_img');
+        var start_time = $(this).attr('data-start_time');
+        var end_time = $(this).attr('data-end_time');
         var status = $(this).attr('data-status');
-        changeListDataByAjaxForMime(app_list_url, {'companyId': companyId}, '#form-appId', 'optionHtml', appId);
+        changeListDataByAjaxForMime(app_list_url, {'company_id': company_id}, '#form-app_id', 'optionHtml', app_id);
         $('#form-id').val(id);
-        $('#form-companyId').val(companyId);
-        $('#form-name').val(name);
-        $('#form-number').val(number);
-        $('#form-code').val(code);
-        $('#form-amount').val(amount);
-        $('[data-toggle="upload-progressInput-one"]').val(img);
-        $('#form-startTime').val(startTime);
-        $('#form-endTime').val(endTime);
+        $('#form-company_id').val(company_id);
+        $('#form-name_ch').val(name_ch);
+        $('#form-contract_rate').val(contract_rate);
+        $('#form-contract_code').val(contract_code);
+        $('#form-contract_amount').val(contract_amount);
+        $('[data-toggle="upload-progressInput-one"]').val(contract_img);
+        $('#form-start_time').val(start_time);
+        $('#form-end_time').val(end_time);
         $('#form-status').val(status);
         uploadDataReset('one');
     });
@@ -273,27 +273,27 @@ $(function () {
   /**
    * 获取企业应用列表
    */
-    $('#form-companyId').change(function () {
-      changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
+    $('#form-company_id').change(function () {
+      changeListDataByAjaxForMime(app_list_url, {'company_id': this.value}, '#form-app_id', 'optionHtml');
       console.log(this.value);
     });
     $('#form-searchCompanyId').change(function () {
-      changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-searchAppId', 'optionHtml');
+      changeListDataByAjaxForMime(app_list_url, {'company_id': this.value}, '#form-searchAppId', 'optionHtml');
       console.log(this.value);
     });
     /**
      * 日期插件
      */
-    $('#form-startTime').datepicker({
+    $('#form-start_time').datepicker({
         dateFormat: "yy-mm-dd",
 		onClose: function( selectedDate ) {
-			$( "#form-endTime" ).datepicker( "option", "minDate", selectedDate );
+			$( "#form-end_time" ).datepicker( "option", "minDate", selectedDate );
 		}
 	});
-	$('#form-endTime').datepicker({
+	$('#form-end_time').datepicker({
         dateFormat: "yy-mm-dd",
 		onClose: function( selectedDate ) {
-			$( "#form-startTime" ).datepicker( "option", "maxDate", selectedDate );
+			$( "#form-start_time" ).datepicker( "option", "maxDate", selectedDate );
 		}
 	});
 });

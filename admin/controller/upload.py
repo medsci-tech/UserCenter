@@ -27,9 +27,9 @@ def handle_uploaded_file (filepath, file):
     try:
         for chunk in file.chunks():
             fd.write(chunk)
-        returnData = {'code': '200', 'msg': '成功', 'data': '%s%s/%s' % (UPLOAD_URL, save_path, save_name)}
+        returnData = {'contract_code': '200', 'msg': '成功', 'data': '%s%s/%s' % (UPLOAD_URL, save_path, save_name)}
     except Exception:
-        returnData = {'code': '900', 'msg': '失败', 'data': ''}
+        returnData = {'contract_code': '900', 'msg': '失败', 'data': ''}
     finally:
         fd.close()
     return returnData
@@ -43,13 +43,13 @@ def img(request):
     if file.content_type in file_type:
         try:
             save_name = handle_uploaded_file(file_path, file)
-            if save_name.get('code') == '200':
-                returnData = {'code': '200', 'msg': '成功', 'data': {'tName': file.name, 'saveName': [save_name.get('data')]}}
+            if save_name.get('contract_code') == '200':
+                returnData = {'contract_code': '200', 'msg': '成功', 'data': {'tName': file.name, 'saveName': [save_name.get('data')]}}
             else:
-                returnData = {'code': '802', 'msg': '失败', 'data': ''}
+                returnData = {'contract_code': '802', 'msg': '失败', 'data': ''}
         except Exception:
-            returnData = {'code': '900', 'msg': '失败', 'data': ''}
+            returnData = {'contract_code': '900', 'msg': '失败', 'data': ''}
     else:
-        returnData = {'code': '801', 'msg': '文件格式不支持', 'data': ''}
+        returnData = {'contract_code': '801', 'msg': '文件格式不支持', 'data': ''}
 
     return HttpResponse(json.dumps(returnData), content_type="application/json")

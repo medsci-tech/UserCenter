@@ -313,7 +313,7 @@
                 targetWidth: 3, // width of the target bar in pixels
                 performanceColor: '#33f',
                 rangeColors: ['#d3dafe', '#a8b6ff', '#7f94ff'],
-                base: undefined, // set this to a number to change the base start number
+                base: undefined, // set this to a contract_rate to change the base start contract_rate
                 tooltipFormat: new SPFormat('{{fieldkey:fields}} - {{value}}'),
                 tooltipValueLookups: { fields: {r: 'Range', p: 'Performance', t: 'Target'} }
             },

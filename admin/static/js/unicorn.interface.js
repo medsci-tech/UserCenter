@@ -51,7 +51,7 @@ $(document).ready(function(){
 	$.gritter.add({
 		title:	'Unread messages',
 		text:	'You have 9 unread messages.',
-		image: 	'img/demo/envelope.png',
+		image: 	'contract_img/demo/envelope.png',
 		sticky: false
 	});	
 	$('#gritter-notify .normal').click(function(){
@@ -143,7 +143,7 @@ $(document).ready(function(){
     });
     $('#bootbox-prompt').click(function(e){
     	e.preventDefault();
-    	bootbox.prompt("What is your name?", function(result) {
+    	bootbox.prompt("What is your name_ch?", function(result) {
 			if (result !== null && result !== '') {
 				bootbox.dialog({
 					message: 'Hi '+result+'!',

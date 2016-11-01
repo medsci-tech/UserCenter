@@ -18,7 +18,7 @@ def index(request):
     adminId = []
     table = post.get('table')
     action = post.get('action')
-    adminName = post.get('adminName')
+    adminName = post.get('admin_name')
     if table:
         param.update(table=table)
     if action:
@@ -29,7 +29,7 @@ def index(request):
         if adminList:
             for ids in adminList:
                 adminId.append(str(ids['id']))
-            param.update(adminId__in=adminId)
+            param.update(admin_id__in=adminId)
         else:
             param.update(id='00000000000000000000000a')  # 无效的24位id
     data = Model.objects.filter(**param).order_by("id")  # 根据条件查询积分配置列表
@@ -50,8 +50,8 @@ def index(request):
 添加log记录--用于controller之间的调用，外部url不能直接访问
     param = {
         'table': 'table',
-        'tableId': 'tableId',
-        'action': 'action',
+        'table_id': 'table_id',
+        'rule_name_en': 'rule_name_en',
         'after': 'after',
     }
 '''
@@ -61,16 +61,14 @@ def logsform(request, param):
         ip = x_forwarded_for.split(',')[0]
     else:
         ip = request.META.get('REMOTE_ADDR')
-    param.update(ip=ip)
-    param.update(adminId=request.session.get('uid'))
-    param.update(adminName=request.session.get('username'))
+    param.update(admin_ip=ip)
+    param.update(admin_id=request.session.get('uid'))
+    param.update(admin_name=request.session.get('username'))
     try:
         model = Model.objects.create(**param)
         if model:
-            returnData = {'code': '200', 'msg': '操作成功', 'data': str(model['id'])}
+            return ApiResponse(200, '操作成功', str(model['id'])).json_return()
         else:
-            returnData = {'code': '801', 'msg': '操作失败', 'data': ''}
+            return ApiResponse(-1, '操作失败').json_return()
     except Exception:
-        returnData = {'code': '900', 'msg': '数据验证错误', 'data': ''}
-
-    return returnData
+        return ApiResponse(-2, '数据验证错误').json_return()

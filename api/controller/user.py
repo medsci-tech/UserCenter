@@ -16,12 +16,11 @@ def _editUser(param):
     try:
         model = Model.objects.get(id=uc_uid).update(**param)
     except Exception:
-        return {'code': 808, 'msg': '数据验证错误', 'data': None}
+        return ApiResponse(-3, '数据验证错误').json_return()
     if model:
-        returnData = {'code': 200, 'msg': '操作成功', 'data': str(model['id'])}
+        return ApiResponse(200, '操作成功', str(model['id'])).json_return()
     else:
-        returnData = {'code': 800, 'msg': '操作失败', 'data': None}
-    return returnData
+        return ApiResponse(-1, '操作失败', str(model['id'])).json_return()
 
 # ============================
 # 修改
@@ -30,21 +29,18 @@ def _editUser(param):
 def edit(request):
     post = request.POST
     if not post:
-        returnData = {'code': 900, 'msg': '非法请求', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(403, '非法请求').json_response()
     uc_uid = post.get('uc_uid')
     token = post.get('token')
     check_token = QXToken(uc_uid).verify_auth_token(token)
     if check_token == None:
-        return {'code': 901, 'msg': '非法操作', 'data': None}
+        return ApiResponse(-2, '非法操作').json_response()
     param = {
         'username': post.get('username'),
         'password': make_password(post.get('username').strip(), None, 'pbkdf2_sha256'),
     }
     result = _editUser(param)
-    if result.get('code') == 200:
-        returnData = {'code': 200, 'msg': '成功', 'data': None}
+    if result.get('contract_code') == 200:
+        return ApiResponse(200, '成功').json_response()
     else:
-        returnData = result
-
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(result).json_response()
