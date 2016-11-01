@@ -124,7 +124,7 @@ def save(request):
                 logParam.update(table_id=id)  # log记录参数
                 logParam.update(action=2)  # log记录参数,rule_name_en=2为修改
             else:
-                logParam.update(table_id=returnData.get('data'))  # log记录参数
+                logParam.update(table_id=json.loads(returnData).get('data'))  # log记录参数
                 logParam.update(action=1)  # log记录参数,rule_name_en=1为添加
             if 'id' in logParam['after']:
                 del logParam['after']['id']

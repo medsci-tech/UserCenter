@@ -78,14 +78,13 @@ def _editById(**param):
             check_model = None
         if check_model and str(check_model['id']) != id:
             return ApiResponse(-4, '手机号已经存在').json_return()
-        if hasattr(param, 'password'):
-            if password:
-                param.update(password=make_password(password, None, 'pbkdf2_sha256'))
-            else:
-                # 如果留空则移除password属性，不修改密码
-                param.pop('password')
+        if password:
+            param.update(password=make_password(password, None, 'pbkdf2_sha256'))
+        else:
+            # 如果留空则移除password属性，不修改密码
+            param.pop('password')
         try:
-            # param.update(updated_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            param.update(updated_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             Model.objects.get(id=id).update(**param)
             return ApiResponse(200, '操作成功').json_return()
         except Exception:
