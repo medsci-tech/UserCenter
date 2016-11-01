@@ -1,29 +1,19 @@
-<div id='beans-chart'>
-    <div class="row">
+<div id='user-chart'>
+    <div class="row user_chart_hide">
         <div class="col-sm-6">
-            <div id="chart0" style="width: auto;height:400px;">
+            <div id="user_chart2" style="width: auto;height:400px;">
             </div>
         </div>
         <div class="col-sm-6">
-            <div id="chart1" style="width: auto;height:400px;">
-            </div>
-        </div>
-    </div>
-    <div class="row chart_hide">
-        <div class="col-sm-6">
-            <div id="chart2" style="width: auto;height:400px;">
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div id="chart3" style="width: auto;height:400px;">
+            <div id="user_chart3" style="width: auto;height:400px;">
             </div>
         </div>
     </div>
-    <div class="row chart_hide">
+    <div class="row user_chart_hide">
         <div class="col-sm-6 text-center">
-            <button type="button" style="width: 15%;" @click='all_data' class="form-control btn btn-primary" style="margin: 0;">全部选中</button>
+            <button type="button" style="width: auto;" @click='all_data' class="form-control btn btn-primary" style="margin: 0;">全部选中</button>
         </div>
-        <div class="col-sm-1 col-sm-offset-1" style="width: auto; margin-left: 10%">
+        <div class="col-sm-1 col-sm-offset-1 " style="width: auto;">
             <select class="form-control" v-model='date.year'>
                 <option value="2015">
                     2015年
@@ -50,39 +40,20 @@
             </select>
         </div>
         <div class="col-sm-1">
-            <button type="button" @click='change_data' class="form-control btn btn-primary" style="margin: 0;">查看</button>
+            <button type="button" @click='changeData' class="form-control btn btn-primary" style="margin: 0;">查看</button>
         </div>
     </div>
 </div>
-<!-- chart1 -->
+<!-- user_chart1 -->
 <script>
 var vm = new Vue({
-    el: '#beans-chart',
+    el: '#user-chart',
     data: {
         color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
         date: {
             year: '',
             mounth: ''
         },
-        class_data: [
-
-            {
-                value: Math.random() * 2000,
-                name: '直接访问'
-            }, {
-                value: Math.random() * 2000,
-                name: '邮件营销'
-            }, {
-                value: Math.random() * 2000,
-                name: '联盟广告'
-            }, {
-                value: Math.random() * 2000,
-                name: '视频广告'
-            }, {
-                value: Math.random() * 2000,
-                name: '搜索引擎'
-            }
-        ],
         strategy_data: [
 
             {
@@ -218,13 +189,13 @@ var vm = new Vue({
         },
         all_data: function() {
             for (item in vm.strategy_data) {
-                myChart3.dispatchAction({
+                myuser_Chart3.dispatchAction({
                     type: 'legendSelect',
                     // 图例名称
                     name: vm.strategy_data[item].name
                 });
             };
-            myChart3.dispatchAction({
+            myuser_Chart3.dispatchAction({
                 type: 'legendSelect',
                 // 图例名称
                 name: vm.strategy_data[0].name
@@ -275,25 +246,27 @@ var vm = new Vue({
     },
 });
 
-var myChart0 = echarts.init(document.getElementById('chart0'));
-var myChart1 = echarts.init(document.getElementById('chart1'));
-var myChart2 = echarts.init(document.getElementById('chart2'));
-var myChart3 = echarts.init(document.getElementById('chart3'));
-$('.chart_hide').addClass('hidden');
+var myuser_Chart2 = echarts.init(document.getElementById('user_chart2'));
+var myuser_Chart3 = echarts.init(document.getElementById('user_chart3'));
 
-var option0 = {
+
+var option2 = {
     title: {
         text: '迈豆池',
     },
     tooltip: {
         trigger: 'item',
-        formatter: '{b}<br>{c} : {d}% '
+        formatter: function(params) {
+            if (params.seriesType == 'pie') {
+                return params.name + '<br>' + params.value + '(' + params.percent + '%)'
+            }
+        },
     },
     series: [{
         type: 'pie',
         radius: '50%',
         center: ['50%', '50%'],
-        data: vm.class_data,
+        data: vm.strategy_data,
         itemStyle: {
             emphasis: {
                 shadowBlur: 10,
@@ -301,130 +274,56 @@ var option0 = {
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
             }
         }
-    }],
+    }]
 };
+myuser_Chart2.setOption(option2);
 
 
-var option1 = {
-    grid: {
-        left: '3%',
-        right: '4%',
-        bottom: '3%',
-        containLabel: true
-    },
-    yAxis: [{
-        type: 'value'
+var option3 = {
+    legend: [{
+        data: vm.data_head(vm.strategy_data),
+        // left: '55%',
     }],
     xAxis: [{
-        type: 'category',
-        data: vm.data_head(vm.class_data),
+        name: vm.date.mounth,
+        gridIndex: 0,
+        boundaryGap: false,
+        data: vm.data_head(vm.mounth_data[0].value),
     }],
+    yAxis: [{
+        gridIndex: 0,
+    }],
+    dataZoom: [{
+        xAxisIndex: 0,
+        filterMode: 'empty',
+    }, {
+        type: 'inside',
+        xAxisIndex: 0,
+    }],
+    series: vm.series_change_to_line(vm.mounth_data),
     tooltip: {
-        trigger: 'item',
-        formatter: '{b}<br>{c} '
+        trigger: 'axis'
     },
-    series: [{
-        type: 'bar',
-        data: vm.data_change_to_bar(vm.class_data),
-        label: {
-            normal: {
-                show: true,
-                position: 'top',
-            }
+};
+
+
+myuser_Chart3.setOption(option3);
+myuser_Chart2.on('click', function(params) {
+    for (item in vm.strategy_data) {
+        if (vm.strategy_data[item].name == params.name) {
+            myuser_Chart3.dispatchAction({
+                type: 'legendSelect',
+                // 图例名称
+                name: vm.strategy_data[item].name
+            });
+        } else {
+            myuser_Chart3.dispatchAction({
+                type: 'legendUnSelect',
+                // 图例名称
+                name: vm.strategy_data[item].name
+            });
         }
-    }],
-};
-myChart0.setOption(option0);
-myChart1.setOption(option1);
-
-var chart_click = function(params) {
-    console.log(params.name);
-
-    $('.chart_hide').removeClass('hidden');
-
-    var option2 = {
-        title: {
-            text: '迈豆池',
-        },
-        tooltip: {
-            trigger: 'item',
-            formatter: function(params) {
-                if (params.seriesType == 'pie') {
-                    return params.name + '<br>' + params.value + '(' + params.percent + '%)'
-                }
-            },
-        },
-        series: [{
-            type: 'pie',
-            radius: '50%',
-            center: ['50%', '50%'],
-            data: vm.strategy_data,
-            itemStyle: {
-                emphasis: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
-        }]
     };
-    myChart2.setOption(option2);
-
-
-    var option3 = {
-        legend: [{
-            data: vm.data_head(vm.strategy_data),
-            // left: '55%',
-        }],
-        xAxis: [{
-            name: vm.date.mounth,
-            gridIndex: 0,
-            boundaryGap: false,
-            data: vm.data_head(vm.mounth_data[0].value),
-        }],
-        yAxis: [{
-            gridIndex: 0,
-        }],
-        dataZoom: [{
-            xAxisIndex: 0,
-            filterMode: 'empty',
-        }, {
-            type: 'inside',
-            xAxisIndex: 0,
-        }],
-        series: vm.series_change_to_line(vm.mounth_data),
-        tooltip: {
-            trigger: 'axis'
-        },
-    };
-
-
-    myChart3.setOption(option3);
-    myChart2.on('click', function(params) {
-        for (item in vm.strategy_data) {
-            if (vm.strategy_data[item].name == params.name) {
-                myChart3.dispatchAction({
-                    type: 'legendSelect',
-                    // 图例名称
-                    name: vm.strategy_data[item].name
-                });
-            } else {
-                myChart3.dispatchAction({
-                    type: 'legendUnSelect',
-                    // 图例名称
-                    name: vm.strategy_data[item].name
-                });
-            }
-        };
-    });
-};
-
-myChart1.on('click', function(params) {
-    chart_click(params);
-});
-
-myChart0.on('click', function(params) {
-    chart_click(params);
 });
 </script>
 <hr>
