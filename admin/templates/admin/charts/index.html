@@ -1,0 +1,19 @@
+{% extends 'admin/layouts/base.html' %}
+
+{% block content %}
+
+<div id="content">
+    <div id="content-header" class="mini">
+        <h1>管理员</h1>
+    </div>
+    <div id="breadcrumb">
+        <a href="{% url 'admin:index' %}" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
+        <a href="#" class="current">管理员</a>
+    </div>
+   
+    {% include 'admin/charts/chart.html' %}
+    
+</div>
+</div>
+
+{% endblock %}

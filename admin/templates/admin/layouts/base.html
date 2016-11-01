@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}用户中心{% endblock %}</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery.jscrollpane.css" />
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/jquery-ui.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/icheck/flat/blue.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/select2.css" />
+    <link rel="stylesheet" href="{{ STATIC_URL }}plugins/sweetalert/sweetalert.css" />
+
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/unicorn.css" />
+    <style>
+
+        body{
+            font-family: "Microsoft YaHei", sans-serif;
+        }
+
+        .form-inline2{
+            height: 30px;
+            font-size: 14px;
+            line-height: 30px;
+            padding-left: 4px;
+            padding-right: 4px;
+            color: #555555;
+            vertical-align: middle;
+            background-color: #ffffff;
+            background-image: none;
+            border: 1px solid #cccccc;
+            border-radius: 4px;
+            -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+                  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+            -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+                  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+        }
+
+    </style>
+    <!--[if lt IE 9]>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/respond.min.js"></script>
+    <![endif]-->
+
+</head>
+
+<body data-color="grey" class="flat">
+<div id="wrapper">
+
+{% include 'admin/layouts/left.html' %}
+{% include 'admin/layouts/js-import.html' %}
+
+{% block content %}
+<div>这里是默认内容，所有继承自这个模板的，如果不覆盖就显示这里的默认内容。</div>
+{% endblock %}
+
+    <div class="row">
+        <div id="footer" class="col-xs-12">
+            2012 - 2013 &copy; Unicorn Admin
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

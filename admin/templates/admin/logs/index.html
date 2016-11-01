@@ -1,0 +1,101 @@
+{% extends 'admin/layouts/base.html' %}
+
+{% block content %}
+
+<div id="content">
+    <div id="content-header" class="mini">
+        <h1>系统操作日志</h1>
+    </div>
+    <div id="breadcrumb">
+        <a href="{% url 'admin:index' %}" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
+        <a href="#" class="current">操作日志</a>
+    </div>
+    <div class="row">
+        <form action="" method="post">
+        <div class="col-xs-12 center">
+            <label>动作：
+                <select class="form-inline2" name="action" id="form-searchAction">
+                    <option value="">全部</option>
+                    {% for key, val in c_logs_operate.items %}
+                        <option value="{{ key }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>集合：
+                <input type="text" name="table" value="{{ ctrlList.table }}">
+            </label>
+            <label>操作人：
+                <input type="text" name="admin_name" value="{{ ctrlList.admin_name }}">
+            </label>
+            <button type="submit" class="btn btn-primary">查询</button>
+        </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-th"></i>
+                    </span>
+                    <h5>系统操作日志列表</h5>
+                </div>
+                <div class="widget-content">
+                    <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
+                                </th>
+                                <th>集合</th>
+                                <th>集合ID</th>
+                                <th>动作</th>
+                                <th>操作后</th>
+                                <th>操作人</th>
+                                <th>IP</th>
+                                <th>创建时间</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+                            {% for list in data_list.object_list  %}
+                            <tr>
+                                <td>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
+                                <td>{{ list.table }}</td>
+                                <td>{{ list.table_id }}</td>
+                                <td>
+                                    {% for key, val in c_logs_operate.items %}
+                                        {% if key == list.action %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ list.after }}</td>
+                                <td>{{ list.admin_name }}</td>
+                                <td>{{ list.admin_ip }}</td>
+                                <td>{{ list.create_time |date:"Y-m-d H:i:s" }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include 'admin/common/page.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(function () {
+
+    //选中应用
+    var searchAction = '{{ ctrlList.action }}';
+    if(searchAction){
+        $('#form-searchAction').val(searchAction);
+    }
+});
+</script>
+
+{% endblock %}

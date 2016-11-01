@@ -1,0 +1,8 @@
+{#    {{ regionValue|default:'' }}//上传到远程目录#}
+<link href="/static/plugins/city-picker/city-picker.css" rel="stylesheet">
+<div style="position: relative;min-width: 330px;">
+    <input readonly class="form-control" type="text" value="{{ regionValue|default:'' }}" data-toggle="city-picker">
+</div>
+<div data-toggle="city-picker-region" style="display: none;"></div>
+<script src="/static/plugins/city-picker/city-picker-fun.js"></script>
+

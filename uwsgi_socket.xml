@@ -1,0 +1,6 @@
+<uwsgi>
+    <socket>:8007</socket>
+    <chdir>/home/wwwroot/UserCenter</chdir>
+    <module>django_wsgi</module>
+    <processes>4</processes>
+</uwsgi>

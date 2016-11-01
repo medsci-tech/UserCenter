@@ -1,0 +1,98 @@
+<div class="form-horizontal">
+    <form class="form-horizontal" method="post" action="" name="contract_validate" id="contract_validate" novalidate="novalidate">
+    {% csrf_token %}
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">合作企业</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="company_id" id="form-company_id">
+                <option value="">请选择</option>
+                {% for data in comList reversed  %}
+                    <option value="{{ data.id }}">{{ data.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">应用平台</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <select class="form-control" name="app_id" id="form-app_id">
+                <option value="">请选择</option>
+            </select>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">合同名称</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="name_ch" id="form-name_ch"  placeholder="不能为空">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">合同编号</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="contract_code" id="form-contract_code">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">合同金额</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="contract_amount" id="form-contract_amount" required>
+        </div>
+    </div>
+        <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">兑换比例</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="contract_rate" id="form-contract_rate" placeholder="填写数字:该数字X合同金额=迈豆值">
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">缩略图</label>
+        {% include 'admin/common/file-uplaod.html' with inputId='one' actionCtrl='contract_img' uploadPath='img' %}
+    </div>
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">合同期限</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <div class="input-daterange input-group">
+                <input type="text" name="start_time" id="form-start_time" class="input-sm form-control" placeholder="开始时间">
+                <span class="input-group-addon">到</span>
+                <input type="text" name="end_time" id="form-end_time" class="input-sm form-control" placeholder="结束时间">
+            </div>
+        </div>
+    </div>
+ 	<div class="form-group">
+      <label class="col-sm-3 col-md-3 col-lg-2 control-label">状态</label>
+      <div class="col-sm-9 col-md-9 col-lg-10">
+          <select class="form-control" name="status" id="form-status">
+              {% for key,value in c_status.items %}
+                  <option value="{{ key }}">{{ value }}</option>
+              {% endfor %}
+          </select>
+      </div>
+	</div>
+    <div class="modal-footer">
+        <input type="submit" value="确定" class="btn btn-primary" id="submit">
+        <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
+    </div>
+    <input type="hidden" name="id" id="form-id">
+    </form>
+</div>
+<script>
+    $().ready(function() {
+        $("#contract_validate").validate();
+    });
+    var stats_url = '{% url 'admin:company_stats' %}';
+
+    /**
+     * 表单验证提交按钮触发的操作
+     */
+    var rules = {
+        required:true,
+        name_ch:{
+            required:true
+        },
+        number:{
+            required:true
+        }
+
+    };
+    subActionAjaxValidateForMime('#contract_validate', rules, '{% url 'admin:contract_save' %}', window.location.href);
+</script>

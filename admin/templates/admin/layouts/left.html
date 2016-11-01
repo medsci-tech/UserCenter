@@ -1,0 +1,52 @@
+
+<div id="header">
+    <h1><a href="./index.html">Unicorn Admin</a></h1>
+    <a id="menu-trigger" href="#"><i class="fa fa-bars"></i></a>
+</div>
+
+<div id="user-nav">
+    <ul class="btn-group">
+        <li class="btn" ><a title="" href="#"><i class="fa fa-user"></i> <span class="text">{{ request.session.username }}</span></a></li>
+
+        <li class="btn"><a title="" href="{% url 'admin:accounts_logout' %}"><i class="fa fa-share"></i> <span class="text">退出</span></a></li>
+    </ul>
+</div>
+
+
+<div id="sidebar">
+ 	<div id="search">
+		<input type="text" placeholder="Search here..."/><button type="submit" class="tip-right" title="Search"><i class="fa fa-search"></i></button>
+	</div>	
+	<ul>
+		<li class="active"><a href="#"><i class="fa fa-home"></i> <span>控制面板</span></a></li>
+		<li class="submenu">
+			<a href="#"><i class="fa fa-flask"></i> <span>系统管理员</span> <i class="arrow fa fa-chevron-right"></i></a>
+			<ul>
+				<li><a href="{% url 'admin:admin' %}">管理员列表</a></li>
+			</ul>
+		</li>
+
+		<li>
+			<a href="{% url 'admin:company' %}"><i class="fa fa-th-list"></i> <span>企业信息管理</span></a>
+		</li>
+		<li>
+			<a href="{% url 'admin:contract' %}"><i class="fa fa-th-list"></i> <span>企业合同管理</span></a>
+		</li>
+		<li>
+			<a href="{% url 'admin:logs' %}"><i class="fa fa-signal"></i> <span>系统操作记录</span></a>
+		</li>
+		<li class="submenu">
+			<a href="#"><i class="fa fa-flask"></i> <span>用户管理</span> <i class="arrow fa fa-chevron-right"></i></a>
+			<ul>
+				<li><a href="{% url 'admin:user' %}">迈德用户管理</a></li>
+			</ul>
+		</li>
+		<!--<li>-->
+			<!--<a href="charts.html"><i class="fa fa-signal"></i> <span>日志列表</span></a>-->
+		<!--</li>-->
+		<!--<li>-->
+			<!--<a href="widgets.html"><i class="fa fa-inbox"></i> <span>用户设置</span></a>-->
+		<!--</li>-->
+	</ul>  
+
+</div>

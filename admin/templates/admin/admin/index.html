@@ -1,0 +1,176 @@
+{% extends 'admin/layouts/base.html' %}
+
+{% block content %}
+
+<div id="content">
+    <div id="content-header" class="mini">
+        <h1>管理员</h1>
+    </div>
+    <div id="breadcrumb">
+        <a href="{% url 'admin:index' %}" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
+        <a href="#" class="current">管理员</a>
+    </div>
+    <div class="row">
+        <form action="" method="post">
+        <div class="col-xs-12 center">
+            <label>昵称：
+                <input type="text" name="nickname" value="{{ ctrlList.nickname }}">
+            </label>
+            <label>用户名：
+                <input type="text" name="username" value="{{ ctrlList.username }}">
+            </label>
+            <label>邮箱：
+                <input type="text" name="email" value="{{ ctrlList.email }}">
+            </label>
+            <button type="submit" class="btn btn-primary">查询</button>
+            <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
+            <button class="btn btn-success" data-form="enable" name="data-form" status="1">启用</button>
+            <button class="btn btn-warning" data-form="disable" name="data-form" status="0">禁用</button>
+        </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-th"></i>
+                    </span>
+                    <h5>管理员列表</h5>
+                </div>
+                <div class="widget-content">
+                    <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
+                                    <input type="hidden" id="form-statusType" name="statusType" value="enable" />
+                                </th>
+                                <th>用户名</th>
+                                <th>昵称</th>
+                                <th>邮箱</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        	{% if data_list %}
+                    			{% for data in data_list  %}
+                            <tr>
+                                <td>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ data.id }}"/>
+                                </td>
+                                <td>{{ data.username }}</td>
+                                <td>{{ data.nickname }}</td>
+                                <td>{{ data.email }}</td>
+                                <td align="center">
+                                	{% ifequal data.status 1 %}
+                        	 		<button class="btn btn-info btn-xs">启用</button>
+									{% else %}
+								    	<button class="btn btn-warning btn-xs">禁用</button>
+									{% endifequal %}
+                                </td>
+                                <td>{{ data.create_time |date:"Y-m-d H:i:s" }}</td>
+                                <td>
+                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
+                                       data-id="{{ data.id }}"
+                                       data-nickname="{{ data.nickname }}"
+                                       data-username="{{ data.username }}"
+                                       data-email="{{ data.email }}"
+                                       data-status="{{ data.status }}"
+                                    ><i class="fa fa-edit"></i> 编辑</a>
+                                </td>
+                            </tr>
+                            	{% endfor %}
+                            {% endif %}
+                        </tbody>
+                    </table>
+                    {% include 'admin/common/page.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>管理员管理</h3>
+            </div>
+            <div class="modal-body">
+                {% include 'admin/admin/form.html' %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+$(function () {
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+    /* add操作处理 */
+    $('[data-form="add-model"]').click(function () {
+        if($("#id")[0]){
+            $("#id").val('');
+        }
+        //重置表单
+        $('#basic_validate')[0].reset()
+
+    });
+
+    var status_url = '{% url 'admin:admin_updateStatus' %}';
+    var index_url = '{% url 'admin:admin' %}';
+    /**
+     * 点击修改按钮触发的操作
+     */
+    $('[data-form="edit-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        var nickname = $(this).attr('data-nickname');
+        var username = $(this).attr('data-username');
+        var password = $(this).attr('data-password');
+        var email = $(this).attr('data-email');
+        var status = $(this).attr('data-status');
+        $('#id').val(id);
+        $('#nickname').val(nickname);
+        $('#username').val(username);
+        $('#password').val(password);
+        $('#email').val(email);
+        $('#status').val(status);
+    });
+
+    /**
+     * 禁用/启用
+     */
+    $("button[name='data-form']").click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verify = verifyChecked(check);
+        var status = $(this).attr('status');
+        if(false == verify){
+            return false;
+        }
+        swal({
+            title: "您确定要操作选中的信息吗",
+            type: "warning",
+            showCancelButton: true,
+            cancelButtonText: '取消',
+            confirmButtonColor: "#f8ac59",
+            confirmButtonText: "确定",
+            closeOnConfirm: false
+        }, function () {
+            var data = {};
+            data.selection = getDataList(check);
+            data.status = status;
+            //console.log(data);
+            ajaxFun(data, status_url);
+        });
+        return false
+    });
+});
+</script>
+
+{% endblock %}

@@ -1,0 +1,196 @@
+{% extends 'admin/layouts/base.html' %}
+
+{% block content %}
+
+<div id="content">
+    <div id="content-header" class="mini">
+        <h1>应用平台管理</h1>
+    </div>
+    <div id="breadcrumb">
+        <a href="{% url 'admin:index' %}" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
+        <a href="{% url 'admin:company' %}">企业</a>
+        <a href="#" class="current">应用平台</a>
+    </div>
+    <div class="row">
+        <form action="" method="post">
+        <div class="col-xs-12 center">
+            <label>名称：
+                <input type="text" name="name" value="{{ ctrlList.name }}">
+            </label>
+            <button type="submit" class="btn btn-primary">查询</button>
+            <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
+            <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
+            <a href="javascript:;" class="btn btn-warning" data-form="disable">禁用</a>
+            <a href="javascript:;" class="btn btn-danger" data-form="delete">删除</a>
+        </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-th"></i>
+                    </span>
+                    <h5>应用平台列表</h5>
+                </div>
+                <div class="widget-content">
+                    <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
+                                    <input type="hidden" id="form-statusType" name="statusType" value="enable" />
+                                </th>
+                                <th>名称</th>
+                                <th>描述</th>
+                                <th>状态</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for list in data_list.object_list  %}
+                            <tr>
+                                <td>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
+                                <td><a href="{% url 'admin:credit_config' %}?app_id={{ list.id }}">{{ list.name }}</a></td>
+                                <td>{{ list.description }}</td>
+                                <td>
+                                    {% for key, val in c_status.items %}
+                                        {% if key == list.status %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ list.create_time |date:"Y-m-d H:i:s" }}</td>
+                                <td>
+                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-company_id="{{ list.company_id }}"
+                                       data-name="{{ list.name }}"
+                                       data-description="{{ list.description }}"
+                                       data-status="{{ list.status }}"
+                                    ><i class="fa fa-edit"></i> 编辑</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include 'admin/common/page.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>应用平台</h3>
+            </div>
+            <form id="app_form_validate" novalidate="novalidate">
+            <div class="modal-body">
+                {% include 'admin/app/form.html' %}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-small" id="form-submit">确定</button>
+                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+$(function () {
+    var delete_url = '{% url 'admin:app_delete' %}';
+    var stats_url = '{% url 'admin:app_stats' %}';
+    var form_url = '{% url 'admin:app_form' %}';
+    var index_url = window.location.href;
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+    });
+
+    /**
+     * 点击添加按钮触发的操作
+     */
+    $('[data-form="add-model"]').click(function () {
+        var kong = '';
+        $('#form-id').val(kong);
+        $('#form-name').val(kong);
+        $('#form-description').val(kong);
+        $('#form-status').val(1);
+    });
+    /**
+     * 点击修改按钮触发的操作
+     */
+    $('[data-form="edit-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        var name = $(this).attr('data-name');
+        var description = $(this).attr('data-description');
+        var status = $(this).attr('data-status');
+        $('#form-id').val(id);
+        $('#form-name').val(name);
+        $('#form-description').val(description);
+        $('#form-status').val(status);
+    });
+    /**
+     * 表单验证提交按钮触发的操作
+     */
+    var rules = {
+        name:{
+            required:true
+        }
+    };
+    subActionAjaxValidateForMime('#app_form_validate', rules, form_url, index_url);
+
+    /**
+     * 启用
+     */
+    $('[data-form="enable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(true == verifyChecked){
+            enableDataMultiple(check, stats_url, index_url);
+        }else {
+            return false;
+        }
+    });
+
+    /**
+     * 禁用
+     */
+    $('[data-form="disable"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(true == verifyChecked){
+            disableDataMultiple(check, stats_url, index_url);
+        }else {
+            return false;
+        }
+    });
+
+    /**
+     * 删除
+     */
+    $('[data-form="delete"]').click(function() {
+        /*判断是否有选中*/
+        var check = $('#data-list-form').find('input[data-form="check-model"]');
+        var verifyChecked = verifyCheckedForMime(check);
+        if(true == verifyChecked){
+            deleteDataMultiple(check, delete_url, index_url);
+        }else {
+            return false;
+        }
+    });
+
+});
+</script>
+
+{% endblock %}

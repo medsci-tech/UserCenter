@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Unicorn Admin</title>
+		<meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<link rel="stylesheet" href="{{ STATIC_URL }}css/bootstrap.min.css" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/font-awesome.css" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/unicorn-login.css" />
+        <link rel="stylesheet" href="{{ STATIC_URL }}plugins/sweetalert/sweetalert.css" />
+	</head>    <body>
+        <div id="container">
+            <div id="logo">
+                <img src="{{ STATIC_URL }}img/logo.png" alt="" />
+            </div>
+            <div id="user">
+                <div class="avatar">
+                    <div class="inner"></div>
+                    <img src="{{ STATIC_URL }}img/demo/av1_1.jpg" />
+                </div>
+                <div class="text">
+                    <h4>Hello,<span class="user_name"></span></h4>
+                </div>
+            </div>
+            <div id="loginbox">            
+                <form id="loginform" action="{% url 'admin:index' %}">
+    				<p>Enter username and password to continue.</p>
+                    <div class="input-group input-sm">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span><input class="form-control" type="text" id="username" placeholder="用户名" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" id="password" placeholder="密码" />
+                    </div>
+					<div class="input-group  form-group required">
+						<span class="input-group-addon"><i class="glyphicon glyphicon-eye-open red"></i></span>
+						<input type="text" id="verifycode" class="form-control" name="verifycode" placeholder="验证码">
+						<div class="input-group-addon" style="padding:0px; cursor: pointer" title
+="点击更换验证码"> <img id="codeImg" onclick="this.setAttribute('src','{% url "admin:accounts_captcha" %}/?nocache='+Math.random());" src="{% url "admin:accounts_captcha" %}" alt="点击更换验证码"/>
+						</div>					
+						</div>
+                    <div class="form-actions clearfix">
+                        <div class="pull-left">
+                            <a href="#registerform" class="flip-link to-register blue">创建账户</a>
+                        </div>
+                        <div class="pull-right">
+                            <a href="#recoverform" class="flip-link to-recover grey">忘记密码?</a>
+                        </div>
+                        <input type="submit" class="btn btn-block btn-primary btn-default" value="登 录" />
+                    </div>
+                    <div class="footer-login">
+                        <div class="pull-left text">
+
+                        </div>
+                        <div class="pull-right btn-social">
+                
+                        </div>
+                    </div>
+
+                </form>
+                <form id="recoverform" action="{% url 'admin:accounts_login' %}">
+    				<p>Enter your e-mail address below and we will send you instructions how to recover a password.</p>
+    				<div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input class="form-control" type="text" placeholder="E-mail address" />
+                    </div>
+                    <div class="form-actions clearfix">
+                        <div class="pull-left">
+                            <a href="#loginform" class="grey flip-link to-login">Click to login</a>
+                        </div>
+                        <div class="pull-right">
+                            <a href="#registerform" class="blue flip-link to-register">Create new account</a>
+                        </div>
+                        <input type="submit" class="btn btn-block btn-inverse" value="Recover" />
+                    </div>
+                </form>
+                <form id="registerform" action="#">
+                    <p>Enter information required to register:</p>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-user"></i></span><input class="form-control" type="text" placeholder="Enter Username" name="username" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" placeholder="Choose Password" name="password" name='checkcode'/>
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-lock"></i></span><input class="form-control" type="password" placeholder="Confirm password" />
+                    </div>
+                    <div class="input-group">
+                        <span class="input-group-addon"><i class="fa fa-envelope"></i></span><input class="form-control" type="text" placeholder="Enter E-mail address" />
+                    </div>
+                    <div class="form-actions clearfix">
+                        <div class="pull-left">
+                            <a href="#loginform" class="grey flip-link to-login">Click to login</a>
+                        </div>
+                        <div class="pull-right">
+                            <a href="#recoverform" class="grey flip-link to-recover">Lost password?</a>
+                        </div>
+                        <input type="submit" class="btn btn-block btn-success" value="Register" />
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <script src="{{ STATIC_URL }}js/jquery.min.js"></script>
+        <script src="{{ STATIC_URL }}js/jquery-ui.custom.min.js"></script>
+        <script src="{{ STATIC_URL }}plugins/sweetalert/sweetalert.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/respond.min.js"></script>
+        <script src="{{ STATIC_URL }}js/unicorn.login.js"></script>
+    </body>
+</html>

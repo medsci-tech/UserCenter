@@ -1,0 +1,190 @@
+{% extends 'admin/layouts/base.html' %}
+
+{% block content %}
+
+<div id="content">
+    <div id="content-header" class="mini">
+        <h1>用户管理</h1>
+    </div>
+    <div id="breadcrumb">
+        <a href="{% url 'admin:index' %}" title="Go to Home" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
+        <a href="#" class="current">用户</a>
+    </div>
+    <div class="row">
+        <form action="" method="post">
+        <div class="col-xs-12 center">
+            <label>角色：
+                <select class="form-inline2" name="role" id="form-searchRole">
+                    <option value="">全部</option>
+                    {% for key, val in c_user_role.items %}
+                        <option value="{{ key }}">{{ val }}</option>
+                    {% endfor %}
+                </select>
+            </label>
+            <label>手机号：
+                <input type="text" name="phone" value="{{ ctrlList.phone }}">
+            </label>
+            <button type="submit" class="btn btn-primary">查询</button>
+            <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
+        </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="widget-box">
+                <div class="widget-title">
+                    <span class="icon">
+                        <i class="fa fa-th"></i>
+                    </span>
+                    <h5>用户管理列表</h5>
+                </div>
+                <div class="widget-content">
+                    <table id="data-list-form" class="table table-bordered table-striped table-hover with-check table-data">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <input type="checkbox" id="title-table-checkbox" name="title-table-checkbox" />
+                                    <input type="hidden" id="form-statusType" name="statusType" value="enable" />
+                                </th>
+                                <th>角色</th>
+                                <th>手机号</th>
+                                {% for foo in list_contratcData %}
+                                  <th>{{ foo.name }}</th>
+                                {% endfor %}
+                                <th>迈豆总数</th>
+                                <th>创建时间</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for list in data_list.object_list  %}
+                            <tr>
+                                <td>
+                                    <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
+                                </td>
+                                <td>
+                                    {% for key, val in c_user_role.items %}
+                                        {% if key == list.role %}
+                                            {{ val }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </td>
+                                <td>{{ list.phone }}</td>
+                                {% for foo in list_contratcData %}
+                                  <td>
+                                    {% if list.beansList %}
+                                      {% for key,val in list.beansList.items %}
+                                        {% if foo.id|iriencode ==  key %}
+                                          {{ val.beans }}
+                                        {% else %}
+                                          0
+                                        {% endif %}
+                                      {% endfor %}
+                                    {% else %}
+                                      0
+                                    {% endif %}
+                                  </td>
+                                {% endfor %}
+                                <td>{{ list.beans_total }}</td>
+                                <td>{{ list.created_at }}</td>
+                                <td>
+                                    <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
+                                       data-id="{{ list.id }}"
+                                       data-role="{{ list.role }}"
+                                       data-phone="{{ list.phone }}"
+                                       data-province="{{ list.province }}"
+                                       data-city="{{ list.city }}"
+                                       data-district="{{ list.district }}"
+                                    ><i class="fa fa-edit"></i> 编辑</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                    {% include 'admin/common/page.html' %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myModal" class="modal fade">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button data-dismiss="modal" class="close" type="button">×</button>
+                <h3>用户管理</h3>
+            </div>
+            <form id="user_form_validate" novalidate="novalidate">
+            <div class="modal-body">
+                {% include 'admin/user/form.html' %}
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary btn-small" id="form-submit">确定</button>
+                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<script>
+$(function () {
+    var stats_url = '{% url 'admin:user_stats' %}';
+    var form_url = '{% url 'admin:user_form' %}';
+    var index_url = window.location.href;
+    $.ajaxSetup({
+        data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
+    });
+
+    //选中应用
+    var searchRole = '{{ ctrlList.role }}';
+    if(searchRole){
+        $('#form-searchRole').val(searchRole);
+    }
+
+    /**
+     * 点击添加按钮触发的操作
+     */
+    $('[data-form="add-model"]').click(function () {
+        var kong = '';
+        var role = $('#form-role');
+        role.val(role.find('option:first').val());
+        $('#form-id').val(kong);
+        $('#form-phone').val(kong);
+        getRegionInit();
+    });
+    /**
+     * 点击修改按钮触发的操作
+     */
+    $('[data-form="edit-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        var role = $(this).attr('data-role');
+        var phone = $(this).attr('data-phone');
+        $('#form-id').val(id);
+        $('#form-role').val(role);
+        $('#form-phone').val(phone);
+        /*地区联动*/
+        getRegionInit();
+        var regionValue = {};
+        regionValue.province = $(this).attr('data-province');
+        regionValue.city = $(this).attr('data-city');
+        regionValue.district = $(this).attr('data-district');
+        getRegionDefault(regionValue);
+    });
+    /**
+     * 表单验证提交按钮触发的操作
+     */
+    var rules = {
+        phone:{
+            required:true,
+            phone:true
+        }
+    };
+    subActionAjaxValidateForMime('#user_form_validate', rules, form_url, index_url);
+
+});
+</script>
+
+{% endblock %}
