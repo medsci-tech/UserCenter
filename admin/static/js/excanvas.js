@@ -63,7 +63,7 @@ if (!document.createElement('canvas').getContext) {
 
   /**
    * Binds a function to an object. The returned function will always use the
-   * passed in {@contract_code obj} as {@contract_code this}.
+   * passed in {@code obj} as {@code this}.
    *
    * Example:
    *
@@ -805,7 +805,7 @@ if (!document.createElement('canvas').getContext) {
       dw = arguments[7];
       dh = arguments[8];
     } else {
-      throw Error('Invalid contract_rate of arguments');
+      throw Error('Invalid number of arguments');
     }
 
     var d = this.getCoords_(dx, dy);
@@ -1021,7 +1021,7 @@ if (!document.createElement('canvas').getContext) {
         var dy = p1.y - p0.y;
         angle = Math.atan2(dx, dy) * 180 / Math.PI;
 
-        // The angle should be a non-negative contract_rate.
+        // The angle should be a non-negative number.
         if (angle < 0) {
           angle += 360;
         }
@@ -1243,7 +1243,7 @@ if (!document.createElement('canvas').getContext) {
         textAlign = 'left';
     }
 
-    // 1.75 is an arbitrary contract_rate, as there is no info about the text baseline
+    // 1.75 is an arbitrary number, as there is no info about the text baseline
     switch (this.textBaseline) {
       case 'hanging':
       case 'top':

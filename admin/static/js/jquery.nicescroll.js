@@ -28,7 +28,7 @@
   }
   var scriptpath = getScriptPath();
 
-// derived by Paul Irish https://gist.github.com/paulirish/1579671 - thanks for your contract_code!
+// derived by Paul Irish https://gist.github.com/paulirish/1579671 - thanks for your code!
 
   if (!Array.prototype.forEach) {  // JS 1.6 polyfill
     Array.prototype.forEach = function(fn, scope) {

@@ -233,7 +233,7 @@ var formHtmlForMime = function (list, element) {
         html += '<div class="form-group">';
         html += '    <label class="col-sm-3 col-md-3 col-lg-2 control-label">' + list[i] + '</label>';
         html += '    <div class="col-sm-9 col-md-9 col-lg-10">';
-        html += '        <input type="text" class="form-control input-sm" name_ch="' + i + '" id="form-' + i + '">';
+        html += '        <input type="text" class="form-control input-sm" name="' + i + '" id="form-' + i + '">';
         html += '    </div>';
         html += '</div>';
     }

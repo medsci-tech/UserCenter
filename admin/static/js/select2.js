@@ -197,7 +197,7 @@ the specific language governing permissions and limitations under the Apache Lic
      * Debounces a function. Returns a function that calls the original fn function only if no invocations have been made
      * within the last quietMillis milliseconds.
      *
-     * @param quietMillis contract_rate of milliseconds to wait before invoking fn
+     * @param quietMillis number of milliseconds to wait before invoking fn
      * @param fn function to be debounced
      * @param ctx object to be used as this reference within fn
      * @return debounced version of fn
@@ -402,7 +402,7 @@ the specific language governing permissions and limitations under the Apache Lic
             window.clearTimeout(timeout);
             timeout = window.setTimeout(function () {
                 requestSequence += 1; // increment the sequence
-                var requestNumber = requestSequence, // this request's sequence contract_rate
+                var requestNumber = requestSequence, // this request's sequence number
                     data = options.data, // ajax data function
                     url = ajaxUrl, // ajax url string or function
                     transport = options.transport || $.fn.select2.ajaxDefaults.transport,
@@ -479,7 +479,7 @@ the specific language governing permissions and limitations under the Apache Lic
         var dataItem = data();
         if (dataItem.text) {
             text = dataItem.text;
-            // if text is not a function we assume it to be a key display_name
+            // if text is not a function we assume it to be a key name
             if (!$.isFunction(text)) {
                 dataText = dataItem.text; // we need to store this in a separate variable because in the next step data gets reset and data.text is no longer available
                 text = function (item) { return item[dataText]; };

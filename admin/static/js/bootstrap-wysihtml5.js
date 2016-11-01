@@ -75,7 +75,7 @@
             "html":
                 "<li>" +
                   "<div class='btn-group'>" +
-                    "<a class='btn btn-default' data-wysihtml5-rule_name_en='change_view' title='" + locale.html.edit + "'><i class='icon-pencil'></i></a>" +
+                    "<a class='btn btn-default' data-wysihtml5-action='change_view' title='" + locale.html.edit + "'><i class='icon-pencil'></i></a>" +
                   "</div>" +
                 "</li>",
 
@@ -196,7 +196,7 @@
         },
 
         initHtml: function(toolbar) {
-            var changeViewSelector = "a[data-wysihtml5-rule_name_en='change_view']";
+            var changeViewSelector = "a[data-wysihtml5-action='change_view']";
             toolbar.find(changeViewSelector).click(function(e) {
                 toolbar.find('a.btn').not(changeViewSelector).toggleClass('disabled');
             });

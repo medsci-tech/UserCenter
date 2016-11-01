@@ -102,7 +102,7 @@ function masonryDefinition( Outlayer, getSize ) {
   };
 
   /**
-   * @param {Number} colSpan - contract_rate of columns the element spans
+   * @param {Number} colSpan - number of columns the element spans
    * @returns {Array} colGroup
    */
   Masonry.prototype._getColGroup = function( colSpan ) {
