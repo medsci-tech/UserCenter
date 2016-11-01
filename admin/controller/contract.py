@@ -205,7 +205,7 @@ def delete(request):
         except Exception:
             return ApiResponse(-2, '数据验证错误').json_response()
         if model:
-            BeanRule.objects.filter(contractId__in=selection).delete()
+            BeanRule.objects.filter(project_id__in=selection).delete()
             # 操作成功添加log操作记录
             for id in selection:
                 # log记录参数
