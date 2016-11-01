@@ -99,10 +99,10 @@ def form(request):
                 'after': param,
             }
             if id:
-                logParam.update(tableId=id)  # log记录参数
+                logParam.update(table_id=id)  # log记录参数
                 logParam.update(action=2)  # log记录参数,rule_name_en=2为修改
             else:
-                logParam.update(tableId=json.loads(returnData).get('data'))  # log记录参数
+                logParam.update(table_id=json.loads(returnData).get('data'))  # log记录参数
                 logParam.update(action=1)  # log记录参数,rule_name_en=1为添加
             if 'id' in logParam['after']:
                 del logParam['after']['id']
@@ -197,8 +197,8 @@ def delete(request):
             returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
             return HttpResponse(json.dumps(returnData), content_type="application/json")
         if model:
-            BeanRule.objects.filter(appId__in=selection).delete()
-            Project.objects.filter(appId__in=selection).delete()
+            BeanRule.objects.filter(app_id__in=selection).delete()
+            Project.objects.filter(app_id__in=selection).delete()
             # 操作成功添加log操作记录
             for id in selection:
                 # log记录参数
