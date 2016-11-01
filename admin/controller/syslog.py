@@ -65,10 +65,8 @@ def logsform(request, param):
     param.update(admin_id=request.session.get('uid'))
     param.update(admin_name=request.session.get('username'))
     try:
-        model = Model.objects.create(**param)
-        if model:
-            return ApiResponse(200, '操作成功', str(model['id'])).json_return()
-        else:
-            return ApiResponse(-1, '操作失败').json_return()
+        Model.objects.create(**param)
+        # return ApiResponse(200, '操作成功').json_return()
     except Exception:
-        return ApiResponse(-2, '数据验证错误').json_return()
+        pass
+        # return ApiResponse(200, '操作成功，log记录失败').json_return()

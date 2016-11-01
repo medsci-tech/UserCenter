@@ -119,7 +119,7 @@ def form(request):
             returnData = _add(**param)
 
         # 操作成功添加log操作记录
-        if returnData.get('code') == '200':
+        if json.loads(returnData).get('code') == '200':
             # log记录参数
             logParam = {
                 'table': 'credit_rule',

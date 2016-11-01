@@ -48,6 +48,38 @@ def index(request):
     })
 
 
+# 添加操作--protected
+def _add(**param):
+    id = param.get('id')
+    if not id:
+        try:
+            model = Model.objects.create(**param)
+        except Exception:
+            return ApiResponse(-3, '数据验证错误').json_return()
+        if model:
+            return ApiResponse(200, '操作成功', str(model['id'])).json_return()
+        else:
+            return ApiResponse(-1, '操作失败').json_return()
+    else:
+        return ApiResponse(-2, '数据错误').json_return()
+
+
+# 修改操作--protected
+def _editById(**param):
+    id = param.get('id')
+    if id:
+        try:
+            model = Model.objects.get(id=id).update(**param)
+        except Exception:
+            return ApiResponse(-2, '数据验证错误').json_return()
+        if model:
+            return ApiResponse(200, '操作成功').json_return()
+        else:
+            return ApiResponse(-1, 'model操作失败').json_return()
+    else:
+        return ApiResponse(-2, '数据错误').json_return()
+
+
 '''
 保存合同信息
 '''
@@ -55,11 +87,11 @@ def index(request):
 def save(request):
     post = request.POST
     if request.method == 'POST':
+        id = post.get('id')  # objectid
         amount = post.get('contract_amount').strip()
         number = post.get('contract_rate').strip()
         totalBeans = math.ceil(float(amount) * float(number))
         param = {
-            'id': post.get('id'),  # objectid
             'company_id': post.get('company_id'),  # 企业id
             'app_id': post.get('app_id'),  # 企业id
             'name_ch':post.get('name_ch'),  # 合同名
@@ -72,27 +104,34 @@ def save(request):
             'end_time': post.get('end_time'),  # 合同截止日期
             'status': post.get('status')  # 状态
         }
-        id = param.get('id',0)
-        param.pop('id') # 剔除主键
-        # log记录参数
-        logParam = {
-            'table': 'contract',
-            'after': param,
-        }
-        try:
-            if(not id): # 添加操作
-                obj = Model.objects.create(**param)
-                logParam.update(table_id=obj.id)  # log记录参数
-                logParam.update(action=1)  # log记录参数,rule_name_en=1为添加
-            else: # 更新
-                Model.objects.filter(id=id).update(**param)
+
+        if id:
+            # 修改
+            param.update(id=id)
+            returnData = _editById(**param)
+        else:
+            # 添加
+            returnData = _add(**param)
+
+        # 操作成功添加log操作记录
+        if json.loads(returnData).get('code') == 200:
+            # log记录参数
+            logParam = {
+                'table': 'contract',
+                'after': param,
+            }
+            if id:
                 logParam.update(table_id=id)  # log记录参数
                 logParam.update(action=2)  # log记录参数,rule_name_en=2为修改
-
+            else:
+                logParam.update(table_id=returnData.get('data'))  # log记录参数
+                logParam.update(action=1)  # log记录参数,rule_name_en=1为添加
+            if 'id' in logParam['after']:
+                del logParam['after']['id']
             logsform(request, logParam)
-            return ApiResponse(200, '操作成功').json_response()
-        except (ValueError, KeyError, TypeError):
-            return ApiResponse(-1, 'json格式错误').json_response()
+        return HttpResponse(returnData, content_type="application/json")
+    else:
+        return ApiResponse(403, '不允许直接访问').json_response()
 
 
 '''
@@ -113,24 +152,25 @@ def recharge(request):
         save_amount = float(request_amount) + float(contractData['contract_amount'])
         totalBeans = math.ceil(save_amount * float(contractData['contract_rate']))
         param = {
+            'id': id,
             'contract_amount': save_amount,  # 合同金额
             'total_beans': totalBeans,  # 总迈豆
         }
-        # log记录参数
-        logParam = {
-            'table': 'contract',
-            'before': param,
-            'after': param,
-        }
-        try:
-            Model.objects.filter(id=id).update(**param)
-            logParam.update(table_id=id)  # log记录参数
-            logParam.update(action=6)  # log记录参数,rule_name_en=2为修改
+        returnData = _editById(**param)
 
+        # return HttpResponse(returnData, content_type="application/json")
+        if json.loads(returnData).get('code') == 200:
+            # log记录参数
+            logParam = {
+                'table': 'contract',
+                'after': param,
+                'table_id': id,
+                'action': 6,
+            }
             logsform(request, logParam)
-            return ApiResponse(200, '操作成功').json_response()
-        except (ValueError, KeyError, TypeError):
-            return ApiResponse(-1, 'json格式错误').json_response()
+        return HttpResponse(returnData, content_type="application/json")
+    else:
+        return ApiResponse(403, '不允许直接访问').json_response()
 
 
 '''

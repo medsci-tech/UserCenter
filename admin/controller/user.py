@@ -45,30 +45,39 @@ def index(request):
 # 添加操作--protected
 def _add(**param):
     id = param.get('id')
+    phone = param.get('phone')
     password = param.get('password')
     if not id:
+        try:
+            check_model = Model.objects.get(phone=phone)
+        except:
+            check_model = None
+        if check_model:
+            return ApiResponse(-4, '手机号已经存在').json_return()
         if not password:
             # 如果没有填密码则为默认密码
             password = '123456'
         param.update(password=make_password(password, None, 'pbkdf2_sha256'))
         try:
-            # param.update(password=)
             model = Model.objects.create(**param)
-            if model:
-                returnData = {'contract_code': '200', 'msg': '操作成功', 'data': str(model['id'])}
-            else:
-                returnData = {'contract_code': '801', 'msg': '操作失败', 'data': ''}
+            return ApiResponse(200, '操作成功', str(model['id'])).json_return()
         except Exception:
-            returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
+            return ApiResponse(-3, '数据验证错误').json_return()
     else:
-        returnData = {'contract_code': '901', 'msg': '数据错误', 'data': ''}
-    return returnData
+        return ApiResponse(-1, '数据错误').json_return()
 
 # 修改操作--protected
 def _editById(**param):
     id = param.get('id')
+    phone = param.get('phone')
     password = param.get('password')
     if id:
+        try:
+            check_model = Model.objects.get(phone=phone)
+        except:
+            check_model = None
+        if check_model and str(check_model['id']) != id:
+            return ApiResponse(-4, '手机号已经存在').json_return()
         if hasattr(param, 'password'):
             if password:
                 param.update(password=make_password(password, None, 'pbkdf2_sha256'))
@@ -76,17 +85,13 @@ def _editById(**param):
                 # 如果留空则移除password属性，不修改密码
                 param.pop('password')
         try:
-            param.update(updated_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-            model = Model.objects.get(id=id).update(**param)
-            if model == 1:
-                returnData = {'contract_code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'contract_code': '801', 'msg': '操作失败', 'data': ''}
+            # param.update(updated_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            Model.objects.get(id=id).update(**param)
+            return ApiResponse(200, '操作成功').json_return()
         except Exception:
-            returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
+            return ApiResponse(-3, '数据错误').json_return()
     else:
-        returnData = {'contract_code': '901', 'msg': '数据错误', 'data': ''}
-    return returnData
+        return ApiResponse(-1, '数据错误').json_return()
 
 # 修改操作
 @auth  # 引用登录权限验证
@@ -103,45 +108,34 @@ def form(request):
             'city': post.get('city'),
             'district': post.get('district'),
         }
-        try:
-            model = Model.objects.get(phone=phone)
-        except:
-            model = None
         if id:
             # 修改
-            if model:
-                if str(model['id']) != id:
-                    returnData = {'contract_code': -1, 'msg': '用户已经存在!', 'data': None}
-                    return HttpResponse(json.dumps(returnData), content_type="application/json")
             param.update(id=id)
             returnData = _editById(**param)
         else:
             # 添加
-            if model:
-                returnData = {'contract_code': -1, 'msg': '用户已经存在!', 'data': None}
-                return HttpResponse(json.dumps(returnData), content_type="application/json")
             returnData = _add(**param)
 
         # 操作成功添加log操作记录
-        if returnData.get('contract_code') == '200':
+        if json.loads(returnData).get('code') == 200:
             # log记录参数
             logParam = {
                 'table': 'credit_rule',
                 'after': param,
             }
             if id:
-                logParam.update(tableId=id)  # log记录参数
+                logParam.update(table_id=id)  # log记录参数
                 logParam.update(action=2)  # log记录参数,rule_name_en=2为修改
             else:
-                logParam.update(tableId=returnData.get('data'))  # log记录参数
+                logParam.update(table_id=returnData.get('data'))  # log记录参数
                 logParam.update(action=1)  # log记录参数,rule_name_en=1为添加
             if 'id' in logParam['after']:
                 del logParam['after']['id']
             logsform(request, logParam)
+        return HttpResponse(returnData, content_type="application/json")
     else:
-        returnData = {'contract_code': '1000', 'msg': '不允许直接访问', 'data': None}
+        return ApiResponse(403, '不允许直接访问').json_response()
 
-    return HttpResponse(json.dumps(returnData), content_type="application/json")
 
 # 更改状态操作
 @auth  # 引用登录权限验证
@@ -159,30 +153,26 @@ def stats(request):
         }
         try:
             model = Model.objects.filter(id__in=selection).update(**param)
-            if model:
-                # 操作成功添加log操作记录
-                for id in selection:
-                    # log记录参数
-                    logParam = {
-                        'table': 'credit_rule',
-                        'after': param,
-                        'table_id': id,
-                    }
-                    if statusType == 'enable':
-                        logParam.update(action=3)  # log记录参数,rule_name_en=3为启用
-                    else:
-                        logParam.update(action=4)  # log记录参数,rule_name_en=4为禁用
-                    if 'id' in logParam['after']:
-                        del logParam['after']['id']
-                    logsform(request, logParam)
-
-                returnData = {'contract_code': '200', 'msg': '操作成功', 'data': ''}
-            else:
-                returnData = {'contract_code': '801', 'msg': '操作失败', 'data': ''}
         except Exception:
-                returnData = {'contract_code': '900', 'msg': '数据验证错误', 'data': ''}
-
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+            return ApiResponse(-2, '数据验证错误').json_response()
+        if model:
+            # 操作成功添加log操作记录
+            for id in selection:
+                # log记录参数
+                logParam = {
+                    'table': 'credit_rule',
+                    'after': param,
+                    'table_id': id,
+                }
+                if statusType == 'enable':
+                    logParam.update(action=3)  # log记录参数,rule_name_en=3为启用
+                else:
+                    logParam.update(action=4)  # log记录参数,rule_name_en=4为禁用
+                if 'id' in logParam['after']:
+                    del logParam['after']['id']
+                logsform(request, logParam)
+            return ApiResponse(200, '操作成功').json_response()
+        else:
+            return ApiResponse(-1, '操作失败').json_response()
     else:
-        returnData = {'contract_code': '1000', 'msg': '不允许直接访问', 'data': None}
-        return HttpResponse(json.dumps(returnData), content_type="application/json")
+        return ApiResponse(403, '不允许直接访问').json_response()

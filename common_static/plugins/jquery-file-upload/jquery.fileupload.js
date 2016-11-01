@@ -103,30 +103,30 @@
             // queues and allows change events to be fired for the same file
             // selection, but can be disabled by setting the following option to false:
             replaceFileInput: true,
-            // The parameter name_ch for the file form data (the request argument name_ch).
-            // If undefined or empty, the display_name property of the file input field is
-            // used, or "files[]" if the file input display_name property is also empty,
+            // The parameter name for the file form data (the request argument name).
+            // If undefined or empty, the name property of the file input field is
+            // used, or "files[]" if the file input name property is also empty,
             // can be a string or an array of strings:
             paramName: undefined,
             // By default, each file of a selection is uploaded using an individual
             // request for XHR type uploads. Set to false to upload file
             // selections in one request each:
             singleFileUploads: true,
-            // To limit the contract_rate of files uploaded with one XHR request,
+            // To limit the number of files uploaded with one XHR request,
             // set the following option to an integer greater than 0:
             limitMultiFileUploads: undefined,
-            // The following option limits the contract_rate of files uploaded with one
+            // The following option limits the number of files uploaded with one
             // XHR request to keep the request size under or equal to the defined
             // limit in bytes:
             limitMultiFileUploadSize: undefined,
-            // Multipart file uploads add a contract_rate of bytes to each uploaded file,
+            // Multipart file uploads add a number of bytes to each uploaded file,
             // therefore the following option adds an overhead for each file used
             // in the limitMultiFileUploadSize configuration:
             limitMultiFileUploadSizeOverhead: 512,
             // Set the following option to true to issue all file upload requests
             // in a sequential order:
             sequentialUploads: false,
-            // To limit the contract_rate of concurrent uploads,
+            // To limit the number of concurrent uploads,
             // set the following option to an integer greater than 0:
             limitConcurrentUploads: undefined,
             // Set the following option to true to force iframe transport uploads:
@@ -134,7 +134,7 @@
             // Set the following option to the location of a redirect url on the
             // origin server, for cross-domain iframe transport uploads:
             redirect: undefined,
-            // The parameter display_name for the redirect url, sent as part of the form
+            // The parameter name for the redirect url, sent as part of the form
             // data and set to 'redirect' if this option is empty:
             redirectParamName: undefined,
             // Set the following option to the location of a postMessage window,
@@ -184,7 +184,7 @@
             },
 
             // Additional form data to be sent along with the file uploads can be set
-            // using this option, which accepts an array of objects with display_name and
+            // using this option, which accepts an array of objects with name and
             // value properties, a function returning such an array, a FormData
             // object (for XHR file uploads), or a simple object.
             // The form of the first fileInput is given as parameter to the function:
@@ -282,7 +282,7 @@
         },
 
         // A list of options that require reinitializing event listeners and/or
-        // special initialization contract_code:
+        // special initialization code:
         _specialOptions: [
             'fileInput',
             'dropZone',
@@ -1189,7 +1189,7 @@
                 }
                 // If the files property is not available, the browser does not
                 // support the File API and we add a pseudo File object with
-                // the input value as display_name with path information removed:
+                // the input value as name with path information removed:
                 files = [{name: value.replace(/^.*\\/, '')}];
             } else if (files[0].name === undefined && files[0].fileName) {
                 // File normalization for Safari 4 and Firefox 3:
@@ -1387,7 +1387,7 @@
         },
 
         // This method is exposed to the widget API and allows to query
-        // the contract_rate of active uploads:
+        // the number of active uploads:
         active: function () {
             return this._active;
         },

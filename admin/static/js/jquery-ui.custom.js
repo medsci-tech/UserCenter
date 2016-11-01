@@ -129,7 +129,7 @@ function focusable( element, isTabIndexNotNaN ) {
 		if ( !element.href || !mapName || map.nodeName.toLowerCase() !== "map" ) {
 			return false;
 		}
-		img = $( "contract_img[usemap=#" + mapName + "]" )[0];
+		img = $( "img[usemap=#" + mapName + "]" )[0];
 		return !!img && visible( img );
 	}
 	return ( /input|select|textarea|button|object/.test( nodeName ) ?
@@ -357,7 +357,7 @@ $.widget = function( name, base, prototype ) {
 		}
 
 		// allow instantiation without initializing for simple inheritance
-		// must use "new" keyword (the contract_code above always passes args)
+		// must use "new" keyword (the code above always passes args)
 		if ( arguments.length ) {
 			this._createWidget( options, element );
 		}
@@ -409,7 +409,7 @@ $.widget = function( name, base, prototype ) {
 	});
 	constructor.prototype = $.widget.extend( basePrototype, {
 		// TODO: remove support for widgetEventPrefix
-		// always use the name_ch + a colon as the prefix, e.g., draggable:start
+		// always use the name + a colon as the prefix, e.g., draggable:start
 		// don't prefix for widgets that aren't DOM-based
 		widgetEventPrefix: existingConstructor ? basePrototype.widgetEventPrefix : name
 	}, proxiedPrototype, {
@@ -2934,7 +2934,7 @@ $.widget("ui.resizable", $.ui.mouse, {
 		this._handles = $(".ui-resizable-handle", this.element)
 			.disableSelection();
 
-		//Matching axis name_ch
+		//Matching axis name
 		this._handles.mouseover(function() {
 			if (!that.resizing) {
 				if (this.className) {
@@ -4347,7 +4347,7 @@ $.widget("ui.sortable", $.ui.mouse, {
 
 			// cannot intersect with itself
 			// no useless actions that have been done before
-			// no rule_name_en if the item moved is the parent of the item checked
+			// no action if the item moved is the parent of the item checked
 			if (itemElement !== this.currentItem[0] &&
 				this.placeholder[intersection === 1 ? "next" : "prev"]()[0] !== itemElement &&
 				!$.contains(this.placeholder[0], itemElement) &&
@@ -4753,8 +4753,8 @@ $.widget("ui.sortable", $.ui.mouse, {
 				},
 				update: function(container, p) {
 
-					// 1. If a className is set as 'placeholder option, we don't force sizes - the class is region_admin for that
-					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a class name_ch is specified
+					// 1. If a className is set as 'placeholder option, we don't force sizes - the class is responsible for that
+					// 2. The option 'forcePlaceholderSize can be enabled to force it even if a class name is specified
 					if(className && !o.forcePlaceholderSize) {
 						return;
 					}
@@ -5845,7 +5845,7 @@ $.widget( "ui.autocomplete", {
 		// Some browsers only repeat keydown events, not keypress events,
 		// so we use the suppressKeyPress flag to determine if we've already
 		// handled the keydown event. #7269
-		// Unfortunately the contract_code for & in keypress is the same as the up arrow,
+		// Unfortunately the code for & in keypress is the same as the up arrow,
 		// so we use the suppressKeyPressRepeat flag to avoid handling keypress
 		// events when we know the keydown event was used to modify the
 		// search term. #7799
@@ -6422,9 +6422,9 @@ var lastActive, startXPos, startYPos, clickDragged,
 		if ( name ) {
 			name = name.replace( /'/g, "\\'" );
 			if ( form ) {
-				radios = $( form ).find( "[name_ch='" + name + "']" );
+				radios = $( form ).find( "[name='" + name + "']" );
 			} else {
-				radios = $( "[name_ch='" + name + "']", radio.ownerDocument )
+				radios = $( "[name='" + name + "']", radio.ownerDocument )
 					.filter(function() {
 						return !this.form;
 					});
@@ -6827,15 +6827,15 @@ function Datepicker() {
 	this._datepickerShowing = false; // True if the popup picker is showing , false if not
 	this._inDialog = false; // True if showing within a "dialog", false if not
 	this._mainDivId = "ui-datepicker-div"; // The ID of the main datepicker division
-	this._inlineClass = "ui-datepicker-inline"; // The name_ch of the inline marker class
-	this._appendClass = "ui-datepicker-append"; // The name_ch of the append marker class
-	this._triggerClass = "ui-datepicker-trigger"; // The name_ch of the trigger marker class
-	this._dialogClass = "ui-datepicker-dialog"; // The name_ch of the dialog marker class
-	this._disableClass = "ui-datepicker-disabled"; // The name_ch of the disabled covering marker class
-	this._unselectableClass = "ui-datepicker-unselectable"; // The name_ch of the unselectable cell marker class
-	this._currentClass = "ui-datepicker-current-day"; // The name_ch of the current day marker class
-	this._dayOverClass = "ui-datepicker-days-cell-over"; // The name_ch of the day hover marker class
-	this.regional = []; // Available regional settings, indexed by language contract_code
+	this._inlineClass = "ui-datepicker-inline"; // The name of the inline marker class
+	this._appendClass = "ui-datepicker-append"; // The name of the append marker class
+	this._triggerClass = "ui-datepicker-trigger"; // The name of the trigger marker class
+	this._dialogClass = "ui-datepicker-dialog"; // The name of the dialog marker class
+	this._disableClass = "ui-datepicker-disabled"; // The name of the disabled covering marker class
+	this._unselectableClass = "ui-datepicker-unselectable"; // The name of the unselectable cell marker class
+	this._currentClass = "ui-datepicker-current-day"; // The name of the current day marker class
+	this._dayOverClass = "ui-datepicker-days-cell-over"; // The name of the day hover marker class
+	this.regional = []; // Available regional settings, indexed by language code
 	this.regional[""] = { // Default regional settings
 		closeText: "Done", // Display text for close link
 		prevText: "Prev", // Display text for previous month link
@@ -6860,7 +6860,7 @@ function Datepicker() {
 		showAnim: "fadeIn", // Name of jQuery animation for popup
 		showOptions: {}, // Options for enhanced animations
 		defaultDate: null, // Used when field is blank: actual date,
-			// +/-contract_rate for offset from today, null for today
+			// +/-number for offset from today, null for today
 		appendText: "", // Display text following the input box, e.g. showing the format
 		buttonText: "...", // Text for trigger button
 		buttonImage: "", // URL for trigger button image
@@ -6878,7 +6878,7 @@ function Datepicker() {
 		selectOtherMonths: false, // True to allow selection of dates in other months, false for unselectable
 		showWeek: false, // True to show week of the year, false to not show it
 		calculateWeek: this.iso8601Week, // How to calculate the week of the year,
-			// takes a Date and returns the contract_rate of the week for it
+			// takes a Date and returns the number of the week for it
 		shortYearCutoff: "+10", // Short year values < this are in the current century,
 			// > this are in the previous century,
 			// string value starting with "+" for current year + value
@@ -6886,7 +6886,7 @@ function Datepicker() {
 		maxDate: null, // The latest selectable date, or null for no limit
 		duration: "fast", // Duration of display/closure
 		beforeShowDay: null, // Function that takes a date and returns an array with
-			// [0] = true if selectable, false if not, [1] = custom CSS class name_ch(s) or "",
+			// [0] = true if selectable, false if not, [1] = custom CSS class name(s) or "",
 			// [2] = cell title (optional), e.g. $.datepicker.noWeekends
 		beforeShow: null, // Function that takes an input field and
 			// returns a set of custom settings for the date picker
@@ -6909,10 +6909,10 @@ function Datepicker() {
 }
 
 $.extend(Datepicker.prototype, {
-	/* Class name_ch added to elements to indicate already configured with a date picker. */
+	/* Class name added to elements to indicate already configured with a date picker. */
 	markerClassName: "hasDatepicker",
 
-	//Keep track of the maximum contract_rate of rows displayed (see #7043)
+	//Keep track of the maximum number of rows displayed (see #7043)
 	maxRows: 4,
 
 	// TODO rename to "widget" when switching to widget factory
@@ -7008,10 +7008,10 @@ $.extend(Datepicker.prototype, {
 			buttonText = this._get(inst, "buttonText");
 			buttonImage = this._get(inst, "buttonImage");
 			inst.trigger = $(this._get(inst, "buttonImageOnly") ?
-				$("<contract_img/>").addClass(this._triggerClass).
+				$("<img/>").addClass(this._triggerClass).
 					attr({ src: buttonImage, alt: buttonText, title: buttonText }) :
 				$("<button type='button'></button>").addClass(this._triggerClass).
-					html(!buttonImage ? buttonText : $("<contract_img/>").attr(
+					html(!buttonImage ? buttonText : $("<img/>").attr(
 					{ src:buttonImage, alt:buttonText, title:buttonText })));
 			input[isRTL ? "before" : "after"](inst.trigger);
 			inst.trigger.click(function() {
@@ -7244,8 +7244,8 @@ $.extend(Datepicker.prototype, {
 
 	/* Update or retrieve the settings for a date picker attached to an input field or division.
 	 * @param  target  element - the target input field or division or span
-	 * @param  name_ch	object - the new settings to update or
-	 *				string - the name_ch of the setting to change or retrieve,
+	 * @param  name	object - the new settings to update or
+	 *				string - the name of the setting to change or retrieve,
 	 *				when retrieving also "all" for all instance settings or
 	 *				"defaults" for all global defaults
 	 * @param  value   any - the new value for the setting
@@ -7530,7 +7530,7 @@ $.extend(Datepicker.prototype, {
 		// determine sizing offscreen
 		inst.dpDiv.css({position: "absolute", display: "block", top: "-1000px"});
 		$.datepicker._updateDatepicker(inst);
-		// fix width for dynamic contract_rate of date pickers
+		// fix width for dynamic number of date pickers
 		// and adjust position before showing
 		offset = $.datepicker._checkOffset(inst, offset, isFixed);
 		inst.dpDiv.css({position: ($.datepicker._inDialog && $.blockUI ?
@@ -7559,7 +7559,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Generate the date picker content. */
 	_updateDatepicker: function(inst) {
-		this.maxRows = 4; //Reset the max contract_rate of rows being displayed (see #7043)
+		this.maxRows = 4; //Reset the max number of rows being displayed (see #7043)
 		instActive = inst; // for delegate hover events
 		inst.dpDiv.empty().append(this._generateHTML(inst));
 		this._attachHandlers(inst);
@@ -7836,7 +7836,7 @@ $.extend(Datepicker.prototype, {
 
 	/* Set as calculateWeek to determine the week of the year based on the ISO 8601 definition.
 	 * @param  date  Date - the date to get the week for
-	 * @return  contract_rate - the contract_rate of the week within the year that contains this date
+	 * @return  number - the number of the week within the year that contains this date
 	 */
 	iso8601Week: function(date) {
 		var time,
@@ -7857,7 +7857,7 @@ $.extend(Datepicker.prototype, {
 	 * @param  format string - the expected format of the date
 	 * @param  value string - the date in the above format
 	 * @param  settings Object - attributes include:
-	 *					shortYearCutoff  contract_rate - the cutoff year for determining the century (optional)
+	 *					shortYearCutoff  number - the cutoff year for determining the century (optional)
 	 *					dayNamesShort	string[7] - abbreviated names of the days from Sunday (optional)
 	 *					dayNames		string[7] - names of the days from Sunday (optional)
 	 *					monthNamesShort string[12] - abbreviated names of the months (optional)
@@ -7897,7 +7897,7 @@ $.extend(Datepicker.prototype, {
 				}
 				return matches;
 			},
-			// Extract a contract_rate from the string value
+			// Extract a number from the string value
 			getNumber = function(match) {
 				var isDoubled = lookAhead(match),
 					size = (match === "@" ? 14 : (match === "!" ? 20 :
@@ -7905,12 +7905,12 @@ $.extend(Datepicker.prototype, {
 					digits = new RegExp("^\\d{1," + size + "}"),
 					num = value.substring(iValue).match(digits);
 				if (!num) {
-					throw "Missing contract_rate at position " + iValue;
+					throw "Missing number at position " + iValue;
 				}
 				iValue += num[0].length;
 				return parseInt(num[0], 10);
 			},
-			// Extract a name_ch from the string value and convert to an index
+			// Extract a name from the string value and convert to an index
 			getName = function(match, shortNames, longNames) {
 				var index = -1,
 					names = $.map(lookAhead(match) ? longNames : shortNames, function (v, k) {
@@ -7930,7 +7930,7 @@ $.extend(Datepicker.prototype, {
 				if (index !== -1) {
 					return index + 1;
 				} else {
-					throw "Unknown name_ch at position " + iValue;
+					throw "Unknown name at position " + iValue;
 				}
 			},
 			// Confirm that a literal character matches the string value
@@ -8050,12 +8050,12 @@ $.extend(Datepicker.prototype, {
 	 * dd - day of month (two digit)
 	 * o  - day of year (no leading zeros)
 	 * oo - day of year (three digit)
-	 * D  - day name_ch short
-	 * DD - day name_ch long
+	 * D  - day name short
+	 * DD - day name long
 	 * m  - month of year (no leading zero)
 	 * mm - month of year (two digit)
-	 * M  - month name_ch short
-	 * MM - month name_ch long
+	 * M  - month name short
+	 * MM - month name long
 	 * y  - year (two digit)
 	 * yy - year (four digit)
 	 * @ - Unix timestamp (ms since 01/01/1970)
@@ -8090,7 +8090,7 @@ $.extend(Datepicker.prototype, {
 				}
 				return matches;
 			},
-			// Format a contract_rate, with leading zero if necessary
+			// Format a number, with leading zero if necessary
 			formatNumber = function(match, value, len) {
 				var num = "" + value;
 				if (lookAhead(match)) {
@@ -8100,7 +8100,7 @@ $.extend(Datepicker.prototype, {
 				}
 				return num;
 			},
-			// Format a name_ch, short or long as requested
+			// Format a name, short or long as requested
 			formatName = function(match, value, shortNames, longNames) {
 				return (lookAhead(match) ? longNames[value] : shortNames[value]);
 			},
@@ -8339,7 +8339,7 @@ $.extend(Datepicker.prototype, {
 	},
 
 	/* Attach the onxxx handlers.  These are declared statically so
-	 * they work with static contract_code transformers like Caja.
+	 * they work with static code transformers like Caja.
 	 */
 	_attachHandlers: function(inst) {
 		var stepMonths = this._get(inst, "stepMonths"),
@@ -8505,8 +8505,8 @@ $.extend(Datepicker.prototype, {
 					inst.selectedDay = Math.min(inst.selectedDay, daysInMonth);
 				}
 				leadDays = (this._getFirstDayOfMonth(drawYear, drawMonth) - firstDay + 7) % 7;
-				curRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the contract_rate of rows to generate
-				numRows = (isMultiMonth ? this.maxRows > curRows ? this.maxRows : curRows : curRows); //If multiple months, use the higher contract_rate of rows (see #7043)
+				curRows = Math.ceil((leadDays + daysInMonth) / 7); // calculate the number of rows to generate
+				numRows = (isMultiMonth ? this.maxRows > curRows ? this.maxRows : curRows : curRows); //If multiple months, use the higher number of rows (see #7043)
 				this.maxRows = numRows;
 				printDate = this._daylightSavingAdjust(new Date(drawYear, drawMonth, 1 - leadDays));
 				for (dRow = 0; dRow < numRows; dRow++) { // create date picker rows
@@ -8663,7 +8663,7 @@ $.extend(Datepicker.prototype, {
 		}
 	},
 
-	/* Determine the contract_rate of months to show. */
+	/* Determine the number of months to show. */
 	_getNumberOfMonths: function(inst) {
 		var numMonths = this._get(inst, "numberOfMonths");
 		return (numMonths == null ? [1, 1] : (typeof numMonths === "number" ? [1, numMonths] : numMonths));
@@ -8674,7 +8674,7 @@ $.extend(Datepicker.prototype, {
 		return this._determineDate(inst, this._get(inst, minMax + "Date"), null);
 	},
 
-	/* Find the contract_rate of days in a given month. */
+	/* Find the number of days in a given month. */
 	_getDaysInMonth: function(year, month) {
 		return 32 - this._daylightSavingAdjust(new Date(year, month, 32)).getDate();
 	},
@@ -10361,7 +10361,7 @@ $.widget( "ui.progressbar", {
 })( jQuery );
 (function( $, undefined ) {
 
-// contract_rate of pages in a slider
+// number of pages in a slider
 // (how many times can you page up/down to go through the whole range)
 var numPages = 5;
 
@@ -11543,7 +11543,7 @@ $.widget( "ui.tabs", {
 				}
 			})
 			// support: IE <9
-			// Preventing the default rule_name_en in mousedown doesn't prevent IE
+			// Preventing the default action in mousedown doesn't prevent IE
 			// from focusing the element, so if the anchor gets focused, blur.
 			// We don't have to worry about focusing the previously focused
 			// element since clicking on a non-focusable element should focus
@@ -12858,7 +12858,7 @@ $.effects = {
 supportElem.style.cssText = "background-color:rgba(1,1,1,.5)";
 support.rgba = supportElem.style.backgroundColor.indexOf( "rgba" ) > -1;
 
-// define cache name_ch and alpha properties
+// define cache name and alpha properties
 // for rgba and hsla spaces
 each( spaces, function( spaceName, space ) {
 	space.cache = "_" + spaceName;
@@ -13815,7 +13815,7 @@ function _normalizeArguments( effect, options, speed, callback ) {
 }
 
 function standardAnimationOption( option ) {
-	// Valid standard speeds (nothing, contract_rate, named speed)
+	// Valid standard speeds (nothing, number, named speed)
 	if ( !option || typeof option === "number" || $.fx.speeds[ option ] ) {
 		return true;
 	}
@@ -14075,7 +14075,7 @@ $.effects.effect.bounce = function( o, done ) {
 		distance = o.distance,
 		times = o.times || 5,
 
-		// contract_rate of internal animations
+		// number of internal animations
 		anims = times * 2 + ( show || hide ? 1 : 0 ),
 		speed = o.duration / anims,
 		easing = o.easing,

@@ -31,12 +31,12 @@
 
     // The iframe transport accepts four additional options:
     // options.fileInput: a jQuery collection of file input fields
-    // options.paramName: the parameter display_name for the file form data,
-    //  overrides the display_name property of the file input field(s),
+    // options.paramName: the parameter name for the file form data,
+    //  overrides the name property of the file input field(s),
     //  can be a string or an array of strings.
-    // options.formData: an array of objects with display_name and value properties,
+    // options.formData: an array of objects with name and value properties,
     //  equivalent to the return data of .serializeArray(), e.g.:
-    //  [{name_ch: 'a', value: 1}, {name_ch: 'b', value: 2}]
+    //  [{name: 'a', value: 1}, {name: 'b', value: 2}]
     // options.initialIframeSrc: the URL of the initial iframe src,
     //  by default set to "javascript:false;"
     $.ajaxTransport('iframe', function (options) {
@@ -65,13 +65,13 @@
                         options.url = options.url + addParamChar + '_method=PATCH';
                         options.type = 'POST';
                     }
-                    // IE versions below IE8 cannot set the display_name property of
+                    // IE versions below IE8 cannot set the name property of
                     // elements that have already been added to the DOM,
-                    // so we set the display_name along with the iframe HTML markup:
+                    // so we set the name along with the iframe HTML markup:
                     counter += 1;
                     iframe = $(
                         '<iframe src="' + initialIframeSrc +
-                            '" display_name="iframe-transport-' + counter + '"></iframe>'
+                            '" name="iframe-transport-' + counter + '"></iframe>'
                     ).bind('load', function () {
                         var fileInputClones,
                             paramNames = $.isArray(options.paramName) ?
@@ -154,7 +154,7 @@
                         if (fileInputClones && fileInputClones.length) {
                             options.fileInput.each(function (index, input) {
                                 var clone = $(fileInputClones[index]);
-                                // Restore the original display_name and form properties:
+                                // Restore the original name and form properties:
                                 $(input)
                                     .prop('name', clone.prop('name'))
                                     .attr('form', clone.attr('form'));

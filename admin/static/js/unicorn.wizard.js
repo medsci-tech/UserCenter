@@ -34,10 +34,10 @@ $(document).ready(function(){
 				eula: "required"
 			},
 			messages: {
-				username: "Please enter your name_ch or username",
+				username: "Please enter your name or username",
 				password: "You must enter the password",
 				password2: { equalTo: "Password don't match" },
-				email: { required: "Please, enter your email", email: "Correct email format is name_ch@domain.com" },
+				email: { required: "Please, enter your email", email: "Correct email format is name@domain.com" },
 				eula: "You must accept the eula"
 			},
 			errorClass: "help-inline",

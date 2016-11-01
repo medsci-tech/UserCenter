@@ -10,8 +10,8 @@ class User(Auth):
             }
 
     phone       = StringField()  # 手机号
-    password    = StringField(min_length = 6, max_length = 30) # 密码
-    role        = StringField(default = None)  # 角色
+    password    = StringField()  # 密码
+    role        = StringField(default=None)  # 角色
 
     province    = StringField(default = None)
     city        = StringField(default = None)
@@ -23,6 +23,7 @@ class User(Auth):
     beans_list  = DictField()
 
     # 推荐人
+    upper_id = ObjectIdField(default = None)
     referrer_id = IntField(default = None)
     referred_name = StringField(default = None)
     referred_phone = StringField(default = None)

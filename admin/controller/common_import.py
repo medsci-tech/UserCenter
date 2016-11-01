@@ -23,6 +23,6 @@ from admin.controller.auth import auth
 # 引入log记录方法
 from admin.controller.syslog import logsform
 
-# 引入log记录方法
+# ApiResponse
 from helper.apiResponse import ApiResponse
 

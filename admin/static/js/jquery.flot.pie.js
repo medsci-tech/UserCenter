@@ -235,7 +235,7 @@ More detail and specific examples can be found in the included HTML file.
 			var newdata = [];
 			for (var i = 0; i < data.length; ++i)
 			{
-				// make sure its a contract_rate
+				// make sure its a number
 				data[i].data[0][1] = parseFloat(data[i].data[0][1]);
 				if (!data[i].data[0][1])
 					data[i].data[0][1] = 0;
@@ -589,7 +589,7 @@ More detail and specific examples can be found in the included HTML file.
 			triggerClickHoverEvent('plotclick', e);
         }
 
-		// trigger click or hover event (they send the same parameters so we share their contract_code)
+		// trigger click or hover event (they send the same parameters so we share their code)
 		function triggerClickHoverEvent(eventname, e) 
 		{
 			var offset = plot.offset(),

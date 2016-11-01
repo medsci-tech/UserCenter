@@ -49,7 +49,7 @@
                                 <th>角色</th>
                                 <th>手机号</th>
                                 {% for foo in list_contratcData %}
-                                  <th>{{ foo.name }}</th>
+                                  <th>{{ foo.name_ch }}</th>
                                 {% endfor %}
                                 <th>迈豆总数</th>
                                 <th>创建时间</th>
@@ -72,8 +72,8 @@
                                 <td>{{ list.phone }}</td>
                                 {% for foo in list_contratcData %}
                                   <td>
-                                    {% if list.beansList %}
-                                      {% for key,val in list.beansList.items %}
+                                    {% if list.beans_list %}
+                                      {% for key,val in list.beans_list.items %}
                                         {% if foo.id|iriencode ==  key %}
                                           {{ val.beans }}
                                         {% else %}
