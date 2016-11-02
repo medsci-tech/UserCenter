@@ -19,7 +19,9 @@ urlpatterns = [
     url(r'^public/setPwd', public.setPwd, name='public_setPwd'),
 
     # 积分图表
-    url(r'^beans_chart/list', beans_chart.list, name='beans_chart_list'),
+    url(r'^beans_chart/project_type', beans_chart.project_type, name='beans_chart_project_type'),
+    url(r'^beans_chart/type_rule', beans_chart.type_rule, name='beans_chart_type_rule'),
+    url(r'^beans_chart/rule_time', beans_chart.rule_time, name='beans_chart_rule_time'),
 
     # 用户信息修改
     url(r'^user/edit', user.edit, name='user_edit'),
