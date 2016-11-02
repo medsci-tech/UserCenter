@@ -9,7 +9,8 @@ class User(Auth):
             'indexes': [],
             }
 
-    mysql_id       = IntField(default=None)  # 没用的id
+    mysql_id            = IntField(default=None)  # 没用的id
+    mysql_referrer_id   = IntField(default = None)
 
     phone       = StringField()  # 手机号
     password    = StringField()  # 密码
@@ -25,7 +26,6 @@ class User(Auth):
     beans_list  = DictField()
 
     # 推荐人
-    upper_id = ObjectIdField(default = None)
     referrer_id = IntField(default = None)
     referrer_name = StringField(default = None)
     referrer_phone = StringField(default = None)

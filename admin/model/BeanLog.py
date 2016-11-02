@@ -8,6 +8,7 @@ class BeanLog(Auth):
             'collection': settings.MONGODB_PREFIX + 'bean_log',
             'indexes': [],
             }
+    mysql_user_id = IntField(default=None)
 
     company_id      = ObjectIdField()
     company_name    = StringField()

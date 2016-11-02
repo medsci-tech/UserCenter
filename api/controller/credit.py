@@ -43,24 +43,25 @@ def index(request):
 
     # return ApiResponse(0, 'test',str_appId).json_response()
     if check_token and request_action and str_appId:
+
         # BeanRule
         try:
             # 根据条件查找规则--BeanRule
             ruleData = BeanRule.objects.get(app_id=str_appId, name_en=request_action)
             need_beans = math.ceil(ruleData['ratio'] * float(request_beans))  # 需要分配给用户的迈豆数
         except:
-            return ApiResponse(-1, 'rule操作失败').json_response()
+            return ApiResponse(-5, 'rule操作失败').json_response()
         if not ruleData:
-            return ApiResponse(-1, '找不到对应规则').json_response()
+            return ApiResponse(-5, '找不到对应规则').json_response()
 
         # Project
         try:
             # 查询Contract表，看是否有可用迈豆
             contractData = Project.objects.get(id=ruleData['project_id'])
         except:
-            return ApiResponse(-1, 'contract操作失败').json_response()
+            return ApiResponse(-5, 'contract操作失败').json_response()
         if not contractData:
-            return ApiResponse(-1, '找不到对应项目').json_response()
+            return ApiResponse(-5, '找不到对应项目').json_response()
 
         # 根据项目起止时间判断迈豆是否可用
         now_time = datetime.datetime.now().timestamp()
@@ -69,19 +70,19 @@ def index(request):
             end_time = datetime.datetime.strptime(contractData['end_time'], '%Y-%m-%d').timestamp() + 86400  # 截止时间默认为次日0点
             has_beans = contractData['total_beans'] - contractData['used_beans']  # 可用的迈豆数
         except:
-            return ApiResponse(-1, '合同时间错误或无可用迈豆').json_response()
+            return ApiResponse(-2, '合同时间错误或无可用迈豆').json_response()
         if now_time < start_time or now_time > end_time:
-            return ApiResponse(-1, '合同不在有效期内').json_response()
+            return ApiResponse(-2, '合同不在有效期内').json_response()
         if has_beans < need_beans:
-            return ApiResponse(-1, '项目迈豆数不够').json_response()
+            return ApiResponse(-2, '项目迈豆数不够').json_response()
 
         # User
         try:
             userData = User.objects.get(phone=request_phone)
         except:
-            return ApiResponse(-1, 'user操作失败').json_response()
+            return ApiResponse(-2, 'user操作失败').json_response()
         if not userData:
-            return ApiResponse(-1, '找不到对应用户').json_response()
+            return ApiResponse(-2, '找不到对应用户').json_response()
         if hasattr(userData, 'beans_list'):
             userBeansList = userData['beans_list']
         else:
