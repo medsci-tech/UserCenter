@@ -159,11 +159,14 @@ def index(request):
                 ruleTypeData = None
             if ruleTypeData:
                 ruleTypeDataName = ruleTypeData['name_ch']
+                ruleTypeDataNameEn = ruleTypeData['name_en']
             else:
                 ruleTypeDataName = ''
+                ruleTypeDataNameEn = ''
             log_param.update(company_name=companyDataName)
             log_param.update(app_name=appDataName)
             log_param.update(rule_type_name=ruleTypeDataName)
+            log_param.update(rule_type_name_en=ruleTypeDataNameEn)
             log_res = _add_log(log_param)
             if log_res:
                 return ApiResponse(200, '操作成功', {'user_beans': save_beans_total}).json_response()

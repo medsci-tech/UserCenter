@@ -22,6 +22,7 @@ class BeanLog(Auth):
     rule_name_en    = StringField()
     rule_type_id    = ObjectIdField()
     rule_type_name  = StringField()
+    rule_type_name_en  = StringField()
 
     user_id     = ObjectIdField()
     user_phone  = StringField()
