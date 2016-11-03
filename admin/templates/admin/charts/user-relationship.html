@@ -15,30 +15,30 @@ var vm = new Vue({
         data: {
 
             this_person: {
-                value: Math.random() * 200 + 50,
+                value: Math.random() * 30 + 20,
                 id: '1',
             },
             upper: [
 
                 {
-                    value: Math.random() * 200 + 50,
+                    value: Math.random() * 30 + 20,
                     id: '21',
                 }
             ],
             lower: [{
-                value: Math.random() * 200 + 50,
+                value: Math.random() * 30 + 20,
                 id: '11',
             }, {
-                value: Math.random() * 200 + 50,
+                value: Math.random() * 30 + 20,
                 id: '12',
             }, {
-                value: Math.random() * 200 + 50,
+                value: Math.random() * 30 + 20,
                 id: '13',
             }, {
-                value: Math.random() * 200 + 50,
+                value: Math.random() * 30 + 20,
                 id: '14',
             }, {
-                value: Math.random() * 200 + 50,
+                value: Math.random() * 30 + 20,
                 id: '15',
             }]
         },
@@ -71,14 +71,14 @@ var vm = new Vue({
                 name: e.this_person.id,
                 category: 'this',
                 value: e.this_person.value,
-                symbolSize: e.this_person.value / 10,
+                symbolSize: e.this_person.value,
             }];
             for (var i = 0; i < ul; i++) {
                 result.push({
                     name: e.upper[i].id,
                     category: '上级',
                     value: e.upper[i].value,
-                    symbolSize: e.upper[i].value / 10,
+                    symbolSize: e.upper[i].value,
                 })
             };
             for (var i = 0; i < ll; i++) {
@@ -86,7 +86,7 @@ var vm = new Vue({
                     name: e.lower[i].id,
                     category: '下级',
                     value: e.lower[i].value,
-                    symbolSize: e.lower[i].value / 10,
+                    symbolSize: e.lower[i].value,
                 })
             };
             return result;
@@ -131,7 +131,7 @@ var option2 = {
         force: {
             gravity: 0,
             repulsion: 50,
-            edgeLength: [50, 100],
+            edgeLength: [50, 120],
         },
         itemStyle: {
 
