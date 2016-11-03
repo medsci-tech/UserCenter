@@ -46,6 +46,7 @@ def index(request):
         'page_last': pageData.get('pageLast'),
         'page_range': range(pageData.get('pageStart'), pageData.get('pageEnd')),
         'ctrlList': post,
+        'ctrl_get': get,
         'form_contractData': contractData,
         'list_integralType': integralType,
         'form_appData': appData,

@@ -13,6 +13,9 @@
         <a href="{% url 'admin:credit_config' %}?app_id={{ form_appData.id }}">项目</a>
         <a href="#" class="current">积分策略</a>
     </div>
+
+    {% include 'admin/charts/beans-chart.html' %}
+
     <div class="row">
         <form action="" method="get">
         <div class="col-xs-12 center">

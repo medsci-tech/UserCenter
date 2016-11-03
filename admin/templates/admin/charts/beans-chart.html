@@ -56,6 +56,8 @@
 </div>
 <!-- chart1 -->
 <script>
+var url_root = 'http://127.0.0.1:8000/';
+
 var vm = new Vue({
     el: '#beans-chart',
     data: {
@@ -64,44 +66,8 @@ var vm = new Vue({
             year: '',
             mounth: ''
         },
-        class_data: [
-
-            {
-                value: Math.random() * 2000,
-                name: '直接访问'
-            }, {
-                value: Math.random() * 2000,
-                name: '邮件营销'
-            }, {
-                value: Math.random() * 2000,
-                name: '联盟广告'
-            }, {
-                value: Math.random() * 2000,
-                name: '视频广告'
-            }, {
-                value: Math.random() * 2000,
-                name: '搜索引擎'
-            }
-        ],
-        strategy_data: [
-
-            {
-                value: Math.random() * 2000,
-                name: '直接访问'
-            }, {
-                value: Math.random() * 2000,
-                name: '邮件营销'
-            }, {
-                value: Math.random() * 2000,
-                name: '联盟广告'
-            }, {
-                value: Math.random() * 2000,
-                name: '视频广告'
-            }, {
-                value: Math.random() * 2000,
-                name: '搜索引擎'
-            }
-        ],
+        class_data: [],
+        strategy_data: [],
         mounth_data: [
 
             {
@@ -275,6 +241,26 @@ var vm = new Vue({
     },
 });
 
+$.ajaxSetup({
+    async: false,
+});
+
+$.post(url_root + 'api/beans_chart/project_type', {
+    project_id: '{{ ctrl_get.project_id }}'
+}, function(data) {
+    if (data.code == 200) {
+        var length = data.data.length;
+        for (var i = 0; i < length; i++) {
+            vm.class_data.push({
+                name: data.data[i]._id,
+                value: data.data[i].total,
+                type_id: data.data[i].type_id
+            })
+        };
+    }
+})
+
+
 var myChart0 = echarts.init(document.getElementById('chart0'));
 var myChart1 = echarts.init(document.getElementById('chart1'));
 var myChart2 = echarts.init(document.getElementById('chart2'));
@@ -283,7 +269,7 @@ $('.chart_hide').addClass('hidden');
 
 var option0 = {
     title: {
-        text: '迈豆池',
+        text: '迈豆池发放类型总计',
     },
     tooltip: {
         trigger: 'item',
@@ -299,6 +285,12 @@ var option0 = {
                 shadowBlur: 10,
                 shadowOffsetX: 0,
                 shadowColor: 'rgba(0, 0, 0, 0.5)'
+            }
+        },
+        label: {
+            normal: {
+                show: true,
+                formatter: '{b}: {d}%'
             }
         }
     }],
@@ -338,7 +330,25 @@ myChart0.setOption(option0);
 myChart1.setOption(option1);
 
 var chart_click = function(params) {
-    console.log(params.name);
+
+    myChart2.showLoading;
+    myChart3.showLoading;
+
+    $.post(url_root + 'api/beans_chart/type_rule', {
+        project_id: '{{ ctrl_get.project_id }}'
+        rule_type_id: '{{ ctrl_get.rule_type_id }}'
+    }, function(data) {
+        if (data.code == 200) {
+            var length = data.data.length;
+            for (var i = 0; i < length; i++) {
+                vm.strategy_data.push({
+                    name: data.data[i]._id,
+                    value: data.data[i].total
+                })
+            };
+            myChart2.hideLoading;
+        }
+    })
 
     $('.chart_hide').removeClass('hidden');
 
