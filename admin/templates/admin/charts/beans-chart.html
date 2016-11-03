@@ -34,7 +34,7 @@
             </select>
         </div>
         <div class="col-sm-1" style="width: auto;">
-            <select class="form-control" v-model='data.mounth'>
+            <select class="form-control" v-model='date.month'>
                 <option value="1">一月</option>
                 <option value="2">二月</option>
                 <option value="3">三月</option>
@@ -50,136 +50,102 @@
             </select>
         </div>
         <div class="col-sm-1">
-            <button type="button" @click='change_data' class="form-control btn btn-primary" style="margin: 0;">查看</button>
+            <button type="button" @click='change_date' class="form-control btn btn-primary" style="margin: 0;">查看</button>
         </div>
     </div>
 </div>
 <!-- chart1 -->
 <script>
 var url_root = 'http://127.0.0.1:8000/';
+var now_date = new Date();
+
 
 var vm = new Vue({
     el: '#beans-chart',
     data: {
         color: ['#c23531', '#2f4554', '#61a0a8', '#d48265', '#91c7ae', '#749f83', '#ca8622', '#bda29a', '#6e7074', '#546570', '#c4ccd3'],
         date: {
-            year: '',
-            mounth: ''
+            year: now_date.getFullYear(),
+            month: now_date.getMonth() + 1
         },
         class_data: [],
         strategy_data: [],
-        mounth_data: [
-
-            {
-                name: '直接访问',
-                value: [
-
-                    {
-                        value: Math.random() * 2000,
-                        name: '1'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '2'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '3'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '4'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '5'
-                    }
-                ]
-            }, {
-                name: '邮件营销',
-                value: [
-
-                    {
-                        value: Math.random() * 2000,
-                        name: '1'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '2'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '3'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '4'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '5'
-                    }
-                ]
-            }, {
-                name: '联盟广告',
-                value: [
-
-                    {
-                        value: Math.random() * 2000,
-                        name: '1'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '2'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '3'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '4'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '5'
-                    }
-                ]
-            }, {
-                name: '视频广告',
-                value: [
-
-                    {
-                        value: Math.random() * 2000,
-                        name: '1'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '2'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '3'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '4'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '5'
-                    }
-                ]
-            }, {
-                name: '搜索引擎',
-                value: [
-
-                    {
-                        value: Math.random() * 2000,
-                        name: '1'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '2'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '3'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '4'
-                    }, {
-                        value: Math.random() * 2000,
-                        name: '5'
-                    }
-                ]
-            },
-        ],
+        month_data: [],
     },
     methods: {
-        change_data: function() {
+        change_date: function() {
+            var length = vm.strategy_data.length;
+            vm.month_data = [];
+
+            for (var i = 0; i < length; i++) {
+                $.post(url_root + 'api/beans_chart/rule_time', {
+                        project_id: '{{ ctrl_get.project_id }}',
+                        rule_type_name: vm.strategy_data[i].name_en,
+                        year: vm.date.year,
+                        month: vm.date.month
+                    },
+                    function(data) {
+                        if (data.code == 200 && data.data) {
+
+                            var length = data.data.length;
+                            var result = [];
+                            for (var j = 0; j < length; j++) {
+                                result.push({
+                                    name: data.data[j]._id.day,
+                                    value: data.data[j].total
+                                });
+                            };
+
+                            vm.month_data.push({
+                                name: vm.strategy_data[i].name,
+                                value: result,
+                            });
+                        } else {
+                            vm.month_data = [{
+                                name: '本月没有数据',
+                                value: {
+                                    name: 0,
+                                    value: 0
+                                }
+                            }];
+                        }
+                    });
+            }
+
+            var option4 = {
+                legend: {
+                    data: vm.data_head(vm.month_data),
+                    // left: '55%',
+                },
+                xAxis: [{
+                    name: vm.date.month + '月',
+                    gridIndex: 0,
+                    boundaryGap: false,
+                    data: function() {
+                        var result = [];
+                        for (var k = 1; k < 32; k++) {
+                            result.push(k);
+                        }
+                        return result;
+                    },
+                }],
+                yAxis: [{
+                    gridIndex: 0,
+                }],
+                dataZoom: [{
+                    xAxisIndex: 0,
+                    filterMode: 'empty',
+                }, {
+                    type: 'inside',
+                    xAxisIndex: 0,
+                }],
+                series: vm.series_change_to_line(vm.month_data),
+                tooltip: {
+                    trigger: 'axis'
+                },
+            };
+            myChart3.clear();
+            myChart3.setOption(option4);
 
         },
         all_data: function() {
@@ -221,6 +187,7 @@ var vm = new Vue({
             return result;
         },
         series_change_to_line: function(e) {
+            console.log(vm.month_data)
             var result = [];
             var l = e.length;
             for (var i = 0; i < l; i++) {
@@ -237,6 +204,7 @@ var vm = new Vue({
                 });
             };
             return result;
+            console.log(result)
         }
     },
 });
@@ -252,9 +220,10 @@ $.post(url_root + 'api/beans_chart/project_type', {
         var length = data.data.length;
         for (var i = 0; i < length; i++) {
             vm.class_data.push({
-                name: data.data[i]._id,
+                name: data.data[i]._id.rule_type_name,
                 value: data.data[i].total,
-                type_id: data.data[i].type_id
+                rule_type_name: data.data[i]._id.rule_type_name,
+                rule_type_name_en: data.data[i]._id.rule_type_name_en,
             })
         };
     }
@@ -334,16 +303,26 @@ var chart_click = function(params) {
     myChart2.showLoading;
     myChart3.showLoading;
 
+    vm.strategy_data = [];
+
     $.post(url_root + 'api/beans_chart/type_rule', {
         project_id: '{{ ctrl_get.project_id }}',
-        rule_type_id: '{{ ctrl_get.rule_type_id }}'
+        rule_type_name: function() {
+            var l = vm.class_data.length;
+            for (var i = 0; i < l; i++) {
+                if (params.name == vm.class_data[i].rule_type_name) {
+                    return vm.class_data[i].rule_type_name_en
+                }
+            }
+        }
     }, function(data) {
         if (data.code == 200) {
             var length = data.data.length;
             for (var i = 0; i < length; i++) {
                 vm.strategy_data.push({
-                    name: data.data[i]._id,
-                    value: data.data[i].total
+                    name: data.data[i]._id.rule_name_ch,
+                    value: data.data[i].total,
+                    name_en: data.data[i]._id.rule_type_name_en
                 })
             };
             myChart2.hideLoading;
@@ -354,7 +333,7 @@ var chart_click = function(params) {
 
     var option2 = {
         title: {
-            text: '迈豆池',
+            text: params.name + '类迈豆总计',
         },
         tooltip: {
             trigger: 'item',
@@ -375,41 +354,19 @@ var chart_click = function(params) {
                     shadowOffsetX: 0,
                     shadowColor: 'rgba(0, 0, 0, 0.5)'
                 }
+            },
+            label: {
+                normal: {
+                    show: true,
+                    formatter: '{b}: {d}%'
+                }
             }
-        }]
+        }],
+
     };
     myChart2.setOption(option2);
 
-
-    var option3 = {
-        legend: [{
-            data: vm.data_head(vm.strategy_data),
-            // left: '55%',
-        }],
-        xAxis: [{
-            name: vm.date.mounth,
-            gridIndex: 0,
-            boundaryGap: false,
-            data: vm.data_head(vm.mounth_data[0].value),
-        }],
-        yAxis: [{
-            gridIndex: 0,
-        }],
-        dataZoom: [{
-            xAxisIndex: 0,
-            filterMode: 'empty',
-        }, {
-            type: 'inside',
-            xAxisIndex: 0,
-        }],
-        series: vm.series_change_to_line(vm.mounth_data),
-        tooltip: {
-            trigger: 'axis'
-        },
-    };
-
-
-    myChart3.setOption(option3);
+    vm.change_date();
     myChart2.on('click', function(params) {
         for (item in vm.strategy_data) {
             if (vm.strategy_data[item].name == params.name) {
