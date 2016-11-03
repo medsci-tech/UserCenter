@@ -5,12 +5,12 @@ from api.controller import (
     credit,
     beans_chart,
 )
-from api import tests
+# from api import tests
 
 urlpatterns = [
 
     # 测试
-    url(r'^tests/index', tests.index, name='public_get_token'),
+    # url(r'^tests/index', tests.index, name='public_get_token'),
 
     # 公共访问
     url(r'^public/get_token', public.get_token, name='public_get_token'),
