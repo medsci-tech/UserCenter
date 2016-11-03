@@ -335,7 +335,7 @@ var chart_click = function(params) {
     myChart3.showLoading;
 
     $.post(url_root + 'api/beans_chart/type_rule', {
-        project_id: '{{ ctrl_get.project_id }}'
+        project_id: '{{ ctrl_get.project_id }}',
         rule_type_id: '{{ ctrl_get.rule_type_id }}'
     }, function(data) {
         if (data.code == 200) {
