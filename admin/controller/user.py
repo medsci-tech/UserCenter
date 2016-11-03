@@ -84,7 +84,7 @@ def _editById(**param):
             # 如果留空则移除password属性，不修改密码
             param.pop('password')
         try:
-            param.update(updated_at=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+            param.update(update_time=datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
             Model.objects.get(id=id).update(**param)
             return ApiResponse(200, '操作成功').json_return()
         except Exception:

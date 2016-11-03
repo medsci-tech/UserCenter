@@ -26,7 +26,7 @@ class User(Auth):
     beans_list  = DictField()
 
     # 推荐人
-    referrer_id = IntField(default = None)
+    referrer_id = ObjectIdField(default = None)
     referrer_name = StringField(default = None)
     referrer_phone = StringField(default = None)
 
@@ -38,5 +38,5 @@ class User(Auth):
     hospital_level  = StringField(default = None)  # 医院等级
     department      = StringField(default = None)  # 科室
 
-    created_at = StringField(default = datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
-    updated_at = StringField(default = None)
+    create_time = StringField(default = datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    update_time = StringField(default = None)
