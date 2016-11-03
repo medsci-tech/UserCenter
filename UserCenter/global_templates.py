@@ -46,13 +46,17 @@ def configParam(request=None):
             3: '启用',
             4: '禁用',
             5: '删除',
+            6: '充值',
         },
 
-        # 用户角色
+        # 用户角色 doctor->医生, user->患者,volunteer->代表，agency->代理商 ,company->企业
         'c_user_role': {
-            1: '普通用户',
-            2: '医生',
-            3: '医药代表',
+            'doctor': '医生',
+            'user': '患者',
+            'volunteer': '代表',
+            'agency': '代理商',
+            'company': '企业',
+            'enterprise': '运营',
         },
 
         # 安全令牌
@@ -61,10 +65,9 @@ def configParam(request=None):
             'expire': None,  # 有效期
         },
 
-        # appId 对应数据库objectId
+        # app_id 对应数据库objectId
         'c_api_appId': {
-            1: '580c05ae4eaa7653f70d82a3',  # 药械通微信端
-            2: '580c215c4eaa7657001f2365',  # mime web平台
-            3: '580dbd462514971c74d2903f',  # 易康伴侣微信端
+            1: '58183aab4eaa76339b2ee36b',  # 药械通微信端
+            2: '58183acb4eaa7633bc2ee36b',  # 易康伴侣微信端
         }
     }

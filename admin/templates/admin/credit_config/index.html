@@ -9,14 +9,14 @@
     <div id="breadcrumb">
         <a href="{% url 'admin:index' %}" class="tip-bottom"><i class="fa fa-home"></i>首页</a>
         <a href="{% url 'admin:company' %}">企业</a>
-        <a href="{% url 'admin:app' %}?companyId={{ form_companyData.id }}">应用平台</a>
+        <a href="{% url 'admin:app' %}?company_id={{ form_companyData.id }}">应用平台</a>
         <a href="#" class="current">项目</a>
     </div>
     <div class="row">
         <form action="" method="post">
         <div class="col-xs-12 center">
             <label>名称：
-                <input type="text" name="name" value="{{ ctrlList.name }}">
+                <input type="text" name="name_ch" value="{{ ctrlList.name_ch }}">
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
@@ -54,9 +54,9 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td><a href="{% url 'admin:credit_rule' %}?contractId={{ list.id }}">{{ list.name }}</a></td>
-                                <td>{{ list.totalBeans }}</td>
-                                <td>{{ list.useBeans }}</td>
+                                <td><a href="{% url 'admin:credit_rule' %}?project_id={{ list.id }}">{{ list.name_ch }}</a></td>
+                                <td>{{ list.total_beans }}</td>
+                                <td>{{ list.used_beans }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
                                         {% if key == list.status %}
@@ -64,7 +64,7 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ list.create_time |date:"Y-m-d H:i:s" }}</td>
 
                             </tr>
                             {% endfor %}
@@ -76,74 +76,15 @@
         </div>
     </div>
 </div>
-<div id="myModal" class="modal fade">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button data-dismiss="modal" class="close" type="button">×</button>
-                <h3>项目</h3>
-            </div>
-            <form id="credit_config_form_validate" novalidate="novalidate">
-            <div class="modal-body">
-                {% include 'admin/credit_config/form.html' %}
-            </div>
-            <div class="modal-footer">
-                <button class="btn btn-primary btn-small" >确定</button>
-                <button data-dismiss="modal" class="btn btn-default btn-small">取消</button>
-            </div>
-            </form>
-        </div>
-    </div>
-</div>
 
 <script>
 $(function () {
-    var app_list_url = '{% url 'admin:app_applist' %}';
-    var contract_list_url = '{% url 'admin:contract_contractlist' %}';
     var stats_url = '{% url 'admin:credit_config_stats' %}';
     var form_url = '{% url 'admin:credit_config_form' %}';
     var index_url = window.location.href;
     $.ajaxSetup({
         data: {csrfmiddlewaretoken: '{{ csrf_token }}' }
     });
-    // get all credit
-    var credit_full_list = [];
-    {% for key, val in c_ext_credit.items %}
-        credit_full_list['{{ key }}'] = '{{ val }}';
-    {% endfor %}
-
-    /**
-     * 点击修改按钮触发的操作
-     */
-    $('[data-form="edit-model"]').click(function () {
-        var id = $(this).attr('data-id');
-        var appId = $(this).attr('data-appId');
-        var contractId = $(this).attr('data-contractId');
-        var name = $(this).attr('data-name');
-        var apiName = $(this).attr('data-apiName');
-        var status = $(this).attr('data-status');
-{#        changeListDataByAjaxForMime(app_list_url, {'companyId': companyId}, '#form-appId', 'optionHtml', appId);#}
-{#        changeListDataByAjaxForMime(contract_list_url, {'appId': appId}, '#form-contractId', 'optionHtml', contractId);#}
-        $('#form-id').val(id);
-        $('#form-appId').val(appId);
-        $('#form-name').val(name);
-        $('#form-apiName').val(apiName);
-        $('#form-status').val(status);
-        for(var i in credit_full_list){
-            $('#form-' + i).val($(this).attr('data-' + i));
-        }
-    });
-    /**
-     * 表单验证提交按钮触发的操作
-     */
-    var rules = {
-        {% for key in c_ext_credit %}
-            'extend[{{ key }}]':{
-                number:true
-            },
-        {% endfor %}
-    };
-    subActionAjaxValidateForMime('#credit_config_form_validate', rules, form_url, index_url);
 
     /**
      * 启用
@@ -171,18 +112,6 @@ $(function () {
         }else {
             return false;
         }
-    });
-
-  /**
-   * 获取企业应用列表
-   */
-    $('#form-companyId').change(function () {
-      changeListDataByAjaxForMime(app_list_url, {'companyId': this.value}, '#form-appId', 'optionHtml');
-        console.log(this.value);
-    });
-    $('#form-appId').change(function () {
-      changeListDataByAjaxForMime(contract_list_url, {'appId': this.value}, '#form-contractId', 'optionHtml');
-        console.log(this.value);
     });
 });
 </script>

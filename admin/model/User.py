@@ -1,62 +1,42 @@
 # -*- coding: utf-8 -*-
 # 公共引入文件
-from admin.model.Common_import import *
+from admin.model.CommonImport import *
+
 
 class User(Auth):
     meta = Document.meta = {
-            'collection': settings.MONGODB_PREFIX+'user',
+            'collection': settings.MONGODB_PREFIX + 'user',
             'indexes': [],
             }
-    createTime = DateTimeField(default=datetime.now())
-    status = IntField(default=1)
 
-    unionId = StringField()  # 微信唯一标识
-    username = StringField(max_length=20)  # 用户名
-    password = StringField(max_length=100)  # 密码
-    longitude = StringField(required=False)  # 经度
-    latitude = StringField(required=False)  # 纬度
-    phone = StringField()  # 手机号
+    mysql_id            = IntField(default=None)  # 没用的id
+    mysql_referrer_id   = IntField(default = None)
 
-    role = IntField(default=0)  # 角色
-    beansList = DictField()  # 迈豆记录
+    phone       = StringField()  # 手机号
+    password    = StringField()  # 密码
+    role        = StringField(default=None)  # 角色
 
-# 用户表
+    province    = StringField(default = None)
+    city        = StringField(default = None)
+    district    = StringField(default = None)
+    longitude   = StringField(required = False)  # 经度
+    latitude    = StringField(required = False)  # 纬度
 
-    _id = ObjectIdField(default=None)
-    id = IntField(default=None)
-    old_id = IntField(default=None)
-    type_id = IntField(default=None)
-    level_id = IntField(default=None)
-    referrer_id = IntField(default=None)
-    cooperator_id = IntField(default=None)
-    is_registered = IntField(default=None)
+    beans_total = IntField(default = 0)
+    beans_list  = DictField()
 
-    # phone = StringField(default=None)
-    auth_code = StringField(default=None)
-    auth_code_expired = StringField(default=None)
-    beans_total = FloatField(default=None)
-    openid = StringField(default=None)
-    unionid = StringField(default=None)
-    nickname = StringField(default=None)
-    head_image_url = StringField(default=None)
-    qr_code = StringField(default=None)
-    created_at = StringField(default=None)
-    updated_at = StringField(default=None)
+    # 推荐人
+    referrer_id = ObjectIdField(default = None)
+    referrer_name = StringField(default = None)
+    referrer_phone = StringField(default = None)
 
-# 用户信息表
-    type = StringField(default=None)
-    level = IntField(default=None)
-    name = StringField(default=None)
-    referred_name = StringField(default=None)
-    referred_phone = StringField(default=None)
-    region = StringField(default=None)
-    region_level = StringField(default=None)
-    responsible = StringField(default=None)
-    province = StringField(default=None)
-    city = StringField(default=None)
-    district = StringField(default=None)
-    hospital = StringField(default=None)
-    hospital_level = StringField(default=None)
-    department = StringField(default=None)
-    remark = StringField(default=None)
+    # doctors only
+    region          = StringField(default = None)  # 医生大区
+    region_level    = StringField(default = None)  # 大区级别
+    region_admin    = StringField(default = None)  # 大区负责人
+    hospital        = StringField(default = None)  # 医院
+    hospital_level  = StringField(default = None)  # 医院等级
+    department      = StringField(default = None)  # 科室
 
+    create_time = StringField(default = datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    update_time = StringField(default = None)

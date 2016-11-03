@@ -1,0 +1,35 @@
+<div class="form-horizontal">
+    {% csrf_token %}
+    <input type="hidden" name="id" id="recharge-id" value="">
+
+    <div class="form-group">
+        <label class="col-sm-3 col-md-3 col-lg-2 control-label">充值金额</label>
+        <div class="col-sm-9 col-md-9 col-lg-10">
+            <input type="text" class="form-control input-sm" name="contract_amount" id="recharge-contract_amount" placeholder="数字类型">
+        </div>
+    </div>
+</div>
+
+<script>
+$(function () {
+    var recharge_url = '{% url 'admin:contract_recharge' %}';
+    var index_url = window.location.href;
+    /**
+     * 迈豆分配按钮触发的操作
+     */
+    $('[data-form="recharge-model"]').click(function () {
+        var id = $(this).attr('data-id');
+        $('#recharge-id').val(id);
+    });
+    /**
+     * 表单验证提交按钮触发的操作
+     */
+    var rules = {
+        'contract_amount':{
+            required:true,
+            number:true
+        }
+    };
+    subActionAjaxValidateForMime('#contract_recharge_validate', rules, recharge_url, index_url);
+});
+</script>

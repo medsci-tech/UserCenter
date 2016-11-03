@@ -23,7 +23,7 @@ getRegionDefault = function (value,parentBom) {
         if (value.city) {
             pickerHtml += '/<span class="select-item" data-count="city">' + value.city + '</span>' +
               '<input type="hidden" name="city" value="' + value.city + '">';
-            if (value.area) {
+            if (value.district) {
                 pickerHtml += '/<span class="select-item" data-count="district">' + value.district + '</span>' +
                   '<input type="hidden" name="district" value="' + value.district + '">';
             }

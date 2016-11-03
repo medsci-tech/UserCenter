@@ -55,7 +55,7 @@
                                 <td>
                                     <input data-form="check-model" type="checkbox" name="selection[]" value="{{ list.id }}"/>
                                 </td>
-                                <td><a href="{% url 'admin:credit_config' %}?appId={{ list.id }}">{{ list.name }}</a></td>
+                                <td><a href="{% url 'admin:credit_config' %}?app_id={{ list.id }}">{{ list.name }}</a></td>
                                 <td>{{ list.description }}</td>
                                 <td>
                                     {% for key, val in c_status.items %}
@@ -64,11 +64,11 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
+                                <td>{{ list.create_time |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
-                                       data-companyId="{{ list.companyId }}"
+                                       data-company_id="{{ list.company_id }}"
                                        data-name="{{ list.name }}"
                                        data-description="{{ list.description }}"
                                        data-status="{{ list.status }}"

@@ -676,7 +676,7 @@
    * {
    *   expression: 'a + 1',
    *   filters: [
-   *     { name: 'uppercase', args: null }
+   *     { name_ch: 'uppercase', args: null }
    *   ]
    * }
    *
@@ -1425,7 +1425,7 @@ var transition = Object.freeze({
 
   /**
    * Create an "anchor" for performing dom insertion/removals.
-   * This is used in a number of scenarios:
+   * This is used in a contract_rate of scenarios:
    * - fragment instance
    * - v-html
    * - v-if
@@ -1591,7 +1591,7 @@ var transition = Object.freeze({
           if (expectedTag) {
             warn('Unknown custom element: <' + tag + '> - ' + 'did you mean <' + expectedTag + '>? ' + 'HTML is case-insensitive, remember to use kebab-case in templates.');
           } else if (isUnknownElement(el, tag)) {
-            warn('Unknown custom element: <' + tag + '> - did you ' + 'register the component correctly? For recursive components, ' + 'make sure to provide the "name" option.');
+            warn('Unknown custom element: <' + tag + '> - did you ' + 'register the component correctly? For recursive components, ' + 'make sure to provide the "name_ch" option.');
           }
         }
       }
@@ -1862,7 +1862,7 @@ var transition = Object.freeze({
         asset = assets[i];
         var id = typeof asset === 'function' ? asset.options && asset.options.name || asset.id : asset.name || asset.id;
         if (!id) {
-          'development' !== 'production' && warn('Array-syntax assets must provide a "name" or "id" field.');
+          'development' !== 'production' && warn('Array-syntax assets must provide a "name_ch" or "id" field.');
         } else {
           res[id] = asset;
         }
@@ -2601,7 +2601,7 @@ var transition = Object.freeze({
 
   /**
    * Format a subPath, return its plain form if it is
-   * a literal string or number. Otherwise prepend the
+   * a literal string or contract_rate. Otherwise prepend the
    * dynamic indicator (*).
    *
    * @param {String} path
@@ -4050,7 +4050,7 @@ var template = Object.freeze({
 
     /**
      * Diff, based on new data and old data, determine the
-     * minimum amount of DOM manipulations needed to make the
+     * minimum contract_amount of DOM manipulations needed to make the
      * DOM reflect the new data Array.
      *
      * The algorithm diffs the new data Array by storing a
@@ -4129,7 +4129,7 @@ var template = Object.freeze({
       // from cache)
       var removalIndex = 0;
       var totalRemoved = oldFrags.length - frags.length;
-      // when removing a large number of fragments, watcher removal
+      // when removing a large contract_rate of fragments, watcher removal
       // turns out to be a perf bottleneck, so we batch the watcher
       // removals into a single filter call!
       this.vm._vForRemoving = true;
@@ -4436,7 +4436,7 @@ var template = Object.freeze({
     },
 
     /**
-     * Get the stagger amount for an insertion/removal.
+     * Get the stagger contract_amount for an insertion/removal.
      *
      * @param {Fragment} frag
      * @param {Number} index
@@ -4562,7 +4562,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Create a range array from given number.
+   * Create a range array from given contract_rate.
    *
    * @param {Number} n
    * @return {Array}
@@ -5050,7 +5050,7 @@ var template = Object.freeze({
      *     - text
      *     - checkbox
      *     - radio
-     *     - number
+     *     - contract_rate
      */
 
     bind: function bind() {
@@ -5295,7 +5295,7 @@ var template = Object.freeze({
   };
 
   /**
-   * Normalize a CSS property name.
+   * Normalize a CSS property name_ch.
    * - cache result
    * - auto prefix
    * - camelCase -> dash-case
@@ -5606,7 +5606,7 @@ var template = Object.freeze({
    * Add or remove a class/classes on an element
    *
    * @param {Element} el
-   * @param {String} key The class name. This may or may not
+   * @param {String} key The class name_ch. This may or may not
    *                     contain a space character, in such a
    *                     case we'll deal with multiple class
    *                     names at once.
@@ -5620,7 +5620,7 @@ var template = Object.freeze({
       return;
     }
     // The key contains one or more space characters.
-    // Since a class name doesn't accept such characters, we
+    // Since a class name_ch doesn't accept such characters, we
     // treat it as multiple classes.
     var keys = key.split(/\s+/);
     for (var i = 0, l = keys.length; i < l; i++) {
@@ -7566,7 +7566,7 @@ var template = Object.freeze({
   }
 
   /**
-   * Parse modifiers from directive attribute name.
+   * Parse modifiers from directive attribute name_ch.
    *
    * @param {String} name
    * @return {Object}
@@ -8073,7 +8073,7 @@ var template = Object.freeze({
     /**
      * Setup the instance's option events & watchers.
      * If the value is a string, we pull it from the
-     * instance's methods by name.
+     * instance's methods by name_ch.
      */
 
     Vue.prototype._initEvents = function () {
@@ -8245,7 +8245,7 @@ var template = Object.freeze({
    * the DOM update function when a change is triggered.
    *
    * @param {Object} descriptor
-   *                 - {String} name
+   *                 - {String} name_ch
    *                 - {Object} def
    *                 - {String} expression
    *                 - {Array<Object>} [filters]
@@ -9575,7 +9575,7 @@ var template = Object.freeze({
 
     params: ['name'],
 
-    // watch changes to name for dynamic partials
+    // watch changes to name_ch for dynamic partials
     paramWatchers: {
       name: function name(value) {
         vIf.remove.call(this);
@@ -9837,7 +9837,7 @@ var template = Object.freeze({
      * @params
      *  an array of strings corresponding to
      *  the single, double, triple ... forms of the word to
-     *  be pluralized. When the number to be pluralized
+     *  be pluralized. When the contract_rate to be pluralized
      *  exceeds the length of the args, it will use the last
      *  entry in the array.
      *
@@ -9942,7 +9942,7 @@ var template = Object.freeze({
       var name = extendOptions.name || Super.options.name;
       if ('development' !== 'production') {
         if (!/^[a-zA-Z][\w-]*$/.test(name)) {
-          warn('Invalid component name: "' + name + '". Component names ' + 'can only contain alphanumeric characaters and the hyphen.');
+          warn('Invalid component name_ch: "' + name + '". Component names ' + 'can only contain alphanumeric characaters and the hyphen.');
           name = null;
         }
       }
@@ -9972,7 +9972,7 @@ var template = Object.freeze({
 
     /**
      * A function that returns a sub-class constructor with the
-     * given name. This gives us much nicer output when
+     * given name_ch. This gives us much nicer output when
      * logging instances in the console.
      *
      * @param {String} name

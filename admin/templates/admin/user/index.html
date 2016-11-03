@@ -26,8 +26,6 @@
             </label>
             <button type="submit" class="btn btn-primary">查询</button>
             <a href="#myModal" data-toggle="modal" class="btn btn-info" data-form="add-model">添加</a>
-            <a href="javascript:;" class="btn btn-success" data-form="enable">启用</a>
-            <a href="javascript:;" class="btn btn-warning" data-form="disable">禁用</a>
         </div>
         </form>
     </div>
@@ -49,9 +47,11 @@
                                     <input type="hidden" id="form-statusType" name="statusType" value="enable" />
                                 </th>
                                 <th>角色</th>
-                                <th>用户名</th>
                                 <th>手机号</th>
-                                <th>状态</th>
+                                {% for foo in list_contratcData %}
+                                  <th>{{ foo.name_ch }}</th>
+                                {% endfor %}
+                                <th>迈豆总数</th>
                                 <th>创建时间</th>
                                 <th>操作</th>
                             </tr>
@@ -69,26 +69,32 @@
                                         {% endif %}
                                     {% endfor %}
                                 </td>
-                                <td>{{ list.username }}</td>
                                 <td>{{ list.phone }}</td>
-                                <td>
-                                    {% for key, val in c_status.items %}
-                                        {% if key == list.status %}
-                                            {{ val }}
+                                {% for foo in list_contratcData %}
+                                  <td>
+                                    {% if list.beans_list %}
+                                      {% for key,val in list.beans_list.items %}
+                                        {% if foo.id|iriencode ==  key %}
+                                          {{ val.beans }}
+                                        {% else %}
+                                          0
                                         {% endif %}
-                                    {% endfor %}
-                                </td>
-                                <td>{{ list.createTime |date:"Y-m-d H:i:s" }}</td>
+                                      {% endfor %}
+                                    {% else %}
+                                      0
+                                    {% endif %}
+                                  </td>
+                                {% endfor %}
+                                <td>{{ list.beans_total }}</td>
+                                <td>{{ list.create_time |date:"Y-m-d H:i:s" }}</td>
                                 <td>
                                     <a href="#myModal" data-toggle="modal" data-form="edit-model" class="btn btn-default btn-xs"
                                        data-id="{{ list.id }}"
                                        data-role="{{ list.role }}"
-                                       data-username="{{ list.username }}"
                                        data-phone="{{ list.phone }}"
                                        data-province="{{ list.province }}"
                                        data-city="{{ list.city }}"
                                        data-district="{{ list.district }}"
-                                       data-status="{{ list.status }}"
                                     ><i class="fa fa-edit"></i> 编辑</a>
                                 </td>
                             </tr>
@@ -146,9 +152,7 @@ $(function () {
         var role = $('#form-role');
         role.val(role.find('option:first').val());
         $('#form-id').val(kong);
-        $('#form-username').val(kong);
         $('#form-phone').val(kong);
-        $('#form-status').val(1);
         getRegionInit();
     });
     /**
@@ -157,64 +161,28 @@ $(function () {
     $('[data-form="edit-model"]').click(function () {
         var id = $(this).attr('data-id');
         var role = $(this).attr('data-role');
-        var username = $(this).attr('data-username');
         var phone = $(this).attr('data-phone');
-        var status = $(this).attr('data-status');
         $('#form-id').val(id);
         $('#form-role').val(role);
-        $('#form-username').val(username);
         $('#form-phone').val(phone);
-        $('#form-status').val(status);
         /*地区联动*/
         getRegionInit();
         var regionValue = {};
         regionValue.province = $(this).attr('data-province');
         regionValue.city = $(this).attr('data-city');
-        regionValue.area = $(this).attr('data-area');
+        regionValue.district = $(this).attr('data-district');
         getRegionDefault(regionValue);
     });
     /**
      * 表单验证提交按钮触发的操作
      */
     var rules = {
-        username:{
-            required:true
-        },
         phone:{
             required:true,
             phone:true
         }
     };
     subActionAjaxValidateForMime('#user_form_validate', rules, form_url, index_url);
-
-    /**
-     * 启用
-     */
-    $('[data-form="enable"]').click(function() {
-        /*判断是否有选中*/
-        var check = $('#data-list-form').find('input[data-form="check-model"]');
-        var verifyChecked = verifyCheckedForMime(check);
-        if(true == verifyChecked){
-            enableDataMultiple(check, stats_url, index_url);
-        }else {
-            return false;
-        }
-    });
-
-    /**
-     * 禁用
-     */
-    $('[data-form="disable"]').click(function() {
-        /*判断是否有选中*/
-        var check = $('#data-list-form').find('input[data-form="check-model"]');
-        var verifyChecked = verifyCheckedForMime(check);
-        if(true == verifyChecked){
-            disableDataMultiple(check, stats_url, index_url);
-        }else {
-            return false;
-        }
-    });
-
 
 });
 </script>

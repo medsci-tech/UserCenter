@@ -27,11 +27,11 @@ urlpatterns = [
     url(r'^admin/save/',admin.save, name='save'),# 保存管理员
 
     # 合同
-    url(r'^contract/contractlist', contract.contractlist, name='contract_contractlist'),# 保存合同
-    url(r'^contract/delete', contract.delete, name='contract_delete'),# 保存合同
+    url(r'^contract/recharge', contract.recharge, name='contract_recharge'),
+    url(r'^contract/contractlist', contract.contractlist, name='contract_contractlist'),
+    url(r'^contract/delete', contract.delete, name='contract_delete'),# 删除合同
     url(r'^contract/save', contract.save, name='contract_save'),# 保存合同
     url(r'^contract/updateStatus', contract.updateStatus, name='contract_updateStatus'),
-    url(r'^contract/credit', contract.credit, name='contract_credit'),
     url(r'^contract/index', contract.index, name='contract'), # 合同列表
 
     # 文件上传
