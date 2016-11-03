@@ -1,0 +1,149 @@
+<div id='user-chart'>
+    <div class="row user_chart_hide">
+        <div class="col-sm-12">
+            <div id="user_chart2" style="width: auto;height:400px;">
+            </div>
+        </div>
+    </div>
+</div>
+<!-- user_chart1 -->
+<script>
+var vm = new Vue({
+    el: '#user-chart',
+    data: {
+
+        data: {
+
+            this_person: {
+                value: Math.random() * 200 + 50,
+                id: '1',
+            },
+            upper: [
+
+                {
+                    value: Math.random() * 200 + 50,
+                    id: '21',
+                }
+            ],
+            lower: [{
+                value: Math.random() * 200 + 50,
+                id: '11',
+            }, {
+                value: Math.random() * 200 + 50,
+                id: '12',
+            }, {
+                value: Math.random() * 200 + 50,
+                id: '13',
+            }, {
+                value: Math.random() * 200 + 50,
+                id: '14',
+            }, {
+                value: Math.random() * 200 + 50,
+                id: '15',
+            }]
+        },
+    },
+    methods: {
+        data_links: function(e) {
+            var ul = e.upper.length;
+            var ll = e.lower.length;
+            var result = [];
+            for (var i = 0; i < ul; i++) {
+                result.push({
+                    source: e.this_person.id,
+                    target: e.upper[i].id,
+                    value: e.upper[i].value,
+                })
+            };
+            for (var i = 0; i < ll; i++) {
+                result.push({
+                    source: e.lower[i].id,
+                    target: e.this_person.id,
+                    value: e.lower[i].value,
+                })
+            };
+            return result;
+        },
+        data_nodes: function(e) {
+            var ul = e.upper.length;
+            var ll = e.lower.length;
+            var result = [{
+                name: e.this_person.id,
+                category: 'this',
+                value: e.this_person.value,
+                symbolSize: e.this_person.value / 10,
+            }];
+            for (var i = 0; i < ul; i++) {
+                result.push({
+                    name: e.upper[i].id,
+                    category: '上级',
+                    value: e.upper[i].value,
+                    symbolSize: e.upper[i].value / 10,
+                })
+            };
+            for (var i = 0; i < ll; i++) {
+                result.push({
+                    name: e.lower[i].id,
+                    category: '下级',
+                    value: e.lower[i].value,
+                    symbolSize: e.lower[i].value / 10,
+                })
+            };
+            return result;
+        }
+    },
+
+});
+
+var myuser_Chart2 = echarts.init(document.getElementById('user_chart2'));
+
+
+var option2 = {
+    title: {
+        text: '迈豆池',
+    },
+    tooltip: {},
+    series: [{
+        name: 'Les Miserables',
+        type: 'graph',
+        layout: 'force',
+        data: vm.data_nodes(vm.data),
+        links: vm.data_links(vm.data),
+        categories: [
+
+            {
+                name: '上级'
+            }, {
+                name: 'this'
+            }, {
+                name: '下级'
+            }
+        ],
+        label: {
+            normal: {
+                show: true,
+                position: 'right',
+                formatter: '{b}'
+            }
+        },
+        edgeSymbol: ['arrow', 'none'],
+        edgeSymbolSize: 5,
+        force: {
+            gravity: 0,
+            repulsion: 50,
+            edgeLength: [50, 100],
+        },
+        itemStyle: {
+
+        },
+        lineStyle: {
+            normal: {
+                width: 2,
+            }
+        }
+    }],
+
+};
+myuser_Chart2.setOption(option2);
+</script>
+<hr>
