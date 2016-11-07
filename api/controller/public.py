@@ -194,7 +194,10 @@ def register(request):
             'token': post.get('token'),
         }
         returnData = imitate_post(url=post_url, param=post_param)
-        return ApiResponse(200, returnData['msg'], returnData['data']).json_response()
+        if returnData.get('code') == 500:
+            return ApiResponse(200, '注册成功，积分请求失败').json_response()
+        else:
+            return ApiResponse(200, returnData['msg'], returnData['data']).json_response()
     else:
         return ApiResponse(-1, '注册失败').json_response()
 

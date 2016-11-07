@@ -26,9 +26,9 @@ def imitate_post(**kwargs):
     try:
         req = request.Request(url, data.encode(encoding='utf-8'))
         res = request.urlopen(req)
-        returnData = json.loads(res.read().decode())
+        return json.loads(res.read().decode())
     except:
-        return [500, 'post error']
+        return {'code': 500, 'msg':'post error', 'data': None}
 
 
 
